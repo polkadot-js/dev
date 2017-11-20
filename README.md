@@ -1,8 +1,8 @@
 # @polkadot/dev
 
-[![Build Status](https://travis-ci.org/polkadot-js/ci.svg?branch=master)](https://travis-ci.org/polkadot-js/ci)
-[![Dependency Status](https://david-dm.org/polkadot-js/ci.svg)](https://david-dm.org/polkadot-js/ci)
-[![devDependency Status](https://david-dm.org/polkadot-js/ci/dev-status.svg)](https://david-dm.org/polkadot-js/ci#info=devDependencies)
+[![Build Status](https://travis-ci.org/polkadot-js/dev.svg?branch=master)](https://travis-ci.org/polkadot-js/dev)
+[![Dependency Status](https://david-dm.org/polkadot-js/dev.svg)](https://david-dm.org/polkadot-js/dev)
+[![devDependency Status](https://david-dm.org/polkadot-js/dev/dev-status.svg)](https://david-dm.org/polkadot-js/dev#info=devDependencies)
 
 ## Introduction
 
