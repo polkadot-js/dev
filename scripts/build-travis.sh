@@ -11,34 +11,30 @@ WITH_NPM_FULL=
 WITH_TEST=
 
 while [ "$1" != "" ]; do
+  echo "command: $1"
+
   case $1 in
     build )
-      shift
       WITH_BUILD=1
       ;;
     check )
-      shift
       WITH_CHECK=1
       ;;
     coveralls )
-      shift
       WITH_COVERALLS=1
       ;;
     npm )
-      shift
       WITH_NPM=1
       ;;
     npmfull )
-      shift
-      WITH_NPM_FULL=1
+      WITH_NPM_FULL=
       ;;
     test )
-      shift
       WITH_TEST=1
       ;;
     * )
       echo "Unknown option $1"
-      shift
+      exit 1
       ;;
   esac
   shift
