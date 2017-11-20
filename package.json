@@ -20,12 +20,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/polkadot-js/ci.git"
+    "url": "git+https://github.com/polkadot-js/dev.git"
   },
   "bugs": {
-    "url": "https://github.com/polkadot-js/ci/issues"
+    "url": "https://github.com/polkadot-js/dev/issues"
   },
-  "homepage": "https://github.com/polkadot-js/ci#readme",
+  "homepage": "https://github.com/polkadot-js/dev#readme",
   "scripts": {
     "check": "eslint scripts"
   },
