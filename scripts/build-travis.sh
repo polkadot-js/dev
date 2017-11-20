@@ -103,7 +103,8 @@ if [ "$WITH_NPM" != "" ]; then
     cd lib
   fi
 
-  npm publish
+  pwd
+  npm publish --verbose
 
   if [ "$WITH_NPM_FULL" != "" ]; then
     cd ..
