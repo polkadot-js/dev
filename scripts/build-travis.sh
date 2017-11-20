@@ -97,14 +97,15 @@ if [ "$WITH_NPM" != "" ]; then
 
   node_modules/.bin/makeshift
 
-  if [ "$WITH_NPM_FULL" == "" ]; then
-    cp LICENSE package.json lib/
+  if [ "$WITH_NPM_FULL" != "" ]; then
+    mkdir -p lib
+    cp LICENSE package.json package-lock.json lib/
     cd lib
   fi
 
   npm publish
 
-  if [ "$WITH_NPM_FULL" == "" ]; then
+  if [ "$WITH_NPM_FULL" != "" ]; then
     cd ..
   fi
 fi
