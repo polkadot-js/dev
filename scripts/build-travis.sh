@@ -7,7 +7,6 @@ WITH_BUILD=
 WITH_CHECK=
 WITH_COVERALLS=
 WITH_NPM=
-WITH_NPM_FULL=
 WITH_TEST=
 
 while [ "$1" != "" ]; do
@@ -25,9 +24,6 @@ while [ "$1" != "" ]; do
       ;;
     npm )
       WITH_NPM=1
-      ;;
-    npmfull )
-      WITH_NPM_FULL=1
       ;;
     test )
       WITH_TEST=1
@@ -97,14 +93,14 @@ if [ "$WITH_NPM" != "" ]; then
 
   node_modules/.bin/makeshift
 
-  if [ "$WITH_NPM_FULL" != "" ]; then
-    mkdir -p lib
-    cp LICENSE package.json package-lock.json lib/
-    cd lib
+  if [  -d "build" ]; then
+    WITH_NPM_FULL=1
+    cp LICENSE package.json package-lock.json build/
+    cd build
   fi
 
   pwd
-  npm publish --verbose
+  npm publish
 
   if [ "$WITH_NPM_FULL" != "" ]; then
     cd ..
