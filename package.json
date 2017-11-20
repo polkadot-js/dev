@@ -1,0 +1,64 @@
+{
+  "name": "@polkadot/dev",
+  "version": "0.1.0",
+  "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
+  "bin": {
+    "polkadot-dev-build-docs": "./scripts/build-docs.js",
+    "polkadot-dev-build-travis": "./scripts/build-travis.sh"
+  },
+  "keywords": [
+    "Polkadot"
+  ],
+  "author": "Jaco Greeff <jacogr@gmail.com>",
+  "license": "ISC",
+  "engines": {
+    "node": ">=6.4"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polkadot-js/ci.git"
+  },
+  "bugs": {
+    "url": "https://github.com/polkadot-js/ci/issues"
+  },
+  "homepage": "https://github.com/polkadot-js/ci#readme",
+  "scripts": {
+    "check": "eslint scripts"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-eslint": "^8.0.2",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-flow-strip-types": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-flow": "^6.23.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-runtime": "^6.26.0",
+    "coveralls": "^3.0.0",
+    "dox": "^0.9.0",
+    "eslint": "^4.11.0",
+    "eslint-config-semistandard": "^11.0.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-config-standard-react": "^5.0.0",
+    "eslint-plugin-flowtype": "^2.39.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-react": "^7.4.0",
+    "eslint-plugin-standard": "^3.0.1",
+    "flow-bin": "^0.59.0",
+    "rimraf": "^2.6.2",
+    "makeshift": "^1.1.0",
+    "mkdirp": "^0.5.1",
+    "stylelint": "^8.2.0",
+    "stylelint-config-standard": "^17.0.0"
+  }
+}
