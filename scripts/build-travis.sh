@@ -27,7 +27,7 @@ while [ "$1" != "" ]; do
       WITH_NPM=1
       ;;
     npmfull )
-      WITH_NPM_FULL=
+      WITH_NPM_FULL=1
       ;;
     test )
       WITH_TEST=1
