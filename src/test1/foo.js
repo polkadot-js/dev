@@ -1,4 +1,5 @@
 // ISC, Copyright 2017 Jaco Greeff
+// @flow
 
 /**
   @name foo
