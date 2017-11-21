@@ -27,11 +27,13 @@
   },
   "homepage": "https://github.com/polkadot-js/dev#readme",
   "scripts": {
-    "check": "eslint scripts",
-    "test": "./scripts/build-docs.js"
+    "build": "./scripts/build-docs.js && rimraf build && babel src --out-dir build --ignore *.spec.js",
+    "check": "eslint src scripts && flow check",
+    "test": "jest --coverage src"
   },
   "devDependencies": {},
   "dependencies": {
+    "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
