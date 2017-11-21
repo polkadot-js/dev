@@ -10,8 +10,6 @@ WITH_NPM=
 WITH_TEST=
 
 while [ "$1" != "" ]; do
-  echo "command: $1"
-
   case $1 in
     build )
       WITH_BUILD=1
@@ -29,7 +27,7 @@ while [ "$1" != "" ]; do
       WITH_TEST=1
       ;;
     * )
-      echo "Unknown option $1"
+      echo "*** Unknown option $1"
       exit 1
       ;;
   esac
@@ -37,24 +35,24 @@ while [ "$1" != "" ]; do
 done
 
 if [ "$WITH_CHECK" != "" ]; then
-  echo "Running code check"
+  echo "*** Running code check"
 
   npm run check
 fi
 
 if [ "$WITH_BUILD" != "" ]; then
-  echo "Running build"
+  echo "*** Running build"
 
   npm run build
 fi
 
 if [ "$WITH_TEST" != "" ]; then
-  echo "Running test suite"
+  echo "*** Running test suite"
 
   npm run test
 
   if [ "$WITH_COVERALLS" != "" ]; then
-    echo "Submitting coverage to coveralls.io"
+    echo "*** Submitting coverage to coveralls.io"
 
     node_modules/.bin/coveralls < coverage/lcov.info
   fi
@@ -62,12 +60,12 @@ fi
 
 # Pull requests and commits to other branches shouldn't try to deploy, just build to verify
 if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "master" ]; then
-  echo "Branch check completed"
+  echo "*** Branch check completed"
 
   exit 0
 fi
 
-echo "Setting up GitHub config for $TRAVIS_REPO_SLUG"
+echo "*** Setting up GitHub config for $TRAVIS_REPO_SLUG"
 
 git config push.default simple
 git config merge.ours.driver true
@@ -76,24 +74,26 @@ git config user.email "$COMMIT_AUTHOR_EMAIL"
 git remote set-url origin https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git > /dev/null 2>&1
 
 if [ -n "$(git status --untracked-files=no --porcelain)" ]; then
-  echo "Adding build artifacts"
+  echo "*** Adding build artifacts"
 
   git add .
   git commit -m "[CI Skip] Build artifacts"
 fi
 
-echo "Incrementing package version"
+echo "*** Incrementing package version"
 
 npm --no-git-tag-version version
 npm version patch -m "[CI Skip] Version bump"
 git push --quiet origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
 
 if [ "$WITH_NPM" != "" ]; then
-  echo "Publishing to npm"
+  echo "*** Publishing to npm"
 
   node_modules/.bin/makeshift
 
   if [  -d "build" ]; then
+    echo "*** Copying relevant files to build"
+
     WITH_NPM_FULL=1
     cp LICENSE package.json package-lock.json build/
     cd build
@@ -107,6 +107,6 @@ if [ "$WITH_NPM" != "" ]; then
   fi
 fi
 
-echo "Travis completed"
+echo "*** Travis completed"
 
 exit 0
