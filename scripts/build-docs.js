@@ -7,14 +7,14 @@ const mkdirp = require('mkdirp');
 const path = require('path');
 const rimraf = require('rimraf');
 
-const docPath = 'docs';
-const srcPath = 'src';
+const DOC = 'docs';
+const SRC = 'src';
 
-rimraf.sync(docPath);
-mkdirp.sync(docPath);
+rimraf.sync(DOC);
+mkdirp.sync(DOC);
 
 function cleanup (text) {
-  return text
+  return (text || '')
     .split('\n')
     .map((part) => part.trim())
     .join('\n');
@@ -26,36 +26,53 @@ function findTag (definition, _type) {
   return cleanup((tag && tag.string) || '');
 }
 
-function generateDirectory (subPath) {
-  const definitions = fs
-    .readdirSync(path.join(srcPath, subPath))
-    .filter((file) => {
-      return !['.', '..', 'index.js', 'types.js'].includes(file) &&
-        !/\.spec\.js$/.test(file);
-    })
-    .sort()
+function findTags (definitions, type) {
+  return definitions.map((definition) => findTag(definition, 'name'));
+}
+
+function parseFile (file) {
+  const source = fs.readFileSync(file).toString('utf-8');
+
+  return dox.parseComments(source, {
+    skipSingleStar: true
+  });
+}
+
+function lsEntries (dir) {
+  return fs.readdirSync(dir).filter((file) => {
+    return !['.', '..', 'index.js', 'types.js'].includes(file) &&
+      !/\.spec\.js$/.test(file);
+  });
+}
+
+function lsFolders (dir) {
+  return lsEntries(dir).filter((file) => {
+    return fs.lstatSync(path.join(dir, file)).isDirectory();
+  });
+}
+
+function readSources (dir) {
+  return lsEntries(path.join(SRC, dir))
     .map((file) => {
-      return dox.parseComments(
-        fs.readFileSync(path.join(srcPath, subPath, file)).toString('utf-8'),
-        { skipSingleStar: true }
-      )[0];
+      return parseFile(path.join(SRC, dir, file))[0];
     })
     .filter((definition) => {
       return definition.tags.find(({ type }) => type === 'name');
     });
-  const names = definitions.map((definition) => {
-    return findTag(definition, 'name');
-  });
-  const rootDefinition = dox.parseComments(
-    fs.readFileSync(path.join(srcPath, subPath, 'index.js')).toString('utf-8'),
-    { skipSingleStar: true }
-  )[0];
+}
 
+function generateDirectory (dir) {
+  const definitions = readSources(dir);
+  const names = findTags(definitions, 'name');
+  const definition = parseFile(path.join(SRC, dir, 'index.js'))[0];
+  const summary = findTag(definition, 'summary');
+  const description = findTag(definition, 'description');
+  const filePath = path.join(DOC, `${dir}.md`);
   const md = names.reduce((md, name, index) => {
-    return `${md}\n- (${name})[#${name}] ${findTag(definitions[index], 'summary')}`;
-  }, `# ${subPath}\n\n${findTag(rootDefinition, 'summary')} ${findTag(rootDefinition, 'description')}\n`);
+    const summary = findTag(definitions[index], 'summary');
 
-  const filePath = path.join(docPath, `${subPath}.md`);
+    return `${md}\n- [${name}](#${name}) ${summary}`;
+  }, `# ${dir}\n\n${summary} ${description}\n`);
 
   console.log(filePath);
 
@@ -79,32 +96,25 @@ function generateDirectory (subPath) {
   );
 }
 
-const entries = fs
-  .readdirSync(srcPath)
-  .filter((file) => {
-    return !['.', '..'].includes(file) &&
-      fs.lstatSync(path.join(srcPath, file)).isDirectory();
-  });
+function generate (src) {
+  const entries = lsFolders(src);
+  const definition = parseFile(path.join(src, 'index.js'))[0];
+  const summary = findTag(definition, 'summary');
+  const description = findTag(definition, 'description');
+  const filePath = path.join(DOC, 'README.md');
 
-const rootDefinition = dox.parseComments(
-  fs.readFileSync(path.join(srcPath, 'index.js')).toString('utf-8'),
-  { skipSingleStar: true }
-)[0];
+  console.log(filePath);
 
-const filePath = path.join(docPath, 'README.md');
+  fs.writeFileSync(
+    filePath,
+    entries.reduce((md, entry) => {
+      const definition = parseFile(path.join(src, entry, 'index.js'))[0];
 
-console.log(filePath);
+      return `${md}\n- [${entry}](${entry}.md) ${findTag(definition, 'summary')}`;
+    }, `# Available interfaces\n\n${summary} ${description}\n`)
+  );
 
-fs.writeFileSync(
-  filePath,
-  entries.reduce((md, entry) => {
-    const definition = dox.parseComments(
-      fs.readFileSync(path.join(srcPath, entry, 'index.js')).toString('utf-8'),
-      { skipSingleStar: true }
-    )[0];
+  entries.map(generateDirectory);
+}
 
-    return `${md}\n- [${entry}](${entry}.md) ${findTag(definition, 'summary')}`;
-  }, `# Available interfaces\n\n${findTag(rootDefinition, 'summary')} ${findTag(rootDefinition, 'description')}\n`)
-);
-
-entries.map(generateDirectory);
+generate(SRC);
