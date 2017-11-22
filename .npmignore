@@ -6,3 +6,4 @@ tmp
 .gitignore
 .travis.yml
 README.md
+yarn-error.log
