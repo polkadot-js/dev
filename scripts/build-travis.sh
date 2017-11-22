@@ -95,12 +95,12 @@ echo ""
 echo "*** Incrementing package version"
 
 if [ "$NPM_BIN" == "npm" ]; then
-  npm --no-git-tag-version --message "[CI Skip] %s" version patch
+  npm --message "[CI Skip] %s" version patch
 else
   yarn config set version-git-message "[CI Skip] %s"
-  yarn --no-git-tag-version version --new-version patch
+  yarn version --new-version patch
 fi
-git push --quiet origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
+git push --quiet --tags origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
 
 if [ "$WITH_NPM" != "" ]; then
   echo ""
