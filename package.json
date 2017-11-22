@@ -3,6 +3,7 @@
   "version": "0.2.2",
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "bin": {
+    "polkadot-dev-build-babel": "./scripts/build-babel.sh",
     "polkadot-dev-build-docs": "./scripts/build-docs.js",
     "polkadot-dev-build-travis": "./scripts/build-travis.sh"
   },
@@ -27,7 +28,7 @@
   },
   "homepage": "https://github.com/polkadot-js/dev#readme",
   "scripts": {
-    "build": "./scripts/build-docs.js && rimraf build && babel src --out-dir build --ignore *.spec.js",
+    "build": "./scripts/build-docs.js && ./scripts/build-babel.sh",
     "check": "eslint src scripts && flow check",
     "test": "jest --coverage src"
   },
@@ -56,6 +57,7 @@
     "eslint-plugin-react": "^7.4.0",
     "eslint-plugin-standard": "^3.0.1",
     "flow-bin": "^0.59.0",
+    "flow-copy-source": "^1.2.1",
     "jest": "^21.2.1",
     "makeshift": "^1.1.0",
     "mkdirp": "^0.5.1",
