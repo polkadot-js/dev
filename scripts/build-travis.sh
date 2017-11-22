@@ -8,6 +8,7 @@ WITH_CHECK=
 WITH_COVERALLS=
 WITH_NPM=
 WITH_TEST=
+NPM_BIN=npm
 
 while [ "$1" != "" ]; do
   case $1 in
@@ -26,6 +27,9 @@ while [ "$1" != "" ]; do
     test )
       WITH_TEST=1
       ;;
+    yarn )
+      NPM_BIN=yarn
+      ;;
     * )
       echo "*** Unknown option $1"
       exit 1
@@ -38,21 +42,21 @@ if [ "$WITH_CHECK" != "" ]; then
   echo ""
   echo "*** Running code check"
 
-  npm run check
+  $NPM_BIN run check
 fi
 
 if [ "$WITH_BUILD" != "" ]; then
   echo ""
   echo "*** Running build"
 
-  npm run build
+  $NPM_BIN run build
 fi
 
 if [ "$WITH_TEST" != "" ]; then
   echo ""
   echo "*** Running test suite"
 
-  npm run test
+  $NPM_BIN run test
 
   if [ "$WITH_COVERALLS" != "" ]; then
     echo ""
@@ -90,8 +94,12 @@ fi
 echo ""
 echo "*** Incrementing package version"
 
-npm --no-git-tag-version version
-npm version patch -m "[CI Skip] Version bump"
+if [ "$NPM_BIN" == "npm" ]; then
+  npm --no-git-tag-version --message "[CI Skip] %s" version patch
+else
+  yarn config set version-git-message "[CI Skip] %s"
+  yarn --no-git-tag-version version --new-version patch
+fi
 git push --quiet origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
 
 if [ "$WITH_NPM" != "" ]; then
@@ -105,12 +113,12 @@ if [ "$WITH_NPM" != "" ]; then
     echo "*** Copying package files"
 
     WITH_NPM_FULL=1
-    cp LICENSE package.json package-lock.json build/
+    cp LICENSE package.json build/
     cd build
   fi
 
   pwd
-  npm publish
+  $NPM_BIN publish
 
   if [ "$WITH_NPM_FULL" != "" ]; then
     cd ..
