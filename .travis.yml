@@ -1,4 +1,13 @@
 language: node_js
 node_js:
   - "8"
-script: ./scripts/build-travis.sh check npm test
+cache:
+  yarn: true
+  directories:
+    - node_modules
+before_install:
+  - npm install -g yarn --cache-min 999999999
+install:
+  - yarn
+script:
+  - ./scripts/build-travis.sh build check npm test yarn
