@@ -95,12 +95,18 @@ echo ""
 echo "*** Incrementing package version"
 
 if [ "$NPM_BIN" == "npm" ]; then
-  npm --message "[CI Skip] %s" version patch
+  $NPM_BIN --message "[CI Skip] %s" version patch
 else
-  yarn config set version-git-message "[CI Skip] %s"
-  yarn version --new-version patch
+  $NPM_BIN config set version-git-message "[CI Skip] %s"
+  $NPM_BIN version --new-version patch
 fi
 git push --quiet --tags origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
+
+PACKAGE_VERSION=$(cat package.json \
+  | grep version \
+  | head -1 \
+  | awk -F: '{ print $2 }' \
+  | sed 's/[",]//g')
 
 if [ "$WITH_NPM" != "" ]; then
   echo ""
@@ -118,7 +124,11 @@ if [ "$WITH_NPM" != "" ]; then
   fi
 
   pwd
-  $NPM_BIN publish
+  if [ "$NPM_BIN" == "npm" ]; then
+    $NPM_BIN publish
+  else
+    $NPM_BIN publish --new-version $PACKAGE_VERSION
+  fi
 
   if [ "$WITH_NPM_FULL" != "" ]; then
     cd ..
