@@ -35,23 +35,27 @@ while [ "$1" != "" ]; do
 done
 
 if [ "$WITH_CHECK" != "" ]; then
+  echo ""
   echo "*** Running code check"
 
   npm run check
 fi
 
 if [ "$WITH_BUILD" != "" ]; then
+  echo ""
   echo "*** Running build"
 
   npm run build
 fi
 
 if [ "$WITH_TEST" != "" ]; then
+  echo ""
   echo "*** Running test suite"
 
   npm run test
 
   if [ "$WITH_COVERALLS" != "" ]; then
+    echo ""
     echo "*** Submitting coverage to coveralls.io"
 
     node_modules/.bin/coveralls < coverage/lcov.info
@@ -60,11 +64,13 @@ fi
 
 # Pull requests and commits to other branches shouldn't try to deploy, just build to verify
 if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "master" ]; then
+  echo ""
   echo "*** Branch check completed"
 
   exit 0
 fi
 
+echo ""
 echo "*** Setting up GitHub config for $TRAVIS_REPO_SLUG"
 
 git config push.default simple
@@ -74,12 +80,14 @@ git config user.email "$COMMIT_AUTHOR_EMAIL"
 git remote set-url origin https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git > /dev/null 2>&1
 
 if [ -n "$(git status --untracked-files=no --porcelain)" ]; then
+  echo ""
   echo "*** Adding build artifacts"
 
   git add .
   git commit -m "[CI Skip] Build artifacts"
 fi
 
+echo ""
 echo "*** Incrementing package version"
 
 npm --no-git-tag-version version
@@ -87,12 +95,14 @@ npm version patch -m "[CI Skip] Version bump"
 git push --quiet origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
 
 if [ "$WITH_NPM" != "" ]; then
+  echo ""
   echo "*** Publishing to npm"
 
   node_modules/.bin/makeshift
 
   if [  -d "build" ]; then
-    echo "*** Copying relevant files to build"
+    echo ""
+    echo "*** Copying package files"
 
     WITH_NPM_FULL=1
     cp LICENSE package.json package-lock.json build/
@@ -107,6 +117,7 @@ if [ "$WITH_NPM" != "" ]; then
   fi
 fi
 
-echo "*** Travis completed"
+echo ""
+echo "*** Release completed"
 
 exit 0
