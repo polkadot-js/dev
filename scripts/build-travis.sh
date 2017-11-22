@@ -6,9 +6,10 @@ set -e
 WITH_BUILD=
 WITH_CHECK=
 WITH_COVERALLS=
-WITH_NPM=
+WITH_FULL=
+WITH_PUBLISH=
 WITH_TEST=
-NPM_BIN=npm
+NPM_BIN=yarn
 
 while [ "$1" != "" ]; do
   case $1 in
@@ -21,8 +22,14 @@ while [ "$1" != "" ]; do
     coveralls )
       WITH_COVERALLS=1
       ;;
-    npm )
-      WITH_NPM=1
+    full )
+      WITH_FULL=1
+      ;;
+    yarn )
+      NPM_BIN=npm
+      ;;
+    publish )
+      WITH_PUBLISH=1
       ;;
     test )
       WITH_TEST=1
@@ -108,17 +115,16 @@ PACKAGE_VERSION=$(cat package.json \
   | awk -F: '{ print $2 }' \
   | sed 's/[",]//g')
 
-if [ "$WITH_NPM" != "" ]; then
+if [ "$WITH_PUBLISH" != "" ]; then
   echo ""
   echo "*** Publishing to npm"
 
   node_modules/.bin/makeshift
 
-  if [  -d "build" ]; then
+  if [  "$WITH_FULL" == "" ]; then
     echo ""
     echo "*** Copying package files"
 
-    WITH_NPM_FULL=1
     cp LICENSE package.json build/
     cd build
   fi
@@ -130,7 +136,7 @@ if [ "$WITH_NPM" != "" ]; then
     $NPM_BIN publish --new-version $PACKAGE_VERSION
   fi
 
-  if [ "$WITH_NPM_FULL" != "" ]; then
+  if [ "$WITH_FULL" != "" ]; then
     cd ..
   fi
 fi
