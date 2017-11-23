@@ -45,6 +45,13 @@ function lsEntries (dir) {
   });
 }
 
+function lsFiles (dir) {
+  return lsEntries(dir).filter((file) => {
+    return !fs.lstatSync(path.join(dir, file)).isDirectory() &&
+      /\.js$/.test(file);
+  });
+}
+
 function lsFolders (dir) {
   return lsEntries(dir).filter((file) => {
     return fs.lstatSync(path.join(dir, file)).isDirectory();
@@ -52,7 +59,7 @@ function lsFolders (dir) {
 }
 
 function readSources (dir) {
-  return lsEntries(path.join(SRC, dir))
+  return lsFiles(path.join(SRC, dir))
     .map((file) => {
       return parseFile(path.join(SRC, dir, file))[0];
     })
@@ -61,60 +68,72 @@ function readSources (dir) {
     });
 }
 
-function generateDirectory (dir) {
+function writeFile (filePath, md) {
+  console.log(filePath);
+
+  fs.writeFileSync(filePath, md);
+}
+
+function mdFromDefinition (definition, md) {
+  const name = findTag(definition, 'name');
+  const description = findTag(definition, 'description');
+  const summary = findTag(definition, 'summary');
+  const _signature = findTag(definition, 'signature');
+  const signature = _signature
+    ? `\`\`\`js\n${_signature}\n\`\`\``
+    : '';
+  const _example = findTag(definition, 'example');
+  const example = _example
+    ? `\`\`\`js\n${_example}\n\`\`\``
+    : '';
+
+  return `${md}\n\n## ${name}\n\n${summary}\n\n${signature}\n\n${description}\n\n${example}`;
+}
+
+function mdFromDefinitions (definitions, md) {
+  return findTags(definitions, 'name').reduce((md, name, index) => {
+    return mdFromDefinition(definitions[index], md);
+  }, md);
+}
+
+function mdFromDirectory (dir, md) {
   const definitions = readSources(dir);
   const names = findTags(definitions, 'name');
   const definition = parseFile(path.join(SRC, dir, 'index.js'))[0];
   const summary = findTag(definition, 'summary');
   const description = findTag(definition, 'description');
-  const filePath = path.join(DOC, `${dir}.md`);
-  const md = names.reduce((md, name, index) => {
+
+  return mdFromDefinitions(definitions, names.reduce((md, name, index) => {
     const summary = findTag(definitions[index], 'summary');
 
-    return `${md}\n- [${name}](#${name}) ${summary}`;
-  }, `# ${dir}\n\n${summary} ${description}\n`);
-
-  console.log(filePath);
-
-  fs.writeFileSync(
-    filePath,
-    names.reduce((md, name, index) => {
-      const definition = definitions[index];
-      const description = findTag(definition, 'description');
-      const summary = findTag(definition, 'summary');
-      const _signature = findTag(definition, 'signature');
-      const signature = _signature
-        ? `\`\`\`js\n${_signature}\n\`\`\``
-        : '';
-      const _example = findTag(definition, 'example');
-      const example = _example
-        ? `\`\`\`js\n${_example}\n\`\`\``
-        : '';
-
-      return `${md}\n\n## ${name}\n\n${summary}\n\n${signature}\n\n${description}\n\n${example}`;
-    }, md)
-  );
+    return `${md}\n- [${name}](#${name.toLowerCase()}) ${summary}`;
+  }, `${md}# ${dir}\n\n${summary} ${description}\n`));
 }
 
 function generate (src) {
-  const entries = lsFolders(src);
+  const folders = lsFolders(src);
+  const files = lsFiles(src);
   const definition = parseFile(path.join(src, 'index.js'))[0];
   const summary = findTag(definition, 'summary');
   const description = findTag(definition, 'description');
-  const filePath = path.join(DOC, 'README.md');
 
-  console.log(filePath);
+  folders.forEach((dir) => {
+    writeFile(path.join(DOC, `${dir}.md`), mdFromDirectory(dir, ''));
+  });
 
-  fs.writeFileSync(
-    filePath,
-    entries.reduce((md, entry) => {
-      const definition = parseFile(path.join(src, entry, 'index.js'))[0];
+  const md = folders.reduce((md, dir) => {
+    const definition = parseFile(path.join(src, dir, 'index.js'))[0];
 
-      return `${md}\n- [${entry}](${entry}.md) ${findTag(definition, 'summary')}`;
-    }, `# Available interfaces\n\n${summary} ${description}\n`)
-  );
+    return `${md}\n- [${dir}](${dir}.md) ${findTag(definition, 'summary')}`;
+  }, `# Available interfaces\n\n${summary} ${description}\n`);
 
-  entries.map(generateDirectory);
+  writeFile(path.join(DOC, 'README.md'), files.reduce((md, file) => {
+    const definition = parseFile(path.join(src, file))[0];
+
+    return findTag(definition, 'name')
+      ? mdFromDefinition(definition, md)
+      : md;
+  }, `${md}\n\n${files.length ? '# Available methods' : ''}`));
 }
 
 generate(SRC);
