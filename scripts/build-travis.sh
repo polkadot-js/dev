@@ -133,7 +133,7 @@ if [ "$WITH_PUBLISH" != "" ]; then
   if [ "$NPM_BIN" == "npm" ]; then
     $NPM_BIN publish
   else
-    $NPM_BIN publish --new-version $PACKAGE_VERSION
+    $NPM_BIN publish --access public --new-version $PACKAGE_VERSION
   fi
 
   if [ "$WITH_FULL" != "" ]; then
