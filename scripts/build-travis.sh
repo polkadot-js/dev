@@ -80,26 +80,28 @@ echo "*** Pushing version update to GitHub"
 
 git push --quiet --tags origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
 
-echo ""
-echo "*** Setting up .npmrc"
-
-yarn run makeshift
-
-if [  "$WITH_ROOT" == "" ]; then
+if [ -f ".npmignore" ]; then
   echo ""
-  echo "*** Copying package files to build"
+  echo "*** Setting up .npmrc"
 
-  cp LICENSE package.json build/
-  cd build
-fi
+  yarn run makeshift
 
-echo ""
-echo "*** Publishing to npm"
+  if [  "$WITH_ROOT" == "" ]; then
+    echo ""
+    echo "*** Copying package files to build"
 
-yarn publish --access public --new-version $PACKAGE_VERSION
+    cp LICENSE package.json build/
+    cd build
+  fi
 
-if [ "$WITH_ROOT" != "" ]; then
-  cd ..
+  echo ""
+  echo "*** Publishing to npm"
+
+  yarn publish --access public --new-version $PACKAGE_VERSION
+
+  if [ "$WITH_ROOT" != "" ]; then
+    cd ..
+  fi
 fi
 
 echo ""
