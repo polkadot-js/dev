@@ -5,7 +5,8 @@
   "bin": {
     "polkadot-dev-build-babel": "./scripts/build-babel.sh",
     "polkadot-dev-build-docs": "./scripts/build-docs.js",
-    "polkadot-dev-build-travis": "./scripts/build-travis.sh"
+    "polkadot-dev-build-travis": "./scripts/build-travis.sh",
+    "polkadot-dev-copy-skeleton": "./scripts/copy-skeleton.sh"
   },
   "keywords": [
     "Polkadot"
