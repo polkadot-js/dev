@@ -36,7 +36,7 @@ if [ -f ".coveralls.yml" ]; then
   echo ""
   echo "*** Submitting coverage"
 
-  yarn run coveralls < coverage/lcov.info
+  cat coverage/lcov.info | yarn run coveralls
 fi
 
 if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "master" ]; then
