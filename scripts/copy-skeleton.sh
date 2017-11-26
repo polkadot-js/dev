@@ -5,8 +5,8 @@ set -e
 
 SRC=node_modules/@polkadot/dev/skeleton
 
-DOTS=( "babelrc" "eslintrc.json" "flowconfig" "gitignore" "npmignore" "stylelintrc.json" "travis.yml" )
-COPY=( "jest.config.js" "../.coveralls.yml" "../.editorconfig" )
+DOTS=( "babelrc" "coveralls.yml" "editorconfig" "eslintrc.json" "flowconfig" "gitignore" "npmignore" "stylelintrc.json" "travis.yml" )
+COPY=( "jest.config.js" )
 
 for FILE in ${DOTS[@]}
 do
