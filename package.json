@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/dev",
-  "version": "0.3.4",
+  "version": "0.4.0",
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "bin": {
     "polkadot-dev-build-babel": "./scripts/build-babel.sh",
@@ -29,7 +29,7 @@
   "homepage": "https://github.com/polkadot-js/dev#readme",
   "scripts": {
     "build": "./scripts/build-docs.js && ./scripts/build-babel.sh",
-    "check": "eslint src scripts && flow check",
+    "check": "eslint flow-typed src scripts && flow check",
     "test": "jest --coverage src"
   },
   "devDependencies": {},
