@@ -5,5 +5,17 @@ set -e
 
 SRC=node_modules/@polkadot/dev/skeleton
 
-cp -fv $SRC/.babelrc $SRC/.eslintrc.json $SRC/.flowconfig $SRC/.gitignore $SRC/.npmignore $SRC/.stylelintrc.json $SRC/.travis.yml $SRC/jest.config.js .
-cp -fv $SRC/../.coveralls.yml $SRC/../.editorconfig .
+DOTS=( "babelrc" "eslintrc.json" "flowconfig" "gitignore" "npmignore" "stylelintrc.json" "travis.yml" )
+COPY=( "jest.config.js" "../.coveralls.yml" "../.editorconfig" )
+
+for FILE in ${DOTS[@]}
+do
+  echo "Updating .$FILE"
+  cat $SRC/$FILE > ./.$FILE
+done
+
+for FILE in ${COPY[@]}
+do
+  echo "Updating $FILE"
+  cat $SRC/$FILE > ./$FILE
+done
