@@ -124,6 +124,7 @@ if [ "$WITH_PUBLISH" != "" ]; then
 
   echo ""
   echo "*** Publishing to npm"
+
   yarn publish --access public --new-version $PACKAGE_VERSION
 
   if [ "$WITH_FULL" != "" ]; then
