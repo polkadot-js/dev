@@ -9,7 +9,6 @@ WITH_COVERALLS=
 WITH_FULL=
 WITH_PUBLISH=
 WITH_TEST=
-NPM_BIN=yarn
 
 while [ "$1" != "" ]; do
   case $1 in
@@ -25,17 +24,11 @@ while [ "$1" != "" ]; do
     full )
       WITH_FULL=1
       ;;
-    yarn )
-      NPM_BIN=npm
-      ;;
     publish )
       WITH_PUBLISH=1
       ;;
     test )
       WITH_TEST=1
-      ;;
-    yarn )
-      NPM_BIN=yarn
       ;;
     * )
       echo "*** Unknown option $1"
@@ -49,21 +42,21 @@ if [ "$WITH_CHECK" != "" ]; then
   echo ""
   echo "*** Running code check"
 
-  $NPM_BIN run check
+  yarn run check
 fi
 
 if [ "$WITH_BUILD" != "" ]; then
   echo ""
   echo "*** Running build"
 
-  $NPM_BIN run build
+  yarn run build
 fi
 
 if [ "$WITH_TEST" != "" ]; then
   echo ""
   echo "*** Running test suite"
 
-  $NPM_BIN run test
+  yarn run test
 
   if [ "$WITH_COVERALLS" != "" ]; then
     echo ""
@@ -101,12 +94,12 @@ fi
 echo ""
 echo "*** Incrementing package version"
 
-if [ "$NPM_BIN" == "npm" ]; then
-  $NPM_BIN --message "[CI Skip] %s" version patch
-else
-  $NPM_BIN config set version-git-message "[CI Skip] %s"
-  $NPM_BIN version --new-version patch
-fi
+yarn config set version-git-message "[CI Skip] %s"
+yarn version --new-version patch
+
+echo ""
+echo "*** Pushing version update to GitHub"
+
 git push --quiet --tags origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
 
 PACKAGE_VERSION=$(cat package.json \
@@ -117,24 +110,21 @@ PACKAGE_VERSION=$(cat package.json \
 
 if [ "$WITH_PUBLISH" != "" ]; then
   echo ""
-  echo "*** Publishing to npm"
+  echo "*** Setting up .npmrc"
 
   node_modules/.bin/makeshift
 
   if [  "$WITH_FULL" == "" ]; then
     echo ""
-    echo "*** Copying package files"
+    echo "*** Copying package files to build"
 
     cp LICENSE package.json build/
     cd build
   fi
 
-  pwd
-  if [ "$NPM_BIN" == "npm" ]; then
-    $NPM_BIN publish
-  else
-    $NPM_BIN publish --access public --new-version $PACKAGE_VERSION
-  fi
+  echo ""
+  echo "*** Publishing to npm"
+  yarn publish --access public --new-version $PACKAGE_VERSION
 
   if [ "$WITH_FULL" != "" ]; then
     cd ..
