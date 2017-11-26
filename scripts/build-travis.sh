@@ -3,70 +3,42 @@
 
 set -e
 
-WITH_BUILD=
-WITH_CHECK=
-WITH_COVERALLS=
-WITH_FULL=
-WITH_PUBLISH=
-WITH_TEST=
+WITH_ROOT=
 
 while [ "$1" != "" ]; do
   case $1 in
-    build )
-      WITH_BUILD=1
-      ;;
-    check )
-      WITH_CHECK=1
-      ;;
-    coveralls )
-      WITH_COVERALLS=1
-      ;;
-    full )
-      WITH_FULL=1
-      ;;
-    publish )
-      WITH_PUBLISH=1
-      ;;
-    test )
-      WITH_TEST=1
+    root )
+      WITH_ROOT=1
       ;;
     * )
       echo "*** Unknown option $1"
-      exit 1
       ;;
   esac
   shift
 done
 
-if [ "$WITH_CHECK" != "" ]; then
-  echo ""
-  echo "*** Running code check"
+echo ""
+echo "*** Running code checks"
 
-  yarn run check
+yarn run check
+
+echo ""
+echo "*** Running build"
+
+yarn run build
+
+echo ""
+echo "*** Running tests"
+
+yarn run test
+
+if [ -f ".coveralls.yml" ]; then
+  echo ""
+  echo "*** Submitting coverage"
+
+  yarn run coveralls < coverage/lcov.info
 fi
 
-if [ "$WITH_BUILD" != "" ]; then
-  echo ""
-  echo "*** Running build"
-
-  yarn run build
-fi
-
-if [ "$WITH_TEST" != "" ]; then
-  echo ""
-  echo "*** Running test suite"
-
-  yarn run test
-
-  if [ "$WITH_COVERALLS" != "" ]; then
-    echo ""
-    echo "*** Submitting coverage to coveralls.io"
-
-    node_modules/.bin/coveralls < coverage/lcov.info
-  fi
-fi
-
-# Pull requests and commits to other branches shouldn't try to deploy, just build to verify
 if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "master" ]; then
   echo ""
   echo "*** Branch check completed"
@@ -97,39 +69,37 @@ echo "*** Incrementing package version"
 yarn config set version-git-message "[CI Skip] %s"
 yarn version --new-version patch
 
-echo ""
-echo "*** Pushing version update to GitHub"
-
-git push --quiet --tags origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
-
 PACKAGE_VERSION=$(cat package.json \
   | grep version \
   | head -1 \
   | awk -F: '{ print $2 }' \
   | sed 's/[",]//g')
 
-if [ "$WITH_PUBLISH" != "" ]; then
+echo ""
+echo "*** Pushing version update to GitHub"
+
+git push --quiet --tags origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
+
+echo ""
+echo "*** Setting up .npmrc"
+
+yarn run makeshift
+
+if [  "$WITH_ROOT" == "" ]; then
   echo ""
-  echo "*** Setting up .npmrc"
+  echo "*** Copying package files to build"
 
-  node_modules/.bin/makeshift
+  cp LICENSE package.json build/
+  cd build
+fi
 
-  if [  "$WITH_FULL" == "" ]; then
-    echo ""
-    echo "*** Copying package files to build"
+echo ""
+echo "*** Publishing to npm"
 
-    cp LICENSE package.json build/
-    cd build
-  fi
+yarn publish --access public --new-version $PACKAGE_VERSION
 
-  echo ""
-  echo "*** Publishing to npm"
-
-  yarn publish --access public --new-version $PACKAGE_VERSION
-
-  if [ "$WITH_FULL" != "" ]; then
-    cd ..
-  fi
+if [ "$WITH_ROOT" != "" ]; then
+  cd ..
 fi
 
 echo ""
