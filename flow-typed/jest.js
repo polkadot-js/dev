@@ -100,19 +100,6 @@ type JestMatcherResult = {
 
 type JestMatcher = (actual: any, expected: any) => JestMatcherResult;
 
-type JestPromiseType = {
-  /**
-   * Use rejects to unwrap the reason of a rejected promise so any other
-   * matcher can be chained. If the promise is fulfilled the assertion fails.
-   */
-  rejects: JestExpectType,
-  /**
-   * Use resolves to unwrap the value of a fulfilled promise so any other
-   * matcher can be chained. If the promise is rejected the assertion fails.
-   */
-  resolves: JestExpectType
-};
-
 /**
  *  Plugin: jest-enzyme
  */
@@ -278,6 +265,19 @@ type JestExpectType = {
    * matching the most recent snapshot when it is called.
    */
   toThrowErrorMatchingSnapshot(): void
+};
+
+type JestPromiseType = {
+  /**
+   * Use rejects to unwrap the reason of a rejected promise so any other
+   * matcher can be chained. If the promise is fulfilled the assertion fails.
+   */
+  rejects: JestExpectType,
+  /**
+   * Use resolves to unwrap the value of a fulfilled promise so any other
+   * matcher can be chained. If the promise is rejected the assertion fails.
+   */
+  resolves: JestExpectType
 };
 
 type JestObjectType = {
