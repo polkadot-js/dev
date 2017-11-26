@@ -1,7 +1,13 @@
 // ISC, Copyright 2017 Jaco Greeff
 
+const index = require('./');
+
 describe('index', () => {
   it('runs the test', () => {
-    expect(true).not.toBe(false);
+    expect(index).toBeDefined();
+  });
+
+  it('runs the echo function', () => {
+    expect(index.echo('something')).toEqual('something');
   });
 });
