@@ -55,13 +55,10 @@ git config user.name "Travis CI"
 git config user.email "$COMMIT_AUTHOR_EMAIL"
 git remote set-url origin https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git > /dev/null 2>&1
 
-if [ -n "$(git status --untracked-files=no --porcelain)" ]; then
-  echo ""
-  echo "*** Adding build artifacts"
+echo ""
+echo "*** Adding build artifacts"
 
-  git add .
-  git commit -m "[CI Skip] Build artifacts"
-fi
+git add .
 
 echo ""
 echo "*** Incrementing package version"
@@ -76,7 +73,7 @@ PACKAGE_VERSION=$(cat package.json \
   | sed 's/[",]//g')
 
 echo ""
-echo "*** Pushing version update to GitHub"
+echo "*** Pushing $PACKAGE_VERSION to GitHub"
 
 git push --quiet --tags origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
 
