@@ -18,6 +18,11 @@ while [ "$1" != "" ]; do
 done
 
 echo ""
+echo "*** Upgrading packages to latest range"
+
+yarn upgrade
+
+echo ""
 echo "*** Running code checks"
 
 yarn run check
