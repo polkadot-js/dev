@@ -89,6 +89,7 @@ function npm_publish () {
     echo ""
     echo "*** Copying package files to build"
 
+    PUBLISH_BUILD=1
     cp LICENSE README.md package.json build/
     cd build
   fi
@@ -101,7 +102,7 @@ function npm_publish () {
   echo ""
   echo "*** Npm publish completed"
 
-  if [ ! -f "../.npmroot" ]; then
+  if [ -n "$PUBLISH_BUILD" ]; then
     cd ..
   fi
 }
