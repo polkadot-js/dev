@@ -100,8 +100,6 @@ function npm_get_version () {
 }
 
 function npm_publish () {
-  npm_get_version
-
   if [ ! -f ".npmroot" ]; then
     echo ""
     echo "*** Copying package files to build"
@@ -205,6 +203,8 @@ git_setup
 git_bump
 
 if [ -n "$BUMP_VERSION" ]; then
+  npm_get_version
+
   if [ -n "$NPM_TOKEN" ]; then
     npm_setup
     loop_func npm_publish
