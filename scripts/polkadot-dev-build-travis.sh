@@ -154,8 +154,8 @@ if [ -d "packages" ]; then
   PACKAGES=( $(ls -1d packages/*) )
 fi
 
-loop_func run_check
-loop_func run_build
+run_check
+run_build
 run_test
 
 if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "master" ]; then
@@ -170,7 +170,7 @@ git_bump
 
 if [ -n "$NPM_TOKEN" ]; then
   npm_setup
-  loop_exec npm_publish
+  loop_func npm_publish
 fi
 
 echo ""
