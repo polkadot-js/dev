@@ -4,26 +4,28 @@
 set -e
 
 function build_js () {
+  ROOT=$1
+
   echo ""
   echo "*** Cleaning build directory"
 
-  rm -rf build
+  yarn run rimraf $ROOT/build
 
   echo ""
   echo "*** Compiling via babel"
 
-  yarn run babel --out-dir build --ignore '*.spec.js' src
+  yarn run babel --out-dir $ROOT/build --ignore '*.spec.js' $ROOT/src
 
   echo ""
   echo "*** Copying flow types (source)"
 
-  yarn run flow-copy-source --verbose --ignore '*.spec.js' src build
+  yarn run flow-copy-source --verbose --ignore '*.spec.js' $ROOT/src $ROOT/build
 
-  if [ -d "flow-typed" ]; then
+  if [ -d "$ROOT/flow-typed" ]; then
     echo ""
     echo "*** Copying flow types (libraries)"
 
-    cp -r flow-typed build
+    cp -r $ROOT/flow-typed $ROOT/build
   fi
 
   echo ""
@@ -32,19 +34,15 @@ function build_js () {
 
 if [ -d "packages" ]; then
   PACKAGES=( $(ls -1d packages/*) )
-fi
 
-if [ -n "$PACKAGES" ]; then
   for PACKAGE in "${PACKAGES[@]}"; do
     echo ""
     echo "*** Executing in $PACKAGE"
 
-    cd $PACKAGE
-    build_js
-    cd ../..
+    build_js "$PACKAGE"
   done
 else
-  build_js
+  build_js "."
 fi
 
 exit 0

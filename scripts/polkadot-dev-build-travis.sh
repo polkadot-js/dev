@@ -136,7 +136,9 @@ function git_bump () {
 function loop_func () {
   FUNC=$1
 
-  if [ -n "$PACKAGES" ]; then
+  if [ -d "packages" ]; then
+    PACKAGES=( $(ls -1d packages/*) )
+
     for PACKAGE in "${PACKAGES[@]}"; do
       echo ""
       echo "*** Executing in $PACKAGE"
@@ -149,10 +151,6 @@ function loop_func () {
     $FUNC
   fi
 }
-
-if [ -d "packages" ]; then
-  PACKAGES=( $(ls -1d packages/*) )
-fi
 
 run_check
 run_build
