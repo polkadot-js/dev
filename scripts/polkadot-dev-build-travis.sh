@@ -5,17 +5,27 @@ set -e
 
 GIT_MESSAGE="[CI Skip] %s"
 
-function check_build () {
+function run_check () {
   echo ""
-  echo "*** Running build checks"
+  echo "*** Running checks"
 
   yarn run check
 
+  echo ""
+  echo "*** Checks completed"
+}
+
+function run_build () {
   echo ""
   echo "*** Running build"
 
   yarn run build
 
+  echo ""
+  echo "*** Build completed"
+}
+
+function run_test () {
   echo ""
   echo "*** Running tests"
 
@@ -29,7 +39,7 @@ function check_build () {
   fi
 
   echo ""
-  echo "*** Build checks completed"
+  echo "*** Tests completed"
 }
 
 function lerna_bump () {
@@ -144,7 +154,9 @@ if [ -d "packages" ]; then
   PACKAGES=( $(ls -1d packages/*) )
 fi
 
-loop_func check_build
+loop_func run_check
+loop_func run_build
+run_test
 
 if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "master" ]; then
   echo ""
@@ -157,7 +169,7 @@ git_setup
 git_bump
 
 if [ -n "$NPM_TOKEN" ]; then
-  loop_func
+  npm_setup
   loop_exec npm_publish
 fi
 
