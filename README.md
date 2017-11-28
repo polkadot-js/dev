@@ -1,3 +1,5 @@
+![ISC](https://img.shields.io/badge/license-ISC-lightgrey.svg)
+[![npm (scoped)](https://img.shields.io/npm/v/@polkadot/dev.svg)](https://www.npmjs.com/package/@polkadot/dev)
 [![Build Status](https://travis-ci.org/polkadot-js/dev.svg?branch=master)](https://travis-ci.org/polkadot-js/dev)
 [![Greenkeeper badge](https://badges.greenkeeper.io/polkadot-js/dev.svg)](https://greenkeeper.io/)
 [![Dependency Status](https://david-dm.org/polkadot-js/dev.svg)](https://david-dm.org/polkadot-js/dev)
