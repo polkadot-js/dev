@@ -122,9 +122,9 @@ if [ -d "packages" ]; then
     echo ""
     echo "*** Executing in $PACKAGE"
 
-    pushd $PACKAGE
+    cd $PACKAGE
     check_build
-    popd
+    cd ../..
   done
 else
   check_build
@@ -150,9 +150,9 @@ if [ -n "$NPM_TOKEN" ]; then
 
   if [ -n "$PACKAGES" ]; then
     for PACKAGE in "${PACKAGES[@]}"; do
-      pushd $PACKAGE
+      cd $PACKAGE
       publish_npm
-      popd
+      cd ../..
     done
   else
     publish_npm
