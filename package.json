@@ -1,12 +1,12 @@
 {
   "name": "@polkadot/dev",
-  "version": "0.8.1",
+  "version": "0.9.0",
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "bin": {
-    "polkadot-dev-build-babel": "./scripts/build-babel.sh",
-    "polkadot-dev-build-docs": "./scripts/build-docs.js",
-    "polkadot-dev-build-travis": "./scripts/build-travis.sh",
-    "polkadot-dev-copy-skeleton": "./scripts/copy-skeleton.sh"
+    "polkadot-dev-build-babel": "./scripts/polkadot-dev-build-babel.sh",
+    "polkadot-dev-build-docs": "./scripts/polkadot-dev-build-docs.js",
+    "polkadot-dev-build-travis": "./scripts/polkadot-dev-build-travis.sh",
+    "polkadot-dev-copy-skeleton": "./scripts/polkadot-dev-copy-skeleton.sh"
   },
   "keywords": [
     "Polkadot"
