@@ -4,6 +4,7 @@
 set -e
 
 GIT_MESSAGE="[CI Skip] %s"
+BUMP_VERSION=
 
 function run_check () {
   echo ""
@@ -42,22 +43,38 @@ function run_test () {
   echo "*** Tests completed"
 }
 
+function lerna_get_version () {
+  LERNA_VERSION=$(cat lerna.json \
+    | grep version \
+    | head -1 \
+    | awk -F: '{ print $2 }' \
+    | sed 's/[",]//g')
+}
+
 function lerna_bump () {
   echo ""
   echo "*** Incrementing lerna version"
 
+  lerna_get_version
+  LERNA_VERSION_PRE="$LERNA_VERSION"
+
   lerna publish --skip-npm --yes --message "$GIT_MESSAGE" --cd-version patch
+
+  lerna_get_version
+  LERNA_VERSION_POST="$LERNA_VERSION"
 
   echo ""
   echo "*** Lerna increment completed"
 }
 
 function npm_bump () {
+  VERSION=$1
+
   echo ""
   echo "*** Incrementing npm version"
 
   yarn config set version-git-message "$GIT_MESSAGE"
-  yarn version --new-version patch
+  yarn version --new-version $VERSION
 
   echo ""
   echo "*** Npm increment completed"
@@ -73,12 +90,16 @@ function npm_setup () {
   echo "*** Npm setup completed"
 }
 
-function npm_publish () {
-  PACKAGE_VERSION=$(cat package.json \
+function npm_get_version () {
+  NPM_VERSION=$(cat package.json \
     | grep version \
     | head -1 \
     | awk -F: '{ print $2 }' \
     | sed 's/[",]//g')
+}
+
+function npm_publish () {
+  npm_get_version
 
   if [ ! -f ".npmroot" ]; then
     echo ""
@@ -92,7 +113,7 @@ function npm_publish () {
   echo ""
   echo "*** Publishing to npm"
 
-  yarn publish --access public --new-version $PACKAGE_VERSION
+  yarn publish --access public --new-version $NPM_VERSION
 
   echo ""
   echo "*** Npm publish completed"
@@ -135,11 +156,18 @@ function git_push () {
 function git_bump () {
   if [ -f "lerna.json" ]; then
     lerna_bump
+
+    if [ "$LERNA_VERSION_PRE" != "$LERNA_VERSION_POST" ]; then
+      BUMP_VERSION="$LERNA_VERSION"
+    fi
   else
-    npm_bump
+    BUMP_VERSION="patch"
   fi
 
-  git_push
+  if [ -n "$BUMP_VERSION" ]; then
+    npm_bump "$BUMP_VERSION"
+    git_push
+  fi
 }
 
 function loop_func () {
@@ -175,7 +203,7 @@ fi
 git_setup
 git_bump
 
-if [ -n "$NPM_TOKEN" ]; then
+if [ -n "$BUMP_VERSION" ] && [ -n "$NPM_TOKEN" ]; then
   npm_setup
   loop_func npm_publish
 fi
