@@ -32,41 +32,6 @@ function check_build () {
   echo "*** Build checks completed"
 }
 
-function git_setup () {
-  echo ""
-  echo "*** Setting up GitHub for $TRAVIS_REPO_SLUG"
-
-  git config push.default simple
-  git config merge.ours.driver true
-  git config user.name "Travis CI"
-  git config user.email "$COMMIT_AUTHOR_EMAIL"
-  git remote set-url origin https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git > /dev/null 2>&1
-
-  echo ""
-  echo "*** Adding build artifacts"
-
-  git add .
-
-  echo ""
-  echo "*** GitHub setup completed"
-}
-
-function package_bump () {
-  echo ""
-  echo "*** Incrementing package version"
-
-  yarn config set version-git-message "$GIT_MESSAGE"
-  yarn version --new-version patch
-
-  echo ""
-  echo "*** Pushing increment to GitHub"
-
-  git push --quiet --tags origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
-
-  echo ""
-  echo "*** Package increment completed"
-}
-
 function lerna_bump () {
   echo ""
   echo "*** Incrementing lerna version"
@@ -77,9 +42,25 @@ function lerna_bump () {
   echo "*** Lerna increment completed"
 }
 
+function npm_bump () {
+  echo ""
+  echo "*** Incrementing npm version"
+
+  yarn config set version-git-message "$GIT_MESSAGE"
+  yarn version --new-version patch
+
+  echo ""
+  echo "*** Pushing increment to GitHub"
+
+  git push --quiet --tags origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
+
+  echo ""
+  echo "*** Npm increment completed"
+}
+
 function npm_setup () {
   echo ""
-  echo "*** Setting up .npmrc"
+  echo "*** Setting up npm"
 
   yarn run makeshift
 
@@ -87,7 +68,7 @@ function npm_setup () {
   echo "*** Npm setup completed"
 }
 
-function publish_npm () {
+function npm_publish () {
   PACKAGE_VERSION=$(cat package.json \
     | grep version \
     | head -1 \
@@ -115,20 +96,55 @@ function publish_npm () {
   fi
 }
 
+function git_setup () {
+  echo ""
+  echo "*** Setting up GitHub for $TRAVIS_REPO_SLUG"
+
+  git config push.default simple
+  git config merge.ours.driver true
+  git config user.name "Travis CI"
+  git config user.email "$COMMIT_AUTHOR_EMAIL"
+  git remote set-url origin https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git > /dev/null 2>&1
+
+  echo ""
+  echo "*** Adding build artifacts"
+
+  git add .
+
+  echo ""
+  echo "*** GitHub setup completed"
+}
+
+function git_bump () {
+  if [ -n "$PACKAGES" ] then
+    lerna_bump
+  else
+    npm_bump
+  fi
+}
+
+function loop_func () {
+  FUNC=$1
+
+  if [ -n "$PACKAGES" ]; then
+    for PACKAGE in "${PACKAGES[@]}"; do
+      echo ""
+      echo "*** Executing in $PACKAGE"
+
+      cd $PACKAGE
+      $FUNC
+      cd ../..
+    done
+  else
+    $FUNC
+  fi
+}
+
 if [ -d "packages" ]; then
   PACKAGES=( $(ls -1d packages/*) )
-
-  for PACKAGE in "${PACKAGES[@]}"; do
-    echo ""
-    echo "*** Executing in $PACKAGE"
-
-    cd $PACKAGE
-    check_build
-    cd ../..
-  done
-else
-  check_build
 fi
+
+loop_func check_build
 
 if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "master" ]; then
   echo ""
@@ -138,25 +154,11 @@ if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "master" ]; then
 fi
 
 git_setup
-
-if [ -n "$PACKAGES" ] then
-  lerna_bump
-else
-  package_bump
-fi
+git_bump
 
 if [ -n "$NPM_TOKEN" ]; then
-  npm_setup
-
-  if [ -n "$PACKAGES" ]; then
-    for PACKAGE in "${PACKAGES[@]}"; do
-      cd $PACKAGE
-      publish_npm
-      cd ../..
-    done
-  else
-    publish_npm
-  fi
+  loop_func
+  loop_exec npm_publish
 fi
 
 echo ""
