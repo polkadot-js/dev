@@ -68,13 +68,11 @@ function lerna_bump () {
 }
 
 function npm_bump () {
-  VERSION=$1
-
   echo ""
   echo "*** Incrementing npm version"
 
   yarn config set version-git-message "$GIT_MESSAGE"
-  yarn version --new-version $VERSION
+  yarn version --new-version $BUMP_VERSION
 
   echo ""
   echo "*** Npm increment completed"
@@ -165,7 +163,7 @@ function git_bump () {
   fi
 
   if [ -n "$BUMP_VERSION" ]; then
-    npm_bump "$BUMP_VERSION"
+    npm_bump
     git_push
   fi
 }
