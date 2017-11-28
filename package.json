@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/polkadot-js/dev#readme",
   "scripts": {
-    "build": "./scripts/build-docs.js && ./scripts/build-babel.sh",
+    "build": "./scripts/polkadot-dev-build-docs.js && ./scripts/polkadot-dev-build-babel.sh",
     "check": "eslint flow-typed src scripts && flow check",
     "test": "jest --coverage src"
   },
