@@ -3,7 +3,6 @@
 
 set -e
 
-GIT_MESSAGE="[CI Skip] %s"
 BUMP_VERSION=
 
 function run_check () {
@@ -58,7 +57,8 @@ function lerna_bump () {
   lerna_get_version
   LERNA_VERSION_PRE="$LERNA_VERSION"
 
-  lerna publish --skip-npm --yes --message "$GIT_MESSAGE" --cd-version patch
+  lerna publish --skip-git --skip-npm --yes --cd-version patch
+  git add .
 
   lerna_get_version
   LERNA_VERSION_POST="$LERNA_VERSION"
@@ -75,6 +75,7 @@ function npm_bump () {
   yarn config set version-git-tag false
   yarn config set version-git-message "$GIT_MESSAGE"
   yarn version --new-version $BUMP_VERSION
+  git add .
 
   echo ""
   echo "*** Npm increment completed"
@@ -147,6 +148,7 @@ function git_push () {
   echo ""
   echo "*** Pushing to GitHub"
 
+  git commit -m "[CI Skip] $NPM_VERSION"
   git push --quiet origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
 
   echo ""
@@ -166,7 +168,6 @@ function git_bump () {
 
   if [ -n "$BUMP_VERSION" ]; then
     npm_bump
-    git_push
   fi
 }
 
@@ -203,9 +204,13 @@ fi
 git_setup
 git_bump
 
-if [ -n "$BUMP_VERSION" ] && [ -n "$NPM_TOKEN" ]; then
-  npm_setup
-  loop_func npm_publish
+if [ -n "$BUMP_VERSION" ]; then
+  if [ -n "$NPM_TOKEN" ]; then
+    npm_setup
+    loop_func npm_publish
+  fi
+
+  git_push
 fi
 
 echo ""
