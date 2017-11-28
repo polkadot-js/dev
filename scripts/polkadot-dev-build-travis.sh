@@ -147,7 +147,7 @@ function git_push () {
   echo ""
   echo "*** Pushing to GitHub"
 
-  git push --quiet --tags origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
+  git push --quiet origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
 
   echo ""
   echo "*** Github push completed"
