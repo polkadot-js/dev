@@ -126,7 +126,7 @@ function git_setup () {
 }
 
 function git_bump () {
-  if [ -n "$PACKAGES" ]; then
+  if [ -f "lerna.json" ]; then
     lerna_bump
   else
     npm_bump
@@ -136,7 +136,7 @@ function git_bump () {
 function loop_func () {
   FUNC=$1
 
-  if [ -d "packages" ]; then
+  if [ -f "lerna.json" ]; then
     PACKAGES=( $(ls -1d packages/*) )
 
     for PACKAGE in "${PACKAGES[@]}"; do
