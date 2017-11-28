@@ -120,6 +120,7 @@ function git_setup () {
   echo ""
   echo "*** Adding build artifacts"
 
+  git checkout $TRAVIS_BRANCH
   git add .
 
   echo ""
