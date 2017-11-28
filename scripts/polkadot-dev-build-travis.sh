@@ -60,11 +60,6 @@ function npm_bump () {
   yarn version --new-version patch
 
   echo ""
-  echo "*** Pushing increment to GitHub"
-
-  git push --quiet --tags origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
-
-  echo ""
   echo "*** Npm increment completed"
 }
 
@@ -127,12 +122,24 @@ function git_setup () {
   echo "*** GitHub setup completed"
 }
 
+function git_push () {
+  echo ""
+  echo "*** Pushing to GitHub"
+
+  git push --quiet --tags origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
+
+  echo ""
+  echo "*** Github push completed"
+}
+
 function git_bump () {
   if [ -f "lerna.json" ]; then
     lerna_bump
   else
     npm_bump
   fi
+
+  git_push
 }
 
 function loop_func () {
