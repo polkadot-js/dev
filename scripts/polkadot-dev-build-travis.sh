@@ -126,7 +126,7 @@ function git_setup () {
 }
 
 function git_bump () {
-  if [ -n "$PACKAGES" ] then
+  if [ -n "$PACKAGES" ]; then
     lerna_bump
   else
     npm_bump
