@@ -71,6 +71,8 @@ function npm_bump () {
   echo ""
   echo "*** Incrementing npm version"
 
+  yarn config set version-sign-git-tag false
+  yarn config set version-git-tag false
   yarn config set version-git-message "$GIT_MESSAGE"
   yarn version --new-version $BUMP_VERSION
 
