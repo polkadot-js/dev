@@ -2,9 +2,10 @@
 // @flow
 
 declare class WebAssembly$Module {
+  constructor (code: Uint8Array): WebAssembly$Module;
 }
 
-declare interface WebAssembly$Instance$Exports {
+declare type WebAssembly$Instance$Exports = {
   [string]: (any) => any
 }
 
@@ -14,11 +15,11 @@ declare class WebAssembly$Instance {
   constructor (module: WebAssembly$Module, imports?: WebAssembly$Imports): WebAssembly$Instance;
 }
 
-declare interface WebAssembly$Memory$Config {
+declare type WebAssembly$Memory$Config = {
   initial: number
 }
 
-declare interface WebAssembly$Table$Config {
+declare type WebAssembly$Table$Config = {
   initial: number,
   element: 'anyfunc'
 }
@@ -31,7 +32,7 @@ declare class WebAssembly$Table {
   constructor (config: WebAssembly$Table$Config): WebAssembly$Table
 }
 
-declare interface WebAssembly$Imports {
+declare type WebAssembly$Imports = {
   env?: {
     memory?: WebAssembly$Memory,
     memoryBase?: number,
@@ -50,5 +51,6 @@ declare class WebAssembly {
 
   static Instance: Class<WebAssembly$Instance>;
   static Memory: Class<WebAssembly$Memory>;
+  static Module: Class<WebAssembly$Module>;
   static Table: Class<WebAssembly$Table>;
 }
