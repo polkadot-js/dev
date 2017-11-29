@@ -30,8 +30,8 @@
   "homepage": "https://github.com/polkadot-js/dev#readme",
   "scripts": {
     "build": "./scripts/polkadot-dev-build-docs.js && ./scripts/polkadot-dev-build-babel.sh",
-    "check": "yarn eslint flow-typed src scripts && yarn flow check",
-    "test": "yarn jest --coverage src"
+    "check": "eslint flow-typed src scripts && flow check",
+    "test": "jest --coverage src"
   },
   "devDependencies": {},
   "dependencies": {
