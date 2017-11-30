@@ -1,9 +1,5 @@
 {
-  "env": {
-    "browser": true,
-    "jest/globals": true,
-    "node": true
-  },
+  "parser": "babel-eslint",
   "extends": [
     "semistandard",
     "standard-react",
@@ -11,9 +7,16 @@
     "plugin:flowtype/recommended",
     "plugin:jest/recommended"
   ],
-  "parser": "babel-eslint",
   "plugins": [
     "flowtype",
     "jest"
-  ]
+  ],
+  "globals": {
+    "WebAssembly": true,
+  },
+  "env": {
+    "browser": true,
+    "jest/globals": true,
+    "node": true
+  }
 }
