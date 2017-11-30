@@ -1,20 +1,22 @@
 {
-  "env": {
-    "browser": true,
-    "mocha": true,
-    "node": true
-  },
+  "parser": "babel-eslint",
   "extends": [
     "semistandard",
     "standard-react",
     "standard-jsx",
-    "plugin:flowtype/recommended"
+    "plugin:flowtype/recommended",
+    "plugin:jest/recommended"
+  ],
+  "plugins": [
+    "flowtype",
+    "jest"
   ],
   "globals": {
-    "expect": true
+    "WebAssembly": true
   },
-  "parser": "babel-eslint",
-  "plugins": [
-    "flowtype"
-  ]
+  "env": {
+    "browser": true,
+    "jest/globals": true,
+    "node": true
+  }
 }
