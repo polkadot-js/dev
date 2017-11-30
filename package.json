@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/dev",
-  "version": "0.9.9",
+  "version": "0.10.0",
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "bin": {
     "polkadot-dev-build-babel": "./scripts/polkadot-dev-build-babel.sh",
@@ -50,6 +50,7 @@
     "eslint": "^4.11.0",
     "eslint-config-semistandard": "^11.0.0",
     "eslint-config-standard": "^10.2.1",
+    "eslint-config-standard-jsx": "^4.0.2",
     "eslint-config-standard-react": "^5.0.0",
     "eslint-plugin-flowtype": "^2.39.1",
     "eslint-plugin-import": "^2.8.0",
