@@ -1,4 +1,5 @@
 ![ISC](https://img.shields.io/badge/license-ISC-lightgrey.svg)
+[![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg)](https://github.com/Flet/semistandard)
 [![npm (scoped)](https://img.shields.io/npm/v/@polkadot/dev.svg)](https://www.npmjs.com/package/@polkadot/dev)
 [![Build Status](https://travis-ci.org/polkadot-js/dev.svg?branch=master)](https://travis-ci.org/polkadot-js/dev)
 [![Greenkeeper badge](https://badges.greenkeeper.io/polkadot-js/dev.svg)](https://greenkeeper.io/)
