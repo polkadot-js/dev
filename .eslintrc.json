@@ -12,7 +12,7 @@
     "jest"
   ],
   "globals": {
-    "WebAssembly": true,
+    "WebAssembly": true
   },
   "env": {
     "browser": true,
