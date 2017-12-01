@@ -1,7 +1,7 @@
 module.exports = {
   collectCoverage: true,
   testMatch: [
-    '**/src/(*.).spec.js'
+    '**/(*.)spec.js'
   ],
   testPathIgnorePatterns: [
     '/node_modules/',
