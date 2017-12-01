@@ -1,18 +1,18 @@
-// https://raw.githubusercontent.com/flowtype/flow-typed/b3d21ff5bc48906c8cd3b2b6a4b094a625f62cae/definitions/npm/koa-router_v7.2.x/flow_v0.25.x-/koa-router_v7.2.x.js
+// https://github.com/flowtype/flow-typed/blob/b3d21ff5bc48906c8cd3b2b6a4b094a625f62cae/definitions/npm/koa-router_v7.2.x/flow_v0.25.x-/koa-router_v7.2.x.js
 // @flow
 
-type KoaRouter$Middleware = (
-  ctx: any,
-  next: () => void | Promise<void>
-) => Promise<void> | void;
-
-type KoaRouter$ParamMiddleware = (
-  param: string,
-  ctx: any,
-  next: () => void | Promise<void>
-) => Promise<void> | void;
-
 declare module 'koa-router' {
+  declare type KoaRouter$Middleware = (
+    ctx: any,
+    next: () => void | Promise<void>
+  ) => Promise<void> | void;
+
+  declare type KoaRouter$ParamMiddleware = (
+    param: string,
+    ctx: any,
+    next: () => void | Promise<void>
+  ) => Promise<void> | void;
+
   declare class Router {
     constructor(opts?: {
       prefix?: string,

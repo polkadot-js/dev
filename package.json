@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/dev",
-  "version": "0.11.2",
+  "version": "0.12.0",
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "bin": {
     "polkadot-dev-build-babel": "./scripts/polkadot-dev-build-babel.sh",
@@ -29,11 +29,13 @@
   },
   "homepage": "https://github.com/polkadot-js/dev#readme",
   "scripts": {
-    "build": "./scripts/polkadot-dev-build-docs.js && ./scripts/polkadot-dev-build-babel.sh",
+    "build": "./scripts/polkadot-dev-build-docs.js && ./scripts/polkadot-dev-build-babel.sh && rimraf build && copyfiles config/* flow-typed/* scripts/* skeleton/* build",
     "check": "eslint flow-typed src scripts && flow check",
-    "test": "jest --coverage src"
+    "test": "jest src"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "copyfiles": "^1.2.0"
+  },
   "dependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
@@ -43,8 +45,6 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
-    "babel-preset-flow": "^6.23.0",
-    "babel-preset-stage-0": "^6.24.1",
     "coveralls": "^3.0.0",
     "dox": "^0.9.0",
     "eslint": "^4.11.0",
@@ -64,6 +64,7 @@
     "jest": "^21.2.1",
     "makeshift": "^1.1.0",
     "mkdirp": "^0.5.1",
+    "postcss": "^6.0.14",
     "postcss-sass": "^0.2.0",
     "rimraf": "^2.6.2",
     "stylelint": "^8.2.0",

@@ -1,4 +1,4 @@
-// https://raw.githubusercontent.com/flowtype/flow-typed/b3d21ff5bc48906c8cd3b2b6a4b094a625f62cae/definitions/npm/koa_v2.x.x/flow_v0.47.x-/koa_v2.x.x.js
+// https://github.com/flowtype/flow-typed/blob/b3d21ff5bc48906c8cd3b2b6a4b094a625f62cae/definitions/npm/koa_v2.x.x/flow_v0.47.x-/koa_v2.x.x.js
 // @flow
 
 /*
