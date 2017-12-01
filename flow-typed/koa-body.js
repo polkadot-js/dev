@@ -1,6 +1,11 @@
 // @flow
 
 declare module 'koa-body' {
+  declare type KoaBody$Middleware = (
+    ctx: any,
+    next: () => void | Promise<void>
+  ) => Promise<void> | void;
+
   declare type KoaBody$Options = {
     patchNode?: boolean,
     patchKoa?: boolean,
@@ -17,5 +22,5 @@ declare module 'koa-body' {
     strict?: boolean
   };
 
-  declare var exports: (options?: KoaBody$Options) => KoaRouter$Middleware
+  declare var exports: (options?: KoaBody$Options) => KoaBody$Middleware
 }
