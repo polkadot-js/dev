@@ -1,10 +1,10 @@
-![isc](https://img.shields.io/badge/license-ISC-lightgrey.svg?style=for-the-badge)
-[![style](https://img.shields.io/badge/code%20style-semistandard-lightgrey.svg?style=for-the-badge)](https://github.com/Flet/semistandard)
-[![npm](https://img.shields.io/npm/v/@polkadot/dev.svg?style=for-the-badge)](https://www.npmjs.com/package/@polkadot/dev)
-[![travis](https://img.shields.io/travis/polkadot-js/dev.svg?style=for-the-badge)](https://travis-ci.org/polkadot-js/dev)
-[![greenkeeper](https://img.shields.io/badge/greenkeeper-enabled-brightgreen.svg?style=for-the-badge)](https://greenkeeper.io/)
-[![dependency](https://img.shields.io/david/polkadot-js/dev.svg?style=for-the-badge)](https://david-dm.org/polkadot-js/dev)
-[![devDependency](https://img.shields.io/david/dev/polkadot-js/dev.svg?style=for-the-badge)](https://david-dm.org/polkadot-js/dev#info=devDependencies)
+![isc](https://img.shields.io/badge/license-ISC-lightgrey.svg?style=flat-square)
+[![style](https://img.shields.io/badge/code%20style-semistandard-lightgrey.svg?style=flat-square)](https://github.com/Flet/semistandard)
+[![npm](https://img.shields.io/npm/v/@polkadot/dev.svg?style=flat-square)](https://www.npmjs.com/package/@polkadot/dev)
+[![travis](https://img.shields.io/travis/polkadot-js/dev.svg?style=flat-square)](https://travis-ci.org/polkadot-js/dev)
+[![greenkeeper](https://img.shields.io/badge/greenkeeper-enabled-brightgreen.svg?style=flat-square)](https://greenkeeper.io/)
+[![dependency](https://img.shields.io/david/polkadot-js/dev.svg?style=flat-square)](https://david-dm.org/polkadot-js/dev)
+[![devDependency](https://img.shields.io/david/dev/polkadot-js/dev.svg?style=flat-square)](https://david-dm.org/polkadot-js/dev#info=devDependencies)
 
 # @polkadot/dev
 
