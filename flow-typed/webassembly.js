@@ -1,56 +1,58 @@
-// ISC, Copyright 2017 Jaco Greeff
 // @flow
 
-declare class WebAssembly$Module {
-  constructor (code: Uint8Array): WebAssembly$Module;
+declare class WebAssemblyModule {
+  constructor (code: Uint8Array): WebAssemblyModule;
 }
 
-declare type WebAssembly$Instance$Exports = {
+declare type WebAssemblyInstance$Exports = {
   [string]: (any) => any
 }
 
-declare class WebAssembly$Instance {
-  exports: WebAssembly$Instance$Exports;
+declare class WebAssemblyInstance {
+  exports: WebAssemblyInstance$Exports;
 
-  constructor (module: WebAssembly$Module, imports?: WebAssembly$Imports): WebAssembly$Instance;
+  constructor (module: WebAssemblyModule, imports?: WebAssemblyImports): WebAssemblyInstance;
 }
 
-declare type WebAssembly$Memory$Config = {
+declare type WebAssemblyMemory$Config = {
   initial: number
 }
 
-declare type WebAssembly$Table$Config = {
+declare type WebAssemblyTable$Config = {
   initial: number,
   element: 'anyfunc'
 }
 
-declare class WebAssembly$Memory {
-  constructor (config: WebAssembly$Memory$Config): WebAssembly$Memory
+declare class WebAssemblyMemory {
+  constructor (config: WebAssemblyMemory$Config): WebAssemblyMemory
 }
 
-declare class WebAssembly$Table {
-  constructor (config: WebAssembly$Table$Config): WebAssembly$Table
+declare class WebAssemblyTable {
+  constructor (config: WebAssemblyTable$Config): WebAssemblyTable
 }
 
-declare type WebAssembly$Imports = {
+declare type WebAssemblyImports = {
   env?: {
-    memory?: WebAssembly$Memory,
+    memory?: WebAssemblyMemory,
     memoryBase?: number,
-    table?: WebAssembly$Table,
+    table?: WebAssemblyTable,
     tableBase?: number
+  },
+  [string]: {
+    [string]: (any) => any
   }
 }
 
 declare class WebAssembly {
-  static compile (array: Uint8Array): WebAssembly$Module;
-  static instantiate (bytecode: Uint8Array, imports?: WebAssembly$Imports): Promise<{
-    module: WebAssembly$Module,
-    instance: WebAssembly$Instance
+  static compile (array: Uint8Array): WebAssemblyModule;
+  static instantiate (bytecode: Uint8Array, imports?: WebAssemblyImports): Promise<{
+    module: WebAssemblyModule,
+    instance: WebAssemblyInstance
   }>;
   static validate (bytecode: Uint8Array): boolean;
 
-  static Instance: Class<WebAssembly$Instance>;
-  static Memory: Class<WebAssembly$Memory>;
-  static Module: Class<WebAssembly$Module>;
-  static Table: Class<WebAssembly$Table>;
+  static Instance: Class<WebAssemblyInstance>;
+  static Memory: Class<WebAssemblyMemory>;
+  static Module: Class<WebAssemblyModule>;
+  static Table: Class<WebAssemblyTable>;
 }

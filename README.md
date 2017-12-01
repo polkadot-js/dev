@@ -1,11 +1,16 @@
-![ISC](https://img.shields.io/badge/license-ISC-lightgrey.svg)
-[![js-semistandard-style](https://img.shields.io/badge/code%20style-semistandard-brightgreen.svg)](https://github.com/Flet/semistandard)
-[![npm (scoped)](https://img.shields.io/npm/v/@polkadot/dev.svg)](https://www.npmjs.com/package/@polkadot/dev)
-[![Build Status](https://travis-ci.org/polkadot-js/dev.svg?branch=master)](https://travis-ci.org/polkadot-js/dev)
-[![Greenkeeper badge](https://badges.greenkeeper.io/polkadot-js/dev.svg)](https://greenkeeper.io/)
-[![Dependency Status](https://david-dm.org/polkadot-js/dev.svg)](https://david-dm.org/polkadot-js/dev)
-[![devDependency Status](https://david-dm.org/polkadot-js/dev/dev-status.svg)](https://david-dm.org/polkadot-js/dev#info=devDependencies)
+![isc](https://img.shields.io/badge/license-ISC-lightgrey.svg?style=flat-square)
+[![style](https://img.shields.io/badge/code%20style-semistandard-lightgrey.svg?style=flat-square)](https://github.com/Flet/semistandard)
+[![npm](https://img.shields.io/npm/v/@polkadot/dev.svg?style=flat-square)](https://www.npmjs.com/package/@polkadot/dev)
+[![travis](https://img.shields.io/travis/polkadot-js/dev.svg?style=flat-square)](https://travis-ci.org/polkadot-js/dev)
+[![greenkeeper](https://img.shields.io/badge/greenkeeper-enabled-brightgreen.svg?style=flat-square)](https://greenkeeper.io/)
+[![dependency](https://img.shields.io/david/polkadot-js/dev.svg?style=flat-square)](https://david-dm.org/polkadot-js/dev)
+[![devDependency](https://img.shields.io/david/dev/polkadot-js/dev.svg?style=flat-square)](https://david-dm.org/polkadot-js/dev#info=devDependencies)
 
 # @polkadot/dev
 
-A collection of shared CI scripts and development environment (configuration, dependencies) used by @polkadot projects. It aims to reduce the boilerplate and updates needed to perform building or libraries as well as a one-repository for [flow definitions](https://flow.org/) for 3rd-party libraries.
+A collection of shared CI scripts and development environment (configuration, dependencies) used by [@polkadot](https://polkadot.js.org) projects. Included here -
+
+- [style config](config/) Common configurations for [Babel](https://babeljs.io/), [ESLint](https://eslint.org/), [Jest](https://facebook.github.io/jest/) & [Stylelint](https://stylelint.io/).
+- [flow definitions](flow-typed/) A collection of 3rd-party [flow](https://flow.org/) definitions used by libraries and projects.
+- [build scripts](scripts/) Build scripts that take care of generating documentation, publishing to npm and other common tasks.
+- [config skeleton](skeleton/) Standard configurations that allow for project bootstrap, done via `yarn polkadot-dev-copy-skeleton`

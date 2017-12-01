@@ -58,7 +58,7 @@ function lerna_bump () {
   LERNA_VERSION_PRE="$LERNA_VERSION"
 
   lerna publish --skip-git --skip-npm --yes --cd-version patch
-  git add .
+  git add --all .
 
   lerna_get_version
   LERNA_VERSION_POST="$LERNA_VERSION"
@@ -75,7 +75,7 @@ function npm_bump () {
   yarn config set version-git-tag false
   yarn config set version-git-message "$GIT_MESSAGE"
   yarn version --new-version $BUMP_VERSION
-  git add .
+  git add --all .
 
   echo ""
   echo "*** Npm increment completed"
@@ -100,26 +100,20 @@ function npm_get_version () {
 }
 
 function npm_publish () {
-  if [ ! -f ".npmroot" ]; then
-    echo ""
-    echo "*** Copying package files to build"
+  echo ""
+  echo "*** Copying package files to build"
 
-    PUBLISH_BUILD=1
-    cp LICENSE README.md package.json build/
-    cd build
-  fi
+  cp LICENSE README.md package.json build/
 
   echo ""
   echo "*** Publishing to npm"
 
+  cd build
   yarn publish --access public --new-version $NPM_VERSION
+  cd ..
 
   echo ""
   echo "*** Npm publish completed"
-
-  if [ -n "$PUBLISH_BUILD" ]; then
-    cd ..
-  fi
 }
 
 function git_setup () {
@@ -136,7 +130,7 @@ function git_setup () {
   echo "*** Adding build artifacts"
 
   git checkout $TRAVIS_BRANCH
-  git add .
+  git add --all .
 
   echo ""
   echo "*** GitHub setup completed"

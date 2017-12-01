@@ -13,6 +13,10 @@ const SRC = 'src';
 rimraf.sync(DOC);
 mkdirp.sync(DOC);
 
+function makeMdLink (text, link, ref) {
+  return `[${text}](${link || ''}${link ? '.md' : ''}${ref ? '#' : ''}${ref ? ref.toLowerCase() : ''})`;
+}
+
 function cleanup (text) {
   return (text || '')
     .split('\n')
@@ -76,6 +80,7 @@ function writeFile (filePath, md) {
 
 function mdFromDefinition (definition, md) {
   const name = findTag(definition, 'name');
+  const alias = findTag(definition, 'alias');
   const description = findTag(definition, 'description');
   const summary = findTag(definition, 'summary');
   const _signature = findTag(definition, 'signature');
@@ -87,7 +92,16 @@ function mdFromDefinition (definition, md) {
     ? `\`\`\`js\n${_example}\n\`\`\``
     : '';
 
-  return `${md}\n\n## ${name}\n\n${summary}\n\n${signature}\n\n${description}\n\n${example}`;
+  let aliasLink = '';
+
+  if (alias) {
+    const [aliasPath, aliasMethod] = alias.split('/');
+    const aliasName = aliasPath + aliasMethod.substr(0, 1).toUpperCase() + aliasMethod.sustr(1);
+
+    aliasLink = makeMdLink(`(alias of ${aliasName})`, aliasPath, aliasName);
+  }
+
+  return `${md}\n\n## ${name}\n\n${summary} ${aliasLink}\n\n${signature}\n\n${description}\n\n${example}`;
 }
 
 function mdFromDefinitions (definitions, md) {
@@ -106,7 +120,7 @@ function mdFromDirectory (dir, md) {
   return mdFromDefinitions(definitions, names.reduce((md, name, index) => {
     const summary = findTag(definitions[index], 'summary');
 
-    return `${md}\n- [${name}](#${name.toLowerCase()}) ${summary}`;
+    return `${md}\n- ${makeMdLink(name, '', name)} ${summary}`;
   }, `${md}# ${dir}\n\n${summary} ${description}\n`));
 }
 
@@ -124,7 +138,7 @@ function generate (src) {
   const md = folders.reduce((md, dir) => {
     const definition = parseFile(path.join(src, dir, 'index.js'))[0];
 
-    return `${md}\n- [${dir}](${dir}.md) ${findTag(definition, 'summary')}`;
+    return `${md}\n- ${makeMdLink(dir, dir)} ${findTag(definition, 'summary')}`;
   }, `# Available interfaces\n\n${summary} ${description}\n`);
 
   writeFile(path.join(DOC, 'README.md'), files.reduce((md, file) => {
