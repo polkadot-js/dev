@@ -96,7 +96,7 @@ function mdFromDefinition (definition, md) {
 
   if (alias) {
     const [aliasPath, aliasMethod] = alias.split('/');
-    const aliasName = aliasPath + aliasMethod.substr(0, 1).toUpperCase() + aliasMethod.sustr(1);
+    const aliasName = aliasPath + aliasMethod.substr(0, 1).toUpperCase() + aliasMethod.substr(1);
 
     aliasLink = makeMdLink(`(alias of ${aliasName})`, aliasPath, aliasName);
   }
