@@ -1,5 +1,4 @@
 module.exports = {
-  collectCoverage: true,
   testMatch: [
     '**/(*.)spec.js'
   ],
