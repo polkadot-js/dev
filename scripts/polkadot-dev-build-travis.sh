@@ -31,7 +31,7 @@ function run_test () {
 
   yarn run test
 
-  if [ -f ".coveralls.yml" ]; then
+  if [ -f "coverage/lcov.info" ]; then
     echo ""
     echo "*** Submitting coverage"
 
