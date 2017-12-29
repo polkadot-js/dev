@@ -3,7 +3,7 @@
 import type { MemDown } from 'memdown';
 import type { LevelDown } from 'leveldown';
 
-declare interface LevelUp$AbstractStorage {}
+// declare interface LevelUp$AbstractStorage {}
 
 declare module 'levelup' {
   declare class LevelUp {
