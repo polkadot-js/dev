@@ -15,7 +15,8 @@ declare class WebAssemblyInstance {
 }
 
 declare type WebAssemblyMemory$Config = {
-  initial: number
+  initial: number,
+  maximum?: number
 }
 
 declare type WebAssemblyTable$Config = {
@@ -24,11 +25,13 @@ declare type WebAssemblyTable$Config = {
 }
 
 declare class WebAssemblyMemory {
-  constructor (config: WebAssemblyMemory$Config): WebAssemblyMemory
+  buffer: Uint8Array;
+
+  constructor (config: WebAssemblyMemory$Config): WebAssemblyMemory;
 }
 
 declare class WebAssemblyTable {
-  constructor (config: WebAssemblyTable$Config): WebAssemblyTable
+  constructor (config: WebAssemblyTable$Config): WebAssemblyTable;
 }
 
 declare type WebAssemblyImports = {
