@@ -1,6 +1,8 @@
 // ISC, Copyright 2017 Jaco Greeff
 // @flow
 
+const pkg = require('../package.json');
+
 /**
   @name test
   @signature test (): boolean
@@ -12,3 +14,6 @@
 
     test(); // => nothing
 */
+module.exports = function test (): void {
+  console.log(pkg.version);
+};
