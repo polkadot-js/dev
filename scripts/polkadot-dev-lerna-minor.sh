@@ -1,4 +1,5 @@
 #!/bin/sh
+# ISC, Copyright 2017-2018 Jaco Greeff
 
 set -e
 
