@@ -60,7 +60,7 @@
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-react": "^7.4.0",
     "eslint-plugin-standard": "^3.0.1",
-    "flow-bin": "^0.62.0",
+    "flow-bin": "^0.63.1",
     "flow-copy-source": "^1.2.1",
     "jest": "^22.0.0",
     "makeshift": "^1.1.0",
