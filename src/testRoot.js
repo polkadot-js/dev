@@ -1,6 +1,7 @@
 // ISC, Copyright 2017-2018 Jaco Greeff
 // @flow
 
+// flowlint-next-line untyped-import:off
 const pkg = require('../package.json');
 
 /**

@@ -22,5 +22,5 @@ declare module 'koa-body' {
     strict?: boolean
   };
 
-  declare var exports: (options?: KoaBody$Options) => KoaBody$Middleware
+  declare module.exports: (options?: KoaBody$Options) => KoaBody$Middleware
 }

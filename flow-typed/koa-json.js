@@ -11,5 +11,5 @@ declare module 'koa-json' {
     param?: string
   };
 
-  declare var exports: (options?: KoaJson$Options) => KoaJson$Middleware
+  declare module.exports: (options?: KoaJson$Options) => KoaJson$Middleware
 }
