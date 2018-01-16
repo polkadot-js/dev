@@ -216,6 +216,8 @@ declare module 'yargs' {
 
     string(key: string | Array<string>): this,
 
+    terminalWidth(): number,
+
     updateLocale(obj: { [key: string]: string }): this,
     updateStrings(obj: { [key: string]: string }): this,
 
