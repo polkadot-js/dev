@@ -6,8 +6,10 @@
     "polkadot-dev-build-babel": "./scripts/polkadot-dev-build-babel.sh",
     "polkadot-dev-build-docs": "./scripts/polkadot-dev-build-docs.js",
     "polkadot-dev-build-travis": "./scripts/polkadot-dev-build-travis.sh",
+    "polkadot-dev-clean-branches": "./scripts/polkadot-dev-clean-branches.sh",
     "polkadot-dev-copy-skeleton": "./scripts/polkadot-dev-copy-skeleton.sh",
-    "polkadot-dev-lerna-minor": "./scripts/polkadot-dev-lerna-minor.sh"
+    "polkadot-dev-lerna-minor": "./scripts/polkadot-dev-lerna-minor.sh",
+    "polkadot-dev-update-deps": "./scripts/polkadot-dev-update-deps.sh"
   },
   "keywords": [
     "Polkadot"
