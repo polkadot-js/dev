@@ -43,7 +43,9 @@ if [ -d "packages" ]; then
 
     build_js "$PACKAGE"
   done
-else
+fi
+
+if [ -d "src" ]; then
   build_js "."
 fi
 
