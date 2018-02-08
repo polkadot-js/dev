@@ -25,7 +25,9 @@ function lsFiles (dir) {
 
 function lsFolders (dir) {
   return lsEntries(dir).filter((file) => {
-    return fs.lstatSync(path.join(dir, file)).isDirectory();
+    const dirPath = path.join(dir, file);
+
+    return fs.lstatSync(dirPath).isDirectory() && !fs.existsSync(path.join(dirPath, '.nodoc'));
   });
 }
 
