@@ -91,9 +91,9 @@ declare module 'bn.js' {
     usub (value: BN): BN;
     usubn (value: number): BN;
     testn (bit: number): BN;
-    toArray (endian: number, length: number): Array<number>;
-    toArrayLike (type: Class<any>, endian: number, length: number): any;
-    toBuffer (endian: number, length: number): Buffer;
+    toArray (endian?: 'be' | 'le', length?: number): Array<number>;
+    toArrayLike (type: Class<any>, endian?: 'be' | 'le', length?: number): any;
+    toBuffer (endian?: 'be' | 'le', length?: number): Buffer;
     toJSON (): string;
     toNumber (): number;
     toString (base?: number, padding?: number): string;
