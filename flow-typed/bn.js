@@ -81,7 +81,11 @@ declare module 'bn.js' {
     upown (pow: number): BN;
     setn (bit: number): BN;
     shln (num: number): BN;
+    iushln (num: number): BN;
+    ushln (num: number): BN;
     shrn (num: number): BN;
+    iushrn (num: number): BN;
+    ushrn (num: number): BN;
     sqr (): BN;
     isqr (): void;
     sub (value: BN): BN;
