@@ -71,7 +71,7 @@
     "postcss": "^6.0.14",
     "postcss-sass": "^0.3.0",
     "rimraf": "^2.6.2",
-    "stylelint": "^8.2.0",
+    "stylelint": "^9.0.0",
     "stylelint-config-standard": "^18.0.0"
   }
 }
