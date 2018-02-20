@@ -28,6 +28,7 @@ declare class WebAssemblyMemory {
   buffer: Uint8Array;
 
   constructor (config: WebAssemblyMemory$Config): WebAssemblyMemory;
+  grow (pages: number): number;
 }
 
 declare class WebAssemblyTable {
