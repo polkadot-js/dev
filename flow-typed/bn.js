@@ -3,8 +3,10 @@
 // @flow
 
 declare module 'bn.js' {
+  declare type BN$Endian = 'be' | 'le';
+
   declare class BN {
-    constructor (value?: any, base: ?number): BN;
+    constructor (value?: any, base?: number, endian?: BN$Endian): BN;
 
     abs (): BN;
     iabs (): BN;
@@ -95,9 +97,9 @@ declare module 'bn.js' {
     usub (value: BN): BN;
     usubn (value: number): BN;
     testn (bit: number): BN;
-    toArray (endian?: 'be' | 'le', length?: number): Array<number>;
-    toArrayLike (type: Class<any>, endian?: 'be' | 'le', length?: number): any;
-    toBuffer (endian?: 'be' | 'le', length?: number): Buffer;
+    toArray (endian?: BN$Endian, length?: number): Array<number>;
+    toArrayLike (type: Class<any>, endian?: BN$Endian, length?: number): any;
+    toBuffer (endian?: BN$Endian, length?: number): Buffer;
     toJSON (): string;
     toNumber (): number;
     toString (base?: number, padding?: number): string;
