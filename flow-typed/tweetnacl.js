@@ -12,6 +12,12 @@ declare module 'tweetnacl' {
     hashLength: number
   };
 
+  declare type Tweetnacl$SecretBox = {
+    (message: Uint8Array, nonce: Uint8Array, secret: Uint8Array): Uint8Array,
+
+    open: (encrypted: Uint8Array, nonce: Uint8Array, secret: Uint8Array) => ?Uint8Array
+  };
+
   declare type Tweetnacl$Sign$Detached = {
     (message: Uint8Array, secretKey: Uint8Array): Uint8Array,
 
@@ -41,6 +47,7 @@ declare module 'tweetnacl' {
   declare module.exports: {
     randomBytes: (length: number) => Uint8Array,
     hash: Tweetnacl$Hash,
+    secretbox: Tweetnacl$SecretBox,
     sign: Tweetnacl$Sign
   }
 }
