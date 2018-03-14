@@ -16,7 +16,7 @@ function build_js () {
   echo ""
   echo "*** Compiling via babel"
 
-  yarn run babel --out-dir $ROOT/build --ignore '*.spec.js' $ROOT/src
+  yarn run babel --out-dir $ROOT/build --ignore '*.spec.js' --copy-files $ROOT/src
 
   echo ""
   echo "*** Copying flow types (source)"
