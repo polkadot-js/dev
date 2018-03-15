@@ -37,7 +37,13 @@ function run_test () {
     echo ""
     echo "*** Submitting coverage"
 
-    cat coverage/lcov.info | yarn run coveralls
+    if [ -n "$COVERALLS_REPO_TOKEN" ]; then
+      cat coverage/lcov.info | yarn run coveralls
+    fi
+
+    if [ -n "$CODECLIMATE_REPO_TOKEN" ]; then
+      cat coverage/lcov.info | yarn run codeclimate-test-reporter
+    fi
   fi
 
   echo ""
