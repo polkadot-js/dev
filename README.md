@@ -9,6 +9,8 @@
 
 # @polkadot/dev
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/polkadot-js/dev.svg)](https://greenkeeper.io/)
+
 A collection of shared CI scripts and development environment (configuration, dependencies) used by [@polkadot](https://polkadot.js.org) projects. Included here -
 
 - [style config](config/) Common configurations for [Babel](https://babeljs.io/), [ESLint](https://eslint.org/), [Jest](https://facebook.github.io/jest/) & [Stylelint](https://stylelint.io/).
