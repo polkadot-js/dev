@@ -1636,3 +1636,9 @@ declare module 'rxjs/testing/TestScheduler' {
     TestScheduler: typeof rxjs$SchedulerClass
   };
 }
+
+declare module 'rxjs/observable/fromPromise' {
+  declare module.exports: {
+    fromPromise: (promise: Promise<*>) => rxjs$Observable<*>;
+  }
+}
