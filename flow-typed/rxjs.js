@@ -1642,3 +1642,12 @@ declare module 'rxjs/observable/fromPromise' {
     fromPromise: (promise: Promise<*>) => rxjs$Observable<*>;
   }
 }
+
+declare module 'rxjs/operators/map' {
+  declare module.exports: {
+    map: {
+      // flowlint-next-line unclear-type:off
+      call: (observable: rxjs$Observable<*>, fn: (value: any, index: number) => any) => rxjs$Observable<any>
+    }
+  }
+}
