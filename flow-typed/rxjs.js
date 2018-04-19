@@ -1643,6 +1643,12 @@ declare module 'rxjs/observable/fromPromise' {
   }
 }
 
+declare module 'rxjs/observable/interval' {
+  declare module.exports: {
+    interval: (delay: number) => rxjs$Observable<*>;
+  }
+}
+
 declare module 'rxjs/operators/map' {
   declare module.exports: {
     map: (fn: (value: any, index: number) => any) => rxjs$OperatorFunctionLast<any, any>
