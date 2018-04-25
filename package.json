@@ -65,7 +65,7 @@
     "eslint-plugin-react": "^7.7.0",
     "eslint-plugin-standard": "^3.0.1",
     "flow-bin": "^0.70.0",
-    "flow-copy-source": "^1.3.0",
+    "flow-copy-source": "polkadot-js/flow-copy-source#3bf0a13ae3bae8e642e4ffafd3ec39b5d0ae2919",
     "jest": "^22.4.2",
     "makeshift": "^1.1.0",
     "mkdirp": "^0.5.1",
