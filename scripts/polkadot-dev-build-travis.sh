@@ -180,7 +180,7 @@ function deploy_all () {
 
     echo ""
     echo "*** GitHub Pages completed"
-  ]
+  fi
 }
 
 function loop_func () {
