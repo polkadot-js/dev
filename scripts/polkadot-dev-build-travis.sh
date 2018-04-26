@@ -171,6 +171,18 @@ function git_bump () {
   fi
 }
 
+function deploy_all () {
+  if [ -f "node_modules/.bin/gh-pages" ]; then
+    echo ""
+    echo "*** Publishing to GitHub Pages"
+
+    yarn run deploy:ghpages
+
+    echo ""
+    echo "*** GitHub Pages completed"
+  ]
+}
+
 function loop_func () {
   FUNC=$1
 
@@ -213,6 +225,7 @@ if [ -n "$BUMP_VERSION" ]; then
   fi
 
   git_push
+  deploy_all
 fi
 
 echo ""
