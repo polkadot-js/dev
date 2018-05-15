@@ -11,7 +11,6 @@
     "test": "jest --coverage"
   },
   "devDependencies": {
-    "copyfiles": "^2.0.0",
-    "lerna": "^2.11.0"
+    "copyfiles": "^2.0.0"
   }
 }
