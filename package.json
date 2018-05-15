@@ -6,7 +6,7 @@
   ],
   "scripts": {
     "build": "./packages/dev/scripts/polkadot-dev-build-docs.js && ./packages/dev/scripts/polkadot-dev-build-babel.sh && ./packages/dev/scripts/polkadot-dev-clean-build.sh && (cd packages/dev && copyfiles config/* flow-typed/* scripts/* skeleton/* build) && (cd packages/dev-react && copyfiles config/* flow-typed/* scripts/* skeleton/* build)",
-    "check": "eslint packages && flow check",
+    "check": "eslint packages",
     "clean": "polkadot-dev-clean-build",
     "test": "jest --coverage"
   },
