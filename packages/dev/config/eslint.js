@@ -2,8 +2,6 @@ module.exports = {
   parser: 'babel-eslint',
   extends: [
     'semistandard',
-    'standard-jsx',
-    'standard-react',
     'plugin:flowtype/recommended',
     'plugin:jest/recommended'
   ],
@@ -18,5 +16,6 @@ module.exports = {
     'browser': true,
     'jest/globals': true,
     'node': true
-  }
+  },
+  rules: {}
 };
