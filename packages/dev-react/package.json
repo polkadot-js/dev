@@ -1,0 +1,37 @@
+{
+  "name": "@polkadot/dev-react",
+  "version": "0.18.0",
+  "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
+  "keywords": [
+    "Polkadot"
+  ],
+  "author": "Jaco Greeff <jacogr@gmail.com>",
+  "license": "ISC",
+  "engines": {
+    "node": ">=6.4"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/polkadot-js/dev.git"
+  },
+  "bugs": {
+    "url": "https://github.com/polkadot-js/dev/issues"
+  },
+  "homepage": "https://github.com/polkadot-js/dev#readme",
+  "scripts": {},
+  "dependencies": {
+    "@polkadot/dev": "^0.18.0",
+    "babel-preset-react": "^6.24.1",
+    "eslint-config-standard-jsx": "^5.0.0",
+    "eslint-config-standard-react": "^6.0.0",
+    "eslint-plugin-react": "^7.8.2",
+    "postcss": "^6.0.22",
+    "postcss-sass": "^0.3.0",
+    "stylelint": "^9.2.0",
+    "stylelint-config-standard": "^18.2.0"
+  }
+}

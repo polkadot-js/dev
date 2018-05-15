@@ -1,9 +1,9 @@
 language: node_js
 node_js:
-  - "9"
+  - "10"
 cache:
   yarn: true
   directories:
     - node_modules
 script:
-  - ./packages/dev/scripts/polkadot-dev-build-travis.sh
+  - yarn polkadot-dev-build-travis
