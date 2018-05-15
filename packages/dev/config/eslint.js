@@ -16,5 +16,6 @@ module.exports = {
     'browser': true,
     'jest/globals': true,
     'node': true
-  }
+  },
+  rules: {}
 };

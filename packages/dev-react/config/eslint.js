@@ -8,6 +8,10 @@ module.exports = Object.keys(base).reduce((config, key) => {
       'standard-jsx',
       'standard-react'
     ]);
+  } else if (key === 'rules') {
+    config[key] = Object.assign(config[key], {
+      'react/prop-types': 'off'
+    });
   }
 
   return config;
