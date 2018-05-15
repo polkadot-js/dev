@@ -7,6 +7,7 @@
     "polkadot-dev-build-docs": "./scripts/polkadot-dev-build-docs.js",
     "polkadot-dev-build-travis": "./scripts/polkadot-dev-build-travis.sh",
     "polkadot-dev-clean-branches": "./scripts/polkadot-dev-clean-branches.sh",
+    "polkadot-dev-clean-build": "./scripts/polkadot-dev-clean-build.sh",
     "polkadot-dev-copy-skeleton": "./scripts/polkadot-dev-copy-skeleton.sh",
     "polkadot-dev-update-deps": "./scripts/polkadot-dev-update-deps.sh",
     "polkadot-dev-version-minor": "./scripts/polkadot-dev-version-minor.sh",
@@ -35,6 +36,7 @@
   "scripts": {
     "build": "./scripts/polkadot-dev-build-docs.js && ./scripts/polkadot-dev-build-babel.sh && rimraf build && copyfiles config/* flow-typed/* scripts/* skeleton/* build",
     "check": "eslint flow-typed src scripts && flow check",
+    "clean": "./scripts/polkadot-dev-clean-build.sh",
     "test": "jest --coverage"
   },
   "devDependencies": {
