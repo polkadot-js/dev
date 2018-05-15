@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/dev-react",
-  "version": "0.18.2",
+  "version": "0.18.3",
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "keywords": [
     "Polkadot"
@@ -24,7 +24,7 @@
   "homepage": "https://github.com/polkadot-js/dev#readme",
   "scripts": {},
   "dependencies": {
-    "@polkadot/dev": "^0.18.2",
+    "@polkadot/dev": "^0.18.3",
     "babel-preset-react": "^6.24.1",
     "eslint-config-standard-jsx": "^5.0.0",
     "eslint-config-standard-react": "^6.0.0",
