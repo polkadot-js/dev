@@ -1,1 +1,1 @@
-module.exports = require('./packages/dev/config/jest');
+module.exports = require('@polkadot/dev/config/jest');

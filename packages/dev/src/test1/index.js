@@ -6,3 +6,4 @@
 /**
   @summary Some first test link
 */
+module.exports = (test) => test;

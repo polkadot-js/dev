@@ -3,9 +3,41 @@
 // of the ISC license. See the LICENSE file for details.
 // @flow
 
+import React from 'react';
+
+type Props = {
+  className: string,
+  value: string
+};
+
+type State = {
+  value: string
+};
+
 /**
   @summary This is just a test file to test the doc generation
 */
-module.exports = {
-  echo: (value: string) => value
-};
+export default class App extends React.PureComponent<Props, State> {
+  state: State;
+
+  constructor (props: Props) {
+    super(props);
+
+    const { value } = this.props;
+
+    this.state = {
+      value
+    };
+  }
+
+  render (): React$Node {
+    const { className } = this.props;
+    const { value } = this.state;
+
+    return (
+      <div className={className}>
+        {value}
+      </div>
+    );
+  }
+}

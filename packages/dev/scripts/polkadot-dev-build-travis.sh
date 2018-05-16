@@ -7,6 +7,16 @@ set -e
 
 BUMP_VERSION=
 
+function run_clean () {
+  echo ""
+  echo "*** Running clean"
+
+  yarn run polkadot-dev-clean-build
+
+  echo ""
+  echo "*** Checks completed"
+}
+
 function run_check () {
   echo ""
   echo "*** Running checks"
@@ -93,7 +103,7 @@ function npm_setup () {
   echo ""
   echo "*** Setting up npm"
 
-  yarn run makeshift
+  makeshift
 
   echo ""
   echo "*** Npm setup completed"
@@ -202,9 +212,10 @@ function loop_func () {
   fi
 }
 
+run_clean
 run_check
-run_build
 run_test
+run_build
 
 if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "master" ]; then
   echo ""

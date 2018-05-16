@@ -11,17 +11,22 @@ function build_js () {
   echo ""
   echo "*** Cleaning build directory"
 
-  yarn run rimraf $ROOT/build
+  rimraf $ROOT/build
 
   echo ""
   echo "*** Compiling via babel"
 
-  yarn run babel --out-dir $ROOT/build --ignore '*.spec.js' --copy-files $ROOT/src
+  babel --out-dir $ROOT/build --ignore '*.spec.js' --copy-files $ROOT/src
 
   echo ""
   echo "*** Copying flow types (source)"
 
-  yarn run flow-copy-source --verbose --ignore '*.spec.js' $ROOT/src $ROOT/build
+  flow-copy-source --verbose $ROOT/src $ROOT/build
+
+  echo ""
+  echo "*** Cleaning spec files (ignored)"
+
+  rimraf $ROOT/build/*.spec.js $ROOT/build/*.spec.js.flow $ROOT/build/**/*.spec.js $ROOT/build/**/*.spec.js.flow
 
   if [ -d "$ROOT/flow-typed" ]; then
     echo ""

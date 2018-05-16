@@ -11,7 +11,7 @@ function clean_build () {
   echo ""
   echo "*** Cleaning build directory"
 
-  yarn run rimraf $ROOT/build
+  rimraf $ROOT/build
 }
 
 if [ -d "packages" ]; then
