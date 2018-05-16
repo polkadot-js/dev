@@ -21,7 +21,12 @@ function build_js () {
   echo ""
   echo "*** Copying flow types (source)"
 
-  flow-copy-source --verbose --ignore '*.spec.js' $ROOT/src $ROOT/build
+  flow-copy-source --verbose $ROOT/src $ROOT/build
+
+  echo ""
+  echo "*** Cleaning spec files (ignored)"
+
+  rimraf $ROOT/build/*.spec.js $ROOT/build/*.spec.js.flow $ROOT/build/**/*.spec.js $ROOT/build/**/*.spec.js.flow
 
   if [ -d "$ROOT/flow-typed" ]; then
     echo ""
