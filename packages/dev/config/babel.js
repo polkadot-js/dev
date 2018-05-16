@@ -2,7 +2,7 @@ const isTest = process.env.NODE_ENV === 'test';
 
 const presets = [
   ['@babel/preset-env', {
-    'modules': isTest ? 'commonjs' : false,
+    'modules': 'commonjs',
     'targets': {
       'node': '9'
     },
