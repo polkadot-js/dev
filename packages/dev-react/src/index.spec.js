@@ -5,13 +5,7 @@
 const index = require('./');
 
 describe('index', () => {
-  it('runs the test', () => {
+  it('has an export', () => {
     expect(index).toBeDefined();
-  });
-
-  it('runs the echo function', () => {
-    expect(
-      index.echo('something')
-    ).toEqual('something');
   });
 });

@@ -93,7 +93,7 @@ function npm_setup () {
   echo ""
   echo "*** Setting up npm"
 
-  yarn run makeshift
+  makeshift
 
   echo ""
   echo "*** Npm setup completed"
@@ -203,8 +203,8 @@ function loop_func () {
 }
 
 run_check
-run_build
 run_test
+run_build
 
 if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "master" ]; then
   echo ""

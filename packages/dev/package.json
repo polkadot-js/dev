@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/dev",
-  "version": "0.18.3",
+  "version": "0.19.0",
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "bin": {
     "polkadot-dev-build-babel": "./scripts/polkadot-dev-build-babel.sh",
@@ -18,9 +18,7 @@
   ],
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "license": "ISC",
-  "engines": {
-    "node": ">=6.4"
-  },
+  "engines": {},
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -40,15 +38,17 @@
     "test": "jest --coverage"
   },
   "dependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
+    "@babel/cli": "^7.0.0-beta.47",
+    "@babel/core": "^7.0.0-beta.47",
+    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.47",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.47",
+    "@babel/plugin-transform-runtime": "^7.0.0-beta.47",
+    "@babel/preset-env": "^7.0.0-beta.47",
+    "@babel/preset-flow": "^7.0.0-beta.47",
+    "@babel/runtime": "^7.0.0-beta.47",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^8.2.3",
     "babel-jest": "^22.4.3",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-flow-strip-types": "^6.22.0",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.7.0",
     "codeclimate-test-reporter": "^0.5.0",
     "coveralls": "^3.0.1",
     "dox": "^0.9.0",
