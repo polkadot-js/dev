@@ -179,6 +179,8 @@ function git_bump () {
   if [ -n "$BUMP_VERSION" ]; then
     npm_bump
   fi
+
+  npm_get_version
 }
 
 function deploy_all () {
@@ -229,8 +231,6 @@ git_bump
 git_push
 
 if [ -n "$BUMP_VERSION" ]; then
-  npm_get_version
-
   if [ -n "$NPM_TOKEN" ]; then
     npm_setup
     loop_func npm_publish
