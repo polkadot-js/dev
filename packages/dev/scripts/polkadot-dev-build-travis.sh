@@ -7,6 +7,16 @@ set -e
 
 BUMP_VERSION=
 
+function run_clean () {
+  echo ""
+  echo "*** Running clean"
+
+  yarn run polkadot-dev-clean-build
+
+  echo ""
+  echo "*** Checks completed"
+}
+
 function run_check () {
   echo ""
   echo "*** Running checks"
@@ -202,6 +212,7 @@ function loop_func () {
   fi
 }
 
+run_clean
 run_check
 run_test
 run_build
