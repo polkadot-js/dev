@@ -1,7 +1,9 @@
+const isTest = process.env.NODE_ENV === 'test';
+
 module.exports = {
   presets: [
     ['@babel/preset-env', {
-      'modules': false,
+      'modules': isTest ? 'commonjs' : false,
       'targets': {
         'node': '9'
       },
