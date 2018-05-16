@@ -226,6 +226,7 @@ fi
 
 git_setup
 git_bump
+git_push
 
 if [ -n "$BUMP_VERSION" ]; then
   npm_get_version
@@ -235,7 +236,6 @@ if [ -n "$BUMP_VERSION" ]; then
     loop_func npm_publish
   fi
 
-  git_push
   deploy_all
 fi
 
