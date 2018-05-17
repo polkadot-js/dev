@@ -27,8 +27,8 @@ declare module 'bn.js' {
     bitLength (): number;
     byteLength (): number;
     clone (): BN;
-    cmp (value: BN): boolean;
-    cmpn (value: number): boolean;
+    cmp (value: BN): number;
+    cmpn (value: number): number;
     div (value: BN): BN;
     divn (value: number): BN;
     idiv (value: BN): BN;
