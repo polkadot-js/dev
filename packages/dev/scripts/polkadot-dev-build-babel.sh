@@ -13,26 +13,35 @@ function build_js () {
 
   rimraf $ROOT/build
 
-  echo ""
-  echo "*** Compiling via babel"
-
-  babel --out-dir $ROOT/build --ignore '*.spec.js' --copy-files $ROOT/src
-
-  echo ""
-  echo "*** Copying flow types (source)"
-
-  flow-copy-source --verbose $ROOT/src $ROOT/build
-
-  echo ""
-  echo "*** Cleaning spec files (ignored)"
-
-  rimraf $ROOT/build/*.spec.js $ROOT/build/*.spec.js.flow $ROOT/build/**/*.spec.js $ROOT/build/**/*.spec.js.flow
-
-  if [ -d "$ROOT/flow-typed" ]; then
+  if [ -d "$ROOT/public" ]; then
     echo ""
-    echo "*** Copying flow types (libraries)"
+    echo "*** Compiling via webpack"
 
-    cp -r $ROOT/flow-typed $ROOT/build
+    cd $ROOT
+    NODE_ENV=production webpack --config webpack.config.js
+    cd ../..
+  else
+    echo ""
+    echo "*** Compiling via babel"
+
+    babel --out-dir $ROOT/build --ignore '*.spec.js' --copy-files $ROOT/src
+
+    echo ""
+    echo "*** Copying flow types (source)"
+
+    flow-copy-source --verbose $ROOT/src $ROOT/build
+
+    echo ""
+    echo "*** Cleaning spec files (ignored)"
+
+    rimraf $ROOT/build/*.spec.js $ROOT/build/*.spec.js.flow $ROOT/build/**/*.spec.js $ROOT/build/**/*.spec.js.flow
+
+    if [ -d "$ROOT/flow-typed" ]; then
+      echo ""
+      echo "*** Copying flow types (libraries)"
+
+      cp -r $ROOT/flow-typed $ROOT/build
+    fi
   fi
 
   echo ""
