@@ -4,5 +4,5 @@
 // @flow
 
 module.exports = {
-  extends: 'stylelint-config-standard'
+  extends: '@polkadot/dev/config/babel'
 };
