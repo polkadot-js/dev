@@ -44,6 +44,6 @@
     "webpack-serve": "^1.0.2"
   },
   "devDependencies": {
-    "react": "^16.3.1"
+    "react": "^16.4.0"
   }
 }

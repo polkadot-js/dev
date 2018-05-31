@@ -1,7 +1,7 @@
 // @flow
 
 import type KadDHT from 'libp2p-kad-dht';
-import type Multiplex from 'libp2p-multiplex';
+import type Multiplex from 'libp2p-mplex';
 import type Railing from 'libp2p-railing';
 import type Secio from 'libp2p-secio';
 import type Spdy from 'libp2p-spdy';
@@ -30,7 +30,8 @@ declare module 'libp2p' {
   declare class LibP2P {
     constructor (config?: LibP2P$Config, peerInfo?: PeerInfo, peerBook?: PeerBook): LibP2P;
 
-    dial (peerInfo: PeerInfo, protocol: string, (error: Error, conn: LibP2P$Connection) => any): void;
+    dial (peerInfo: PeerInfo, (error: Error, conn: LibP2P$Connection) => any): void;
+    dialProtocol (peerInfo: PeerInfo, protocol: string, (error: Error, conn: LibP2P$Connection) => any): void;
     handle (protocol: string, (protocol: string, conn: LibP2P$Connection) => any): void;
     on (event: LibP2P$Events, callback: (event: any) => any): void;
     start ((error: Error) => any): void;

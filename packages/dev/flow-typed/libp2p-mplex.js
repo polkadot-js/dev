@@ -1,6 +1,6 @@
 // @flow
 
-declare module 'libp2p-multiplex' {
+declare module 'libp2p-mplex' {
   declare class LibP2PMultiplex {
     constructor (): LibP2PMultiplex;
   }
