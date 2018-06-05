@@ -10,6 +10,7 @@ declare module 'peer-info' {
   declare class MultiAddrSet {
     add (address: string): void;
     has (address: string): boolean;
+    toArray (): Array<MultiAddr>;
   }
 
   declare type PeerInfo$CreateCb = (error: Error, peerInfo: PeerInfo) => void;

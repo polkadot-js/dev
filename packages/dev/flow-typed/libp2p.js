@@ -31,7 +31,7 @@ declare module 'libp2p' {
     constructor (config?: LibP2P$Config, peerInfo?: PeerInfo, peerBook?: PeerBook): LibP2P;
 
     dial (peerInfo: PeerInfo, (error: Error, conn: LibP2P$Connection) => any): void;
-    dialProtocol (peerInfo: PeerInfo, protocol: string, (error: Error, conn: LibP2P$Connection) => any): void;
+    dialProtocol (peerInfo: PeerInfo, protocol: string, (error: Error, conn: LibP2P$Connection) => any, (protocol: string, requestedProtocol, callback: (error: null, accept: boolean) => void) => any): void;
     handle (protocol: string, (protocol: string, conn: LibP2P$Connection) => any): void;
     on (event: LibP2P$Events, callback: (event: any) => any): void;
     start ((error: Error) => any): void;
