@@ -1,14 +1,11 @@
 // @flow
 
-import type { MemDown } from 'memdown';
-import type { LevelDown } from 'leveldown';
-
-// declare interface LevelUp$AbstractStorage {}
-
 declare module 'levelup' {
+  declare interface LevelUp$AbstractStorage {
+  }
+
   declare class LevelUp {
-    /* constructor (provider: LevelUp$AbstractStorage): LevelUp; */
-    constructor (provider: MemDown | LevelDown): LevelUp;
+    constructor (provider: LevelUp$AbstractStorage): LevelUp;
   }
 
   declare module.exports: typeof LevelUp;

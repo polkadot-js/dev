@@ -1,7 +1,7 @@
 // @flow
 
 declare module 'memdown' {
-  declare class MemDown /* implements LevelUp$AbstractStorage */ {
+  declare class MemDown {
     constructor (): MemDown;
   }
 
