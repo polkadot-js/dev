@@ -6,4 +6,4 @@
 /**
   @summary Some first test link
 */
-module.exports = (test) => test;
+module.exports = (test: string): string => test;
