@@ -4,7 +4,15 @@ declare class WebAssemblyModule {
   constructor (code: Uint8Array): WebAssemblyModule;
 }
 
+declare class WebAssemblyMemory {
+  buffer: Uint8Array;
+
+  constructor (config: WebAssemblyMemory$Config): WebAssemblyMemory;
+  grow (pages: number): number;
+}
+
 declare type WebAssemblyInstance$Exports = {
+  memory: WebAssemblyMemory,
   [string]: (any) => any
 }
 
@@ -22,13 +30,6 @@ declare type WebAssemblyMemory$Config = {
 declare type WebAssemblyTable$Config = {
   initial: number,
   element: 'anyfunc'
-}
-
-declare class WebAssemblyMemory {
-  buffer: Uint8Array;
-
-  constructor (config: WebAssemblyMemory$Config): WebAssemblyMemory;
-  grow (pages: number): number;
 }
 
 declare class WebAssemblyTable {
