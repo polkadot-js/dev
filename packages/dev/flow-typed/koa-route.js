@@ -12,7 +12,7 @@ declare module 'koa-route' {
 
   declare type WsContextType = {
     websocket: {
-      on: (type: 'message', (message: string) => mixed) => void,
+      on: (type: 'close' | 'message', (message: string) => mixed) => void,
       send: (message: string) => void
     }
   };
