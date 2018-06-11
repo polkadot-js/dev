@@ -5,7 +5,7 @@ import type Koa from 'koa';
 declare module 'koa-websocket' {
   declare type WsContextType = {
     websocket: {
-      on: (type: 'message', (message: string) => mixed) => void,
+      on: (type: 'close' | 'message', (message: string) => void | Promise<void>) => void,
       send: (message: string) => void
     }
   };
