@@ -12,13 +12,13 @@ declare module 'koa-route' {
 
   declare type WsContextType = {
     websocket: {
-      on: (type: 'close' | 'message', (message: string) => mixed) => void,
-      send: (message: string) => void
+      on: (type: 'close' | 'message', (message: string) => void | Promise<void>) => void,
+      send: (message: string) => void | Promise<void>
     }
   };
 
   declare module.exports: {
-    post: (path: string, handler: (ctx: PostContextType) => Promise<void>) => Middleware;
-    all: (path: string, handler: (ctx: WsContextType) => Promise<void>) => Middleware
+    post: (path: string, handler: (ctx: PostContextType) => void | Promise<void>) => Middleware;
+    all: (path: string, handler: (ctx: WsContextType) => void | Promise<void>) => Middleware
   }
 }
