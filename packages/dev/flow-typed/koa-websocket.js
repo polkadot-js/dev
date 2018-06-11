@@ -13,6 +13,6 @@ declare module 'koa-websocket' {
   declare module.exports: {
     (app: Koa): Koa;
 
-    all: (path: string, handler: (ctx: WsContextType) => void | Promise<void>) => void
+    all: (path: string, handler: (ctx: WsContextType) => any) => void
   }
 }

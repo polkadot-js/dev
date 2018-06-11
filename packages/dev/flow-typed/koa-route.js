@@ -18,7 +18,7 @@ declare module 'koa-route' {
   };
 
   declare module.exports: {
-    post: (path: string, handler: (ctx: PostContextType) => void | Promise<void>) => Middleware;
-    all: (path: string, handler: (ctx: WsContextType) => void | Promise<void>) => Middleware
+    post: (path: string, handler: (ctx: PostContextType) => any) => Middleware;
+    all: (path: string, handler: (ctx: WsContextType) => any) => Middleware
   }
 }
