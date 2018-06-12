@@ -9,6 +9,8 @@
     "polkadot-dev-clean-branches": "./scripts/polkadot-dev-clean-branches.sh",
     "polkadot-dev-clean-build": "./scripts/polkadot-dev-clean-build.sh",
     "polkadot-dev-copy-skeleton": "./scripts/polkadot-dev-copy-skeleton.sh",
+    "polkadot-dev-lint-css": "./scripts/polkadot-dev-lint-css.sh",
+    "polkadot-dev-lint-js": "./scripts/polkadot-dev-lint-js.sh",
     "polkadot-dev-update-deps": "./scripts/polkadot-dev-update-deps.sh",
     "polkadot-dev-version-minor": "./scripts/polkadot-dev-version-minor.sh",
     "polkadot-dev-version-patch": "./scripts/polkadot-dev-version-patch.sh"
