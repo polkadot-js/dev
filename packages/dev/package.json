@@ -11,7 +11,8 @@
     "polkadot-dev-copy-skeleton": "./scripts/polkadot-dev-copy-skeleton.sh",
     "polkadot-dev-update-deps": "./scripts/polkadot-dev-update-deps.sh",
     "polkadot-dev-version-minor": "./scripts/polkadot-dev-version-minor.sh",
-    "polkadot-dev-version-patch": "./scripts/polkadot-dev-version-patch.sh"
+    "polkadot-dev-version-patch": "./scripts/polkadot-dev-version-patch.sh",
+    "polkadot-dev-yarn-only": "./scripts/polkadot-dev-yarn-only.js"
   },
   "keywords": [
     "Polkadot"
@@ -50,6 +51,7 @@
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^8.2.3",
     "babel-jest": "^22.4.3",
+    "chalk": "^2.4.1",
     "codeclimate-test-reporter": "^0.5.0",
     "coveralls": "^3.0.1",
     "dox": "^0.9.0",

@@ -12,9 +12,11 @@
     "build": "polkadot-dev-build-docs && polkadot-dev-build-babel && (cd packages/dev && copyfiles config/* flow-typed/* scripts/* skeleton/* build) && (cd packages/dev-react && copyfiles config/* flow-typed/* scripts/* skeleton/* build)",
     "check": "eslint packages",
     "clean": "polkadot-dev-clean-build",
+    "postinstall": "./packages/dev/scripts/polkadot-dev-yarn-only.js",
     "test": "jest --coverage"
   },
   "devDependencies": {
+    "chalk": "^2.4.1",
     "copyfiles": "^2.0.0"
   }
 }
