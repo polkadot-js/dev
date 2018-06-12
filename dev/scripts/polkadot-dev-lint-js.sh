@@ -5,28 +5,29 @@
 
 set -e
 
-function clean_build () {
+function lint () {
   ROOT=$1
 
   echo ""
-  echo "*** Cleaning build directory"
+  echo "*** Executing in $ROOT"
 
-  rimraf $ROOT/build
+  eslint $ROOT
 }
 
 if [ -d "packages" ]; then
   PACKAGES=( $(ls -1d packages/*) )
 
   for PACKAGE in "${PACKAGES[@]}"; do
-    echo ""
-    echo "*** Executing in $PACKAGE"
-
-    clean_build "$PACKAGE"
+    lint "$PACKAGE"
   done
-fi
+else
+  DIRECTORIES=( $(ls -1d *) )
 
-if [ -d "src" ]; then
-  clean_build "."
+  for DIR in "${DIRECTORIES[@]}"; do
+    if [ -d "$DIR" ] && [ -f "$DIR/package.json" ]; then
+      lint "$DIR"
+    fi
+  done
 fi
 
 exit 0

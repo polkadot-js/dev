@@ -1,5 +1,5 @@
 {
   "extends": [
-    "./packages/dev/config/eslint.js"
+    "./dev/config/eslint.js"
   ]
 }

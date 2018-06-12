@@ -66,15 +66,19 @@ function writeFile (filePath, md) {
   fs.writeFileSync(filePath, md);
 }
 
-function generatePackagePath (root, dir) {
+function generatePackagePath (root, dir, isFlat) {
   return root
-    ? path.join('packages', root, dir)
+    ? (
+      isFlat
+        ? path.join(root, dir)
+        : path.join('packages', root, dir)
+    )
     : dir;
 }
 
-function buildPackage (root) {
-  const DOC = generatePackagePath(root, 'docs');
-  const SRC = generatePackagePath(root, 'src');
+function buildPackage (root, isFlat) {
+  const DOC = generatePackagePath(root, 'docs', isFlat);
+  const SRC = generatePackagePath(root, 'src', isFlat);
 
   rimraf.sync(DOC);
   mkdirp.sync(DOC);
@@ -161,7 +165,15 @@ function buildPackage (root) {
 }
 
 if (fs.existsSync('packages')) {
-  lsFolders('packages').forEach(buildPackage);
+  lsFolders('packages').forEach((dir) =>
+    buildPackage(dir)
+  );
+} else {
+  lsFolders('.').forEach((dir) => {
+    if (fs.existsSync(`${dir}/package.json`)) {
+      buildPackage(dir, true);
+    }
+  });
 }
 
 if (fs.existsSync('src')) {

@@ -6,4 +6,4 @@ cache:
   directories:
     - node_modules
 script:
-  - ./packages/dev/scripts/polkadot-dev-build-travis.sh
+  - ./dev/scripts/polkadot-dev-build-travis.sh

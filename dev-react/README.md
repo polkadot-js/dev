@@ -5,8 +5,8 @@
 [![travis](https://img.shields.io/travis/polkadot-js/dev.svg?style=flat-square)](https://travis-ci.org/polkadot-js/dev)
 [![maintainability](https://img.shields.io/codeclimate/maintainability/polkadot-js/dev.svg?style=flat-square)](https://codeclimate.com/github/polkadot-js/dev/maintainability)
 [![coverage](https://img.shields.io/coveralls/polkadot-js/dev.svg?style=flat-square)](https://coveralls.io/github/polkadot-js/dev?branch=master)
-[![dependency](https://david-dm.org/polkadot-js/dev.svg?style=flat-square&path=packages/dev-react)](https://david-dm.org/polkadot-js/dev?path=packages/dev-react)
-[![devDependency](https://david-dm.org/polkadot-js/dev/dev-status.svg?style=flat-square&path=packages/dev-react)](https://david-dm.org/polkadot-js/dev?path=packages/dev-react#info=devDependencies)
+[![dependency](https://david-dm.org/polkadot-js/dev.svg?style=flat-square&path=dev-react)](https://david-dm.org/polkadot-js/dev?path=dev-react)
+[![devDependency](https://david-dm.org/polkadot-js/dev/dev-status.svg?style=flat-square&path=dev-react)](https://david-dm.org/polkadot-js/dev?path=dev-react#info=devDependencies)
 
 # @polkadot/dev-react
 

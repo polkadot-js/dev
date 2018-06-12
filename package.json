@@ -6,11 +6,12 @@
     "yarn": "^1.3.2"
   },
   "workspaces": [
-    "packages/*"
+    "dev",
+    "dev-react"
   ],
   "scripts": {
-    "build": "polkadot-dev-build-docs && polkadot-dev-build-babel && (cd packages/dev && copyfiles config/* flow-typed/* scripts/* skeleton/* build) && (cd packages/dev-react && copyfiles config/* flow-typed/* scripts/* skeleton/* build)",
-    "check": "eslint packages",
+    "build": "polkadot-dev-build-docs && polkadot-dev-build-babel && (cd dev && copyfiles config/* flow-typed/* scripts/* skeleton/* build) && (cd dev-react && copyfiles config/* flow-typed/* scripts/* skeleton/* build)",
+    "check": "polkadot-dev-lint-js && polkadot-dev-lint-css",
     "clean": "polkadot-dev-clean-build",
     "test": "jest --coverage"
   },

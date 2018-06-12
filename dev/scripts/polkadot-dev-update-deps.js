@@ -60,13 +60,13 @@ function extractVersion (dir) {
 }
 
 function findPackages (dir) {
-  const pkgsDir = path.join(dir, 'packages');
-
   paths.push(dir);
   extractVersion(dir);
 
+  let pkgsDir = path.join(dir, 'packages');
+
   if (!fs.existsSync(pkgsDir)) {
-    return;
+    pkgsDir = dir;
   }
 
   fs
@@ -79,8 +79,10 @@ function findPackages (dir) {
     .forEach((dir) => {
       const full = path.join(pkgsDir, dir);
 
-      paths.push(full);
-      extractVersion(full);
+      if (fs.existsSync(path.join(full, 'package.json'))) {
+        paths.push(full);
+        extractVersion(full);
+      }
     });
 }
 
