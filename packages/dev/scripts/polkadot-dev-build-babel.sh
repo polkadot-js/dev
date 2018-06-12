@@ -9,6 +9,9 @@ function build_js () {
   ROOT=$1
 
   echo ""
+  echo "*** Executing in $ROOT"
+
+  echo ""
   echo "*** Cleaning build directory"
 
   rimraf $ROOT/build
@@ -52,10 +55,15 @@ if [ -d "packages" ]; then
   PACKAGES=( $(ls -1d packages/*) )
 
   for PACKAGE in "${PACKAGES[@]}"; do
-    echo ""
-    echo "*** Executing in $PACKAGE"
-
     build_js "$PACKAGE"
+  done
+else
+  DIRECTORIES=( $(ls -1d *) )
+
+  for DIR in "${DIRECTORIES[@]}"; do
+    if [ -d "$DIR" && -f "$DIR/package.json" ]; then
+      build_js "$DIR"
+    fi
   done
 fi
 

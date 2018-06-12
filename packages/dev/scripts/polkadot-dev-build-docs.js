@@ -162,6 +162,12 @@ function buildPackage (root) {
 
 if (fs.existsSync('packages')) {
   lsFolders('packages').forEach(buildPackage);
+} else {
+  lsFolders('.').forEach((dir) => {
+    if (fs.existsSync(`${dir}/package.json`)) {
+      buildPackage(dir);
+    }
+  });
 }
 
 if (fs.existsSync('src')) {

@@ -9,6 +9,9 @@ function clean_build () {
   ROOT=$1
 
   echo ""
+  echo "*** Executing in $ROOT"
+
+  echo ""
   echo "*** Cleaning build directory"
 
   rimraf $ROOT/build
@@ -18,10 +21,15 @@ if [ -d "packages" ]; then
   PACKAGES=( $(ls -1d packages/*) )
 
   for PACKAGE in "${PACKAGES[@]}"; do
-    echo ""
-    echo "*** Executing in $PACKAGE"
-
     clean_build "$PACKAGE"
+  done
+else
+  DIRECTORIES=( $(ls -1d *) )
+
+  for DIR in "${DIRECTORIES[@]}"; do
+    if [ -d "$DIR" && -f "$DIR/package.json" ]; then
+      clean_build "$DIR"
+    fi
   done
 fi
 

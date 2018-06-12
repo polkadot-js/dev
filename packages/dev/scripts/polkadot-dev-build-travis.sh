@@ -199,16 +199,28 @@ function loop_func () {
   FUNC=$1
 
   if [ -f "lerna.json" ]; then
-    PACKAGES=( $(ls -1d packages/*) )
+    if [ -d "packages" ]; then
+      PACKAGES=( $(ls -1d packages/*) )
 
-    for PACKAGE in "${PACKAGES[@]}"; do
-      echo ""
-      echo "*** Executing in $PACKAGE"
+      for PACKAGE in "${PACKAGES[@]}"; do
+        echo ""
+        echo "*** Executing in $PACKAGE"
 
-      cd $PACKAGE
-      $FUNC
-      cd ../..
-    done
+        cd $PACKAGE
+        $FUNC
+        cd ../..
+      done
+    else
+      DIRECTORIES=( $(ls -1d *) )
+
+      for DIR in "${DIRECTORIES[@]}"; do
+        if [ -d "$DIR" && -f "$DIR/package.json" ]; then
+          cd $DIR
+          $FUNC
+          cd ..
+        fi
+      done
+    fi
   else
     $FUNC
   fi
