@@ -27,7 +27,7 @@ else
   DIRECTORIES=( $(ls -1d *) )
 
   for DIR in "${DIRECTORIES[@]}"; do
-    if [ -d "$DIR" && -f "$DIR/package.json" ]; then
+    if [ -d "$DIR" ] && [ -f "$DIR/package.json" ]; then
       clean_build "$DIR"
     fi
   done

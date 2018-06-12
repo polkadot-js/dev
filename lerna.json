@@ -8,7 +8,8 @@
     }
   },
   "packages": [
-    "packages/*"
+    "dev",
+    "dev-react"
   ],
   "version": "0.19.24"
 }
