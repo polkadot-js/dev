@@ -6,6 +6,7 @@
     "polkadot-dev-build-babel": "./scripts/polkadot-dev-build-babel.sh",
     "polkadot-dev-build-docs": "./scripts/polkadot-dev-build-docs.js",
     "polkadot-dev-build-travis": "./scripts/polkadot-dev-build-travis.sh",
+    "polkadot-dev-build-ts": "./scripts/polkadot-dev-build-ts.sh",
     "polkadot-dev-clean-branches": "./scripts/polkadot-dev-clean-branches.sh",
     "polkadot-dev-clean-build": "./scripts/polkadot-dev-clean-build.sh",
     "polkadot-dev-copy-skeleton": "./scripts/polkadot-dev-copy-skeleton.sh",
@@ -43,15 +44,16 @@
     "test": "jest --coverage"
   },
   "dependencies": {
-    "@babel/cli": "^7.0.0-beta.47",
-    "@babel/core": "^7.0.0-beta.47",
-    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.47",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.47",
-    "@babel/plugin-transform-runtime": "^7.0.0-beta.47",
-    "@babel/preset-env": "^7.0.0-beta.47",
-    "@babel/preset-flow": "^7.0.0-beta.47",
-    "@babel/register": "^7.0.0-beta.47",
-    "@babel/runtime": "^7.0.0-beta.47",
+    "@babel/cli": "^7.0.0-beta.51",
+    "@babel/core": "^7.0.0-beta.51",
+    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.51",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.51",
+    "@babel/plugin-transform-runtime": "^7.0.0-beta.51",
+    "@babel/preset-env": "^7.0.0-beta.51",
+    "@babel/preset-flow": "^7.0.0-beta.51",
+    "@babel/preset-typescript": "7.0.0-beta.51",
+    "@babel/register": "^7.0.0-beta.51",
+    "@babel/runtime": "^7.0.0-beta.51",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^8.2.3",
     "babel-jest": "^22.4.3",
@@ -74,6 +76,7 @@
     "lerna": "^2.11.0",
     "makeshift": "^1.1.0",
     "mkdirp": "^0.5.1",
-    "rimraf": "^2.6.2"
+    "rimraf": "^2.6.2",
+    "typescript": "^2.9.2"
   }
 }
