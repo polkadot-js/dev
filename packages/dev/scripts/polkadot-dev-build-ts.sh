@@ -12,33 +12,36 @@ function build_js () {
   echo "*** Cleaning build directory"
 
   rimraf $ROOT/build
+  cd $ROOT
 
-  if [ -d "$ROOT/public" ]; then
+  if [ -d "public" ]; then
     echo ""
     echo "*** Compiling via webpack"
 
-    cd $ROOT
     NODE_ENV=production webpack --config webpack.config.js
-    cd ../..
   else
     echo ""
     echo "*** Compiling via tsc & babel"
 
-    tsc --emitDeclarationOnly
-    babel $ROOT/src --out-dir $ROOT/build --ignore '*.spec.js' --extensions ".ts"
+    pwd
+    tsc --listEmittedFiles --rootDir src --outDir build --emitDeclarationOnly
+    babel src --config-file ../../babel.config.js --out-dir build --ignore '*.spec.js,*.d.ts' --extensions ".ts,.tsx"
 
     echo ""
-    echo "*** Cleaning spec files (ignored)"
+    echo "*** Adjusting spec and declaration paths"
 
-    rimraf $ROOT/build/*.spec.js $ROOT/build/*.spec.js.flow $ROOT/build/**/*.spec.js $ROOT/build/**/*.spec.js.flow
+    rimraf build/*.spec.js build/*.d.js build/**/*.spec.js build/**/*.d.js
+    ncp src build --filter .ts
 
-    if [ -d "$ROOT/flow-typed" ]; then
+    if [ -d "flow-typed" ]; then
       echo ""
       echo "*** Copying flow types (libraries)"
 
-      cp -r $ROOT/flow-typed $ROOT/build
+      ncp flow-typed build/flow-typed
     fi
   fi
+
+  cd ../..
 
   echo ""
   echo "*** Build completed"

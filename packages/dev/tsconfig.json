@@ -1,5 +1,3 @@
 {
   "extends": "./config/tsconfig",
-  "declarationDir": "build",
-  "outDir": "build"
 }

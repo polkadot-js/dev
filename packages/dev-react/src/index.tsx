@@ -1,9 +1,8 @@
 // Copyright 2017-2018 @polkadot/dev-react authors & contributors
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
-// @flow
 
-import React from 'react';
+import * as React from 'react';
 
 type Props = {
   className: string,
@@ -30,7 +29,7 @@ export default class App extends React.PureComponent<Props, State> {
     };
   }
 
-  render (): React$Node {
+  render (): React.ReactNode {
     const { className } = this.props;
     const { value } = this.state;
 

@@ -54,6 +54,7 @@
     "@babel/preset-typescript": "7.0.0-beta.51",
     "@babel/register": "^7.0.0-beta.51",
     "@babel/runtime": "^7.0.0-beta.51",
+    "@types/node": "^10.3.3",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^8.2.3",
     "babel-jest": "^22.4.3",
@@ -76,6 +77,7 @@
     "lerna": "^2.11.0",
     "makeshift": "^1.1.0",
     "mkdirp": "^0.5.1",
+    "ncp": "^2.0.0",
     "rimraf": "^2.6.2",
     "typescript": "^2.9.2"
   }
