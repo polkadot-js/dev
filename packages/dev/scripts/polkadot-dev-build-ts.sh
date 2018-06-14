@@ -30,8 +30,8 @@ function build_js () {
     echo ""
     echo "*** Adjusting spec and declaration paths"
 
-    rimraf build/*.spec.js build/*.d.js build/**/*.spec.js build/**/*.d.js
-    ncp src build --filter .ts
+    rimraf build/*.spec.ts build/*.d.js build/**/*.spec.ts build/**/*.d.js
+    ncp src build --filter "^(spec).ts"
 
     if [ -d "flow-typed" ]; then
       echo ""

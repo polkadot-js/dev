@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const index = require('./');
+const index = require('./index');
 
 describe('index', () => {
   it('has an export', () => {

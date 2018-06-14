@@ -3,5 +3,11 @@
 // of the ISC license. See the LICENSE file for details.
 
 module.exports = {
+  transform: {
+    '^.+\\.tsx?$': 'ts-jest'
+  },
+  moduleFileExtensions: [
+    'js', 'ts', 'tsx'
+  ],
   verbose: false
 };
