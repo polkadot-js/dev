@@ -1,4 +1,5 @@
 {
   "extends": "./config/tsconfig",
-  "outDir": "./build"
+  "declarationDir": "build",
+  "outDir": "build"
 }
