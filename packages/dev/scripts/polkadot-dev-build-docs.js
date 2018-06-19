@@ -53,6 +53,10 @@ function findTags (definitions, type) {
 }
 
 function parseFile (file) {
+  if (!fs.existsSync(file)) {
+    return [];
+  }
+
   const source = fs.readFileSync(file).toString('utf-8');
 
   return dox.parseComments(source, {
