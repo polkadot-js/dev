@@ -85,12 +85,12 @@ function buildPackage (root) {
 
   function readSources (dir) {
     return lsFiles(path.join(SRC, dir))
-      .map((file) => {
-        return parseFile(path.join(SRC, dir, file))[0];
-      })
-      .filter((definition) => {
-        return definition.tags.find(({ type }) => type === 'name');
-      });
+      .map((file) =>
+        parseFile(path.join(SRC, dir, file))[0]
+      )
+      .filter((definition) =>
+        definition && definition.tags.find(({ type }) => type === 'name')
+      );
   }
 
   function mdFromDefinition (definition, md) {
