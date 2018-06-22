@@ -23,20 +23,19 @@ function build_js () {
     echo ""
     echo "*** Compiling via tsc & babel"
 
-    cd src
-    FILES=$(find . -name '*.ts' -o -name '*.tsx' -print)
-    echo $FILES
-    cd ..
-
     pwd
     # tsc --listEmittedFiles --outDir build --declaration --jsx preserve --emitDeclarationOnly src
     babel src --config-file ../../babel.config.js --out-dir build --extensions ".ts,.tsx" --ignore "**/*.d.ts"
 
     echo ""
-    echo "*** Adjusting spec and declaration paths"
+    echo "*** Copying source declarations"
 
-    # rimraf build/*.spec.ts build/*.d.js build/**/*.spec.ts build/**/*.d.js
     ncp src/ build --filter "\.d\.js"
+
+    echo ""
+    echo "*** Copying generated declarations"
+
+    ncp ../../build/$ROOT/src build --filter "\.d\.js"
 
     # if [ -d "flow-typed" ]; then
     #   echo ""
@@ -46,7 +45,7 @@ function build_js () {
     # fi
   fi
 
-  cd ../..
+  cd ..
 
   echo ""
   echo "*** Build completed"
@@ -55,10 +54,10 @@ function build_js () {
 yarn run polkadot-dev-clean-build
 
 cd packages
-tsc --emitDeclarationOnly
-cd ..
+rm -rf ../build
+tsc --emitDeclarationOnly --outdir ../build
 
-PACKAGES=( $(ls -1d packages/*) )
+PACKAGES=( $(ls -1d *) )
 
 for PACKAGE in "${PACKAGES[@]}"; do
   echo ""
@@ -66,5 +65,7 @@ for PACKAGE in "${PACKAGES[@]}"; do
 
   build_js "$PACKAGE"
 done
+
+cd ..
 
 exit 0
