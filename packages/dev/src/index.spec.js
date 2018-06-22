@@ -2,7 +2,7 @@
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
 
-const index = require('./index');
+import * as index from './index';
 
 describe('index', () => {
   it('runs the test', () => {

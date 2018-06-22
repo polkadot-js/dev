@@ -4,10 +4,10 @@
 
 module.exports = {
   transform: {
-    '^.+\\.tsx?$': 'ts-jest'
+    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest'
   },
   moduleFileExtensions: [
-    'js', 'ts', 'tsx'
+    'js', 'jsx', 'ts', 'tsx'
   ],
-  verbose: false
+  verbose: true
 };

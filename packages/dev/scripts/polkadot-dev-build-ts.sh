@@ -24,42 +24,48 @@ function build_js () {
     echo "*** Compiling via tsc & babel"
 
     pwd
-    tsc --listEmittedFiles --rootDir src --outDir build --emitDeclarationOnly
-    babel src --config-file ../../babel.config.js --out-dir build --ignore '*.spec.js,*.d.ts' --extensions ".ts,.tsx"
+    # tsc --listEmittedFiles --outDir build --declaration --jsx preserve --emitDeclarationOnly src
+    babel src --config-file ../../babel.config.js --out-dir build --extensions ".ts,.tsx" --ignore "**/*.d.ts"
 
     echo ""
-    echo "*** Adjusting spec and declaration paths"
+    echo "*** Copying source declarations"
 
-    rimraf build/*.spec.ts build/*.d.js build/**/*.spec.ts build/**/*.d.js
-    ncp src build --filter "^(spec).ts"
+    ncp src/ build --filter "\.d\.js"
 
-    if [ -d "flow-typed" ]; then
-      echo ""
-      echo "*** Copying flow types (libraries)"
+    echo ""
+    echo "*** Copying generated declarations"
 
-      ncp flow-typed build/flow-typed
-    fi
+    ncp ../../build/$ROOT/src build --filter "\.d\.js"
+
+    # if [ -d "flow-typed" ]; then
+    #   echo ""
+    #   echo "*** Copying flow types (libraries)"
+
+    #   ncp flow-typed build/flow-typed
+    # fi
   fi
 
-  cd ../..
+  cd ..
 
   echo ""
   echo "*** Build completed"
 }
 
-if [ -d "packages" ]; then
-  PACKAGES=( $(ls -1d packages/*) )
+yarn run polkadot-dev-clean-build
 
-  for PACKAGE in "${PACKAGES[@]}"; do
-    echo ""
-    echo "*** Executing in $PACKAGE"
+cd packages
+rm -rf ../build
+tsc --emitDeclarationOnly --outdir ../build
 
-    build_js "$PACKAGE"
-  done
-fi
+PACKAGES=( $(ls -1d *) )
 
-if [ -d "src" ]; then
-  build_js "."
-fi
+for PACKAGE in "${PACKAGES[@]}"; do
+  echo ""
+  echo "*** Executing in $PACKAGE"
+
+  build_js "$PACKAGE"
+done
+
+cd ..
 
 exit 0

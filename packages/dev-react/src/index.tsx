@@ -4,6 +4,9 @@
 
 import * as React from 'react';
 
+// cross-package imports
+// import { echo } from '@polkadot/dev';
+
 type Props = {
   className: string,
   value: string
@@ -32,6 +35,8 @@ export default class App extends React.PureComponent<Props, State> {
   render (): React.ReactNode {
     const { className } = this.props;
     const { value } = this.state;
+
+    // echo(value);
 
     return (
       <div className={className}>
