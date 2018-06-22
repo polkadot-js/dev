@@ -1,11 +1,12 @@
 {
   "name": "@polkadot/dev",
-  "version": "0.19.28",
+  "version": "0.20.0",
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "bin": {
     "polkadot-dev-build-babel": "./scripts/polkadot-dev-build-babel.sh",
     "polkadot-dev-build-docs": "./scripts/polkadot-dev-build-docs.js",
     "polkadot-dev-build-travis": "./scripts/polkadot-dev-build-travis.sh",
+    "polkadot-dev-build-ts": "./scripts/polkadot-dev-build-ts.sh",
     "polkadot-dev-clean-branches": "./scripts/polkadot-dev-clean-branches.sh",
     "polkadot-dev-clean-build": "./scripts/polkadot-dev-clean-build.sh",
     "polkadot-dev-copy-skeleton": "./scripts/polkadot-dev-copy-skeleton.sh",
@@ -43,15 +44,18 @@
     "test": "jest --coverage"
   },
   "dependencies": {
-    "@babel/cli": "^7.0.0-beta.47",
-    "@babel/core": "^7.0.0-beta.47",
-    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.47",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.47",
-    "@babel/plugin-transform-runtime": "^7.0.0-beta.47",
-    "@babel/preset-env": "^7.0.0-beta.47",
-    "@babel/preset-flow": "^7.0.0-beta.47",
-    "@babel/register": "^7.0.0-beta.47",
-    "@babel/runtime": "^7.0.0-beta.47",
+    "@babel/cli": "^7.0.0-beta.51",
+    "@babel/core": "^7.0.0-beta.51",
+    "@babel/plugin-proposal-class-properties": "^7.0.0-beta.51",
+    "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.51",
+    "@babel/plugin-transform-runtime": "^7.0.0-beta.51",
+    "@babel/preset-env": "^7.0.0-beta.51",
+    "@babel/preset-flow": "^7.0.0-beta.51",
+    "@babel/preset-typescript": "7.0.0-beta.51",
+    "@babel/register": "^7.0.0-beta.51",
+    "@babel/runtime": "^7.0.0-beta.51",
+    "@types/jest": "^23.1.0",
+    "@types/node": "^10.3.3",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^8.2.3",
     "babel-jest": "^22.4.3",
@@ -70,10 +74,13 @@
     "eslint-plugin-standard": "^3.0.1",
     "flow-bin": "^0.73.0",
     "flow-copy-source": "^1.3.0",
-    "jest": "^22.4.3",
+    "jest": "^23.0.0",
     "lerna": "^2.11.0",
     "makeshift": "^1.1.0",
     "mkdirp": "^0.5.1",
-    "rimraf": "^2.6.2"
+    "ncp": "^2.0.0",
+    "rimraf": "^2.6.2",
+    "ts-jest": "^22.4.6",
+    "typescript": "^2.9.2"
   }
 }
