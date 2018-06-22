@@ -9,5 +9,5 @@ module.exports = {
   moduleFileExtensions: [
     'js', 'jsx', 'ts', 'tsx'
   ],
-  verbose: false
+  verbose: true
 };
