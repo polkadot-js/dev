@@ -9,7 +9,7 @@ function build_js () {
   ROOT=$1
 
   echo ""
-  echo "*** Cleaning build directory"
+  echo "*** Cleaning build directory $ROOT/build"
 
   rimraf $ROOT/build
   cd $ROOT

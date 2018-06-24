@@ -9,24 +9,19 @@ function clean_build () {
   ROOT=$1
 
   echo ""
-  echo "*** Cleaning build directory"
+  echo "*** Cleaning build directory $ROOT/build"
 
   rimraf $ROOT/build
 }
+
+clean_build "."
 
 if [ -d "packages" ]; then
   PACKAGES=( $(ls -1d packages/*) )
 
   for PACKAGE in "${PACKAGES[@]}"; do
-    echo ""
-    echo "*** Executing in $PACKAGE"
-
     clean_build "$PACKAGE"
   done
-fi
-
-if [ -d "src" ]; then
-  clean_build "."
 fi
 
 exit 0
