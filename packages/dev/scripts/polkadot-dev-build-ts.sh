@@ -8,10 +8,6 @@ set -e
 function build_js () {
   ROOT=$1
 
-  echo ""
-  echo "*** Cleaning build directory $ROOT/build"
-
-  rimraf $ROOT/build
   cd $ROOT
 
   if [ -d "public" ]; then
@@ -54,7 +50,6 @@ function build_js () {
 yarn run polkadot-dev-clean-build
 
 cd packages
-rm -rf ../build
 tsc --emitDeclarationOnly --outdir ../build
 
 PACKAGES=( $(ls -1d *) )
