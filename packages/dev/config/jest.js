@@ -7,7 +7,7 @@ module.exports = {
     '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest'
   },
   moduleFileExtensions: [
-    'js', 'jsx', 'ts', 'tsx'
+    'js', 'jsx', 'ts', 'tsx', 'json'
   ],
   verbose: true
 };
