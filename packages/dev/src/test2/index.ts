@@ -3,5 +3,5 @@
 // of the ISC license. See the LICENSE file for details.
 
 /**
-  @summary Some second test link
-*/
+ * @summary Some second test link
+ */

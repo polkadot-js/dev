@@ -1,3 +1,3 @@
 /**
-  @summary Some second test link
-*/
+ * @summary Some second test link
+ */

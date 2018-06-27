@@ -3,18 +3,18 @@
 // of the ISC license. See the LICENSE file for details.
 
 /**
-  @name foo
-  @signature foo (something: string): boolean
-  @summary This is the summary
-  @description
-    This is the description
-    With another line
-  @example
-    const foo = require('./foo');
-
-    try {
-      foo();
-    } catch (error) {
-      console.error
-    }
-*/
+ * @name foo
+ * @signature foo (something: string): boolean
+ * @summary This is the summary
+ * @description
+ * This is the description
+ * With another line
+ * @example
+ * const foo = require('./foo');
+ *
+ * try {
+ *   foo();
+ * } catch (error) {
+ *   console.error
+ * }
+ */

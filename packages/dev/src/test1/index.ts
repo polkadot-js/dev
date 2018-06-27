@@ -3,6 +3,6 @@
 // of the ISC license. See the LICENSE file for details.
 
 /**
-  @summary Some first test link
-*/
+ * @summary Some first test link
+ */
 export default (test: string): string => test;
