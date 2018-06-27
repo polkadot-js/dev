@@ -17,8 +17,8 @@ type State = {
 };
 
 /**
-  @summary This is just a test file to test the doc generation
-*/
+ * @summary This is just a test file to test the doc generation
+ */
 export default class App extends React.PureComponent<Props, State> {
   state: State;
 
