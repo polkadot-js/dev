@@ -24,14 +24,11 @@ function build_js () {
     babel src --config-file ../../babel.config.js --out-dir build --extensions ".ts,.tsx" --ignore "**/*.d.ts"
 
     echo ""
-    echo "*** Copying source declarations"
+    echo "*** Copying declarations"
 
     ncp src/ build --filter "\.d\.js"
-
-    echo ""
-    echo "*** Copying generated declarations"
-
     ncp ../../build/$ROOT/src build --filter "\.d\.js"
+    cp -f package.json build/
 
     # if [ -d "flow-typed" ]; then
     #   echo ""

@@ -121,6 +121,7 @@ function npm_publish () {
   echo ""
   echo "*** Copying package files to build"
 
+  rm -rf build/package.json
   cp LICENSE README.md package.json build/
 
   echo ""
