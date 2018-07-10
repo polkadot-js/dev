@@ -7,12 +7,12 @@ import * as React from 'react';
 // cross-package imports
 // import { echo } from '@polkadot/dev';
 
-type Props = {
+export type Props = {
   className: string,
   value: string
 };
 
-type State = {
+export type State = {
   value: string
 };
 
