@@ -3,6 +3,6 @@
 // of the ISC license. See the LICENSE file for details.
 
 /**
- * @summary This is just a test file to test the doc generation
+ * This is just a test file to test the doc generation
  */
 export const echo = (value: string) => value;

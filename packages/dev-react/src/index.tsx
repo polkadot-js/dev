@@ -4,9 +4,6 @@
 
 import * as React from 'react';
 
-// cross-package imports
-// import { echo } from '@polkadot/dev';
-
 export type Props = {
   className: string,
   value: string
@@ -17,7 +14,7 @@ export type State = {
 };
 
 /**
- * @summary This is just a test file to test the doc generation
+ * This is just a test file to test the doc generation
  */
 export default class App extends React.PureComponent<Props, State> {
   state: State;

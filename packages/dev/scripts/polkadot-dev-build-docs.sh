@@ -20,11 +20,6 @@ function build_docs () {
   fi
 }
 
-echo ""
-echo "*** Cleaning docs directory"
-
-rimraf ./docs
-
 PACKAGES=( $(ls -1d packages/*) )
 
 for PACKAGE in "${PACKAGES[@]}"; do
