@@ -37,14 +37,9 @@
     "url": "https://github.com/polkadot-js/dev/issues"
   },
   "homepage": "https://github.com/polkadot-js/dev#readme",
-  "scripts": {
-    "build": "./scripts/polkadot-dev-build-docs.js && ./scripts/polkadot-dev-build-babel.sh && rimraf build && copyfiles config/* flow-typed/* scripts/* skeleton/* build",
-    "check": "eslint flow-typed src scripts && flow check",
-    "clean": "./scripts/polkadot-dev-clean-build.sh",
-    "test": "jest --coverage"
-  },
   "resolutions": {
-    "babel-core": "^7.0.0-bridge.0"
+    "babel-core": "^7.0.0-bridge.0",
+    "typescript": "^2.9.2"
   },
   "dependencies": {
     "@babel/cli": "^7.0.0-beta.51",
