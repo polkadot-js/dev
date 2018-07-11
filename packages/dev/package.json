@@ -4,7 +4,7 @@
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "bin": {
     "polkadot-dev-build-babel": "./scripts/polkadot-dev-build-babel.sh",
-    "polkadot-dev-build-docs": "./scripts/polkadot-dev-build-docs.js",
+    "polkadot-dev-build-docs": "./scripts/polkadot-dev-build-docs.sh",
     "polkadot-dev-build-travis": "./scripts/polkadot-dev-build-travis.sh",
     "polkadot-dev-build-ts": "./scripts/polkadot-dev-build-ts.sh",
     "polkadot-dev-clean-branches": "./scripts/polkadot-dev-clean-branches.sh",
@@ -86,6 +86,7 @@
     "rimraf": "^2.6.2",
     "tslint": "^5.10.0",
     "tslint-config-semistandard": "^7.0.0",
+    "typedoc": "^0.11.1",
     "typescript": "^2.9.2"
   }
 }

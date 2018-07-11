@@ -9,7 +9,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "polkadot-dev-build-ts && (cd packages/dev && copyfiles config/* scripts/* skeleton/* build) && (cd packages/dev-react && copyfiles config/* scripts/* skeleton/* build)",
+    "build": "polkadot-dev-build-ts && (cd packages/dev && copyfiles config/* scripts/* skeleton/* build) && (cd packages/dev-react && copyfiles config/* scripts/* skeleton/* build) && polkadot-dev-build-docs",
     "check": "tslint --project . && tsc --noEmit",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "./packages/dev/scripts/polkadot-dev-yarn-only.js",

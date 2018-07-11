@@ -3,6 +3,7 @@
 // of the ISC license. See the LICENSE file for details.
 
 /**
- * @summary Some first test link
+ * Some first test link
+ * @link ../testRoot.ts
  */
 export default (test: string): string => test;
