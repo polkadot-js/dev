@@ -5,8 +5,8 @@
 const isTest = process.env.NODE_ENV === 'test';
 
 const plugins = [
-  '@babel/plugin-proposal-class-properties',
-  '@babel/plugin-proposal-decorators',
+  ['@babel/plugin-proposal-decorators', { legacy: true }],
+  ['@babel/plugin-proposal-class-properties', { loose: true }],
   '@babel/plugin-proposal-object-rest-spread',
   '@babel/plugin-transform-runtime'
 ];
