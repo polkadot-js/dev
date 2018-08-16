@@ -28,11 +28,11 @@ function build_js () {
     cp -f package.json build/
     ncp src/ build --filter "\.d\.js"
 
-    if [ -d "../../build/$ROOT" ]; then
+    if [ -d "../../build/$ROOT/src" ]; then
       ncp ../../build/$ROOT/src build --filter "\.d\.js"
     fi
-    if [ -d "../../build/packages/$ROOT" ]; then
-      ncp ../../build/$ROOT/src build --filter "\.d\.js"
+    if [ -d "../../build/packages/$ROOT/src" ]; then
+      ncp ../../build/packages/$ROOT/src build --filter "\.d\.js"
     fi
   fi
 
