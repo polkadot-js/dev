@@ -20,22 +20,20 @@ function build_js () {
     echo "*** Compiling via tsc & babel"
 
     pwd
-    # tsc --listEmittedFiles --outDir build --declaration --jsx preserve --emitDeclarationOnly src
     babel src --config-file ../../babel.config.js --out-dir build --extensions ".ts,.tsx" --ignore "**/*.d.ts"
 
     echo ""
     echo "*** Copying declarations"
 
-    ncp src/ build --filter "\.d\.js"
-    ncp ../../build/$ROOT/src build --filter "\.d\.js"
     cp -f package.json build/
+    ncp src/ build --filter "\.d\.js"
 
-    # if [ -d "flow-typed" ]; then
-    #   echo ""
-    #   echo "*** Copying flow types (libraries)"
-
-    #   ncp flow-typed build/flow-typed
-    # fi
+    if [ -d "../../build/$ROOT/src" ]; then
+      ncp ../../build/$ROOT/src build --filter "\.d\.js"
+    fi
+    if [ -d "../../build/packages/$ROOT/src" ]; then
+      ncp ../../build/$ROOT/src build --filter "\.d\.js"
+    fi
   fi
 
   cd ..
@@ -47,6 +45,7 @@ function build_js () {
 yarn run polkadot-dev-clean-build
 
 cd packages
+tsc --version
 tsc --emitDeclarationOnly --outdir ../build
 
 PACKAGES=( $(ls -1d *) )
