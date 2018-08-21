@@ -13,7 +13,7 @@ function build_docs () {
     echo "*** Building via typedoc"
 
     DOCROOT=${ROOT/packages/.}
-    typedoc --out ./docs/$DOCROOT $ROOT/src
+    typedoc --theme markdown --out ./docs/$DOCROOT $ROOT/src
 
     echo ""
     echo "*** Docs completed"
