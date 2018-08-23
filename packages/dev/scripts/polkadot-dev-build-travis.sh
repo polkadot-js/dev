@@ -75,7 +75,7 @@ function lerna_bump () {
   lerna_get_version
   LERNA_VERSION_PRE="$LERNA_VERSION"
 
-  lerna publish --skip-git --skip-npm --yes --cd-version patch
+  lerna version patch --yes --no-git-tag-version --no-push --allow-branch '*'
   git add --all .
 
   lerna_get_version

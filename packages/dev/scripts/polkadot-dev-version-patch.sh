@@ -6,5 +6,5 @@
 set -e
 
 if [ -d "packages" ]; then
-  lerna publish --skip-git --skip-npm --yes --cd-version patch
+  lerna version patch --yes --no-git-tag-version --no-push --allow-branch '*'
 fi
