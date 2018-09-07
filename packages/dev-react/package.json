@@ -35,23 +35,22 @@
     "last 2 Edge versions"
   ],
   "dependencies": {
-    "@babel/core": "^7.0.0-rc.1",
-    "@babel/plugin-syntax-dynamic-import": "^7.0.0-rc.1",
-    "@babel/preset-react": "^7.0.0-rc.1",
+    "@babel/core": "^7.0.0",
+    "@babel/plugin-syntax-dynamic-import": "^7.0.0",
+    "@babel/preset-react": "^7.0.0",
     "@polkadot/dev": "^0.20.18",
     "@types/react-dom": "^16.0.7",
-    "browserslist": "^4.0.2",
-    "eslint-config-standard-jsx": "^5.0.0",
-    "eslint-config-standard-react": "^6.0.0",
+    "browserslist": "^4.1.1",
+    "eslint-config-standard-jsx": "^6.0.2",
+    "eslint-config-standard-react": "^7.0.2",
     "eslint-plugin-react": "^7.11.1",
-    "react-hot-loader": "^4.3.4",
+    "react": "^16.5.0",
+    "react-dom": "^16.5.0",
+    "react-hot-loader": "^4.3.6",
     "stylelint": "^9.5.0",
     "stylelint-config-standard": "^18.2.0",
-    "webpack": "^4.17.0",
+    "webpack": "^4.17.2",
     "webpack-cli": "^3.1.0",
     "webpack-serve": "^2.0.1"
-  },
-  "devDependencies": {
-    "react": "^16.4.2"
   }
 }
