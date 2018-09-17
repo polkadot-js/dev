@@ -27,7 +27,6 @@ function build_docs () {
 }
 
 PACKAGES=( $(ls -1d packages/*) )
-rm -rf docs
 
 for PACKAGE in "${PACKAGES[@]}"; do
   echo ""
