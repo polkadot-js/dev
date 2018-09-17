@@ -15,12 +15,19 @@ function build_docs () {
     DOCROOT=${ROOT/packages/.}
     typedoc --theme markdown --out ./docs/$DOCROOT $ROOT/src
 
+    # detect gitbook
+    if [ -f "book.json" ]; then
+      yarn gitbook build
+      cp -r ./_book/* ./docs
+    fi
+
     echo ""
     echo "*** Docs completed"
   fi
 }
 
 PACKAGES=( $(ls -1d packages/*) )
+rm -rf docs
 
 for PACKAGE in "${PACKAGES[@]}"; do
   echo ""

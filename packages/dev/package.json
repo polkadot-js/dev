@@ -72,6 +72,8 @@
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-promise": "^4.0.1",
     "eslint-plugin-standard": "^4.0.0",
+    "gitbook-cli": "^2.3.2",
+    "gitbook-plugin-asciidoc-include": "^0.1.9",
     "jest": "^23.5.0",
     "lerna": "^3.3.0",
     "makeshift": "^1.1.0",
