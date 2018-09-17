@@ -18,7 +18,7 @@ function build_docs () {
     # detect gitbook
     if [ -f "book.json" ]; then
       yarn gitbook build
-      cp -r ./_book/* ./docs
+      cp -rf ./_book/* ./docs
     fi
 
     echo ""
