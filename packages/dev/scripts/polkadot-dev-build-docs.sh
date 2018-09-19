@@ -8,33 +8,32 @@ set -e
 function build_docs () {
   ROOT=$1
 
-  if [ ! -f "$ROOT/.nodoc" ]; then
-    echo ""
-    echo "*** Building via typedoc"
-
-    DOCROOT=${ROOT/packages/.}
-    typedoc --theme markdown --out ./docs/$DOCROOT $ROOT/src
-
-    # detect gitbook
-    if [ -f "book.json" ]; then
-      yarn gitbook build
-      cp -rf ./_book/* ./docs
-    fi
-
-    echo ""
-    echo "*** Docs completed"
-  fi
+  DOCROOT=${ROOT/packages/.}
+  typedoc --theme markdown --out ./docs/$DOCROOT $ROOT/src
 }
 
-PACKAGES=( $(ls -1d packages/*) )
+if [ -f "typedoc.js" ]; then
+  PACKAGES=( $(ls -1d packages/*) )
 
-for PACKAGE in "${PACKAGES[@]}"; do
+  for PACKAGE in "${PACKAGES[@]}"; do
+    if [ ! -f "$PACKAGE/.nodoc" ]; then
+      echo ""
+      echo "*** Executing in $PACKAGE"
+
+      build_docs "$PACKAGE"
+    fi
+  done
+
+  if [ -f "book.json" ]; then
+    echo ""
+    echo "*** Building via gitbook"
+
+    yarn gitbook build
+    cp -rf ./_book/* ./docs
+  fi
+
   echo ""
-  echo "*** Executing in $PACKAGE"
-
-  build_docs "$PACKAGE"
-done
-
-cd ..
+  echo "*** Docs completed"
+fi
 
 exit 0
