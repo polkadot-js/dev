@@ -226,13 +226,6 @@ run_check
 run_test
 run_build
 
-
-  echo ""
-  echo "*** Branch check completed"
-
-  exit 0
-fi
-
 if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   if [ "$TRAVIS_BRANCH" == "master" ]; then
     git_setup
