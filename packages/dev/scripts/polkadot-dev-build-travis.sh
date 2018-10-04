@@ -189,7 +189,13 @@ function deploy_all () {
     echo ""
     echo "*** Publishing to GitHub Pages"
 
-    yarn run deploy:ghpages
+    GH_PAGES_DST="."
+
+    if [ "$TRAVIS_BRANCH" == "next" ]; then
+      GH_PAGES_DST="next"
+    fi
+
+    yarn run gh-pages --dist $GH_PAGES_SRC --dest -$GH_PAGES_DST
 
     echo ""
     echo "*** GitHub Pages completed"
@@ -220,24 +226,30 @@ run_check
 run_test
 run_build
 
-if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "master" ]; then
+
   echo ""
   echo "*** Branch check completed"
 
   exit 0
 fi
 
-git_setup
-git_bump
-git_push
+if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+  if [ "$TRAVIS_BRANCH" == "master" ]; then
+    git_setup
+    git_bump
+    git_push
 
-if [ -n "$BUMP_VERSION" ]; then
-  if [ -n "$NPM_TOKEN" ]; then
-    npm_setup
-    loop_func npm_publish
+    if [ -n "$BUMP_VERSION" ]; then
+      if [ -n "$NPM_TOKEN" ]; then
+        npm_setup
+        loop_func npm_publish
+      fi
+    fi
   fi
 
-  deploy_all
+  if [ "$TRAVIS_BRANCH" == "master" -o "$TRAVIS_BRANCH" == "next" ]; then
+    deploy_all
+  fi
 fi
 
 echo ""
