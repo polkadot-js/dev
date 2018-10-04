@@ -195,7 +195,7 @@ function deploy_all () {
       GH_PAGES_DST="next"
     fi
 
-    yarn run gh-pages --dist $GH_PAGES_SRC --dest -$GH_PAGES_DST
+    yarn run gh-pages --dist $GH_PAGES_SRC --dest $GH_PAGES_DST
 
     echo ""
     echo "*** GitHub Pages completed"
