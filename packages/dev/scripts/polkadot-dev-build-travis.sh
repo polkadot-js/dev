@@ -227,8 +227,9 @@ run_test
 run_build
 
 if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+  git_setup
+
   if [ "$TRAVIS_BRANCH" == "master" ]; then
-    git_setup
     git_bump
     git_push
 
