@@ -5,11 +5,12 @@
 const { defaults } = require('jest-config');
 
 module.exports = {
-  transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest'
-  },
   moduleFileExtensions: [
     ...defaults.moduleFileExtensions, 'ts', 'tsx'
   ],
+  testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
+  transform: {
+    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest'
+  },
   verbose: true
 };
