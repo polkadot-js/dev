@@ -151,6 +151,10 @@ function git_setup () {
   git checkout $TRAVIS_BRANCH
   git add --all .
 
+  if [ -d "docs" ]; then
+    git add --all -f docs
+  fi
+
   echo ""
   echo "*** GitHub setup completed"
 }
