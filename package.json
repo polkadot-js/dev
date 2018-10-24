@@ -10,7 +10,7 @@
   ],
   "resolutions": {
     "babel-core": "^7.0.0-bridge.0",
-    "typescript": "^3.0.1"
+    "typescript": "^3.1.3"
   },
   "scripts": {
     "build": "polkadot-dev-build-ts && (cd packages/dev && copyfiles config/* scripts/* skeleton/* build) && (cd packages/dev-react && copyfiles config/* scripts/* skeleton/* build) && polkadot-dev-build-docs",
@@ -18,8 +18,5 @@
     "clean": "polkadot-dev-clean-build",
     "postinstall": "./packages/dev/scripts/polkadot-dev-yarn-only.js",
     "test": "jest --coverage"
-  },
-  "devDependencies": {
-    "chalk": "^2.4.1"
   }
 }
