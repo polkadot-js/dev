@@ -19,7 +19,7 @@
     "postinstall": "./packages/dev/scripts/polkadot-dev-yarn-only.js",
     "test": "jest --coverage"
   },
-  "dependencies": {
+  "devDependencies": {
     "@babel/core": "^7.1.2"
   }
 }
