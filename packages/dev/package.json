@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/dev",
-  "version": "0.21.3",
+  "version": "0.21.4",
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "bin": {
     "polkadot-dev-build-babel": "./scripts/polkadot-dev-build-babel.sh",
@@ -60,8 +60,8 @@
     "babel-plugin-module-resolver": "^3.1.1",
     "chalk": "^2.4.1",
     "codeclimate-test-reporter": "^0.5.1",
-    "cpx": "^1.5.0",
     "coveralls": "^3.0.1",
+    "cpx": "^1.5.0",
     "dox": "^0.9.0",
     "eslint": "^5.7.0",
     "eslint-config-semistandard": "^13.0.0",
