@@ -26,13 +26,13 @@ function build_js () {
     echo "*** Copying declarations"
 
     cp -f package.json build/
-    ncp src/ build --filter "\.d\.js"
+    cpx "src/**/*.d.ts" build
 
     if [ -d "../../build/$ROOT/src" ]; then
-      ncp ../../build/$ROOT/src build --filter "\.d\.js"
+      cpx "../../build/$ROOT/src/**/*.d.ts" build
     fi
     if [ -d "../../build/packages/$ROOT/src" ]; then
-      ncp ../../build/packages/$ROOT/src build --filter "\.d\.js"
+      cpx "../../build/packages/$ROOT/src/**/*.d.ts" build
     fi
   fi
 
