@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/dev",
-  "version": "0.21.6",
+  "version": "0.22.0",
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "bin": {
     "polkadot-dev-build-babel": "./scripts/polkadot-dev-build-babel.sh",
@@ -53,7 +53,7 @@
     "@babel/register": "^7.0.0",
     "@babel/runtime": "^7.1.5",
     "@types/jest": "^23.3.9",
-    "@types/node": "^10.12.7",
+    "@types/node": "^10.12.9",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
     "babel-jest": "^23.6.0",
@@ -85,7 +85,7 @@
     "tslint": "^5.11.0",
     "tslint-config-semistandard": "^7.0.0",
     "typedoc": "^0.13.0",
-    "typedoc-plugin-markdown": "^1.1.18",
+    "typedoc-plugin-markdown": "^1.1.19",
     "typescript": "^3.1.6"
   }
 }

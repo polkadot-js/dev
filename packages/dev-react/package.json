@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/dev-react",
-  "version": "0.21.6",
+  "version": "0.22.0",
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "keywords": [
     "Polkadot"
@@ -38,7 +38,7 @@
     "@babel/core": "^7.1.6",
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
-    "@polkadot/dev": "^0.21.6",
+    "@polkadot/dev": "^0.22.0",
     "@types/react-dom": "^16.0.9",
     "browserslist": "^4.3.4",
     "eslint": "^5.9.0",
@@ -50,8 +50,8 @@
     "react-hot-loader": "^4.3.12",
     "stylelint": "^9.8.0",
     "stylelint-config-standard": "^18.2.0",
-    "webpack": "^4.25.1",
+    "webpack": "^4.26.0",
     "webpack-cli": "^3.1.2",
-    "webpack-serve": "^2.0.1"
+    "webpack-serve": "^2.0.3"
   }
 }
