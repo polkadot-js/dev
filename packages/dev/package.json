@@ -83,7 +83,7 @@
     "mkdirp": "^0.5.1",
     "rimraf": "^2.6.2",
     "tslint": "^5.11.0",
-    "tslint-config-semistandard": "^7.0.0",
+    "tslint-config-standard": "^8.0.1",
     "typedoc": "^0.13.0",
     "typedoc-plugin-markdown": "^1.1.19",
     "typescript": "^3.1.6"
