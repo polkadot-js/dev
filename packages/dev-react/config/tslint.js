@@ -4,7 +4,7 @@
 
 module.exports = {
   extends: '@polkadot/dev/config/tslint',
-  rulesDirectory: './node_modules/tslint-react/rules/',
+  rulesDirectory: 'tslint-react/rules/',
   rules: {
     'jsx-alignment': true
   }
