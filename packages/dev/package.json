@@ -39,7 +39,7 @@
   "homepage": "https://github.com/polkadot-js/dev#readme",
   "resolutions": {
     "babel-core": "^7.0.0-bridge.0",
-    "typescript": "^3.1.6"
+    "typescript": "^3.2.1"
   },
   "dependencies": {
     "@babel/cli": "^7.1.5",
@@ -53,7 +53,7 @@
     "@babel/register": "^7.0.0",
     "@babel/runtime": "^7.1.5",
     "@types/jest": "^23.3.10",
-    "@types/node": "^10.12.10",
+    "@types/node": "^10.12.11",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^23.6.0",
     "babel-plugin-module-resolver": "^3.1.1",
@@ -68,7 +68,7 @@
     "gitbook-plugin-mermaid-gb3": "^2.1.0",
     "gitbook-plugin-sunlight-highlighter": "^0.4.3",
     "jest": "^23.6.0",
-    "lerna": "^3.5.0",
+    "lerna": "^3.5.1",
     "makeshift": "^1.1.0",
     "mkdirp": "^0.5.1",
     "rimraf": "^2.6.2",
@@ -76,6 +76,7 @@
     "tslint-config-standard": "^8.0.1",
     "typedoc": "^0.13.0",
     "typedoc-plugin-markdown": "^1.1.19",
-    "typescript": "^3.1.6"
+    "typedoc-plugin-no-inherit": "^1.0.2",
+    "typescript": "^3.2.1"
   }
 }
