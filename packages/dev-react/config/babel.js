@@ -9,7 +9,8 @@ module.exports = Object.keys(base).reduce((config, key) => {
 
   if (key === 'plugins') {
     config[key] = config[key].concat([
-      '@babel/plugin-syntax-dynamic-import'
+      '@babel/plugin-syntax-dynamic-import',
+      'babel-plugin-styled-components'
     ]);
   } else if (key === 'presets') {
     config[key] = config[key].concat([
