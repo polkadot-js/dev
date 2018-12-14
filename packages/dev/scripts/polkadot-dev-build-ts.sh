@@ -23,14 +23,21 @@ function build_js () {
     babel src --config-file ../../babel.config.js --out-dir build --extensions ".ts,.tsx" --ignore "**/*.d.ts"
 
     echo ""
-    echo "*** Copying declarations"
+    echo "*** Copying static resources"
 
     cp -f package.json build/
+    cpx "src/**/*.css" build
+    cpx "src/**/*.svg" build
+
+    echo ""
+    echo "*** Copying declarations"
+
     cpx "src/**/*.d.ts" build
 
     if [ -d "../../build/$ROOT/src" ]; then
       cpx "../../build/$ROOT/src/**/*.d.ts" build
     fi
+
     if [ -d "../../build/packages/$ROOT/src" ]; then
       cpx "../../build/packages/$ROOT/src/**/*.d.ts" build
     fi
