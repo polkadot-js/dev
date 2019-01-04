@@ -4924,13 +4924,6 @@ gitbook-cli@^2.3.2:
     tmp "0.0.31"
     user-home "2.0.0"
 
-gitbook-plugin-asciidoc-include@^0.1.9:
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/gitbook-plugin-asciidoc-include/-/gitbook-plugin-asciidoc-include-0.1.9.tgz#ba7736576d882c1bfa1a1d2b639d8d594bc972af"
-  integrity sha1-unc2V22ILBv6Gh0rY52NWUvJcq8=
-  dependencies:
-    q "1.4.1"
-
 gitbook-plugin-include-codeblock@^3.2.2:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/gitbook-plugin-include-codeblock/-/gitbook-plugin-include-codeblock-3.2.2.tgz#88e8779258cfb151dc54130df0b24ec166e3fa38"
@@ -9306,11 +9299,6 @@ punycode@^2.1.0, punycode@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
   integrity sha512-XRsRjdf+j5ml+y/6GKHPZbrF/8p2Yga0JPtdqTIY2Xe5ohJPD9saDJJLPvp9+NSBprVvevdXZybnj2cv8OEd0A==
-
-q@1.4.1:
-  version "1.4.1"
-  resolved "https://registry.yarnpkg.com/q/-/q-1.4.1.tgz#55705bcd93c5f3673530c2c2cbc0c2b3addc286e"
-  integrity sha1-VXBbzZPF82c1MMLCy8DCs63cKG4=
 
 q@1.5.0:
   version "1.5.0"

@@ -57,7 +57,6 @@
     "coveralls": "^3.0.1",
     "cpx": "^1.5.0",
     "gitbook-cli": "^2.3.2",
-    "gitbook-plugin-asciidoc-include": "^0.1.9",
     "gitbook-plugin-include-codeblock": "^3.2.2",
     "gitbook-plugin-insert-logo-link": "^1.0.1",
     "gitbook-plugin-mermaid-gb3": "^2.1.0",
