@@ -11180,17 +11180,17 @@ typedoc-default-themes@^0.5.0:
   resolved "https://registry.yarnpkg.com/typedoc-default-themes/-/typedoc-default-themes-0.5.0.tgz#6dc2433e78ed8bea8e887a3acde2f31785bd6227"
   integrity sha1-bcJDPnjti+qOiHo6zeLzF4W9Yic=
 
-typedoc-plugin-markdown@^1.1.19:
+typedoc-plugin-markdown@^1.1.20:
   version "1.1.20"
   resolved "https://registry.yarnpkg.com/typedoc-plugin-markdown/-/typedoc-plugin-markdown-1.1.20.tgz#a3eb91994f3f8b67d5df4d938653982bf2b85209"
   integrity sha512-2rDLrzb0Wb0w0+iQ7LEGWccvRvluHTfPzj+wiggUaOYq3WaUfjA2KVFlAOECIuPiLoMiVgwSAp2YOLCYNp1C5A==
   dependencies:
     turndown "^5.0.1"
 
-typedoc-plugin-no-inherit@^1.0.2:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/typedoc-plugin-no-inherit/-/typedoc-plugin-no-inherit-1.1.0.tgz#735ac343bfe25ba7d230aa9490fc37020677dc91"
-  integrity sha512-FOFA3fydaN3IxrLG4uKWzoDRT5BrFIxAI3VemoBWxRk7XL4zKL7XAy/wGEUZ89onYFY8VPJpfle3ZJJm1j/bAg==
+typedoc-plugin-no-inherit@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/typedoc-plugin-no-inherit/-/typedoc-plugin-no-inherit-1.1.1.tgz#ee2c5e53de50c4c34f26342a880d7a01cf76f61a"
+  integrity sha512-+yZWgh8Nh7wL6gxDMrdx2pPGigG8U9iklSiHQyxOdNb8r+EyR/q9KssdFCiPCyFZEcCviU+4a7wuD8ZOGyXrWA==
 
 typedoc@^0.13.0:
   version "0.13.0"
