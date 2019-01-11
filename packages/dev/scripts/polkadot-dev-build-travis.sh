@@ -103,7 +103,7 @@ function npm_setup () {
   echo ""
   echo "*** Setting up npm"
 
-  makeshift
+  echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc 2> /dev/null
 
   echo ""
   echo "*** Npm setup completed"

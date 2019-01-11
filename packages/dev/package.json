@@ -63,7 +63,6 @@
     "gitbook-plugin-sunlight-highlighter": "^0.4.3",
     "jest": "^23.6.0",
     "lerna": "^3.8.4",
-    "makeshift": "^1.1.0",
     "mkdirp": "^0.5.1",
     "rimraf": "^2.6.3",
     "tslint": "^5.12.0",
