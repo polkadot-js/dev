@@ -135,9 +135,10 @@ function npm_publish () {
     (yarn publish --access public --new-version $NPM_VERSION) && break || {
       if [[ $n -lt 5 ]]; then
         ((n++))
-        echo "Command failed. Attempt $n/$5"
+        echo "Publish failed on attempt $n/5. Retrying in 15s."
         sleep 15
       else
+        echo "Publish failed on final attempt. Aborting."
         exit 1
       fi
     }
