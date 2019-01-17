@@ -128,7 +128,21 @@ function npm_publish () {
   echo "*** Publishing to npm"
 
   cd build
-  yarn publish --access public --new-version $NPM_VERSION
+
+  local n=1
+
+  while true; do
+    (yarn publish --access public --new-version $NPM_VERSION) && break || {
+      if [[ $n -lt 5 ]]; then
+        ((n++))
+        echo "Command failed. Attempt $n/$5"
+        sleep 15
+      else
+        exit 1
+      fi
+    }
+  done
+
   cd ..
 
   echo ""
