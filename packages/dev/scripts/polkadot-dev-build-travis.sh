@@ -243,22 +243,13 @@ function loop_func () {
 run_clean
 run_check
 run_test
+run_build
 
 if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   git_setup
 
   if [ "$TRAVIS_BRANCH" == "master" ]; then
     git_bump
-  fi
-fi
-
-run_build
-
-if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-  # git_setup
-
-  if [ "$TRAVIS_BRANCH" == "master" ]; then
-    # git_bump
     git_push
 
     if [ -n "$BUMP_VERSION" ]; then
