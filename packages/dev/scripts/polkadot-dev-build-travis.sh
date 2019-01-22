@@ -160,15 +160,7 @@ function git_setup () {
   git config user.email "$COMMIT_AUTHOR_EMAIL"
   git remote set-url origin https://${GH_TOKEN}@github.com/${TRAVIS_REPO_SLUG}.git > /dev/null 2>&1
 
-  echo ""
-  echo "*** Adding build artifacts"
-
   git checkout $TRAVIS_BRANCH
-  git add --all .
-
-  if [ -d "docs" ]; then
-    git add --all -f docs
-  fi
 
   echo ""
   echo "*** GitHub setup completed"
@@ -176,8 +168,18 @@ function git_setup () {
 
 function git_push () {
   echo ""
+  echo "*** Adding build artifacts"
+
+  git add --all .
+
+  if [ -d "docs" ]; then
+    git add --all -f docs
+  fi
+
+  echo ""
   echo "*** Pushing to GitHub"
 
+  git status
   git commit -m "[CI Skip] $NPM_VERSION"
   git push --quiet origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
 
