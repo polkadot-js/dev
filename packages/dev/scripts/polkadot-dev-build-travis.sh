@@ -31,7 +31,7 @@ function run_build () {
   echo ""
   echo "*** Running build"
 
-  yarn run build
+  NODE_ENV=production yarn run build
 
   echo ""
   echo "*** Build completed"
