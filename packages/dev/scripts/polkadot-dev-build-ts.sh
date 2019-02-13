@@ -30,9 +30,10 @@ function build_js () {
     cpx "src/**/*.svg" build
 
     echo ""
-    echo "*** Copying declarations"
+    echo "*** Copying declarations & JS sources"
 
     cpx "src/**/*.d.ts" build
+    cpx "src/**/*.js" build
 
     if [ -d "../../build/$ROOT/src" ]; then
       cpx "../../build/$ROOT/src/**/*.d.ts" build
