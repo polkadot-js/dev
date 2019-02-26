@@ -33,6 +33,7 @@ if [ -f "typedoc.js" ]; then
     echo ""
     echo "*** Copying vuepress HTML"
     cp -rf ./docs/.vuepress/dist/* ./docs
+    rm -rf ./docs/.vuepress/dist
   fi
 
   echo ""
