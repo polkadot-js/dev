@@ -29,6 +29,10 @@ if [ -f "typedoc.js" ]; then
     echo "*** Building via vuepress"
 
     yarn vuepress build docs
+
+    echo ""
+    echo "*** Copying vuepress HTML"
+    cp -rf ./docs/.vuepress/dist/* ./docs
   fi
 
   echo ""
