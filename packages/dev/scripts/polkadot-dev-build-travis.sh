@@ -179,7 +179,6 @@ function git_push () {
   echo ""
   echo "*** Pushing to GitHub"
 
-  git status
   git commit -m "[CI Skip] $NPM_VERSION"
   git push --quiet origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
 
