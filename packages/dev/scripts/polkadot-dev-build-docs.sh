@@ -24,12 +24,11 @@ if [ -f "typedoc.js" ]; then
     fi
   done
 
-  if [ -f "book.json" ]; then
+  if [ -d "docs/.vuepress" ]; then
     echo ""
-    echo "*** Building via gitbook"
+    echo "*** Building via vuepress"
 
-    yarn gitbook build
-    cp -rf ./_book/* ./docs
+    yarn vuepress build docs
   fi
 
   echo ""
