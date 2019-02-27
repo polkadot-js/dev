@@ -177,9 +177,13 @@ function git_push () {
   fi
 
   echo ""
+  echo "*** Committing changed files"
+
+  git commit --no-status --quiet -m "[CI Skip] $NPM_VERSION"
+
+  echo ""
   echo "*** Pushing to GitHub"
 
-  git commit -m "[CI Skip] $NPM_VERSION"
   git push --quiet origin HEAD:refs/heads/$TRAVIS_BRANCH > /dev/null 2>&1
 
   echo ""
