@@ -37,7 +37,7 @@ if [ -f "typedoc.js" ]; then
 
   echo ""
   echo "*** Copying root markdown"
-  cp -n *.md ./$DOCROOT
+  cp -f CHANGELOG.md CONTRIBUTING.md ./$DOCROOT
 
   if [ -d "docs/.vuepress" ]; then
     echo ""
