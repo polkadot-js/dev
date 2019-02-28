@@ -11,7 +11,7 @@ function clean_build () {
   echo ""
   echo "*** Cleaning build directory $ROOT/build"
 
-  rimraf $ROOT/build
+  rimraf $ROOT/build $ROOT/build-docs
 }
 
 clean_build "."

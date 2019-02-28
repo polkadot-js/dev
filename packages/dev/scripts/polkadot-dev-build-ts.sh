@@ -59,10 +59,12 @@ tsc --emitDeclarationOnly --outdir ../build
 PACKAGES=( $(ls -1d *) )
 
 for PACKAGE in "${PACKAGES[@]}"; do
-  echo ""
-  echo "*** Executing in $PACKAGE"
+  if [ -d "$PACKAGE/src" ]; then
+    echo ""
+    echo "*** Executing in $PACKAGE"
 
-  build_js "$PACKAGE"
+    build_js "$PACKAGE"
+  fi
 done
 
 cd ..
