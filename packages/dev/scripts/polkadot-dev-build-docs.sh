@@ -23,10 +23,12 @@ if [ -f "typedoc.js" ]; then
 
   for PACKAGE in "${PACKAGES[@]}"; do
     if [ ! -f "$PACKAGE/.nodoc" ]; then
-      echo ""
-      echo "*** Executing in $PACKAGE"
+      if [ -d "$PACKAGE/src" ]; then
+        echo ""
+        echo "*** Executing in $PACKAGE"
 
-      build_docs "$PACKAGE"
+        build_docs "$PACKAGE"
+      fi
     fi
   done
 

@@ -52,10 +52,12 @@ if [ -d "packages" ]; then
   PACKAGES=( $(ls -1d packages/*) )
 
   for PACKAGE in "${PACKAGES[@]}"; do
-    echo ""
-    echo "*** Executing in $PACKAGE"
+    if [ -d "$PACKAGE/src" ]; then
+      echo ""
+      echo "*** Executing in $PACKAGE"
 
-    build_js "$PACKAGE"
+      build_js "$PACKAGE"
+    fi
   done
 fi
 
