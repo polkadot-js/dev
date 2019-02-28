@@ -11,7 +11,7 @@ if [ -f "node_modules/.bin/gh-pages" ]; then
   DOCROOT=build-docs
 
   rm -rf ./$DOCROOT
-  cp -f ./docs ./$DOCROOT
+  cp -rf ./docs ./$DOCROOT
 fi
 
 function build_docs () {
