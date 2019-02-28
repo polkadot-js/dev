@@ -39,16 +39,16 @@
   "homepage": "https://github.com/polkadot-js/dev#readme",
   "dependencies": {
     "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.3.3",
-    "@babel/plugin-proposal-class-properties": "^7.3.3",
+    "@babel/core": "^7.3.4",
+    "@babel/plugin-proposal-class-properties": "^7.3.4",
     "@babel/plugin-proposal-decorators": "^7.3.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.3.2",
-    "@babel/plugin-transform-runtime": "^7.2.0",
-    "@babel/preset-env": "^7.3.1",
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.4",
+    "@babel/plugin-transform-runtime": "^7.3.4",
+    "@babel/preset-env": "^7.3.4",
     "@babel/preset-typescript": "^7.3.3",
     "@babel/register": "^7.0.0",
-    "@babel/runtime": "^7.3.1",
-    "@types/jest": "^24.0.6",
+    "@babel/runtime": "^7.3.4",
+    "@types/jest": "^24.0.9",
     "@types/node": "^11.9.5",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^24.1.0",
@@ -58,7 +58,7 @@
     "coveralls": "^3.0.3",
     "cpx": "^1.5.0",
     "jest": "^24.1.0",
-    "lerna": "^3.13.0",
+    "lerna": "^3.13.1",
     "mkdirp": "^0.5.1",
     "rimraf": "^2.6.3",
     "tslint": "^5.13.0",
@@ -67,6 +67,6 @@
     "typedoc-plugin-markdown": "^1.1.27",
     "typedoc-plugin-no-inherit": "^1.1.6",
     "typescript": "^3.3.3333",
-    "vuepress": "^1.0.0-alpha.39"
+    "vuepress": "^1.0.0-alpha.40"
   }
 }

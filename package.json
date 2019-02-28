@@ -20,7 +20,7 @@
     "test": "jest --coverage"
   },
   "devDependencies": {
-    "@babel/core": "^7.3.3",
+    "@babel/core": "^7.3.4",
     "copyfiles": "^2.1.0"
   }
 }
