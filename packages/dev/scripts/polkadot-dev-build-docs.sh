@@ -9,6 +9,9 @@ DOCROOT=docs
 
 if [ -f "node_modules/.bin/gh-pages" ]; then
   DOCROOT=build-docs
+
+  rm -rf ./$DOCROOT
+  cp -f ./docs ./$DOCROOT
 fi
 
 function build_docs () {
@@ -34,7 +37,7 @@ if [ -f "typedoc.js" ]; then
 
   echo ""
   echo "*** Copying root markdown"
-  cp -f *.md ./$DOCROOT
+  cp -n *.md ./$DOCROOT
 
   if [ -d "docs/.vuepress" ]; then
     echo ""
