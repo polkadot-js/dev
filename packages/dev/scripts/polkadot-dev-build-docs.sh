@@ -5,11 +5,17 @@
 
 set -e
 
+DOCROOT=docs
+
+if [ -f "node_modules/.bin/gh-pages" ]; then
+  DOCROOT=build-docs
+fi
+
 function build_docs () {
   ROOT=$1
+  DOCPATH=${ROOT/packages/.}
 
-  DOCROOT=${ROOT/packages/.}
-  typedoc --theme markdown --out ./docs/$DOCROOT $ROOT/src
+  typedoc --theme markdown --out ./$DOCROOT/$DOCPATH $ROOT/src
 }
 
 if [ -f "typedoc.js" ]; then
@@ -28,13 +34,13 @@ if [ -f "typedoc.js" ]; then
     echo ""
     echo "*** Building via vuepress"
 
-    yarn vuepress build docs
+    yarn vuepress build $DOCROOT
 
     echo ""
     echo "*** Copying vuepress generated outputs"
-    rm -rf ./docs/assets
-    cp -rf ./docs/.vuepress/dist/* ./docs
-    rm -rf ./docs/.vuepress/dist
+    rm -rf ./$DOCROOT/assets
+    cp -rf ./$DOCROOT/.vuepress/dist/* ./$DOCROOT
+    rm -rf ./$DOCROOT/.vuepress/dist
   fi
 
   echo ""
