@@ -32,6 +32,10 @@ if [ -f "typedoc.js" ]; then
     fi
   done
 
+  echo ""
+  echo "*** Copying root markdown"
+  cp -f *.md ./$DOCROOT
+
   if [ -d "docs/.vuepress" ]; then
     echo ""
     echo "*** Building via vuepress"
