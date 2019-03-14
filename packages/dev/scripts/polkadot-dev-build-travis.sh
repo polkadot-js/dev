@@ -75,7 +75,7 @@ function lerna_bump () {
   lerna_get_version
   LERNA_VERSION_PRE="$LERNA_VERSION"
 
-  lerna version patch --yes --no-git-tag-version --no-push --allow-branch '*'
+  yarn run polkadot-dev-version-beta
   git add --all .
 
   lerna_get_version
