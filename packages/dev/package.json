@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/dev",
-  "version": "0.25.13",
+  "version": "0.26.0",
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "bin": {
     "polkadot-dev-build-babel": "./scripts/polkadot-dev-build-babel.sh",
@@ -11,6 +11,7 @@
     "polkadot-dev-clean-build": "./scripts/polkadot-dev-clean-build.sh",
     "polkadot-dev-copy-skeleton": "./scripts/polkadot-dev-copy-skeleton.sh",
     "polkadot-dev-update-deps": "./scripts/polkadot-dev-update-deps.sh",
+    "polkadot-dev-version-beta": "./scripts/polkadot-dev-version-beta.sh",
     "polkadot-dev-version-minor": "./scripts/polkadot-dev-version-minor.sh",
     "polkadot-dev-version-patch": "./scripts/polkadot-dev-version-patch.sh",
     "polkadot-dev-yarn-only": "./scripts/polkadot-dev-yarn-only.js"
