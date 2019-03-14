@@ -74,8 +74,23 @@ function lerna_bump () {
 
   lerna_get_version
   LERNA_VERSION_PRE="$LERNA_VERSION"
+  BETA=${LERNA_VERSION_PRE##*-}
 
-  yarn run polkadot-dev-version-beta
+  if [[ $BETA == *"beta"* ]]; then
+    # if we have a beta version, just continue the stream of betas
+    yarn run polkadot-dev-version-beta
+  else
+    LAST=${BETA##*.}
+
+    if [[ $LAST == "0" ]]; then
+      # patch is .0, so publish this as an actual release (surely we did out job on beta)
+      yarn run polkadot-dev-version-patch
+    else
+      # non-zero patch version, continue as next beta minor
+      yarn run lerna version preminor --preid beta --yes --no-git-tag-version --no-push --allow-branch '*'
+    fi
+  fi
+
   git add --all .
 
   lerna_get_version

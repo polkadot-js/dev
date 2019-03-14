@@ -23,7 +23,12 @@ function lerna_bump () {
     yarn run polkadot-dev-version-beta
   else
     LAST=${BETA##*.}
-    echo "*** LAST part"
+
+    if [[ $LAST == "0" ]]; then
+      yarn run polkadot-dev-version-patch
+    else
+      yarn run lerna version preminor --preid beta --yes --no-git-tag-version --no-push --allow-branch '*'
+    fi
   fi
 
   git add --all .
