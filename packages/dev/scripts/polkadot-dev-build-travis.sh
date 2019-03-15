@@ -74,13 +74,13 @@ function lerna_bump () {
 
   lerna_get_version
   LERNA_VERSION_PRE="$LERNA_VERSION"
-  BETA=${LERNA_VERSION_PRE##*-}
+  TAG=${LERNA_VERSION_PRE##*-}
 
-  if [[ $BETA == *"beta"* ]]; then
+  if [[ $TAG == *"beta"* ]]; then
     # if we have a beta version, just continue the stream of betas
     yarn run polkadot-dev-version-beta
   else
-    LAST=${BETA##*.}
+    LAST=${TAG##*.}
 
     if [[ $LAST == "0" ]]; then
       # patch is .0, so publish this as an actual release (surely we did out job on beta)
@@ -142,15 +142,22 @@ function npm_publish () {
   echo ""
   echo "*** Publishing to npm"
 
+  VERTAG=${NPM_VERSION##*-}
+  TAG=""
+
+  if [[ $VERTAG == *"beta"* ]]; then
+    TAG="--tag beta"
+  fi
+
   cd build
 
   local n=1
 
   while true; do
-    (yarn publish --access public --new-version $NPM_VERSION) && break || {
+    (yarn publish --access public --new-version $NPM_VERSION $TAG) && break || {
       if [[ $n -lt 5 ]]; then
-        ((n++))
         echo "Publish failed on attempt $n/5. Retrying in 15s."
+        ((n++))
         sleep 15
       else
         echo "Publish failed on final attempt. Aborting."
