@@ -28,8 +28,7 @@ module.exports = {
           'last 2 Edge versions'
         ],
         node: '9'
-      },
-      useBuiltIns: 'usage'
+      }
     }],
     '@babel/preset-typescript'
   ],
