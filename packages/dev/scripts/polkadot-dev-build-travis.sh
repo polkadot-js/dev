@@ -6,6 +6,7 @@
 set -e
 
 BUMP_VERSION=
+RUN_STAGE="$1"
 
 function run_clean () {
   echo ""
@@ -267,37 +268,44 @@ function loop_func () {
   fi
 }
 
-run_clean
-run_check
-run_test
-
-if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-  git_setup
-
-  if [ "$TRAVIS_BRANCH" == "master" ]; then
-    git_bump
-  fi
+if [ -z "$RUN_STAGE" ] || [ "$RUN_STAGE" == "clean" ]; then
+  run_clean
 fi
 
-run_build
+if [ -z "$RUN_STAGE" ] || [ "$RUN_STAGE" == "test" ]; then
+  run_check
+  run_test
+fi
 
-if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-  # git_setup
+if [ -z "$RUN_STAGE" ] || [ "$RUN_STAGE" == "build" ]; then
+  if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+    git_setup
 
-  if [ "$TRAVIS_BRANCH" == "master" ]; then
-    # git_bump
-    git_push
-
-    if [ -n "$BUMP_VERSION" ]; then
-      if [ -n "$NPM_TOKEN" ]; then
-        npm_setup
-        loop_func npm_publish
-      fi
+    if [ "$TRAVIS_BRANCH" == "master" ]; then
+      git_bump
     fi
   fi
 
-  if [ "$TRAVIS_BRANCH" == "master" -o "$TRAVIS_BRANCH" == "next" ]; then
-    deploy_all
+  run_build
+fi
+
+if [ -z "$RUN_STAGE" ] || [ "$RUN_STAGE" == "publish" ]; then
+  if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
+
+    if [ "$TRAVIS_BRANCH" == "master" ]; then
+      git_push
+
+      if [ -n "$BUMP_VERSION" ]; then
+        if [ -n "$NPM_TOKEN" ]; then
+          npm_setup
+          loop_func npm_publish
+        fi
+      fi
+    fi
+
+    if [ "$TRAVIS_BRANCH" == "master" -o "$TRAVIS_BRANCH" == "next" ]; then
+      deploy_all
+    fi
   fi
 fi
 
