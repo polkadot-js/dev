@@ -10,11 +10,12 @@
   ],
   "resolutions": {
     "babel-core": "^7.0.0-bridge.0",
-    "typescript": "^3.3.4000"
+    "typescript": "^3.4.1"
   },
   "scripts": {
     "build": "polkadot-dev-build-ts && (cd packages/dev && copyfiles config/* scripts/* skeleton/* build) && (cd packages/dev-react && copyfiles config/* scripts/* skeleton/* build) && polkadot-dev-build-docs",
-    "check": "tslint --project . && tsc --noEmit --pretty",
+    "check": "yarn lint",
+    "lint": "tslint --project . && tsc --noEmit --pretty",
     "clean": "polkadot-dev-clean-build",
     "polkadot-dev-version-beta": "./packages/dev/scripts/polkadot-dev-version-beta.sh",
     "polkadot-dev-version-minor": "./packages/dev/scripts/polkadot-dev-version-minor.sh",

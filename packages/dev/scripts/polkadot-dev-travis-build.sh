@@ -21,7 +21,7 @@ function run_check () {
   echo ""
   echo "*** Running checks"
 
-  yarn run check
+  yarn run lint
 
   echo ""
   echo "*** Checks completed"

@@ -46,12 +46,12 @@
     "@babel/plugin-proposal-decorators": "^7.4.0",
     "@babel/plugin-proposal-object-rest-spread": "^7.4.0",
     "@babel/plugin-transform-runtime": "^7.4.0",
-    "@babel/preset-env": "^7.4.1",
+    "@babel/preset-env": "^7.4.2",
     "@babel/preset-typescript": "^7.3.3",
     "@babel/register": "^7.4.0",
-    "@babel/runtime": "^7.4.0",
+    "@babel/runtime": "^7.4.2",
     "@types/jest": "^24.0.11",
-    "@types/node": "^11.11.4",
+    "@types/node": "^11.12.2",
     "babel-core": "^7.0.0-bridge.0",
     "babel-jest": "^24.5.0",
     "babel-plugin-module-resolver": "^3.2.0",
@@ -60,6 +60,8 @@
     "coveralls": "^3.0.3",
     "cpx": "^1.5.0",
     "jest": "^24.5.0",
+    "jest-haste-map": "^24.5.0",
+    "jest-resolve": "^24.5.0",
     "lerna": "^3.13.1",
     "mkdirp": "^0.5.1",
     "rimraf": "^2.6.3",
@@ -68,7 +70,7 @@
     "typedoc": "^0.14.2",
     "typedoc-plugin-markdown": "^1.1.27",
     "typedoc-plugin-no-inherit": "^1.1.6",
-    "typescript": "^3.3.4000",
+    "typescript": "^3.4.1",
     "vuepress": "^1.0.0-alpha.44"
   }
 }
