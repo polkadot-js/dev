@@ -27,16 +27,6 @@ function run_check () {
   echo "*** Checks completed"
 }
 
-function run_build () {
-  echo ""
-  echo "*** Running build"
-
-  yarn run build
-
-  echo ""
-  echo "*** Build completed"
-}
-
 function run_test () {
   echo ""
   echo "*** Running tests"
@@ -58,6 +48,16 @@ function run_test () {
 
   echo ""
   echo "*** Tests completed"
+}
+
+function run_build () {
+  echo ""
+  echo "*** Running build"
+
+  yarn run build
+
+  echo ""
+  echo "*** Build completed"
 }
 
 function lerna_get_version () {
@@ -112,16 +112,6 @@ function npm_bump () {
 
   echo ""
   echo "*** Npm increment completed"
-}
-
-function npm_setup () {
-  echo ""
-  echo "*** Setting up npm"
-
-  echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc 2> /dev/null
-
-  echo ""
-  echo "*** Npm setup completed"
 }
 
 function npm_get_version () {
@@ -282,26 +272,6 @@ if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
 fi
 
 run_build
-
-if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-  # git_setup
-
-  if [ "$TRAVIS_BRANCH" == "master" ]; then
-    # git_bump
-    git_push
-
-    if [ -n "$BUMP_VERSION" ]; then
-      if [ -n "$NPM_TOKEN" ]; then
-        npm_setup
-        loop_func npm_publish
-      fi
-    fi
-  fi
-
-  if [ "$TRAVIS_BRANCH" == "master" -o "$TRAVIS_BRANCH" == "next" ]; then
-    deploy_all
-  fi
-fi
 
 echo ""
 echo "*** CI completed"

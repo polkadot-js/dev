@@ -5,11 +5,12 @@
   "bin": {
     "polkadot-dev-build-babel": "./scripts/polkadot-dev-build-babel.sh",
     "polkadot-dev-build-docs": "./scripts/polkadot-dev-build-docs.sh",
-    "polkadot-dev-build-travis": "./scripts/polkadot-dev-build-travis.sh",
     "polkadot-dev-build-ts": "./scripts/polkadot-dev-build-ts.sh",
     "polkadot-dev-clean-branches": "./scripts/polkadot-dev-clean-branches.sh",
     "polkadot-dev-clean-build": "./scripts/polkadot-dev-clean-build.sh",
     "polkadot-dev-copy-skeleton": "./scripts/polkadot-dev-copy-skeleton.sh",
+    "polkadot-dev-travis-deploy": "./scripts/polkadot-dev-travis-deploy.sh",
+    "polkadot-dev-travis-build": "./scripts/polkadot-dev-travis-build.sh",
     "polkadot-dev-update-deps": "./scripts/polkadot-dev-update-deps.sh",
     "polkadot-dev-version-beta": "./scripts/polkadot-dev-version-beta.sh",
     "polkadot-dev-version-minor": "./scripts/polkadot-dev-version-minor.sh",
