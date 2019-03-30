@@ -255,12 +255,14 @@ function loop_func () {
     PACKAGES=( $(ls -1d packages/*) )
 
     for PACKAGE in "${PACKAGES[@]}"; do
-      echo ""
-      echo "*** Executing in $PACKAGE"
+      if [ -f "$PACKAGE/package.json" ]; then
+        echo ""
+        echo "*** Executing in $PACKAGE"
 
-      cd $PACKAGE
-      $FUNC
-      cd ../..
+        cd $PACKAGE
+        $FUNC
+        cd ../..
+      fi
     done
   else
     $FUNC
