@@ -126,11 +126,12 @@ function loop_func () {
   fi
 }
 
+npm_get_version
+
 if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
   if [ "$TRAVIS_BRANCH" == "master" ]; then
     git_push
 
-    npm_get_version
     npm_setup
     loop_func npm_publish
 
