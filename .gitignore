@@ -9,6 +9,7 @@ tmp/
 .env.test.local
 .env.production.local
 .npmrc
+cc-test-reporter
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
