@@ -40,10 +40,6 @@ function run_test () {
     if [ -n "$COVERALLS_REPO_TOKEN" ]; then
       cat coverage/lcov.info | yarn run coveralls
     fi
-
-    if [ -n "$CODECLIMATE_REPO_TOKEN" ]; then
-      cat coverage/lcov.info | yarn run codeclimate-test-reporter
-    fi
   fi
 
   echo ""
