@@ -6,6 +6,7 @@ module.exports = {
   extends: '@polkadot/dev/config/tslint',
   rulesDirectory: 'tslint-react/rules/',
   rules: {
+    indent: [true, 'spaces', 2],
     'jsx-alignment': true
   }
 };

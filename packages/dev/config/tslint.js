@@ -5,6 +5,7 @@
 module.exports = {
   extends: 'tslint-config-standard',
   rules: {
+    indent: [true, 'spaces', 2],
     semicolon: [true, 'always']
   }
 };
