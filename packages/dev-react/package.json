@@ -52,7 +52,7 @@
     "react-dom": "^16.8.6",
     "react-hot-loader": "^4.9.0",
     "style-loader": "^0.23.0",
-    "styled-components": "^4.2.1",
+    "styled-components": "^4.3.1",
     "thread-loader": "^2.1.2",
     "tslint": "^5.17.0",
     "tslint-react": "^4.0.0",
