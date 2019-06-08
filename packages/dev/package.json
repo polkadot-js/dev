@@ -70,6 +70,6 @@
     "typedoc-plugin-markdown": "^1.2.1",
     "typedoc-plugin-no-inherit": "^1.1.8",
     "typescript": "^3.5.1",
-    "vuepress": "^1.0.0-beta.2"
+    "vuepress": "^1.0.0-rc.1"
   }
 }
