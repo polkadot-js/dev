@@ -39,6 +39,12 @@ function build_js () {
       cpx "../../build/$ROOT/src/**/*.d.ts" build
     fi
 
+    # lerna one package
+    if [ -d "../../build/src" ]; then
+      cpx "../../build/src/**/*.d.ts" build
+    fi
+
+    # lerna multiple packages
     if [ -d "../../build/packages/$ROOT/src" ]; then
       cpx "../../build/packages/$ROOT/src/**/*.d.ts" build
     fi
