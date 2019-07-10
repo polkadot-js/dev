@@ -5,4 +5,4 @@
 /**
  * This is just a test file to test the doc generation
  */
-export const echo = (value: string) => value;
+export const echo = (value: string): string => value;
