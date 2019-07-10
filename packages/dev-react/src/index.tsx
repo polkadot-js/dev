@@ -19,7 +19,7 @@ export interface State {
 export default class App extends React.PureComponent<Props, State> {
   public state: State;
 
-  constructor (props: Props) {
+  public constructor (props: Props) {
     super(props);
 
     const { value } = this.props;
