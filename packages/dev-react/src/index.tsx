@@ -4,20 +4,20 @@
 
 import * as React from 'react';
 
-export type Props = {
-  className: string,
-  value: string
-};
+export interface Props {
+  className: string;
+  value: string;
+}
 
-export type State = {
-  value: string
-};
+export interface State {
+  value: string;
+}
 
 /**
  * This is just a test file to test the doc generation
  */
 export default class App extends React.PureComponent<Props, State> {
-  state: State;
+  public state: State;
 
   constructor (props: Props) {
     super(props);
@@ -29,7 +29,7 @@ export default class App extends React.PureComponent<Props, State> {
     };
   }
 
-  render (): React.ReactNode {
+  public render (): React.ReactNode {
     const { className } = this.props;
     const { value } = this.state;
 

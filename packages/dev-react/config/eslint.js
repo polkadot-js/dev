@@ -13,7 +13,11 @@ module.exports = {
   extends: base.extends.concat([
     'plugin:react/recommended'
   ]),
+  plugins: base.plugins.concat([
+    'react-hooks'
+  ]),
   settings: {
+    ...base.settings,
     react: {
       version: 'detect'
     }

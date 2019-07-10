@@ -7,3 +7,8 @@
  * @link ../testRoot.ts
  */
 export default (test: string): string => test;
+
+// eslint config test
+export function blah (): void {
+  console.log('123');
+}
