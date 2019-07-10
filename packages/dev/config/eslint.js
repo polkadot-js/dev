@@ -15,11 +15,6 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   plugins: ['@typescript-eslint'],
   rules: {
-    '@typescript-eslint/explicit-member-accessibility': ['error', {
-      overrides: {
-        constructors: 'no-public'
-      }
-    }],
     '@typescript-eslint/indent': ['error', 2],
     'indent': 'off' // required by @typescript-eslint/indent
   },
