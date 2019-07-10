@@ -3,13 +3,18 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 module.exports = {
-  parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint'],
+  env: {
+    browser: true,
+    jest: true,
+    node: true
+  },
   extends: [
     'semistandard',
     'plugin:@typescript-eslint/recommended'
   ],
-  'rules': {
+  parser: '@typescript-eslint/parser',
+  plugins: ['@typescript-eslint'],
+  rules: {
     'indent': 'off',
     '@typescript-eslint/indent': ['error', 2]
   }
