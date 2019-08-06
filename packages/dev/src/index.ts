@@ -2,7 +2,14 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+const A = 123;
+let count = 0;
+
 /**
  * This is just a test file to test the doc generation
  */
-export const echo = (value: string): string => value;
+export const echo = (value: string): string => {
+  count++;
+
+  return `${count}: ${A}: ${value}`;
+};
