@@ -22,13 +22,8 @@ module.exports = {
     ['@babel/preset-env', {
       modules: 'commonjs',
       targets: {
-        browsers: [
-          'last 2 Chrome versions',
-          'last 2 Safari versions',
-          'last 2 Firefox versions',
-          'last 2 Edge versions'
-        ],
-        node: '9'
+        browsers: 'defaults',
+        node: '10'
       }
     }],
     '@babel/preset-typescript'
