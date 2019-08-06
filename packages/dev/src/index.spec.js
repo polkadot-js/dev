@@ -11,7 +11,7 @@ describe('index', () => {
 
   it('runs the echo function', () => {
     expect(
-      index.echo('something')
+      index.echo('1: 123: something')
     ).toEqual('something');
   });
 });
