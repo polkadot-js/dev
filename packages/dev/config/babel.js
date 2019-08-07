@@ -22,7 +22,7 @@ module.exports = {
     ['@babel/preset-env', {
       modules: 'commonjs',
       targets: {
-        browsers: 'defaults',
+        browsers: '>0.25% and last 2 versions and not ie 11 and not OperaMini all',
         node: '10'
       }
     }],
