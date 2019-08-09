@@ -1,0 +1,24 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/polkadot-js
+    docker:
+      - image: circleci/node:10
+    steps:
+      - checkout
+       - run:
+          name: install-codeclimate
+          command: 'curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter && chmod +x ./cc-test-reporter'
+      - restore_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+      - run:
+          name: install-deps
+          command: yarn install --frozen-lockfile
+      - save_cache:
+          key: dependency-cache-{{ checksum "yarn.lock" }}
+          paths:
+            - ./node_modules
+            - ~/.cache/yarn
+      - run:
+          name: build
+          command: './packages/dev/scripts/polkadot-dev-circleci-build.sh'
