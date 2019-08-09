@@ -1,6 +1,5 @@
 [![polkadotjs](https://img.shields.io/badge/polkadot-js-orange.svg?style=flat-square)](https://polkadot.js.org)
 ![license](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)
-[![style](https://img.shields.io/badge/code%20style-semistandard-lightgrey.svg?style=flat-square)](https://github.com/Flet/semistandard)
 [![npm](https://img.shields.io/npm/v/@polkadot/dev.svg?style=flat-square)](https://www.npmjs.com/package/@polkadot/dev)
 [![travisci](https://img.shields.io/travis/com/polkadot-js/dev?label=travisci&style=flat-square)](https://travis-ci.com/polkadot-js/dev)
 [![circleci](https://img.shields.io/circleci/build/github/polkadot-js/dev/master?label=circleci&style=flat-square)](https://circleci.com/gh/polkadot-js/dev)
