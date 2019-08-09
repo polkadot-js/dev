@@ -6,6 +6,7 @@
     "polkadot-dev-build-babel": "./scripts/polkadot-dev-build-babel.sh",
     "polkadot-dev-build-docs": "./scripts/polkadot-dev-build-docs.sh",
     "polkadot-dev-build-ts": "./scripts/polkadot-dev-build-ts.sh",
+    "polkadot-dev-circleci-build": "./scripts/polkadot-dev-circleci-build.sh",
     "polkadot-dev-clean-branches": "./scripts/polkadot-dev-clean-branches.sh",
     "polkadot-dev-clean-build": "./scripts/polkadot-dev-clean-build.sh",
     "polkadot-dev-copy-skeleton": "./scripts/polkadot-dev-copy-skeleton.sh",
