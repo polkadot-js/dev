@@ -5,8 +5,6 @@
 [![travisci](https://img.shields.io/travis/com/polkadot-js/dev?label=travisci&style=flat-square)](https://travis-ci.com/polkadot-js/dev)
 [![circleci](https://img.shields.io/circleci/build/github/polkadot-js/dev/master?label=circleci&style=flat-square)](https://circleci.com/gh/polkadot-js/dev)
 [![greenkeeper](https://img.shields.io/badge/greenkeeper-enabled-brightgreen.svg?style=flat-square)](https://greenkeeper.io/)
-[![dependency](https://img.shields.io/david/polkadot-js/dev.svg?style=flat-square)](https://david-dm.org/polkadot-js/dev)
-[![devDependency](https://img.shields.io/david/dev/polkadot-js/dev.svg?style=flat-square)](https://david-dm.org/polkadot-js/dev#info=devDependencies)
 
 # @polkadot/dev
 
