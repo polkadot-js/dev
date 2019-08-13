@@ -33,13 +33,11 @@ function run_test () {
 
   yarn run test
 
-  if [ -f "coverage/lcov.info" ]; then
+  if [ -f "coverage/lcov.info" ] && [ -n "$COVERALLS_REPO_TOKEN" ]; then
     echo ""
-    echo "*** Submitting coverage"
+    echo "*** Submitting to coveralls.io"
 
-    if [ -n "$COVERALLS_REPO_TOKEN" ]; then
-      cat coverage/lcov.info | yarn run coveralls
-    fi
+    (cat coverage/lcov.info | yarn run coveralls) || true
   fi
 
   echo ""
