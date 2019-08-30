@@ -25,7 +25,7 @@ module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
     // This is for 1.13 behavior, should be adjusted for 2.x
-    createDefaultProgram: true
+    // createDefaultProgram: true
   },
   plugins: ['@typescript-eslint'],
   rules: {
