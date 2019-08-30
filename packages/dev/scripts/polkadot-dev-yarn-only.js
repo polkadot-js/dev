@@ -6,7 +6,7 @@
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const chalk = require('chalk');
 
-if (process.env.npm_execpath.indexOf('yarn') === -1) {
+if (process.env.npm_execpath.includes('yarn')) {
   const blank = ''.padStart(75);
 
   console.error(
