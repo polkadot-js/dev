@@ -10,9 +10,24 @@ module.exports = {
   },
   extends: [
     'semistandard',
-    'plugin:@typescript-eslint/recommended'
+    'plugin:@typescript-eslint/eslint-recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking'
+  ],
+  overrides: [
+    {
+      files: ['*.js', '*.spec.js'],
+      rules: {
+        '@typescript-eslint/explicit-function-return-type': 'off'
+      }
+    }
   ],
   parser: '@typescript-eslint/parser',
+  parserOptions: {
+    // This is for 1.13 behavior, should be adjusted for 2.x
+    createDefaultProgram: true,
+    warnOnUnsupportedTypeScriptVersion: false
+  },
   plugins: ['@typescript-eslint'],
   rules: {
     '@typescript-eslint/indent': ['error', 2],
