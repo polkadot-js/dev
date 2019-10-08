@@ -1,15 +1,13 @@
 name: Master
 on:
-  pull_request:
+  push:
     branches:
-      -master
-    types: [closed]
+      - master
 
 jobs:
   merge:
     name: Merge
     runs-on: ubuntu-latest
-    if: github.event.pull_request.merged == true
     strategy:
       matrix:
         node-version: [12.x]
