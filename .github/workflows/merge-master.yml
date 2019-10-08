@@ -1,6 +1,6 @@
 name: Master
 on:
-  pull-request:
+  pull_request:
     branches:
       -master
     types: [closed]
