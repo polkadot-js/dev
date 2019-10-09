@@ -125,9 +125,9 @@ function git_setup () {
 
   git config push.default simple
   git config merge.ours.driver true
-  git config user.name "Travis CI"
-  git config user.email "Jaco Greeff <jacogr@gmail.com>"
-  git remote set-url origin https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git > /dev/null 2>&1
+  git config user.name "GitHub Actions"
+  git config user.email "action@github.com"
+  git remote add origin https://github.com/${GITHUB_REPOSITORY} || git remote set-url origin https://github.com/${GITHUB_REPOSITORY} || true
 
   git checkout master
 
