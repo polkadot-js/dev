@@ -81,7 +81,7 @@ function git_push () {
   echo ""
   echo "*** Pushing to GitHub"
 
-  git push https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git HEAD:$GITHUB_REF
+  git push https://x-access-token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git HEAD:$GITHUB_REF
 
   echo ""
   echo "*** Github push completed"
