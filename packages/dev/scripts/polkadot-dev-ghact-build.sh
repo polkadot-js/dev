@@ -121,15 +121,15 @@ function npm_get_version () {
 
 function git_setup () {
   echo ""
-  echo "*** Setting up GitHub for $GITHUB_REPOSITORYG"
+  echo "*** Setting up GitHub for $GITHUB_REPOSITORY"
 
   git config push.default simple
   git config merge.ours.driver true
   git config user.name "Travis CI"
   git config user.email "Jaco Greeff <jacogr@gmail.com>"
-  git remote set-url origin https://${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git > /dev/null 2>&1
+  git remote set-url origin https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git > /dev/null 2>&1
 
-  git checkout $TRAVIS_BRANCH
+  git checkout master
 
   echo ""
   echo "*** GitHub setup completed"

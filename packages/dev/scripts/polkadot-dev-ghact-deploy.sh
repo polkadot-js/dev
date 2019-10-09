@@ -92,13 +92,7 @@ function deploy_all () {
     echo ""
     echo "*** Publishing to GitHub Pages"
 
-    GH_PAGES_DST="."
-
-    if [ "$GITHUB_REF" == "refs/heads/next" ]; then
-      GH_PAGES_DST="next"
-    fi
-
-    yarn run gh-pages --dist $GH_PAGES_SRC --dest $GH_PAGES_DST
+    yarn run gh-pages --dist $GH_PAGES_SRC --dest .
 
     echo ""
     echo "*** GitHub Pages completed"
