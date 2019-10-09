@@ -10,6 +10,8 @@
     "polkadot-dev-clean-branches": "./scripts/polkadot-dev-clean-branches.sh",
     "polkadot-dev-clean-build": "./scripts/polkadot-dev-clean-build.sh",
     "polkadot-dev-copy-skeleton": "./scripts/polkadot-dev-copy-skeleton.sh",
+    "polkadot-dev-ghact-deploy": "./scripts/polkadot-dev-ghact-deploy.sh",
+    "polkadot-dev-ghact-build": "./scripts/polkadot-dev-ghact-build.sh",
     "polkadot-dev-travis-deploy": "./scripts/polkadot-dev-travis-deploy.sh",
     "polkadot-dev-travis-build": "./scripts/polkadot-dev-travis-build.sh",
     "polkadot-dev-update-deps": "./scripts/polkadot-dev-update-deps.sh",
