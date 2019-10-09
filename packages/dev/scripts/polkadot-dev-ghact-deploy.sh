@@ -81,8 +81,7 @@ function git_push () {
   echo ""
   echo "*** Pushing to GitHub"
 
-  header=$(echo -n "ad-m:${GITHUB_TOKEN}" | base64)
-  git -c http.extraheader="AUTHORIZATION: basic $header" push --quiet origin HEAD:master > /dev/null 2>&1
+  git push --quiet https://${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git master > /dev/null 2>&1
 
   echo ""
   echo "*** Github push completed"
