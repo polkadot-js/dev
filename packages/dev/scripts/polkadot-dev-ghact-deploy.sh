@@ -121,12 +121,9 @@ function loop_func () {
 }
 
 npm_get_version
-
 git_push
-
 npm_setup
 loop_func npm_publish
-
 deploy_all
 
 echo ""

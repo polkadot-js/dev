@@ -175,10 +175,8 @@ function loop_func () {
 run_clean
 run_check
 run_test
-
 git_setup
 git_bump
-
 run_build
 
 echo ""
