@@ -5,6 +5,8 @@
 
 set -e
 
+REPO=https://${GH_PAT:-"x-access-token:$GITHUB_TOKEN"}@github.com/${GITHUB_REPOSITORY}.git
+
 function npm_setup () {
   echo ""
   echo "*** Setting up npm"
@@ -81,7 +83,7 @@ function git_push () {
   echo ""
   echo "*** Pushing to GitHub"
 
-  git push https://${GH_PAT:-"x-access-token:$GITHUB_TOKEN"}@github.com/${GITHUB_REPOSITORY}.git HEAD:$GITHUB_REF
+  git push $REPO HEAD:$GITHUB_REF
 
   echo ""
   echo "*** Github push completed"
@@ -92,7 +94,7 @@ function deploy_all () {
     echo ""
     echo "*** Publishing to GitHub Pages"
 
-    yarn run gh-pages --dist $GH_PAGES_SRC --dest .
+    yarn run gh-pages --repo $REPO --dist $GH_PAGES_SRC --dest .
 
     echo ""
     echo "*** GitHub Pages completed"
