@@ -184,6 +184,6 @@ git_bump
 run_build
 
 echo ""
-echo "*** CI completed"
+echo "*** CI build completed"
 
 exit 0

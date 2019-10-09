@@ -81,10 +81,8 @@ function git_push () {
   echo ""
   echo "*** Pushing to GitHub"
 
-  # header=$(echo -n "ad-m:${GITHUB_TOKEN}" | base64)
-  # git -c http.extraheader="AUTHORIZATION: basic $header" push origin HEAD:master
-
-  git push --quiet origin HEAD:master > /dev/null 2>&1
+  header=$(echo -n "ad-m:${GITHUB_TOKEN}" | base64)
+  git -c http.extraheader="AUTHORIZATION: basic $header" push --quiet origin HEAD:master > /dev/null 2>&1
 
   echo ""
   echo "*** Github push completed"
