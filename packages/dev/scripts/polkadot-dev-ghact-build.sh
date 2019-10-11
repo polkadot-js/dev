@@ -3,6 +3,16 @@
 # This software may be modified and distributed under the terms
 # of the Apache-2.0 license. See the LICENSE file for details.
 
+# For codeclimate
+#   curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+#   chmod +x ./cc-test-reporter
+#
+# Needs CC_TEST_REPORTER_ID
+#
+#   ./cc-test-reporter before-build
+#   yarn test
+#   ./cc-test-reporter after-build --exit-code 0
+
 set -e
 
 BUMP_VERSION=
@@ -125,8 +135,8 @@ function git_setup () {
 
   git config push.default simple
   git config merge.ours.driver true
-  git config user.name "Jaco Greeff"
-  git config user.email "jacogr@gmail.com"
+  git config user.name "Github Actions"
+  git config user.email "action@github.com"
   git checkout master
 
   echo ""
