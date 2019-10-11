@@ -31,9 +31,9 @@
     "last 2 Edge versions"
   ],
   "dependencies": {
-    "@babel/core": "^7.6.2",
+    "@babel/core": "^7.6.4",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-react": "^7.6.3",
     "@polkadot/dev": "^0.32.0-beta.7",
     "@types/react": "^16.9.5",
     "@types/react-dom": "^16.9.1",
@@ -44,7 +44,7 @@
     "copy-webpack-plugin": "^5.0.4",
     "css-loader": "^3.2.0",
     "enzyme": "^3.10.0",
-    "enzyme-adapter-react-16": "^1.14.0",
+    "enzyme-adapter-react-16": "^1.15.0",
     "eslint-plugin-react": "^7.16.0",
     "eslint-plugin-react-hooks": "^2.1.2",
     "file-loader": "^4.2.0",

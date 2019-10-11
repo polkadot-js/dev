@@ -108,7 +108,7 @@ function loop_func () {
     PACKAGES=( $(ls -1d packages/*) )
 
     for PACKAGE in "${PACKAGES[@]}"; do
-      if [ -f "$PACKAGE/package.json" ]; then
+      if [ -f "$PACKAGE/package.json" ] && [ -d "$PACKAGE/build" ]; then
         echo ""
         echo "*** Executing in $PACKAGE"
 
