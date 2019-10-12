@@ -16,6 +16,7 @@
 set -e
 
 BUMP_VERSION=
+REPO=https://${GH_PAT:-"x-access-token:$GITHUB_TOKEN"}@github.com/${GITHUB_REPOSITORY}.git
 
 function run_clean () {
   echo ""
@@ -129,6 +130,56 @@ function npm_get_version () {
     | sed 's/[",]//g')
 }
 
+function npm_setup () {
+  echo ""
+  echo "*** Setting up npm"
+
+  echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc 2> /dev/null
+
+  echo ""
+  echo "*** Npm setup completed"
+}
+
+function npm_publish () {
+  echo ""
+  echo "*** Copying package files to build"
+
+  rm -rf build/package.json
+  cp LICENSE README.md package.json build/
+
+  echo ""
+  echo "*** Publishing to npm"
+
+  VERTAG=${NPM_VERSION##*-}
+  TAG=""
+
+  if [[ $VERTAG == *"beta"* ]]; then
+    TAG="--tag beta"
+  fi
+
+  cd build
+
+  local n=1
+
+  while true; do
+    (yarn publish --access public --new-version $NPM_VERSION $TAG) && break || {
+      if [[ $n -lt 5 ]]; then
+        echo "Publish failed on attempt $n/5. Retrying in 15s."
+        ((n++))
+        sleep 15
+      else
+        echo "Publish failed on final attempt. Aborting."
+        exit 1
+      fi
+    }
+  done
+
+  cd ..
+
+  echo ""
+  echo "*** Npm publish completed"
+}
+
 function git_setup () {
   echo ""
   echo "*** Setting up GitHub for $GITHUB_REPOSITORY"
@@ -161,6 +212,30 @@ function git_bump () {
   npm_get_version
 }
 
+function git_push () {
+  echo ""
+  echo "*** Adding build artifacts"
+
+  git add --all .
+
+  if [ -d "docs" ]; then
+    git add --all -f docs
+  fi
+
+  echo ""
+  echo "*** Committing changed files"
+
+  git commit --no-status --quiet -m "[CI Skip] $NPM_VERSION"
+
+  echo ""
+  echo "*** Pushing to GitHub"
+
+  git push $REPO HEAD:$GITHUB_REF
+
+  echo ""
+  echo "*** Github push completed"
+}
+
 function loop_func () {
   FUNC=$1
 
@@ -168,7 +243,7 @@ function loop_func () {
     PACKAGES=( $(ls -1d packages/*) )
 
     for PACKAGE in "${PACKAGES[@]}"; do
-      if [ -f "$PACKAGE/package.json" ]; then
+      if [ -f "$PACKAGE/package.json" ] && [ -d "$PACKAGE/build" ]; then
         echo ""
         echo "*** Executing in $PACKAGE"
 
@@ -182,12 +257,18 @@ function loop_func () {
   fi
 }
 
+git_setup
+git_bump
+npm_setup
+npm_get_version
+
 run_clean
 run_check
 run_test
-git_setup
-git_bump
 run_build
+
+git_push
+loop_func npm_publish
 
 echo ""
 echo "*** CI build completed"

@@ -27,4 +27,3 @@ jobs:
       run: |
         yarn install --frozen-lockfile
         ./packages/dev/scripts/polkadot-dev-ghact-build.sh
-        ./packages/dev/scripts/polkadot-dev-ghact-deploy.sh
