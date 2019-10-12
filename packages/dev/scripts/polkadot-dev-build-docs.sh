@@ -7,19 +7,19 @@ set -e
 
 DOCROOT=docs
 
-if [ -f "node_modules/.bin/gh-pages" ]; then
-  DOCROOT=build-docs
-
-  rm -rf ./$DOCROOT
-  cp -rf ./docs ./$DOCROOT
-fi
-
 function build_docs () {
   ROOT=$1
   DOCPATH=${ROOT/packages/.}
 
   typedoc --theme markdown --out ./$DOCROOT/$DOCPATH $ROOT/src
 }
+
+if [ -d "docs" ]; then
+  DOCROOT=build-docs
+
+  rm -rf ./$DOCROOT
+  cp -rf ./docs ./$DOCROOT
+fi
 
 if [ -f "typedoc.js" ]; then
   PACKAGES=( $(ls -1d packages/*) )

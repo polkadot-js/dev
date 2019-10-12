@@ -12,10 +12,8 @@
     "typescript": "^3.6.4"
   },
   "scripts": {
-    "build": "yarn build:split:code && yarn build:split:docs",
-    "build:split:code": "polkadot-dev-build-ts && (cd packages/dev && copyfiles config/* scripts/* skeleton/* build) && (cd packages/dev-react && copyfiles config/* scripts/* skeleton/* build)",
-    "build:split:docs": "polkadot-dev-build-docs",
-    "check": "yarn lint",
+    "build": "polkadot-dev-build-ts && (cd packages/dev && copyfiles config/* scripts/* skeleton/* build) && (cd packages/dev-react && copyfiles config/* scripts/* skeleton/* build)",
+    "docs": "polkadot-dev-build-docs",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx && tsc --noEmit --pretty",
     "clean": "polkadot-dev-clean-build",
     "polkadot-dev-version-beta": "./packages/dev/scripts/polkadot-dev-version-beta.sh",
