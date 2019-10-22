@@ -4,6 +4,7 @@
     "baseUrl": ".",
     "paths": {
     },
+    "skipLibCheck": true,
     "typeRoots": [
       "./node_modules/@types"
     ]

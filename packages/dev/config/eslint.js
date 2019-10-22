@@ -9,6 +9,7 @@ module.exports = {
     node: true
   },
   extends: [
+    'eslint:recommended',
     'semistandard',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
@@ -28,8 +29,8 @@ module.exports = {
   },
   plugins: ['@typescript-eslint'],
   rules: {
-    '@typescript-eslint/indent': ['error', 2],
-    indent: 'off' // required as 'off' by @typescript-eslint/indent
+    indent: 'off', // required as 'off' by @typescript-eslint/indent
+    '@typescript-eslint/indent': ['error', 2]
   },
   settings: {}
 };
