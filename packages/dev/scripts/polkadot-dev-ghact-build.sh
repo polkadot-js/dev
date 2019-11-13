@@ -225,7 +225,11 @@ function git_push () {
   echo ""
   echo "*** Committing changed files"
 
-  git commit --no-status --quiet -m "[CI Skip] $NPM_VERSION"
+  # add the skip checks for GitHub ...
+  git commit --no-status --quiet -m "[CI Skip] $NPM_VERSION
+
+
+skip-checks: true"
 
   echo ""
   echo "*** Pushing to GitHub"
