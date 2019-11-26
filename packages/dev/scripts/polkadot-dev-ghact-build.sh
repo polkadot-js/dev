@@ -272,7 +272,10 @@ run_test
 run_build
 
 git_push
-loop_func npm_publish
+
+if [ -z "$NPM_SKIP" ]; then
+  loop_func npm_publish
+fi
 
 echo ""
 echo "*** CI build completed"
