@@ -9,6 +9,7 @@ const plugins = [
   ['@babel/plugin-proposal-decorators', { legacy: true }],
   ['@babel/plugin-proposal-class-properties', { loose: true }],
   ['@babel/plugin-proposal-pipeline-operator', { proposal: 'fsharp' }],
+  '@babel/plugin-proposal-numeric-separator',
   '@babel/plugin-proposal-object-rest-spread',
   '@babel/plugin-proposal-optional-chaining',
   '@babel/plugin-transform-runtime'
