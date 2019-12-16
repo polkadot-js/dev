@@ -134,7 +134,8 @@ function npm_setup () {
   echo ""
   echo "*** Setting up npm"
 
-  echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc 2> /dev/null
+  # echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" > .npmrc 2> /dev/null
+  echo "//npm.pkg.github.com/:_authToken=$GITHUB_TOKEN" > .npmrc 2> /dev/null
 
   echo ""
   echo "*** Npm setup completed"
