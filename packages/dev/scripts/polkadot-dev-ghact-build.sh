@@ -17,7 +17,8 @@ set -e
 
 BUMP_VERSION=
 REPO=https://${GH_PAT:-"x-access-token:$GITHUB_TOKEN"}@github.com/${GITHUB_REPOSITORY}.git
-NPMREG="registry.npmjs.org"
+# NPMREG="registry.npmjs.org"
+NPMREG="npm.pkg.github.com"
 
 function run_clean () {
   echo ""
@@ -162,6 +163,8 @@ function npm_publish () {
   cd build
 
   local n=1
+
+  yarn config set registry "https://$NPMREG"
 
   while true; do
     (yarn publish --access public --new-version $NPM_VERSION $TAG) && break || {
