@@ -122,14 +122,6 @@ function npm_bump () {
   echo "*** Npm increment completed"
 }
 
-function npm_get_name () {
-  NPM_NAME=$(cat package.json \
-    | grep name \
-    | head -1 \
-    | awk -F: '{ print $2 }' \
-    | sed 's/[",]//g')
-}
-
 function npm_get_version () {
   NPM_VERSION=$(cat package.json \
     | grep version \
@@ -169,10 +161,7 @@ function npm_publish () {
 
   local n=1
 
-  npm_get_name
-
   while true; do
-    npm unpublish "$NPM_NAME@$NPM_VERSION" || true
     (yarn publish --access public --new-version $NPM_VERSION $TAG) && break || {
       if [[ $n -lt 5 ]]; then
         echo "Publish failed on attempt $n/5. Retrying in 15s."
