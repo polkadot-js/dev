@@ -263,7 +263,7 @@ function loop_func () {
 
 git_setup
 git_bump
-npm_setup
+# npm_setup
 npm_get_version
 
 run_clean
