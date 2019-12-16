@@ -164,7 +164,7 @@ function npm_publish () {
 
   local n=1
 
-  yarn config set registry "https://$NPMREG"
+  # yarn config set registry "https://$NPMREG"
 
   while true; do
     (yarn publish --access public --new-version $NPM_VERSION $TAG) && break || {
@@ -268,7 +268,7 @@ function loop_func () {
 
 git_setup
 git_bump
-npm_setup
+# npm_setup
 npm_get_version
 
 run_clean
