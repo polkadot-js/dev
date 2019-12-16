@@ -17,8 +17,7 @@ set -e
 
 BUMP_VERSION=
 REPO=https://${GH_PAT:-"x-access-token:$GITHUB_TOKEN"}@github.com/${GITHUB_REPOSITORY}.git
-# NPMREG="registry.npmjs.org"
-NPMREG="npm.pkg.github.com"
+NPMREG="registry.npmjs.org"
 
 function run_clean () {
   echo ""
@@ -136,8 +135,7 @@ function npm_setup () {
   echo ""
   echo "*** Setting up npm for $NPMREG"
 
-  # echo "//$NPMREG/:_authToken=$NPM_TOKEN" > .npmrc 2> /dev/null
-  echo "//$NPMREG/:_authToken=$GH_PAT" > .npmrc 2> /dev/null
+  echo "//$NPMREG/:_authToken=$NPM_TOKEN" > .npmrc 2> /dev/null
 
   echo ""
   echo "*** Npm setup completed"
@@ -268,7 +266,7 @@ function loop_func () {
 
 git_setup
 git_bump
-# npm_setup
+npm_setup
 npm_get_version
 
 run_clean

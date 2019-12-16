@@ -49,7 +49,7 @@ for REPO in "${DIRECTORIES[@]}"; do
 
   CURRENT=$(git rev-parse --abbrev-ref HEAD)
 
-  yarn config set registry "https://npm.pkg.github.com/"
+  # yarn config set registry "https://npm.pkg.github.com/"
   yarn --ignore-engines
 
   if [ "$CURRENT" = "master" ]; then
