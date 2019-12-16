@@ -1,7 +1,6 @@
 [![polkadotjs](https://img.shields.io/badge/polkadot-js-orange?style=flat-square)](https://polkadot.js.org)
 ![license](https://img.shields.io/badge/License-Apache%202.0-blue?logo=apache&style=flat-square)
 [![npm](https://img.shields.io/npm/v/@polkadot/dev?logo=npm&style=flat-square)](https://www.npmjs.com/package/@polkadot/dev)
-[![beta](https://img.shields.io/npm/v/@polkadot/dev/beta?label=beta&logo=npm&style=flat-square)](https://www.npmjs.com/package/@polkadot/dev)
 
 # @polkadot/dev
 
