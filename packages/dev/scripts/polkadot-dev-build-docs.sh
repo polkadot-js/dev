@@ -11,7 +11,7 @@ function build_docs () {
   ROOT=$1
   DOCPATH=${ROOT/packages/.}
 
-  typedoc --theme markdown --mdEngine gitbook --out ./$DOCROOT/$DOCPATH $ROOT/src
+  typedoc --theme markdown --out ./$DOCROOT/$DOCPATH $ROOT/src
 }
 
 if [ -d "docs" ]; then
