@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/dev-react",
-  "version": "0.32.15",
+  "version": "0.32.16",
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "keywords": [
     "Polkadot"
@@ -33,7 +33,7 @@
   "dependencies": {
     "@babel/core": "^7.8.3",
     "@babel/preset-react": "^7.8.3",
-    "@polkadot/dev": "^0.32.15",
+    "@polkadot/dev": "^0.32.16",
     "@types/react": "^16.9.19",
     "@types/react-dom": "^16.9.5",
     "@types/react-native": "^0.61.4",
