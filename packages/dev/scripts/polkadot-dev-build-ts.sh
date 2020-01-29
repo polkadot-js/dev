@@ -5,10 +5,24 @@
 
 set -e
 
+function npm_check_name () {
+  NPM_NAME=$(cat package.json \
+    | grep name \
+    | head -1 \
+    | awk -F: '{ print $2 }' \
+    | sed 's/[",]//g' \
+    | sed -e 's/^[[:space:]]*//')
+
+  if ! [[ "$NPM_NAME" == @polkadot/* ]]; then
+    exit 1
+  fi
+}
+
 function build_js () {
   ROOT=$1
 
   cd $ROOT
+  npm_check_name
 
   if [ -d "public" ]; then
     echo ""
