@@ -1,3 +1,24 @@
+# 0.33.1
+
+- Package scoping checks, build & pre-publish
+- Bump deps
+
+# 0.32.1
+
+- GitHub workflows
+- Don't publish this package as beta
+- Bump deps
+
+# 0.31.1
+
+- TypeScript eslint 2
+- Bump deps
+
+# 0.30.1
+
+- Swap to TypeScript eslint
+- Bump deps
+
 # 0.29.1
 
 - Split deploy & build steps
