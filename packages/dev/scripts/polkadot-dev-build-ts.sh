@@ -5,24 +5,10 @@
 
 set -e
 
-function npm_check_name () {
-  NPM_NAME=$(cat package.json \
-    | grep name \
-    | head -1 \
-    | awk -F: '{ print $2 }' \
-    | sed 's/[",]//g' \
-    | sed -e 's/^[[:space:]]*//')
-
-  if ! [[ "$NPM_NAME" == @polkadot/* ]]; then
-    exit 1
-  fi
-}
-
 function build_js () {
   ROOT=$1
 
   cd $ROOT
-  npm_check_name
 
   if [ -d "public" ]; then
     echo ""
@@ -30,11 +16,19 @@ function build_js () {
 
     NODE_ENV=production webpack --config webpack.config.js
   else
-    echo ""
-    echo "*** Compiling via tsc & babel"
+    NPM_NAME=$(cat package.json \
+      | grep name \
+      | head -1 \
+      | awk -F: '{ print $2 }' \
+      | sed 's/[",]//g' \
+      | sed -e 's/^[[:space:]]*//')
 
-    pwd
-    babel src --config-file ../../babel.config.js --out-dir build --extensions ".ts,.tsx" --ignore "**/*.d.ts"
+    if [[ "$NPM_NAME" == @polkadot/* ]]; then
+      echo ""
+      echo "*** Compiling via tsc & babel"
+
+      babel src --config-file ../../babel.config.js --out-dir build --extensions ".ts,.tsx" --ignore "**/*.d.ts"
+    fi
 
     echo ""
     echo "*** Copying static resources"
