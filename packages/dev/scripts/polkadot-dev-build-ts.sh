@@ -23,6 +23,8 @@ function build_js () {
       | sed 's/[",]//g' \
       | sed -e 's/^[[:space:]]*//')
 
+    mkdir -p build
+
     if [[ "$NPM_NAME" == @polkadot/* ]]; then
       echo ""
       echo "*** Compiling via tsc & babel"
