@@ -142,6 +142,10 @@ function npm_setup () {
 }
 
 function npm_publish () {
+  if [ -f ".npmskip" ]; then
+    return
+  fi
+
   echo ""
   echo "*** Copying package files to build"
 
