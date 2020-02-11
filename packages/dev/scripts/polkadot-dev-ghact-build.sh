@@ -142,7 +142,7 @@ function npm_setup () {
 }
 
 function npm_publish () {
-  if [ -f ".npmskip" ]; then
+  if [ -f ".skip-npm" ]; then
     return
   fi
 
