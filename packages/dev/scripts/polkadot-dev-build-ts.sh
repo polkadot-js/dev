@@ -8,6 +8,10 @@ set -e
 function build_js () {
   ROOT=$1
 
+  if [ -f "$ROOT/.skip-build" ]; then
+    return
+  fi
+
   cd $ROOT
 
   if [ -d "public" ]; then
