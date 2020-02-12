@@ -1,6 +1,11 @@
+# 0.34.1
+
+- Bump deps
+
 # 0.33.1
 
 - Package scoping checks, build & pre-publish
+- Allow `.skip-{npm,build}` files to control build
 - Bump deps
 
 # 0.32.1
