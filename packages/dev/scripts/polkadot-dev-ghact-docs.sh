@@ -35,7 +35,7 @@ function deploy_pages () {
   echo ""
   echo "*** Publishing to GitHub Pages"
 
-  yarn run gh-pages --repo $REPO --dist $GH_PAGES_SRC --dest .
+  yarn run gh-pages --dotfiles --repo $REPO --dist $GH_PAGES_SRC --dest .
 
   echo ""
   echo "*** GitHub Pages completed"
