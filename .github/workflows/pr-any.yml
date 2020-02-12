@@ -16,7 +16,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: lint
       run: |
-        yarn install --frozen-lockfile
+        yarn install --immutable
         yarn lint
 
   test:
@@ -35,7 +35,7 @@ jobs:
       env:
         CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
       run: |
-        yarn install --frozen-lockfile
+        yarn install --immutable
         yarn test
 
   build_code:
@@ -52,7 +52,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: build
       run: |
-        yarn install --frozen-lockfile
+        yarn install --immutable
         yarn build
 
   build_docs:
@@ -69,5 +69,5 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: build
       run: |
-        yarn install --frozen-lockfile
+        yarn install --immutable
         yarn docs
