@@ -5,6 +5,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 function main () {
+  // console.log('> webpack', process.argv.slice(2));
+
   require('webpack-cli');
 }
 
