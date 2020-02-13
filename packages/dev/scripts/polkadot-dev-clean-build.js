@@ -15,10 +15,14 @@ function rmBuilds (dir) {
   rimraf.sync(path.join(dir, 'build-docs'));
 }
 
-rmBuilds('.');
+function main () {
+  rmBuilds('.');
 
-fs
-  .readdirSync(ROOT)
-  .map((file) => path.join(ROOT, file))
-  .filter((file) => fs.statSync(file).isDirectory())
-  .forEach(rmBuilds);
+  fs
+    .readdirSync(ROOT)
+    .map((file) => path.join(ROOT, file))
+    .filter((file) => fs.statSync(file).isDirectory())
+    .forEach(rmBuilds);
+}
+
+main();

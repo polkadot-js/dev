@@ -4,7 +4,7 @@
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "bin": {
     "polkadot-dev-build-docs": "./scripts/polkadot-dev-build-docs.sh",
-    "polkadot-dev-build-ts": "./scripts/polkadot-dev-build-ts.sh",
+    "polkadot-dev-build-ts": "./scripts/polkadot-dev-build-ts.js",
     "polkadot-dev-clean-build": "./scripts/polkadot-dev-clean-build.js",
     "polkadot-dev-ghact-build": "./scripts/polkadot-dev-ghact-build.sh",
     "polkadot-dev-ghact-docs": "./scripts/polkadot-dev-ghact-docs.sh",
@@ -87,6 +87,8 @@
     "typedoc-plugin-no-inherit": "^1.1.10",
     "typescript": "^3.7.5",
     "vuepress": "^1.3.0",
+    "webpack": "^4.41.6",
+    "webpack-cli": "^3.3.11",
     "yargs": "^15.1.0"
   }
 }
