@@ -13,17 +13,16 @@
   "scripts": {
     "build": "polkadot-dev-build-ts && (cd packages/dev && copyfiles config/* scripts/* skeleton/* build) && (cd packages/dev-react && copyfiles config/* scripts/* skeleton/* build)",
     "docs": "polkadot-dev-build-docs",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx && tsc --noEmit --pretty",
+    "lint": "polkadot-dev-run-lint",
     "clean": "polkadot-dev-clean-build",
     "polkadot-dev-version-beta": "./packages/dev/scripts/polkadot-dev-version-beta.sh",
     "polkadot-dev-version-minor": "./packages/dev/scripts/polkadot-dev-version-minor.sh",
     "polkadot-dev-version-patch": "./packages/dev/scripts/polkadot-dev-version-patch.sh",
     "postinstall": "./packages/dev/scripts/polkadot-dev-yarn-only.js",
-    "test": "jest --coverage"
+    "test": "polkadot-dev-run-test --coverage"
   },
   "devDependencies": {
-    "@polkadot/dev-react": "^0.34.1",
-    "copyfiles": "^2.2.0",
-    "jest": "^25.1.0"
+    "@polkadot/dev": "^0.34.1",
+    "copyfiles": "^2.2.0"
   }
 }
