@@ -22,7 +22,7 @@ if (!argv['skip-eslint']) {
 }
 
 if (!argv['skip-tsc']) {
-  // HACK This really is just betond words :(
+  // HACK This really is just beyond words :(
   process.argv = ['something-ignored', 'somewhere-ignored', '--noEmit', '--pretty'];
 
   require('typescript/lib/tsc');
