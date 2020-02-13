@@ -5,6 +5,7 @@
 
 set -e
 
-if [ -d "packages" ]; then
-  yarn run lerna version prerelease --preid beta --yes --no-git-tag-version --no-push --allow-branch '*'
-fi
+eslint . --ext .js,.jsx,.ts,.tsx
+tsc --noEmit --pretty
+
+exit 0
