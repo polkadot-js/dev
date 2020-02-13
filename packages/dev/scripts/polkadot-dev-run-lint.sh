@@ -5,7 +5,12 @@
 
 set -e
 
-eslint . --ext .js,.jsx,.ts,.tsx
-tsc --noEmit --pretty
+if [ -z "$SKIP_ESLINT" ]; then
+  eslint . --ext .js,.jsx,.ts,.tsx
+fi
+
+if [ -z "$SKIP_TSC" ]; then
+  tsc --noEmit --pretty
+fi
 
 exit 0
