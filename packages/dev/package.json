@@ -9,8 +9,8 @@
     "polkadot-dev-clean-build": "./scripts/polkadot-dev-clean-build.sh",
     "polkadot-dev-ghact-build": "./scripts/polkadot-dev-ghact-build.sh",
     "polkadot-dev-ghact-docs": "./scripts/polkadot-dev-ghact-docs.sh",
-    "polkadot-dev-run-lint": "./scripts/polkadot-dev-run-lint.sh",
-    "polkadot-dev-run-test": "./scripts/polkadot-dev-run-test.sh",
+    "polkadot-dev-run-lint": "./scripts/polkadot-dev-run-lint.js",
+    "polkadot-dev-run-test": "./scripts/polkadot-dev-run-test.js",
     "polkadot-dev-update-deps": "./scripts/polkadot-dev-update-deps.sh",
     "polkadot-dev-version-beta": "./scripts/polkadot-dev-version-beta.sh",
     "polkadot-dev-version-minor": "./scripts/polkadot-dev-version-minor.sh",
@@ -78,6 +78,7 @@
     "eslint-plugin-standard": "^4.0.1",
     "gh-pages": "^2.2.0",
     "jest": "^25.1.0",
+    "jest-cli": "^25.1.0",
     "jest-config": "^25.1.0",
     "jest-haste-map": "^25.1.0",
     "jest-resolve": "^25.1.0",
@@ -89,6 +90,7 @@
     "typedoc-plugin-markdown": "^2.2.16",
     "typedoc-plugin-no-inherit": "^1.1.10",
     "typescript": "^3.7.5",
-    "vuepress": "^1.3.0"
+    "vuepress": "^1.3.0",
+    "yargs": "^15.1.0"
   }
 }
