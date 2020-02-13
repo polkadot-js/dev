@@ -2685,7 +2685,7 @@ __metadata:
     "@babel/preset-react": ^7.8.3
     "@babel/preset-typescript": ^7.8.3
     "@babel/runtime": ^7.8.4
-    "@polkadot/dev": ^0.34.1
+    "@polkadot/dev": ^0.34.2
     "@types/react": ^16.9.19
     "@types/react-dom": ^16.9.5
     "@types/react-native": ^0.61.14
@@ -2724,7 +2724,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@polkadot/dev@^0.34.1, @polkadot/dev@workspace:packages/dev":
+"@polkadot/dev@^0.34.2, @polkadot/dev@workspace:packages/dev":
   version: 0.0.0-use.local
   resolution: "@polkadot/dev@workspace:packages/dev"
   dependencies:
@@ -16179,7 +16179,7 @@ resolve@1.1.7:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@polkadot/dev": ^0.34.1
+    "@polkadot/dev": ^0.34.2
     copyfiles: ^2.2.0
   languageName: unknown
   linkType: soft

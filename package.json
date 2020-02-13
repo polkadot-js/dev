@@ -11,7 +11,7 @@
     "typescript": "^3.7.5"
   },
   "scripts": {
-    "build": "polkadot-dev-build-ts && (cd packages/dev && copyfiles config/* scripts/* skeleton/* build) && (cd packages/dev-react && copyfiles config/* scripts/* skeleton/* build)",
+    "build": "polkadot-dev-build-ts && (cd packages/dev && copyfiles config/* scripts/* skeleton/* build)",
     "docs": "polkadot-dev-build-docs",
     "lint": "polkadot-dev-run-lint",
     "clean": "polkadot-dev-clean-build",
@@ -22,7 +22,7 @@
     "test": "polkadot-dev-run-test --coverage"
   },
   "devDependencies": {
-    "@polkadot/dev": "^0.34.1",
+    "@polkadot/dev": "^0.34.2",
     "copyfiles": "^2.2.0"
   }
 }
