@@ -3,8 +3,6 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const lerna = require('lerna/core/lerna');
 const { type } = require('yargs')
   .options({
     type: {
@@ -17,7 +15,7 @@ const { type } = require('yargs')
   .strict()
   .argv;
 
-lerna(
+require('lerna')(
   ['version', type]
     .concat(
       ['preminor', 'prerelease'].includes(type)
