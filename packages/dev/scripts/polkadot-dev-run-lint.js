@@ -4,6 +4,8 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 /* eslint-disable @typescript-eslint/no-var-requires */
 
+const { execSync } = require('child_process');
+const path = require('path');
 const argv = require('yargs')
   .options({
     'skip-eslint': {
@@ -18,13 +20,14 @@ const argv = require('yargs')
   .strict()
   .argv;
 
-if (!argv['skip-eslint']) {
-  require('eslint/lib/cli').execute(['--ext', '.js,.jsx,.ts,.tsx', process.cwd()]);
+function main () {
+  if (!argv['skip-eslint']) {
+    require('eslint/lib/cli').execute(['--ext', '.js,.jsx,.ts,.tsx', process.cwd()]);
+  }
+
+  if (!argv['skip-tsc']) {
+    execSync(`${path.join(__dirname, 'polkadot-dev-exec-tsc.js')} --noEmit --pretty`);
+  }
 }
 
-if (!argv['skip-tsc']) {
-  // HACK This really is just beyond words :(
-  process.argv = ['something-ignored', 'somewhere-ignored', '--noEmit', '--pretty'];
-
-  require('typescript/lib/tsc');
-}
+main();

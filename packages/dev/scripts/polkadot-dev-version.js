@@ -16,12 +16,16 @@ const { type } = require('yargs')
   .strict()
   .argv;
 
-require('lerna')(
-  ['version', type]
-    .concat(
-      ['preminor', 'prerelease'].includes(type)
-        ? ['--preid', 'beta']
-        : []
-    )
-    .concat(['--yes', '--no-git-tag-version', '--no-push', '--allow-branch', '*'])
-);
+function main () {
+  require('lerna')(
+    ['version', type]
+      .concat(
+        ['preminor', 'prerelease'].includes(type)
+          ? ['--preid', 'beta']
+          : []
+      )
+      .concat(['--yes', '--no-git-tag-version', '--no-push', '--allow-branch', '*'])
+  );
+}
+
+main();
