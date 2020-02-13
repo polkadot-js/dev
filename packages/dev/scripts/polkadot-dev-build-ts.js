@@ -43,7 +43,7 @@ async function buildJs (dir) {
       return;
     }
 
-    console.log(`${name} ${version}`);
+    console.log(`*** ${name} ${version}`);
 
     mkdirp.sync('build');
 
@@ -52,6 +52,8 @@ async function buildJs (dir) {
     } else {
       await buildBabel(dir);
     }
+
+    console.log();
   }
 }
 
