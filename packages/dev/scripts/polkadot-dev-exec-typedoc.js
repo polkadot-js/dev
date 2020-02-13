@@ -5,8 +5,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 function main () {
-  // console.log('> tsc', process.argv.slice(2));
-  require('typescript/lib/tsc');
+  // console.log('> typedoc', process.argv.slice(2));
+
+  const td = require('typedoc/dist/lib/cli.js');
+
+  new td.CliApplication().bootstrap();
 }
 
 main();

@@ -5,8 +5,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 function main () {
-  // console.log('> tsc', process.argv.slice(2));
-  require('typescript/lib/tsc');
+  // console.log('> vuepress', process.argv.slice(2));
+
+  require('vuepress/cli');
 }
 
 main();
