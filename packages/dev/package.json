@@ -12,9 +12,7 @@
     "polkadot-dev-run-lint": "./scripts/polkadot-dev-run-lint.js",
     "polkadot-dev-run-test": "./scripts/polkadot-dev-run-test.js",
     "polkadot-dev-update-deps": "./scripts/polkadot-dev-update-deps.sh",
-    "polkadot-dev-version-beta": "./scripts/polkadot-dev-version-beta.sh",
-    "polkadot-dev-version-minor": "./scripts/polkadot-dev-version-minor.sh",
-    "polkadot-dev-version-patch": "./scripts/polkadot-dev-version-patch.sh",
+    "polkadot-dev-version": "./scripts/polkadot-dev-version.js",
     "polkadot-dev-yarn-only": "./scripts/polkadot-dev-yarn-only.js"
   },
   "keywords": [
