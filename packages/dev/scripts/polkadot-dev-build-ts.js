@@ -14,7 +14,7 @@ const path = require('path');
 const CPX = ['package.json', 'src/**/*.css', 'src/**/*.gif', 'src/**/*.jpg', 'src/**/*.png', 'src/**/*.svg', 'src/**/*.d.ts', 'src/**/*.js'];
 
 function buildWebpack () {
-  execSync(`${path.join(__dirname, 'plokadot-dev-run-webpack.js')} --config webpack.config.js --mode production`);
+  execSync(`${path.join(__dirname, 'polkadot-dev-run-webpack.js')} --config webpack.config.js --mode production`);
 }
 
 async function buildBabel (dir) {
@@ -55,26 +55,29 @@ async function buildJs (dir) {
   }
 }
 
-function main () {
+async function main () {
   execSync(path.join(__dirname, 'polkadot-dev-clean-build.js'));
 
   process.chdir('packages');
 
   execSync(`${path.join(__dirname, 'polkadot-dev-run-tsc.js')} --emitDeclarationOnly --outdir ../build`);
 
-  Promise
-    .all(
-      fs
-        .readdirSync('.')
-        .filter((dir) => fs.statSync(dir).isDirectory() && fs.existsSync(path.join(process.cwd(), dir, 'src')))
-        .map((dir) => Promise
-          .resolve(process.chdir(dir))
-          .then(() => buildJs(dir))
-          .finally(() => process.chdir('..'))
-        )
-    )
-    .catch(console.error)
-    .finally(() => process.chdir('..'));
+  const dirs = fs
+    .readdirSync('.')
+    .filter((dir) => fs.statSync(dir).isDirectory() && fs.existsSync(path.join(process.cwd(), dir, 'src')));
+
+  for (const dir of dirs) {
+    process.chdir(dir);
+
+    await buildJs(dir);
+
+    process.chdir('..');
+  }
+
+  process.chdir('..');
 }
 
-main();
+main().catch((error) => {
+  console.error(error);
+  process.exit(-1);
+});
