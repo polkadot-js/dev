@@ -17,7 +17,7 @@ function buildTypedoc (docRoot) {
     .filter(([dir]) =>
       fs.statSync(dir).isDirectory() &&
       fs.existsSync(path.join(dir, 'src')) &&
-      !fs.statSync(path.join(dir, '.nodoc')).isDirectory()
+      !fs.existsSync(path.join(dir, '.nodoc'))
     )
     .forEach(([full, dir]) => {
       execSync(`${path.join(__dirname, 'polkadot-dev-exec-typedoc.js')} --theme markdown --out ./${docRoot}/${dir} ${full}/src`, { stdio: 'inherit' });
