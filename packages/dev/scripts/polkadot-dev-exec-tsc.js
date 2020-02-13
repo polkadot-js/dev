@@ -5,7 +5,8 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 function main () {
-  require('jest-cli/build/cli').run();
+  // console.log('> tsc', process.argv.slice(2));
+  require('typescript/lib/tsc');
 }
 
 main();

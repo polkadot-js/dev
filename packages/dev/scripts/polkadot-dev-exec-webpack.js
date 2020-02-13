@@ -5,7 +5,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 function main () {
-  require('jest-cli/build/cli').run();
+  // console.log('> webpack', process.argv.slice(2));
+
+  require('webpack-cli');
 }
 
 main();

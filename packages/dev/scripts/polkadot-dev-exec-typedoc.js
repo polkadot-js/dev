@@ -5,7 +5,11 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 function main () {
-  require('jest-cli/build/cli').run();
+  // console.log('> typedoc', process.argv.slice(2));
+
+  const td = require('typedoc/dist/lib/cli.js');
+
+  new td.CliApplication().bootstrap();
 }
 
 main();
