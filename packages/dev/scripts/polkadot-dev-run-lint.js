@@ -25,7 +25,7 @@ function runEslint () {
 }
 
 function runTsc () {
-  execSync(`${path.join(__dirname, 'polkadot-dev-run-tsc.js')} --noEmit --pretty`);
+  execSync(`${path.join(__dirname, 'polkadot-dev-exec-tsc.js')} --noEmit --pretty`);
 }
 
 function main () {

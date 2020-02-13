@@ -14,7 +14,7 @@ const path = require('path');
 const CPX = ['package.json', 'src/**/*.css', 'src/**/*.gif', 'src/**/*.jpg', 'src/**/*.png', 'src/**/*.svg', 'src/**/*.d.ts', 'src/**/*.js'];
 
 function buildWebpack () {
-  execSync(`${path.join(__dirname, 'polkadot-dev-run-webpack.js')} --config webpack.config.js --mode production`);
+  execSync(`${path.join(__dirname, 'polkadot-dev-exec-webpack.js')} --config webpack.config.js --mode production`);
 }
 
 async function buildBabel (dir) {
@@ -62,7 +62,7 @@ async function main () {
 
   process.chdir('packages');
 
-  execSync(`${path.join(__dirname, 'polkadot-dev-run-tsc.js')} --emitDeclarationOnly --outdir ../build`);
+  execSync(`${path.join(__dirname, 'polkadot-dev-exec-tsc.js')} --emitDeclarationOnly --outdir ../build`);
 
   const dirs = fs
     .readdirSync('.')
