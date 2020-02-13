@@ -5,13 +5,11 @@
   "bin": {
     "polkadot-dev-build-docs": "./scripts/polkadot-dev-build-docs.sh",
     "polkadot-dev-build-ts": "./scripts/polkadot-dev-build-ts.sh",
-    "polkadot-dev-clean-branches": "./scripts/polkadot-dev-clean-branches.sh",
-    "polkadot-dev-clean-build": "./scripts/polkadot-dev-clean-build.sh",
+    "polkadot-dev-clean-build": "./scripts/polkadot-dev-clean-build.js",
     "polkadot-dev-ghact-build": "./scripts/polkadot-dev-ghact-build.sh",
     "polkadot-dev-ghact-docs": "./scripts/polkadot-dev-ghact-docs.sh",
     "polkadot-dev-run-lint": "./scripts/polkadot-dev-run-lint.js",
     "polkadot-dev-run-test": "./scripts/polkadot-dev-run-test.js",
-    "polkadot-dev-update-deps": "./scripts/polkadot-dev-update-deps.sh",
     "polkadot-dev-version": "./scripts/polkadot-dev-version.js",
     "polkadot-dev-yarn-only": "./scripts/polkadot-dev-yarn-only.js"
   },
