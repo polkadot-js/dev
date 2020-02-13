@@ -76,7 +76,6 @@ function build_js () {
 yarn run polkadot-dev-clean-build
 
 cd packages
-tsc --version
 tsc --emitDeclarationOnly --outdir ../build
 
 PACKAGES=( $(ls -1d *) )
