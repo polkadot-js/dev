@@ -1,5 +1,5 @@
 {
-  "version": "0.34.2",
+  "version": "0.40.3",
   "private": true,
   "engines": {
     "yarn": "^1.10.1"
@@ -15,9 +15,6 @@
     "docs": "polkadot-dev-build-docs",
     "lint": "polkadot-dev-run-lint",
     "clean": "polkadot-dev-clean-build",
-    "polkadot-dev-version-beta": "./packages/dev/scripts/polkadot-dev-version-beta.sh",
-    "polkadot-dev-version-minor": "./packages/dev/scripts/polkadot-dev-version-minor.sh",
-    "polkadot-dev-version-patch": "./packages/dev/scripts/polkadot-dev-version-patch.sh",
     "postinstall": "./packages/dev/scripts/polkadot-dev-yarn-only.js",
     "test": "polkadot-dev-run-test --coverage"
   },

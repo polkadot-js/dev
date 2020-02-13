@@ -1,3 +1,7 @@
+# 0.40.1
+
+- Remove `@polkadot/dev-react`, combine into `@polkadot/dev`
+
 # 0.34.1
 
 - Swap to yarn 2
