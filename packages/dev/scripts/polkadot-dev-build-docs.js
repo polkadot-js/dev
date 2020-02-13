@@ -32,18 +32,14 @@ function buildVuepress (docRoot) {
   rimraf.sync(`${docRoot}/.vuepress/dist`);
 }
 
-function copyDocs (docRoot) {
-  rimraf.sync(docRoot);
-  cpx.copySync('./docs', docRoot);
-}
-
 function main () {
   let docRoot = path.join(process.cwd(), 'docs');
 
   if (fs.existsSync(docRoot)) {
     docRoot = path.join(process.cwd(), 'build-docs');
 
-    copyDocs(docRoot);
+    rimraf.sync(docRoot);
+    cpx.copySync(path.join(process.cwd(), 'docs'), docRoot);
   }
 
   if (fs.existsSync(path.join(process.cwd(), 'typedoc.js'))) {
