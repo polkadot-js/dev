@@ -2,6 +2,8 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+const resolver = require('./resolver');
+
 module.exports = {
   env: {
     browser: true,
@@ -10,6 +12,7 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
+    'standard',
     'semistandard',
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
@@ -24,7 +27,7 @@ module.exports = {
       }
     }
   ],
-  parser: '@typescript-eslint/parser',
+  parser: resolver('@typescript-eslint/parser'),
   parserOptions: {
     warnOnUnsupportedTypeScriptVersion: false
   },
