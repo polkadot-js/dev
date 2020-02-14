@@ -2,6 +2,12 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+function resolve (input) {
+  return Array.isArray(input)
+    ? [require.resolve(input[0]), input[1]]
+    : require.resolve(input);
+}
+
 module.exports = {
   presets: [
     ['@babel/preset-env', {
@@ -13,7 +19,7 @@ module.exports = {
     }],
     '@babel/preset-typescript',
     '@babel/preset-react'
-  ],
+  ].map(resolve),
   plugins: [
     // ordering important, decorators before class properties
     ['@babel/plugin-proposal-decorators', { legacy: true }],
@@ -26,5 +32,5 @@ module.exports = {
     '@babel/plugin-syntax-dynamic-import',
     'babel-plugin-styled-components',
     process.env.NODE_ENV === 'test' && '@polkadot/dev/config/babel-plugin-fix-istanbul'
-  ].filter((p) => !!p)
+  ].filter((p) => !!p).map(resolve)
 };
