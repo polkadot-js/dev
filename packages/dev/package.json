@@ -3,11 +3,11 @@
   "version": "0.40.15",
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "bin": {
+    "polkadot-ci-ghact-build": "./scripts/polkadot-ci-ghact-build.sh",
+    "polkadot-ci-ghact-docs": "./scripts/polkadot-ci-ghact-docs.sh",
     "polkadot-dev-build-docs": "./scripts/polkadot-dev-build-docs.js",
     "polkadot-dev-build-ts": "./scripts/polkadot-dev-build-ts.js",
     "polkadot-dev-clean-build": "./scripts/polkadot-dev-clean-build.js",
-    "polkadot-dev-ghact-build": "./scripts/polkadot-dev-ghact-build.sh",
-    "polkadot-dev-ghact-docs": "./scripts/polkadot-dev-ghact-docs.sh",
     "polkadot-dev-run-lint": "./scripts/polkadot-dev-run-lint.js",
     "polkadot-dev-run-test": "./scripts/polkadot-dev-run-test.js",
     "polkadot-dev-version": "./scripts/polkadot-dev-version.js",

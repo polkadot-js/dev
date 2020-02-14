@@ -28,7 +28,7 @@ jobs:
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       run: |
         yarn install --frozen-lockfile
-        CI_NO_BETA=true ./packages/dev/scripts/polkadot-dev-ghact-build.sh
+        CI_NO_BETA=true ./packages/dev/scripts/polkadot-ci-ghact-build.sh
 
   dummy:
     name: Dummy
