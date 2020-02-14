@@ -12,21 +12,21 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
-    'standard',
-    'semistandard',
+    ...resolver([
+      'eslint-config-standard',
+      'eslint-config-semistandard'
+    ]),
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'plugin:react/recommended'
   ],
-  overrides: [
-    {
-      files: ['*.js', '*.spec.js'],
-      rules: {
-        '@typescript-eslint/explicit-function-return-type': 'off'
-      }
+  overrides: [{
+    files: ['*.js', '*.spec.js'],
+    rules: {
+      '@typescript-eslint/explicit-function-return-type': 'off'
     }
-  ],
+  }],
   parser: resolver('@typescript-eslint/parser'),
   parserOptions: {
     warnOnUnsupportedTypeScriptVersion: false

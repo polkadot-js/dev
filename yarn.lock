@@ -2594,6 +2594,7 @@ __metadata:
     eslint: ^6.8.0
     eslint-config-semistandard: ^15.0.0
     eslint-config-standard: ^14.1.0
+    eslint-import-resolver-node: ^0.3.3
     eslint-plugin-import: ^2.20.1
     eslint-plugin-node: ^11.0.0
     eslint-plugin-promise: ^4.2.1
@@ -6969,7 +6970,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-import-resolver-node@npm:^0.3.2":
+"eslint-import-resolver-node@npm:^0.3.2, eslint-import-resolver-node@npm:^0.3.3":
   version: 0.3.3
   resolution: "eslint-import-resolver-node@npm:0.3.3"
   dependencies:
