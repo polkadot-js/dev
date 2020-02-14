@@ -1,6 +1,7 @@
 # 0.40.1
 
 - Remove `@polkadot/dev-react`, combine into `@polkadot/dev`
+- Move all user-facing (non-CI scripts) to JS, which makes cross-platform easier
 
 # 0.34.1
 

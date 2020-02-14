@@ -6,8 +6,9 @@
 
 const { execSync } = require('child_process');
 const cpx = require('cpx');
-const path = require('path');
 const fs = require('fs');
+const fse = require('fs-extra');
+const path = require('path');
 const rimraf = require('rimraf');
 
 function buildTypedoc (docRoot) {
@@ -20,15 +21,15 @@ function buildTypedoc (docRoot) {
       !fs.existsSync(path.join(dir, '.nodoc'))
     )
     .forEach(([full, dir]) => {
-      execSync(`${path.join(__dirname, 'polkadot-dev-exec-typedoc.js')} --theme markdown --out ./${docRoot}/${dir} ${full}/src`, { stdio: 'inherit' });
+      execSync(`${path.join(__dirname, 'polkadot-exec-typedoc.js')} --theme markdown --out ${docRoot}/${dir} ${full}/src`, { stdio: 'inherit' });
     });
 }
 
 function buildVuepress (docRoot) {
-  execSync(`${path.join(__dirname, 'polkadot-dev-exec-vuepress.js')} build ${docRoot}`, { stdio: 'inherit' });
+  execSync(`${path.join(__dirname, 'polkadot-exec-vuepress.js')} build ${docRoot}`, { stdio: 'inherit' });
 
   rimraf.sync(`${docRoot}/assets`);
-  cpx.copySync(`${docRoot}/.vuepress/dist/*`, docRoot);
+  fse.copySync(`${docRoot}/.vuepress/dist`, docRoot);
   rimraf.sync(`${docRoot}/.vuepress/dist`);
 }
 
@@ -39,7 +40,7 @@ function main () {
     docRoot = path.join(process.cwd(), 'build-docs');
 
     rimraf.sync(docRoot);
-    cpx.copySync(path.join(process.cwd(), 'docs'), docRoot);
+    fse.copySync(path.join(process.cwd(), 'docs'), docRoot);
   }
 
   if (fs.existsSync(path.join(process.cwd(), 'typedoc.js'))) {

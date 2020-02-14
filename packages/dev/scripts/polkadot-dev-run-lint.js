@@ -26,7 +26,7 @@ function main () {
   }
 
   if (!argv['skip-tsc']) {
-    execSync(`${path.join(__dirname, 'polkadot-dev-exec-tsc.js')} --noEmit --pretty`, { stdio: 'inherit' });
+    execSync(`${path.join(__dirname, 'polkadot-exec-tsc.js')} --noEmit --pretty`, { stdio: 'inherit' });
   }
 }
 
