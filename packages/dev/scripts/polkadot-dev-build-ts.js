@@ -6,7 +6,7 @@
 
 const babel = require('@babel/cli/lib/babel/dir').default;
 const { execSync } = require('child_process');
-const cpx = require('cpx');
+const fse = require('fs-extra');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const path = require('path');
@@ -32,7 +32,7 @@ async function buildBabel (dir) {
 
   [...CPX]
     .concat(`../../build/${dir}/src/**/*.d.ts`, `../../build/packages/${dir}/src/**/*.d.ts`)
-    .forEach((src) => cpx.copySync(src, 'build'));
+    .forEach((src) => fse.copySync(src, 'build'));
 }
 
 async function buildJs (dir) {

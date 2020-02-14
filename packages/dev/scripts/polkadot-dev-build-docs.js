@@ -5,9 +5,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 
 const { execSync } = require('child_process');
-const cpx = require('cpx');
 const path = require('path');
 const fs = require('fs');
+const fse = require('fs-extra');
 const rimraf = require('rimraf');
 
 function buildTypedoc (docRoot) {
@@ -28,7 +28,7 @@ function buildVuepress (docRoot) {
   execSync(`${path.join(__dirname, 'polkadot-exec-vuepress.js')} build ${docRoot}`, { stdio: 'inherit' });
 
   rimraf.sync(`${docRoot}/assets`);
-  cpx.copySync(`${docRoot}/.vuepress/dist/*`, docRoot);
+  fse.copySync(`${docRoot}/.vuepress/dist/*`, docRoot);
   rimraf.sync(`${docRoot}/.vuepress/dist`);
 }
 
@@ -39,17 +39,13 @@ function main () {
     docRoot = path.join(process.cwd(), 'build-docs');
 
     rimraf.sync(docRoot);
-    cpx.copySync(path.join(process.cwd(), 'docs/*'), docRoot);
-    cpx.copySync(path.join(process.cwd(), 'docs/.*'), docRoot);
-    cpx.copySync(path.join(process.cwd(), 'docs/**/*'), docRoot);
-    cpx.copySync(path.join(process.cwd(), 'docs/.**/*'), docRoot);
-    cpx.copySync(path.join(process.cwd(), 'docs/.**/**/*'), docRoot);
+    fse.copySync(path.join(process.cwd(), 'docs'), docRoot);
   }
 
   if (fs.existsSync(path.join(process.cwd(), 'typedoc.js'))) {
     buildTypedoc(docRoot);
 
-    ['CHANGELOG.md', 'CONTRIBUTING.md'].forEach((file) => cpx.copySync(file, docRoot));
+    ['CHANGELOG.md', 'CONTRIBUTING.md'].forEach((file) => fse.copySync(file, docRoot));
 
     if (fs.existsSync(path.join(process.cwd(), 'docs/.vuepress'))) {
       buildVuepress(docRoot);
