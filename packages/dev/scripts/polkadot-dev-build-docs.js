@@ -39,7 +39,11 @@ function main () {
     docRoot = path.join(process.cwd(), 'build-docs');
 
     rimraf.sync(docRoot);
-    cpx.copySync(path.join(process.cwd(), 'docs'), docRoot);
+    cpx.copySync(path.join(process.cwd(), 'docs/*'), docRoot);
+    cpx.copySync(path.join(process.cwd(), 'docs/.*'), docRoot);
+    cpx.copySync(path.join(process.cwd(), 'docs/**/*'), docRoot);
+    cpx.copySync(path.join(process.cwd(), 'docs/.**/*'), docRoot);
+    cpx.copySync(path.join(process.cwd(), 'docs/.**/**/*'), docRoot);
   }
 
   if (fs.existsSync(path.join(process.cwd(), 'typedoc.js'))) {
