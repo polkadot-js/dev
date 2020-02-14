@@ -10,19 +10,14 @@ const rimraf = require('rimraf');
 
 const ROOT = path.join(process.cwd(), 'packages');
 
-function rmBuilds (dir) {
-  rimraf.sync(path.join(dir, 'build'));
-  rimraf.sync(path.join(dir, 'build-docs'));
-}
-
 function main () {
-  rmBuilds('.');
-
   fs
     .readdirSync(ROOT)
     .map((file) => path.join(ROOT, file))
     .filter((file) => fs.statSync(file).isDirectory())
-    .forEach(rmBuilds);
+    .concat(['.'])
+    .reduce((arr, dir) => arr.concat(path.join(dir, 'build'), path.join(dir, 'build-docs')), [])
+    .forEach((dir) => rimraf.sync(dir));
 }
 
 main();
