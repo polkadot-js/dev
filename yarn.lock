@@ -6637,7 +6637,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"dot-prop@npm:^4.1.1, dot-prop@npm:^4.2.0":
+"dot-prop@npm:^4.2.0":
   version: 4.2.0
   resolution: "dot-prop@npm:4.2.0"
   dependencies:
@@ -13600,13 +13600,13 @@ fsevents@^2.1.2:
   linkType: hard
 
 "postcss-selector-parser@npm:^3.0.0":
-  version: 3.1.1
-  resolution: "postcss-selector-parser@npm:3.1.1"
+  version: 3.1.2
+  resolution: "postcss-selector-parser@npm:3.1.2"
   dependencies:
-    dot-prop: ^4.1.1
+    dot-prop: ^5.2.0
     indexes-of: ^1.0.1
     uniq: ^1.0.1
-  checksum: 2/3bb7d6ee35d22034138f6908ed32d26ef95191252ffa0ef41ca7058dd1165045f27e9a2581acfd28ae345a19029bc0003f5457abeea798c5a0dc13b89dd61d19
+  checksum: 2/021ffdeef1007d4ab24439fee8e2cba188681899eae8dbc882a0e860d2ff8392f232c87e3f69eadc0a3d630b897a9ceb9f49adbe30b954a23ed91e61d3ea248c
   languageName: node
   linkType: hard
 
@@ -14474,13 +14474,13 @@ fsevents@^2.1.2:
   linkType: hard
 
 "regjsparser@npm:^0.6.0":
-  version: 0.6.2
-  resolution: "regjsparser@npm:0.6.2"
+  version: 0.6.3
+  resolution: "regjsparser@npm:0.6.3"
   dependencies:
     jsesc: ~0.5.0
   bin:
     regjsparser: bin/parser
-  checksum: 2/6ea2ef028a41791ba8851690efe4bdc7fb284603e6b4948adec0e355a764ce134695235397d02762581ae487f035da462fb8b4bc2d5c9e07c1e1e5a16d77d168
+  checksum: 2/bcb2caf20f7515f6f47ff83953844eb9d2192b53c729a571f69c43a7eb9aea27ea864841af3303f137d1c40bf568a9130666dc74c0af598ea7b8b54ff7087c0a
   languageName: node
   linkType: hard
 
