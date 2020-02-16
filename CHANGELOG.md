@@ -2,6 +2,7 @@
 
 - Remove `@polkadot/dev-react`, combine into `@polkadot/dev`
 - Move all user-facing (non-CI scripts) to JS, which makes cross-platform easier
+- Add `polkadot-dev-circular` script to extract circular deps
 
 # 0.34.1
 
