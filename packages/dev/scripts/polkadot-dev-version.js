@@ -24,7 +24,7 @@ function main () {
           ? ['--preid', 'beta']
           : []
       )
-      .concat(['--yes', '--no-git-tag-version', '--no-push', '--allow-branch', '*'])
+      .concat(['--yes', '--exact', '--no-git-tag-version', '--no-push', '--allow-branch', '*'])
   );
 }
 
