@@ -24,6 +24,7 @@ module.exports = {
     '@babel/plugin-proposal-optional-chaining',
     '@babel/plugin-proposal-private-methods',
     '@babel/plugin-transform-runtime',
+    '@babel/plugin-syntax-bigint',
     '@babel/plugin-syntax-dynamic-import',
     'babel-plugin-styled-components',
     process.env.NODE_ENV === 'test' && '@polkadot/dev/config/babel-plugin-fix-istanbul'
