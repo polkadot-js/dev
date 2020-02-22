@@ -1,5 +1,5 @@
 {
-  "version": "0.40.22",
+  "version": "0.41.1",
   "private": true,
   "engines": {
     "yarn": "^1.10.1"
