@@ -33,8 +33,13 @@ module.exports = {
     'react-hooks'
   ],
   rules: {
-    indent: 'off', // required as 'off' by @typescript-eslint/indent
-    '@typescript-eslint/indent': ['error', 2]
+    // required as 'off' by @typescript-eslint/indent
+    indent: 'off',
+    // our indentation is different from the TypeScript repo
+    '@typescript-eslint/indent': ['error', 2],
+    // rules from semistandard (don't include it, has standard dep version mismatch)
+    semi: [2, 'always'],
+    'no-extra-semi': 2
   },
   settings: {
     react: {
