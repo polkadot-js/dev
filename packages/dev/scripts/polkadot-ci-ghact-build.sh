@@ -100,8 +100,6 @@ function lerna_bump () {
     else
       echo "*** Not setting version, patch detected"
       echo "$LERNA_VERSION" >> .123trigger
-    else
-
     fi
   fi
 
