@@ -1,5 +1,5 @@
 {
-  "version": "0.40.18",
+  "version": "0.41.6",
   "private": true,
   "engines": {
     "yarn": "^1.10.1"
@@ -8,7 +8,7 @@
     "packages/*"
   ],
   "resolutions": {
-    "typescript": "^3.7.5"
+    "typescript": "^3.8.2"
   },
   "scripts": {
     "build": "polkadot-dev-build-ts && (cd packages/dev && copyfiles config/* scripts/* skeleton/* build)",

@@ -1,3 +1,8 @@
+# 0.41.1
+
+- TypeScript 3.8.2
+- Extend Babel plugins with latest TS features
+
 # 0.40.1
 
 - Remove `@polkadot/dev-react`, combine into `@polkadot/dev`

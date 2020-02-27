@@ -86,17 +86,20 @@ function lerna_bump () {
     # if we have a beta version, just continue the stream of betas
     yarn run polkadot-dev-version --type prerelease
   else
-    LAST=${TAG##*.}
+    PATCH=${TAG##*.}
 
-    if [[ $LAST == "0" ]]; then
-      # patch is .0, so publish this as an actual release (surely we did out job on beta)
-      yarn run polkadot-dev-version --type patch
-    elif [ -z "$CI_NO_BETA" ]; then
-      # non-zero patch version, continue as next beta minor
-      yarn run polkadot-dev-version --type preminor
-    else
+    if [ -n "$CI_NO_BETA" ]; then
       # don't allow beta versions
       yarn run polkadot-dev-version --type patch
+    elif [[ $PATCH == "0" ]]; then
+      # patch is .0, so publish this as an actual release (surely we did out job on beta)
+      yarn run polkadot-dev-version --type patch
+    elif [[ $PATCH == "1" ]]; then
+      # continue with first new minor as beta
+      yarn run polkadot-dev-version --type preminor
+    else
+      echo "*** Not setting version, patch detected"
+      echo "$LERNA_VERSION" >> .123trigger
     fi
   fi
 
@@ -124,11 +127,15 @@ function npm_bump () {
 }
 
 function npm_get_version () {
-  NPM_VERSION=$(cat package.json \
-    | grep version \
-    | head -1 \
-    | awk -F: '{ print $2 }' \
-    | sed 's/[",]//g')
+  if [ -f "lerna.json" ]; then
+    NPM_VERSION="$LERNA_VERSION"
+  else
+    NPM_VERSION=$(cat package.json \
+      | grep version \
+      | head -1 \
+      | awk -F: '{ print $2 }' \
+      | sed 's/[",]//g')
+  fi
 }
 
 function npm_setup () {
