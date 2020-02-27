@@ -127,11 +127,15 @@ function npm_bump () {
 }
 
 function npm_get_version () {
-  NPM_VERSION=$(cat package.json \
-    | grep version \
-    | head -1 \
-    | awk -F: '{ print $2 }' \
-    | sed 's/[",]//g')
+  if [ -f "lerna.json" ]; then
+    NPM_VERSION="$LERNA_VERSION"
+  else
+    NPM_VERSION=$(cat package.json \
+      | grep version \
+      | head -1 \
+      | awk -F: '{ print $2 }' \
+      | sed 's/[",]//g')
+  fi
 }
 
 function npm_setup () {
