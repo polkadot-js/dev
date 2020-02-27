@@ -214,9 +214,7 @@ function git_bump () {
     fi
   else
     BUMP_VERSION="patch"
-  fi
 
-  if [ -n "$BUMP_VERSION" ]; then
     npm_bump
   fi
 
