@@ -139,7 +139,7 @@ function npm_setup () {
   echo ""
   echo "*** Setting up npm for $NPMREG"
 
-  echo "//$NPMREG/:_authToken=$NPM_TOKEN" > .npmrc 2> /dev/null
+  echo "//$NPMREG/:_authToken=$NPM_TOKEN" > ~/.npmrc 2> /dev/null
 
   echo ""
   echo "*** Npm setup completed"
