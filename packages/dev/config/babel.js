@@ -2,8 +2,11 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const resolver = require('./resolver');
+
 module.exports = {
-  presets: [
+  presets: resolver([
     ['@babel/preset-env', {
       modules: 'commonjs',
       targets: {
@@ -13,8 +16,8 @@ module.exports = {
     }],
     '@babel/preset-typescript',
     '@babel/preset-react'
-  ],
-  plugins: [
+  ]),
+  plugins: resolver([
     // ordering important, decorators before class properties
     ['@babel/plugin-proposal-decorators', { legacy: true }],
     ['@babel/plugin-proposal-class-properties', { loose: true }],
@@ -31,5 +34,5 @@ module.exports = {
     '@babel/plugin-syntax-top-level-await',
     'babel-plugin-styled-components',
     process.env.NODE_ENV === 'test' && '@polkadot/dev/config/babel-plugin-fix-istanbul'
-  ].filter((p) => !!p)
+  ])
 };

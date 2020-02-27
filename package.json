@@ -1,5 +1,5 @@
 {
-  "version": "0.41.6",
+  "version": "0.42.0",
   "private": true,
   "engines": {
     "yarn": "^1.10.1"
@@ -11,12 +11,12 @@
     "typescript": "^3.8.2"
   },
   "scripts": {
-    "build": "polkadot-dev-build-ts && (cd packages/dev && copyfiles config/* scripts/* skeleton/* build)",
-    "docs": "polkadot-dev-build-docs",
-    "lint": "polkadot-dev-run-lint",
-    "clean": "polkadot-dev-clean-build",
+    "build": "./packages/dev/scripts/polkadot-dev-build-ts.js && (cd packages/dev && copyfiles config/* scripts/* skeleton/* build)",
+    "docs": "./packages/dev/scripts/polkadot-dev-build-docs.js",
+    "lint": "./packages/dev/scripts/polkadot-dev-run-lint.js",
+    "clean": "./packages/dev/scripts/polkadot-dev-clean-build.js",
     "postinstall": "./packages/dev/scripts/polkadot-dev-yarn-only.js",
-    "test": "polkadot-dev-run-test --coverage"
+    "test": "./packages/dev/scripts/polkadot-dev-run-test.js --coverage"
   },
   "devDependencies": {
     "copyfiles": "^2.2.0"
