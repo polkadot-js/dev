@@ -2521,7 +2521,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/dev@^0.41.6, @polkadot/dev@workspace:packages/dev":
+"@polkadot/dev@workspace:packages/dev":
   version: 0.0.0-use.local
   resolution: "@polkadot/dev@workspace:packages/dev"
   dependencies:
@@ -14700,7 +14700,6 @@ resolve@1.1.7:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@polkadot/dev": ^0.41.6
     copyfiles: ^2.2.0
   languageName: unknown
   linkType: soft

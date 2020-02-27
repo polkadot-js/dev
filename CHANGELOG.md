@@ -1,3 +1,7 @@
+# 0.50.1
+
+- Yarn 2
+
 # 0.41.1
 
 - TypeScript 3.8.2
@@ -11,7 +15,6 @@
 
 # 0.34.1
 
-- Swap to yarn 2
 - Bump deps
 
 # 0.33.1
