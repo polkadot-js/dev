@@ -7,11 +7,5 @@ module.exports = {
     project: [
       './tsconfig.json'
     ]
-  },
-  settings: {
-    ...base.settings,
-    'import/resolver': {
-      [require.resolve('./eslint-resolver.js')]: {}
-    }
   }
 };
