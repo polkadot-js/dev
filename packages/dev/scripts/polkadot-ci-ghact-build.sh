@@ -118,8 +118,7 @@ function npm_bump () {
 
   npm config set version-sign-git-tag false
   npm config set version-git-tag false
-  npm config set version-git-message "$GIT_MESSAGE"
-  npm version $BUMP_VERSION
+  npm version --force $BUMP_VERSION
   git add --all .
 
   echo ""
