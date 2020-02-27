@@ -1,4 +1,5 @@
-releases: null
+releases:
+
 
 undecided:
   - "@polkadot/dev"
