@@ -1,5 +1,5 @@
 {
-  "extends": "./packages/dev/config/tsconfig",
+  "extends": "@polkadot/dev/config/tsconfig",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
