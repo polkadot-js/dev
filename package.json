@@ -19,7 +19,7 @@
     "test": "polkadot-dev-run-test --coverage"
   },
   "devDependencies": {
-    "@polkadot/dev": "^0.40.16",
+    "@polkadot/dev": "^0.41.6",
     "copyfiles": "^2.2.0"
   }
 }
