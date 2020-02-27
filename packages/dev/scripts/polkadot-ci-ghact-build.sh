@@ -173,7 +173,7 @@ function npm_publish () {
   # yarn config set registry "https://$NPMREG"
 
   while true; do
-    (npm publish --access public --tag $TAG) && break || {
+    (npm publish --access public $TAG) && break || {
       if [[ $n -lt 5 ]]; then
         echo "Publish failed on attempt $n/5. Retrying in 15s."
         ((n++))
