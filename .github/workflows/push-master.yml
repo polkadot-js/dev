@@ -37,7 +37,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       run: |
-        yarn install --immutable | grep -v 'YN0013'
+        yarn install | grep -v 'YN0013'
         CI_NO_BETA=true ./packages/dev/scripts/polkadot-ci-ghact-build.sh
 
   dummy:
