@@ -2,6 +2,9 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const resolver = require('./resolver');
+
 module.exports = {
   env: {
     browser: true,
@@ -10,7 +13,7 @@ module.exports = {
   },
   extends: [
     'eslint:recommended',
-    'standard',
+    ...resolver(['eslint-config-standard']),
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
