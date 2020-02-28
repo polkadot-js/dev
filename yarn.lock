@@ -2600,6 +2600,11 @@ __metadata:
     polkadot-dev-run-test: ./scripts/polkadot-dev-run-test.js
     polkadot-dev-version: ./scripts/polkadot-dev-version.js
     polkadot-dev-yarn-only: ./scripts/polkadot-dev-yarn-only.js
+    polkadot-exec-ghpages: ./scripts/polkadot-exec-ghpages.js
+    polkadot-exec-tsc: ./scripts/polkadot-exec-tsc.js
+    polkadot-exec-typedoc: ./scripts/polkadot-exec-typedoc.js
+    polkadot-exec-vuepress: ./scripts/polkadot-exec-vuepress.js
+    polkadot-exec-webpack: ./scripts/polkadot-exe-webpackc.js
   languageName: unknown
   linkType: soft
 
