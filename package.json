@@ -1,4 +1,7 @@
 {
+  "repository": "https://github.com/polkadot-js/dev",
+  "author": "Jaco Greeff <jacogr@gmail.com>",
+  "license": "Apache-2",
   "private": true,
   "workspaces": [
     "packages/*"
