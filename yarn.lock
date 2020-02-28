@@ -2844,7 +2844,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/typescript-estree@npm:2.21.0":
+"@typescript-eslint/typescript-estree@npm:2.21.0, @typescript-eslint/typescript-estree@npm:^2.4.0":
   version: 2.21.0
   resolution: "@typescript-eslint/typescript-estree@npm:2.21.0"
   dependencies:
@@ -2861,26 +2861,6 @@ __metadata:
     typescript:
       optional: true
   checksum: 2/e6724eea96602ceb3a3747fa4c1a1a93df94d9503a4b846d22fe1c17175890ad9c2dd86609e4d3f154c698ca4b8a21ada0b5ad99b03618f4ce76ee62139b82cf
-  languageName: node
-  linkType: hard
-
-"@typescript-eslint/typescript-estree@npm:^2.4.0":
-  version: 2.20.0
-  resolution: "@typescript-eslint/typescript-estree@npm:2.20.0"
-  dependencies:
-    debug: ^4.1.1
-    eslint-visitor-keys: ^1.1.0
-    glob: ^7.1.6
-    is-glob: ^4.0.1
-    lodash: ^4.17.15
-    semver: ^6.3.0
-    tsutils: ^3.17.1
-  peerDependencies:
-    typescript: "*"
-  peerDependenciesMeta:
-    typescript:
-      optional: true
-  checksum: 2/ddf9a2b1365ff73c0c8429eac40bda8c1e8e53aaf4f413589eb1fce259a3f9ca819cd372390ccbc96db929035a44588fc70fc2866557b53ba46f4982047d08b7
   languageName: node
   linkType: hard
 
@@ -6630,9 +6610,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.3.361":
-  version: 1.3.362
-  resolution: "electron-to-chromium@npm:1.3.362"
-  checksum: 2/c465941ec55a5d5958de203e7ad85413dbd7496561dd81079e82ea6f26ff0a74998e4a23eb07d091aa0d41a9722cdddeca1e737db2867e017d1060cc86382749
+  version: 1.3.363
+  resolution: "electron-to-chromium@npm:1.3.363"
+  checksum: 2/33664669d5dc0f2dea5a186954b23753c7e06cc210c919c71964a97c7a27a8e09d8e2ddf55bd1f557cee0cdcce6f67e224aadf8fee9e21a14aec56601123be5d
   languageName: node
   linkType: hard
 
@@ -7917,7 +7897,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fsevents@^1.0.0, fsevents@^1.2.7":
+"fsevents@npm:^1.0.0, fsevents@npm:^1.2.7":
   version: 1.2.11
   resolution: "fsevents@npm:1.2.11"
   dependencies:
@@ -7929,7 +7909,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-fsevents@^2.1.2:
+"fsevents@npm:^2.1.2":
   version: 2.1.2
   resolution: "fsevents@npm:2.1.2"
   dependencies:
@@ -14601,14 +14581,14 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-resolve@1.1.7:
+"resolve@npm:1.1.7":
   version: 1.1.7
   resolution: "resolve@npm:1.1.7"
   checksum: 2/3e928e9586d51dd985d42f524646267f08269261d844adfb54bf2e3a2f96e9bdb2be8e3db686145a7ac2b65c7cd894bdfa7b48b80b828ea5cb1d2abc403778b0
   languageName: node
   linkType: hard
 
-"resolve@^1.1.6, resolve@^1.1.7, resolve@^1.10.0, resolve@^1.10.1, resolve@^1.11.1, resolve@^1.12.0, resolve@^1.13.1, resolve@^1.14.2, resolve@^1.2.0, resolve@^1.3.2, resolve@^1.8.1":
+"resolve@npm:^1.1.6, resolve@npm:^1.1.7, resolve@npm:^1.10.0, resolve@npm:^1.10.1, resolve@npm:^1.11.1, resolve@npm:^1.12.0, resolve@npm:^1.13.1, resolve@npm:^1.14.2, resolve@npm:^1.2.0, resolve@npm:^1.3.2, resolve@npm:^1.8.1":
   version: 1.15.1
   resolution: "resolve@npm:1.15.1"
   dependencies:
@@ -16373,9 +16353,9 @@ resolve@1.1.7:
   linkType: hard
 
 "tslib@npm:^1.8.1, tslib@npm:^1.9.0":
-  version: 1.11.0
-  resolution: "tslib@npm:1.11.0"
-  checksum: 2/fa014c310808080e07b14d33aa52a3c8c8038f25fd7164a8e7d038fd6f2ca767b5a9305c77147d7d59ccd93bdf7a461a3c1d7ae53dfaca43501a2623834def97
+  version: 1.11.1
+  resolution: "tslib@npm:1.11.1"
+  checksum: 2/d40eba08de267b2d3c458ddbf51f9010a45b8e752d3bf8c0fed63e266afc9277c6a26e65e51223335b8753f9f106aeb600e704f2a6eae05729160671a97c52e7
   languageName: node
   linkType: hard
 
