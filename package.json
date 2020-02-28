@@ -1,9 +1,8 @@
 {
-  "version": "0.50.2",
+  "repository": "https://github.com/polkadot-js/dev",
+  "author": "Jaco Greeff <jacogr@gmail.com>",
+  "license": "Apache-2",
   "private": true,
-  "engines": {
-    "yarn": "^1.10.1"
-  },
   "workspaces": [
     "packages/*"
   ],
