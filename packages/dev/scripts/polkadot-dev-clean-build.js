@@ -27,7 +27,7 @@ function main () {
         .readdirSync(PKGS)
         .map((file) => path.join(PKGS, file))
         .filter((file) => fs.statSync(file).isDirectory())
-        .reduce((arr, dir) => arr.concat(...getDirs(dir)), [])
+        .reduce((arr, dir) => arr.concat(getDirs(dir)), [])
     );
   }
 }
