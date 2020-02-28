@@ -18,18 +18,14 @@ function cleanDirs (dirs) {
   dirs.forEach((dir) => rimraf.sync(dir));
 }
 
-function main () {
-  cleanDirs(getDirs(path.join(process.cwd(), 'build')));
+cleanDirs(getDirs(path.join(process.cwd(), 'build')));
 
-  if (fs.existsSync(PKGS)) {
-    cleanDirs(
-      fs
-        .readdirSync(PKGS)
-        .map((file) => path.join(PKGS, file))
-        .filter((file) => fs.statSync(file).isDirectory())
-        .reduce((arr, dir) => arr.concat(getDirs(dir)), [])
-    );
-  }
+if (fs.existsSync(PKGS)) {
+  cleanDirs(
+    fs
+      .readdirSync(PKGS)
+      .map((file) => path.join(PKGS, file))
+      .filter((file) => fs.statSync(file).isDirectory())
+      .reduce((arr, dir) => arr.concat(getDirs(dir)), [])
+  );
 }
-
-main();

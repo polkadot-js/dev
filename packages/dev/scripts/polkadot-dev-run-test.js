@@ -4,8 +4,4 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-function main () {
-  require('jest-cli/build/cli').run();
-}
-
-main();
+require('jest-cli/build/cli').run();

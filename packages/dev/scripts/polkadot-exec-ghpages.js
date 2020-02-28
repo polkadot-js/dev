@@ -4,4 +4,4 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 /* eslint-disable @typescript-eslint/no-var-requires */
 
-require('webpack-cli');
+require('gh-pages/bin/gh-pages');

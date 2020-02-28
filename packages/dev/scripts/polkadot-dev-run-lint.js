@@ -20,14 +20,10 @@ const argv = require('yargs')
   .strict()
   .argv;
 
-function main () {
-  if (!argv['skip-eslint']) {
-    require('eslint/lib/cli').execute(['--ext', '.js,.jsx,.ts,.tsx', process.cwd()]);
-  }
-
-  if (!argv['skip-tsc']) {
-    execSync(`${path.join(__dirname, 'polkadot-exec-tsc.js')} --noEmit --pretty`, { stdio: 'inherit' });
-  }
+if (!argv['skip-eslint']) {
+  require('eslint/lib/cli').execute(['--ext', '.js,.jsx,.ts,.tsx', process.cwd()]);
 }
 
-main();
+if (!argv['skip-tsc']) {
+  execSync(`${path.join(__dirname, 'polkadot-exec-tsc.js')} --noEmit --pretty`, { stdio: 'inherit' });
+}
