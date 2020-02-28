@@ -9,10 +9,10 @@ tmp/
 .env.test.local
 .env.production.local
 .npmrc
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
 .pnp.*
-.yarn/cache
-.yarn/unplugged
-.yarn/build-state.yml
 cc-test-reporter
 npm-debug.log*
 yarn-debug.log*
