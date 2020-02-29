@@ -103,6 +103,8 @@ function lerna_bump () {
     fi
   fi
 
+  # we will have inter-package mismatches, resolve
+  yarn
   git add --all .
 
   lerna_get_version
