@@ -15,7 +15,6 @@
 
 set -e
 
-BUMP_VERSION=
 REPO=https://${GH_PAT:-"x-access-token:$GITHUB_TOKEN"}@github.com/${GITHUB_REPOSITORY}.git
 NPMREG="registry.npmjs.org"
 
@@ -118,7 +117,7 @@ function npm_bump () {
   echo ""
   echo "*** Incrementing npm version"
 
-  yarn version $BUMP_VERSION
+  npm --no-git-tag-version --force version patch
   yarn
   git add --all .
 
@@ -211,13 +210,7 @@ function git_setup () {
 function git_bump () {
   if [ -f "lerna.json" ]; then
     lerna_bump
-
-    if [ "$LERNA_VERSION_PRE" != "$LERNA_VERSION_POST" ]; then
-      BUMP_VERSION="$LERNA_VERSION"
-    fi
   else
-    BUMP_VERSION="patch"
-
     npm_bump
   fi
 
