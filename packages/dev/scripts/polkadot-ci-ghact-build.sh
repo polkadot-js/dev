@@ -119,6 +119,7 @@ function npm_bump () {
   echo "*** Incrementing npm version"
 
   yarn version $BUMP_VERSION
+  yarn
   git add --all .
 
   echo ""
