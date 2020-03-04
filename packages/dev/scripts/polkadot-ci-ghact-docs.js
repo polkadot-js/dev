@@ -10,18 +10,12 @@ const repo = `https://${token}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
 
 console.log('$ polkadot-ci-ghact-docs', process.argv.slice(2).join(' '));
 
-console.log(`*** Setting up GitHub for ${process.env.GITHUB_REPOSITORY}`);
 execSync('git config push.default simple');
 execSync('git config merge.ours.driver true');
 execSync('git config user.name "Github Actions"');
 execSync('git config user.email "action@github.com"');
 execSync('git checkout master');
-console.log('*** GitHub setup completed');
 
-console.log('*** Running docs build');
 execSync('yarn run docs');
-console.log('*** Docs build completed');
 
-console.log('*** Publishing to GitHub Pages');
 execSync(`yarn polkadot-exec-ghpages --dotfiles --repo ${repo} --dist ${process.env.GH_PAGES_SRC} --dest .`, true);
-console.log('*** GitHub Pages completed');
