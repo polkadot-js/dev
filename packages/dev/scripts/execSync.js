@@ -4,8 +4,8 @@
 
 const { execSync } = require('child_process');
 
-module.exports = function exec (cmd) {
+module.exports = function execute (cmd) {
   console.log(`$ ${cmd}`);
 
   execSync(cmd, { stdio: 'inherit' });
-}
+};
