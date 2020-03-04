@@ -4,6 +4,5 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 const { execSync } = require('child_process');
-const path = require('path');
 
 execSync(`${require.resolve('@polkadot/dev/scripts/polkadot-ci-ghact-docs.sh')}`, { stdio: 'inherit' });
