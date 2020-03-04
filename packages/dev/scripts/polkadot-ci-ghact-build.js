@@ -209,7 +209,7 @@ skip-checks: true"`);
 
   console.log('*** Pushing to GitHub');
 
-  execSync(`git push ${repo} HEAD:${process.env.GITHUB_REF}`);
+  execSync(`git push ${repo} HEAD:${process.env.GITHUB_REF}`, true);
 
   console.log('*** Github push completed');
 }
