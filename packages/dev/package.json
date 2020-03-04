@@ -4,7 +4,6 @@
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "bin": {
     "polkadot-ci-ghact-build": "./scripts/polkadot-ci-ghact-build.js",
-    "polkadot-ci-ghact-build.sh": "./scripts/polkadot-ci-ghact-build.sh",
     "polkadot-ci-ghact-docs": "./scripts/polkadot-ci-ghact-docs.js",
     "polkadot-ci-ghpages-force": "./scripts/polkadot-ci-ghpages-force.js",
     "polkadot-dev-build-docs": "./scripts/polkadot-dev-build-docs.js",

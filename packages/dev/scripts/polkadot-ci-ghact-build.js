@@ -5,6 +5,7 @@
 
 const { execSync } = require('child_process');
 const cpx = require('cpx');
+const os = require('os');
 const path = require('path');
 const fs = require('fs');
 const rimraf = require('rimraf');
@@ -124,7 +125,7 @@ function npmSetup () {
 
   console.log(`*** Setting up npm for ${registry}`);
 
-  fs.writeFileSync('~/.npmrc', `//${registry}/:_authToken=${process.env.NPM_TOKEN}`);
+  fs.writeFileSync(path.join(os.homedir(), '.npmrc'), `//${registry}/:_authToken=${process.env.NPM_TOKEN}`);
 
   console.log('*** Npm setup completed');
 }
@@ -172,7 +173,7 @@ function npmPublish (package) {
 }
 
 function gitSetup () {
-  console.log('*** Setting up GitHub for $GITHUB_REPOSITORY');
+  console.log(`*** Setting up GitHub for ${process.env.GITHUB_REPOSITORY}`);
 
   execSync('git config push.default simple', { stdio: 'inherit' });
   execSync('git config merge.ours.driver true', { stdio: 'inherit' });
