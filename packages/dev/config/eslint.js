@@ -41,6 +41,7 @@ module.exports = {
     'no-extra-semi': 2
   },
   settings: {
+    'import/resolver': require.resolve('eslint-import-resolver-node'),
     react: {
       version: 'detect'
     }
