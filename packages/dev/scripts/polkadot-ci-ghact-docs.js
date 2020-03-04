@@ -23,4 +23,3 @@ console.log('\n*** Docs build completed');
 console.log('\n*** Publishing to GitHub Pages');
 execSync(`yarn polkadot-exec-ghpages --dotfiles --repo ${repo} --dist ${process.env.GH_PAGES_SRC} --dest .`);
 console.log('\n*** GitHub Pages completed');
-
