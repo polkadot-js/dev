@@ -4,12 +4,12 @@
 
 import * as index from './index';
 
-describe('index', () => {
-  it('runs the test', () => {
+describe('index', (): void => {
+  it('runs the test', (): void => {
     expect(index).toBeDefined();
   });
 
-  it('runs the echo function', () => {
+  it('runs the echo function', (): void => {
     expect(
       index.echo('something')
     ).toEqual('1: 123: something');

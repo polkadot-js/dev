@@ -2,14 +2,14 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-const index = require('./index').default;
+import index from './';
 
-describe('index', () => {
-  it('runs the test', () => {
+describe('index', (): void => {
+  it('runs the test', (): void => {
     expect(index).toBeDefined();
   });
 
-  it('runs the echo function', () => {
+  it('runs the echo function', (): void => {
     expect(
       index('something')
     ).toEqual('something');
