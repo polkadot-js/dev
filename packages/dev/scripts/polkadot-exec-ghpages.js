@@ -4,6 +4,7 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 console.error('> gh-pages', process.argv.slice(2).join(' '));
+
 require('gh-pages/bin/gh-pages')(process.argv)
   .then(() => {
     process.stdout.write('Published\n');
