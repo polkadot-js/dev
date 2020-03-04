@@ -17,6 +17,7 @@
     "polkadot-dev-run-test": "./scripts/polkadot-dev-run-test.js",
     "polkadot-dev-version": "./scripts/polkadot-dev-version.js",
     "polkadot-dev-yarn-only": "./scripts/polkadot-dev-yarn-only.js",
+    "polkadot-exec-eslint": "./scripts/polkadot-exec-eslint.js",
     "polkadot-exec-ghpages": "./scripts/polkadot-exec-ghpages.js",
     "polkadot-exec-tsc": "./scripts/polkadot-exec-tsc.js",
     "polkadot-exec-typedoc": "./scripts/polkadot-exec-typedoc.js",
