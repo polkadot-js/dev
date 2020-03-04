@@ -20,9 +20,9 @@ const argv = require('yargs')
   .argv;
 
 if (!argv['skip-eslint']) {
-  execSync(`${path.join(__dirname, 'polkadot-exec-eslint.js')} --resolve-plugins-relative-to ${__dirname} --ext .js,.jsx,.ts,.tsx ${process.cwd()}`, { stdio: 'inherit' });
+  execSync(`${require.resolve('@polkadot/dev/scripts/polkadot-exec-eslint.js')} --resolve-plugins-relative-to ${__dirname} --ext .js,.jsx,.ts,.tsx ${process.cwd()}`, { stdio: 'inherit' });
 }
 
 if (!argv['skip-tsc']) {
-  execSync(`${path.join(__dirname, 'polkadot-exec-tsc.js')} --noEmit --pretty`, { stdio: 'inherit' });
+  execSync(`${require.resolve('@polkadot/dev/scripts/polkadot-exec-tsc.js')} --noEmit --pretty`, { stdio: 'inherit' });
 }

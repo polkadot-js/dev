@@ -6,4 +6,4 @@
 const { execSync } = require('child_process');
 const path = require('path');
 
-execSync(`${path.join(__dirname, 'polkadot-ci-ghact-build.sh')}`, { stdio: 'inherit' });
+execSync(`${require.resolve('@polkadot/dev/scripts/polkadot-ci-ghact-build.sh')}`, { stdio: 'inherit' });
