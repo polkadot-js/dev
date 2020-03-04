@@ -12,6 +12,8 @@ const path = require('path');
 
 const CPX = ['package.json', 'src/**/*.css', 'src/**/*.gif', 'src/**/*.jpg', 'src/**/*.png', 'src/**/*.svg', 'src/**/*.d.ts', 'src/**/*.js'];
 
+console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
+
 function buildWebpack () {
   execSync('yarn polkadot-exec-webpack --config webpack.config.js --mode production', { stdio: 'inherit' });
 }

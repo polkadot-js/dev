@@ -8,6 +8,8 @@ const { execSync } = require('child_process');
 const token = process.env.GH_PAT || `x-access-token:${process.env.GITHUB_TOKEN}`;
 const repo = `https://${token}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
 
+console.log('$ polkadot-ci-ghact-docs', process.argv.slice(2).join(' '));
+
 console.log(`*** Setting up GitHub for ${process.env.GITHUB_REPOSITORY}`);
 execSync('git config push.default simple', { stdio: 'inherit' });
 execSync('git config merge.ours.driver true', { stdio: 'inherit' });

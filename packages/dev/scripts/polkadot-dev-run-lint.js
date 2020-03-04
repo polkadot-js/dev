@@ -18,6 +18,8 @@ const argv = require('yargs')
   .strict()
   .argv;
 
+console.log('$ polkadot-dev-run-lint', process.argv.slice(2).join(' '));
+
 if (!argv['skip-eslint']) {
   execSync(`yarn polkadot-exec-eslint --resolve-plugins-relative-to ${__dirname} --ext .js,.ts,.tsx ${process.cwd()}`, { stdio: 'inherit' });
 }

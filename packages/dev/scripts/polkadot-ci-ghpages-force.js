@@ -6,6 +6,8 @@
 const { execSync } = require('child_process');
 const rimraf = require('rimraf');
 
+console.log('$ polkadot-ci-ghpages-force', process.argv.slice(2).join(' '));
+
 // ensure we are on master
 execSync('git checkout master', { stdio: 'inherit' });
 

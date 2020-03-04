@@ -7,6 +7,6 @@ const { execSync } = require('child_process');
 
 const argv = process.argv.slice(2).join(' ');
 
-console.error('> git', argv);
+console.log('$ git', argv);
 
 execSync(`git ${argv}`);

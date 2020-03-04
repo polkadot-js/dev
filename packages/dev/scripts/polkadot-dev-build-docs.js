@@ -10,6 +10,8 @@ const fse = require('fs-extra');
 const path = require('path');
 const rimraf = require('rimraf');
 
+console.log('$ polkadot-dev-build-docs', process.argv.slice(2).join(' '));
+
 function buildTypedoc (docRoot) {
   fs
     .readdirSync('packages')

@@ -15,6 +15,8 @@ const { type } = require('yargs')
   .strict()
   .argv;
 
+console.log('$ polkadot-dev-version', process.argv.slice(2).join(' '));
+
 require('lerna')(
   ['version', type]
     .concat(

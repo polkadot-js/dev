@@ -22,6 +22,8 @@ const token = process.env.GH_PAT || `x-access-token:${process.env.GITHUB_TOKEN}`
 const repo = `https://${token}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
 const hasLerna = fs.existsSync(path.join(process.cwd(), 'lerna.json'));
 
+console.log('$ polkadot-ci-ghact-build', process.argv.slice(2).join(' '));
+
 function runClean () {
   console.log('*** Running clean');
 
@@ -71,7 +73,7 @@ function lernaBump () {
 
   const [version, tag] = lernaGetVersion().split('-');
   const [,, patch] = version.split('.');
-  const isBeta = tag.includes('beta.');
+  const isBeta = !!tag && tag.includes('beta.');
 
   if (isBeta) {
     // if we have a beta version, just continue the stream of betas
