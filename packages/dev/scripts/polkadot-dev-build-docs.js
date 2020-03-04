@@ -3,7 +3,7 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-const { execSync } = require('child_process');
+const execSync = require('./execSync');
 const cpx = require('cpx');
 const fs = require('fs');
 const fse = require('fs-extra');
@@ -22,12 +22,12 @@ function buildTypedoc (docRoot) {
       !fs.existsSync(path.join(dir, '.nodoc'))
     )
     .forEach(([full, dir]) => {
-      execSync(`yarn polkadot-exec-typedoc --theme markdown --out ${docRoot}/${dir} ${full}/src`, { stdio: 'inherit' });
+      execSync(`yarn polkadot-exec-typedoc --theme markdown --out ${docRoot}/${dir} ${full}/src`);
     });
 }
 
 function buildVuepress (docRoot) {
-  execSync(`yarn polkadot-exec-vuepress build ${docRoot}`, { stdio: 'inherit' });
+  execSync(`yarn polkadot-exec-vuepress build ${docRoot}`);
 
   rimraf.sync(`${docRoot}/assets`);
   fse.copySync(`${docRoot}/.vuepress/dist`, docRoot);

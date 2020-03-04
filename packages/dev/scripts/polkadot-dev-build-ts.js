@@ -4,7 +4,7 @@
 // of the Apache-2.0 license. See the LICENSE file for details.
 
 const babel = require('@babel/cli/lib/babel/dir').default;
-const { execSync } = require('child_process');
+const execSync = require('./execSync');
 const cpx = require('cpx');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
@@ -15,7 +15,7 @@ const CPX = ['package.json', 'src/**/*.css', 'src/**/*.gif', 'src/**/*.jpg', 'sr
 console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
 function buildWebpack () {
-  execSync('yarn polkadot-exec-webpack --config webpack.config.js --mode production', { stdio: 'inherit' });
+  execSync('yarn polkadot-exec-webpack --config webpack.config.js --mode production');
 }
 
 async function buildBabel (dir) {
@@ -59,11 +59,11 @@ async function buildJs (dir) {
 }
 
 async function main () {
-  execSync('yarn polkadot-dev-clean-build', { stdio: 'inherit' });
+  execSync('yarn polkadot-dev-clean-build');
 
   process.chdir('packages');
 
-  execSync('yarn polkadot-exec-tsc --emitDeclarationOnly --outdir ../build', { stdio: 'inherit' });
+  execSync('yarn polkadot-exec-tsc --emitDeclarationOnly --outdir ../build');
 
   const dirs = fs
     .readdirSync('.')
