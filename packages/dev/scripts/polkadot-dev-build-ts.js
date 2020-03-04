@@ -61,7 +61,7 @@ async function main () {
 
   process.chdir('packages');
 
-  execSync(`yarn polkadot-exec-tsc --emitDeclarationOnly --outdir ../build`, { stdio: 'inherit' });
+  execSync('yarn polkadot-exec-tsc --emitDeclarationOnly --outdir ../build', { stdio: 'inherit' });
 
   const dirs = fs
     .readdirSync('.')
