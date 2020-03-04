@@ -204,7 +204,7 @@ function gitPush () {
   execSync(`git commit --no-status --quiet -m "[CI Skip] ${npmGetVersion()}
 
 
-skip-checks: true`, { stdio: 'inherit' });
+skip-checks: true"`, { stdio: 'inherit' });
 
   console.log('*** Pushing to GitHub');
 
