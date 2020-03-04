@@ -19,8 +19,6 @@
   },
   "devDependencies": {
     "@polkadot/dev": "workspace:packages/dev",
-    "@yarnpkg/pnpify": "^2.0.0-rc.18",
-    "copyfiles": "^2.2.0",
-    "typescript": "^3.8.3"
+    "copyfiles": "^2.2.0"
   }
 }
