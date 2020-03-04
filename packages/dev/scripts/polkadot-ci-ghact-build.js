@@ -218,11 +218,13 @@ function loopFunc (fn) {
   if (hasLerna) {
     fs
       .readdirSync('packages')
-      .filter((dir) =>
-        fs.statSync(dir).isDirectory() &&
-        fs.existsSync(path.join(dir, 'package.json')) &&
-        fs.existsSync(path.join(dir, 'build'))
-      )
+      .filter((dir) => {
+        const pkgDir = path.join(process.cwd(), 'packages', dir);
+
+        return fs.statSync(pkgDir).isDirectory() &&
+          fs.existsSync(path.join(pkgDir, 'package.json')) &&
+          fs.existsSync(path.join(pkgDir, 'build'));
+      })
       .forEach((dir) => {
         process.chdir(path.join('packages', dir));
         fn();
