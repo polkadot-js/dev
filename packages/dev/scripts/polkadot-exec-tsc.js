@@ -3,6 +3,8 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-console.log('$ tsc', process.argv.slice(2).join(' '));
+const execSync = require('./execSync');
 
-require('typescript/lib/tsc');
+execSync(`yarn pnpify tsc ${process.argv.slice(2).join(' ')}`);
+
+// require('typescript/lib/tsc');
