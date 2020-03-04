@@ -82,7 +82,7 @@ function lernaBump () {
   } else if (patch === '0') {
     // patch is .0, so publish this as an actual release (surely we did out job on beta)
     execSync('yarn polkadot-dev-version --type patch', { stdio: 'inherit' });
-  } else if (pathc === '1') {
+  } else if (patch === '1') {
     // continue with first new minor as beta
     execSync('yarn polkadot-dev-version --type preminor', { stdio: 'inherit' });
   } else {
@@ -144,7 +144,7 @@ function npmPublish (package) {
     ? '--tag beta'
     : '';
 
-  chdir('build');
+  process.chdir('build');
 
   while (true) {
     try {
@@ -155,16 +155,16 @@ function npmPublish (package) {
       if (count < 5) {
         const end = Date.now() + 15000;
 
-       console.log(`Publish failed on attempt $${count}/5. Retrying in 15s`);
+        console.log(`Publish failed on attempt $${count}/5. Retrying in 15s`);
 
-       while (Date.now() < end) {
-         // just spin our wheels
-       }
+        while (Date.now() < end) {
+          // just spin our wheels
+        }
       }
     }
   }
 
-  chdir('..');
+  process.chdir('..');
 
   console.log('*** Npm publish completed');
 }
@@ -182,7 +182,7 @@ function gitSetup () {
 }
 
 function gitBump () {
-  if (isLerna) {
+  if (hasLerna) {
     lernaBump();
   } else {
     npmBump();
@@ -223,9 +223,9 @@ function loopFunc (fn) {
         fs.existsSync(path.join(dir, 'build'))
       )
       .forEach((dir) => {
-        chdir(path.join('packages', dir));
+        process.chdir(path.join('packages', dir));
         fn();
-        chdir('../..');
+        process.chdir('../..');
       });
   } else {
     fn();
@@ -245,4 +245,3 @@ gitPush();
 loopFunc(npmPublish);
 
 console.log('*** CI build completed');
-
