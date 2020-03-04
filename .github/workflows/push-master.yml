@@ -38,7 +38,7 @@ jobs:
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       run: |
         yarn install --immutable | grep -v 'YN0013'
-        yarn polkadot-ci-ghact-build --no-beta
+        yarn polkadot-ci-ghact-build --skip-beta
 
   dummy:
     name: Dummy

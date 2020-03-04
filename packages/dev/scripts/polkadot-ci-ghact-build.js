@@ -10,7 +10,7 @@ const fs = require('fs');
 const rimraf = require('rimraf');
 const argv = require('yargs')
   .options({
-    'no-beta': {
+    'skip-beta': {
       description: 'Do not increment as beta',
       type: 'boolean'
     }
@@ -76,7 +76,7 @@ function lernaBump () {
   if (isBeta) {
     // if we have a beta version, just continue the stream of betas
     execSync('yarn run polkadot-dev-version --type prerelease', { stdio: 'inherit' });
-  } else if (argv['no-beta']) {
+  } else if (argv['skip-beta']) {
     // don't allow beta versions
     execSync('yarn polkadot-dev-version --type patch', { stdio: 'inherit' });
   } else if (patch === '0') {
