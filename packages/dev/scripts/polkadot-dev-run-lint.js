@@ -19,9 +19,9 @@ const argv = require('yargs')
   .argv;
 
 if (!argv['skip-eslint']) {
-  execSync(`${require.resolve('@polkadot/dev/scripts/polkadot-exec-eslint.js')} --resolve-plugins-relative-to ${__dirname} --ext .js,.jsx,.ts,.tsx ${process.cwd()}`, { stdio: 'inherit' });
+  execSync(`yarn polkadot-exec-eslint --resolve-plugins-relative-to ${__dirname} --ext .js,.jsx,.ts,.tsx ${process.cwd()}`, { stdio: 'inherit' });
 }
 
 if (!argv['skip-tsc']) {
-  execSync(`${require.resolve('@polkadot/dev/scripts/polkadot-exec-tsc.js')} --noEmit --pretty`, { stdio: 'inherit' });
+  execSync('yarn polkadot-exec-tsc --noEmit --pretty', { stdio: 'inherit' });
 }

@@ -20,12 +20,12 @@ function buildTypedoc (docRoot) {
       !fs.existsSync(path.join(dir, '.nodoc'))
     )
     .forEach(([full, dir]) => {
-      execSync(`${require.resolve('@polkadot/dev/scripts/polkadot-exec-typedoc.js')} --theme markdown --out ${docRoot}/${dir} ${full}/src`, { stdio: 'inherit' });
+      execSync(`yarn polkadot-exec-typedoc --theme markdown --out ${docRoot}/${dir} ${full}/src`, { stdio: 'inherit' });
     });
 }
 
 function buildVuepress (docRoot) {
-  execSync(`${require.resolve('@polkadot/dev/scripts/polkadot-exec-vuepress.js')} build ${docRoot}`, { stdio: 'inherit' });
+  execSync(`yarn polkadot-exec-vuepress build ${docRoot}`, { stdio: 'inherit' });
 
   rimraf.sync(`${docRoot}/assets`);
   fse.copySync(`${docRoot}/.vuepress/dist`, docRoot);

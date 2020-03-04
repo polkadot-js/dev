@@ -13,7 +13,7 @@ const path = require('path');
 const CPX = ['package.json', 'src/**/*.css', 'src/**/*.gif', 'src/**/*.jpg', 'src/**/*.png', 'src/**/*.svg', 'src/**/*.d.ts', 'src/**/*.js'];
 
 function buildWebpack () {
-  execSync(`${require.resolve('@polkadot/dev/scripts/polkadot-exec-webpack.js')} --config webpack.config.js --mode production`, { stdio: 'inherit' });
+  execSync('yarn polkadot-exec-webpack --config webpack.config.js --mode production', { stdio: 'inherit' });
 }
 
 async function buildBabel (dir) {
@@ -57,11 +57,11 @@ async function buildJs (dir) {
 }
 
 async function main () {
-  execSync(path.join(__dirname, 'polkadot-dev-clean-build.js'), { stdio: 'inherit' });
+  execSync('yarn polkadot-dev-clean-build', { stdio: 'inherit' });
 
   process.chdir('packages');
 
-  execSync(`${require.resolve('@polkadot/dev/scripts/polkadot-exec-tsc.js')} --emitDeclarationOnly --outdir ../build`, { stdio: 'inherit' });
+  execSync(`yarn polkadot-exec-tsc --emitDeclarationOnly --outdir ../build`, { stdio: 'inherit' });
 
   const dirs = fs
     .readdirSync('.')
