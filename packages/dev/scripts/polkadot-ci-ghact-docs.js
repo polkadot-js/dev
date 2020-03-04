@@ -11,8 +11,8 @@ const repo = `https://${token}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
 console.log(`\n*** Setting up GitHub for ${process.env.GITHUB_REPOSITORY}`);
 execSync('git config push.default simple');
 execSync('git config merge.ours.driver true');
-execSync('git config user.name "Github Actions');
-execSync('git config user.email "action@github.com');
+execSync('git config user.name "Github Actions"');
+execSync('git config user.email "action@github.com"');
 execSync('git checkout master');
 console.log('\n*** GitHub setup completed');
 
