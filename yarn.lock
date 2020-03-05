@@ -2549,6 +2549,7 @@ __metadata:
     "@types/node": ^13.7.7
     "@typescript-eslint/eslint-plugin": 2.22.0
     "@typescript-eslint/parser": 2.22.0
+    "@vue/component-compiler-utils": ^3.1.1
     "@yarnpkg/pnpify": ^2.0.0-rc.18
     babel-core: ^7.0.0-bridge.0
     babel-jest: ^25.1.0
@@ -2603,7 +2604,7 @@ __metadata:
     polkadot-exec-tsc: ./scripts/polkadot-exec-tsc.js
     polkadot-exec-typedoc: ./scripts/polkadot-exec-typedoc.js
     polkadot-exec-vuepress: ./scripts/polkadot-exec-vuepress.js
-    polkadot-exec-webpack: ./scripts/polkadot-exe-webpackc.js
+    polkadot-exec-webpack: ./scripts/polkadot-exec-webpack.js
   languageName: unknown
   linkType: soft
 
@@ -2984,7 +2985,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vue/component-compiler-utils@npm:^3.1.0":
+"@vue/component-compiler-utils@npm:^3.1.0, @vue/component-compiler-utils@npm:^3.1.1":
   version: 3.1.1
   resolution: "@vue/component-compiler-utils@npm:3.1.1"
   dependencies:
