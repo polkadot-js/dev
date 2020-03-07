@@ -103,21 +103,21 @@ function npmPublish () {
   rimraf.sync('build/package.json');
   ['LICENSE', 'README.md', 'package.json'].forEach((file) => cpx.copySync(file, 'build'));
 
+  process.chdir('build');
+
   const tag = npmGetVersion(true).includes('-beta.') ? '--tag beta' : ''
   let count = 1;
 
-  process.chdir('build');
-
   while (true) {
     try {
-      execSync(`npm publish --access public ${$tag}`);
+      execSync(`npm publish --access public ${tag}`);
 
       break;
     } catch (error) {
       if (count < 5) {
         const end = Date.now() + 15000;
 
-        console.error(`Publish failed on attempt $${count}/5. Retrying in 15s`);
+        console.error(`Publish failed on attempt ${count}/5. Retrying in 15s`);
         count++;
 
         while (Date.now() < end) {
