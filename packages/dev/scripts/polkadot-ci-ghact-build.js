@@ -105,7 +105,7 @@ function npmPublish () {
 
   process.chdir('build');
 
-  const tag = npmGetVersion(true).includes('-beta.') ? '--tag beta' : ''
+  const tag = npmGetVersion(true).includes('-beta.') ? '--tag beta' : '';
   let count = 1;
 
   while (true) {
