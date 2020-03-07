@@ -19,7 +19,7 @@ function cleanDirs (dirs) {
   dirs.forEach((dir) => rimraf.sync(dir));
 }
 
-cleanDirs(getDirs(path.join(process.cwd(), 'build')));
+cleanDirs(getDirs(process.cwd()));
 
 if (fs.existsSync(PKGS)) {
   cleanDirs(

@@ -73,16 +73,10 @@ function lernaBump () {
   } else {
     // echo "$LERNA_VERSION" >> .123trigger
   }
-
-  // we will have inter-package mismatches, resolve
-  execSync('yarn install');
-  execSync('git add --all .');
 }
 
 function npmBump () {
   execSync('npm --no-git-tag-version --force version patch');
-  execSync('yarn install');
-  execSync('git add --all .');
 }
 
 function npmGetVersion (noLerna) {
@@ -109,13 +103,14 @@ function npmPublish () {
   rimraf.sync('build/package.json');
   ['LICENSE', 'README.md', 'package.json'].forEach((file) => cpx.copySync(file, 'build'));
 
+  const tag = npmGetVersion(true).includes('-beta.') ? '--tag beta' : ''
   let count = 1;
 
   process.chdir('build');
 
   while (true) {
     try {
-      execSync(`npm publish --access public${npmGetVersion(true).includes('-beta.') ? ' --tag beta' : ''}`);
+      execSync(`npm publish --access public ${$tag}`);
 
       break;
     } catch (error) {
@@ -149,6 +144,9 @@ function gitBump () {
   } else {
     npmBump();
   }
+
+  execSync('yarn install');
+  execSync('git add --all .');
 }
 
 function gitPush () {
