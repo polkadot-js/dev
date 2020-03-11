@@ -54,7 +54,8 @@ function lernaGetVersion () {
 }
 
 function lernaBump () {
-  const [version, tag] = lernaGetVersion().split('-');
+  const currentVersion = lernaGetVersion();
+  const [version, tag] = currentVersion.split('-');
   const [,, patch] = version.split('.');
   const isBeta = !!tag && tag.includes('beta.');
 
@@ -71,7 +72,8 @@ function lernaBump () {
     // continue with first new minor as beta
     execSync('yarn polkadot-dev-version --type preminor');
   } else {
-    // echo "$LERNA_VERSION" >> .123trigger
+    // some changes, so we can commit
+    fs.appendFileSync(path.join(process.cwd(), '.123trigger'), lernaGetVersion());
   }
 }
 
