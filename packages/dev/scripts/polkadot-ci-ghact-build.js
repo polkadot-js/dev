@@ -79,6 +79,7 @@ function lernaBump () {
 
 function npmBump () {
   execSync('npm --no-git-tag-version --force version patch');
+  execSync('yarn install');
 }
 
 function npmGetVersion (noLerna) {
@@ -147,7 +148,6 @@ function gitBump () {
     npmBump();
   }
 
-  execSync('yarn install');
   execSync('git add --all .');
 }
 

@@ -52,7 +52,7 @@ for REPO in "${DIRECTORIES[@]}"; do
   # yarn config set registry "https://npm.pkg.github.com/"
   if [ -f ".yarnrc.yml" ]; then
     # yarn 2, assuming we only use those there
-    yarn | grep -v 'YN0013'
+    yarn install | grep -v 'YN0013'
   else
     yarn --ignore-engines
   fi
