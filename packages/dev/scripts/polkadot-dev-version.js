@@ -3,6 +3,7 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+const execSync = require('./execSync');
 const { type } = require('yargs')
   .options({
     type: {
@@ -26,3 +27,5 @@ require('lerna')(
     )
     .concat(['--yes', '--exact', '--no-git-tag-version', '--no-push', '--allow-branch', '*'])
 );
+
+execSync('yarn install');

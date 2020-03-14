@@ -54,7 +54,8 @@ function lernaGetVersion () {
 }
 
 function lernaBump () {
-  const [version, tag] = lernaGetVersion().split('-');
+  const currentVersion = lernaGetVersion();
+  const [version, tag] = currentVersion.split('-');
   const [,, patch] = version.split('.');
   const isBeta = !!tag && tag.includes('beta.');
 
@@ -71,18 +72,14 @@ function lernaBump () {
     // continue with first new minor as beta
     execSync('yarn polkadot-dev-version --type preminor');
   } else {
-    // echo "$LERNA_VERSION" >> .123trigger
+    // some changes, so we can commit
+    fs.appendFileSync(path.join(process.cwd(), '.123trigger'), lernaGetVersion());
   }
-
-  // we will have inter-package mismatches, resolve
-  execSync('yarn install');
-  execSync('git add --all .');
 }
 
 function npmBump () {
   execSync('npm --no-git-tag-version --force version patch');
   execSync('yarn install');
-  execSync('git add --all .');
 }
 
 function npmGetVersion (noLerna) {
@@ -109,20 +106,21 @@ function npmPublish () {
   rimraf.sync('build/package.json');
   ['LICENSE', 'README.md', 'package.json'].forEach((file) => cpx.copySync(file, 'build'));
 
-  let count = 1;
-
   process.chdir('build');
+
+  const tag = npmGetVersion(true).includes('-beta.') ? '--tag beta' : '';
+  let count = 1;
 
   while (true) {
     try {
-      execSync(`npm publish --access public${npmGetVersion(true).includes('-beta.') ? ' --tag beta' : ''}`);
+      execSync(`npm publish --access public ${tag}`);
 
       break;
     } catch (error) {
       if (count < 5) {
         const end = Date.now() + 15000;
 
-        console.error(`Publish failed on attempt $${count}/5. Retrying in 15s`);
+        console.error(`Publish failed on attempt ${count}/5. Retrying in 15s`);
         count++;
 
         while (Date.now() < end) {
@@ -149,6 +147,8 @@ function gitBump () {
   } else {
     npmBump();
   }
+
+  execSync('git add --all .');
 }
 
 function gitPush () {
