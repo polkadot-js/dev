@@ -19,6 +19,7 @@
   },
   "devDependencies": {
     "@polkadot/dev": "workspace:packages/dev",
+    "@types/jest": "^25.1.4",
     "copyfiles": "^2.2.0"
   }
 }
