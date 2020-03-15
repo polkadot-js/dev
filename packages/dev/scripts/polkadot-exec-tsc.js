@@ -5,4 +5,4 @@
 
 console.log('$ tsc', process.argv.slice(2).join(' '));
 
-require('typescript/bin/tsc');
+require('typescript/lib/tsc');
