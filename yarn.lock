@@ -2611,6 +2611,7 @@ __metadata:
     polkadot-dev-yarn-only: ./scripts/polkadot-dev-yarn-only.js
     polkadot-exec-eslint: ./scripts/polkadot-exec-eslint.js
     polkadot-exec-ghpages: ./scripts/polkadot-exec-ghpages.js
+    polkadot-exec-lerna: ./scripts/polkadot-exec-lerna.js
     polkadot-exec-tsc: ./scripts/polkadot-exec-tsc.js
     polkadot-exec-typedoc: ./scripts/polkadot-exec-typedoc.js
     polkadot-exec-vuepress: ./scripts/polkadot-exec-vuepress.js

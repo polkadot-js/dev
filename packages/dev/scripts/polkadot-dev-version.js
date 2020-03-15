@@ -18,14 +18,13 @@ const { type } = require('yargs')
 
 console.log('$ polkadot-dev-version', process.argv.slice(2).join(' '));
 
-require('lerna')(
-  ['version', type]
-    .concat(
-      ['preminor', 'prerelease'].includes(type)
-        ? ['--preid', 'beta']
-        : []
-    )
-    .concat(['--yes', '--exact', '--no-git-tag-version', '--no-push', '--allow-branch', '*'])
-);
+const args = ['version', type]
+  .concat(
+    ['preminor', 'prerelease'].includes(type)
+      ? ['--preid', 'beta']
+      : []
+  )
+  .concat(['--yes', '--exact', '--no-git-tag-version', '--no-push', '--allow-branch', '"*"']);
 
+execSync(`yarn polkadot-exec-lerna ${args.join(' ')}`);
 execSync('yarn install');
