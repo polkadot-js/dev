@@ -8,7 +8,7 @@ jobs:
   master:
     strategy:
       matrix:
-        step: ['polkadot-ci-ghact-build --skip-beta']
+        step: ['build:release']
     name: ${{ matrix.step }}
     if: "! contains(github.event.head_commit.message, '[CI Skip]')"
     runs-on: ubuntu-latest
