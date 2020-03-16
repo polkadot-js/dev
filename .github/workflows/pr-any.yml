@@ -7,8 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Use Node.js
-      uses: actions/setup-node@v1
+    - uses: actions/setup-node@v1
       with:
         node-version: '12.x'
     - name: lint
@@ -21,8 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Use Node.js
-      uses: actions/setup-node@v1
+    - uses: actions/setup-node@v1
       with:
         node-version: '12.x'
     - name: test
@@ -37,8 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Use Node.js
-      uses: actions/setup-node@v1
+    - uses: actions/setup-node@v1
       with:
         node-version: '12.x'
     - name: build
@@ -51,8 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Use Node.js
-      uses: actions/setup-node@v1
+    - uses: actions/setup-node@v1
       with:
         node-version: '12.x'
     - name: build
