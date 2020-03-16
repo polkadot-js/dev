@@ -4,70 +4,28 @@ on: [pull_request]
 jobs:
   lint:
     name: Linting
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x]
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+    - uses: polkadot-js/ghactions@master
       with:
-        node-version: ${{ matrix.node-version }}
-    - name: lint
-      run: |
-        yarn install --immutable | grep -v 'YN0013'
-        yarn lint
+        yarn-cmd: lint
 
   test:
     name: Testing
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x]
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+    - uses: polkadot-js/ghactions@master
       with:
-        node-version: ${{ matrix.node-version }}
-    - name: test
-      env:
-        CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
-      run: |
-        yarn install --immutable | grep -v 'YN0013'
-        yarn test
+        yarn-cmd: test
 
   build_code:
     name: Build Code
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x]
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+    - uses: polkadot-js/ghactions@master
       with:
-        node-version: ${{ matrix.node-version }}
-    - name: build
-      run: |
-        yarn install --immutable | grep -v 'YN0013'
-        yarn build
+        yarn-cmd: build
 
   build_docs:
     name: Build Docs
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [12.x]
     steps:
-    - uses: actions/checkout@v1
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+    - uses: polkadot-js/ghactions@master
       with:
-        node-version: ${{ matrix.node-version }}
-    - name: build
-      run: |
-        yarn install --immutable | grep -v 'YN0013'
-        yarn docs
+        yarn-cmd: docs
