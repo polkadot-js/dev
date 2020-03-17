@@ -4,7 +4,9 @@
 
 import * as index from './index';
 
-describe('index', () => {
+describe('index', (blah_bleh) => {
+  console.log(blah_bleh);
+
   it('runs the test', () => {
     expect(index).toBeDefined();
   });

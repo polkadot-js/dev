@@ -3,9 +3,14 @@
   "files.eol": "\n",
   "npm.packageManager": "yarn",
   "eslint.enable": true,
+  "eslint.options": {
+    "resolvePluginsRelativeTo": ".."
+  },
   "eslint.validate": [
     "javascript",
     "typescript",
     "typescriptreact"
-  ]
+  ],
+  "eslint.nodePath": ".vscode/pnpify",
+  "typescript.tsdk": ".vscode/pnpify/typescript/lib"
 }
