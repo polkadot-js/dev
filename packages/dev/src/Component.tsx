@@ -9,9 +9,9 @@ interface Props {
   className?: string;
 }
 
-function Component ({ children, className }): React.ReactElement<Props> {
+function Component ({ children, className }: Props): React.ReactElement<Props> {
   return (
-    <div className={clasName}>
+    <div className={className}>
       {children}
     </div>
   );
