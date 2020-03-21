@@ -9,6 +9,6 @@ require('gh-pages/bin/gh-pages')(process.argv)
   .then(() => {
     process.stdout.write('Published\n');
   })
-  .catch(err => {
-    process.stderr.write(`${err.message}\n`, () => process.exit(1));
+  .catch((error) => {
+    process.stderr.write(`${error.message}\n`, () => process.exit(1));
   });

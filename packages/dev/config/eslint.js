@@ -36,6 +36,7 @@ module.exports = {
     'react-hooks'
   ],
   rules: {
+    'arrow-parens': ['error', 'always'],
     // required as 'off' by @typescript-eslint/indent
     indent: 'off',
     // our indentation is different from the TypeScript repo

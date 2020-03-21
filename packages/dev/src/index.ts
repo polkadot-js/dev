@@ -7,11 +7,17 @@ import type { EchoString } from './types';
 const A = 123;
 let count = 0;
 
+function doCallback (fn: (a: string) => string): void {
+  fn('test');
+}
+
 /**
  * This is just a test file to test the doc generation
  */
 export const echo = (value: EchoString): string => {
   count++;
+
+  doCallback((a) => a);
 
   return `${count}: ${A}: ${value}`;
 };
