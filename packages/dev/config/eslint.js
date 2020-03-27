@@ -36,14 +36,17 @@ module.exports = {
     'react-hooks'
   ],
   rules: {
-    'arrow-parens': ['error', 'always'],
-    // required as 'off' by @typescript-eslint/indent
+    // required as 'off' by @typescript-eslint/indent, 2 spaces is diff from defaults
     indent: 'off',
-    // our indentation is different from the TypeScript repo
     '@typescript-eslint/indent': ['error', 2],
     // rules from semistandard (don't include it, has standard dep version mismatch)
     semi: [2, 'always'],
-    'no-extra-semi': 2
+    'no-extra-semi': 2,
+    // no scalable, but it is what it is - need to enable explicitly
+    'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
+    'react-hooks/exhaustive-deps': 'error', // Checks effect dependencies
+    // specific project-based overrides, should really be none
+    'arrow-parens': ['error', 'always']
   },
   settings: {
     'import/extensions': ['.js', '.ts', '.tsx'],
