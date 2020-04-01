@@ -54,7 +54,7 @@ module.exports = {
     'jsx-quotes': ['error', 'prefer-single'],
     'react/jsx-max-props-per-line': [2, { maximum: 1, when: 'always' }],
     'react/jsx-sort-props': [2, { noSortAlphabetically: false }],
-    'sort-destructure-keys/sort-destructure-keys': [1, { caseSensitive: true }],
+    'sort-destructure-keys/sort-destructure-keys': [2, { caseSensitive: true }],
     'sort-keys': 'error'
   },
   settings: {
