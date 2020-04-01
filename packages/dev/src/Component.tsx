@@ -19,6 +19,20 @@ function Child ({ children, className, label }: Props): React.ReactElement<Props
 }
 
 function Component ({ children, className, label }: Props): React.ReactElement<Props> {
+  const bon = '123';
+
+  if (label === bon) {
+    console.error('true');
+  }
+
+  try {
+    console.log('bon');
+  } catch (error) {
+    // ignore;
+  }
+
+  console.log('1');
+
   return (
     <div className={className}>
       <Child

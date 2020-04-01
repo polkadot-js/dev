@@ -25,6 +25,7 @@ madge('./', { fileExtensions: ['ts', 'tsx'] })
         if (idx) {
           process.stdout.write(chalk.dim(' > '));
         }
+
         process.stdout.write(chalk.cyan.bold(module));
       });
 

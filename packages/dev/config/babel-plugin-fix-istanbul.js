@@ -12,6 +12,7 @@ module.exports = function () {
         programPath.traverse({
           ArrowFunctionExpression (path) {
             const node = path.node;
+
             node.expression = node.body.type !== 'BlockStatement';
           }
         });

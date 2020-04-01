@@ -46,27 +46,36 @@ module.exports = {
     // rules from semistandard (don't include it, has standard dep version mismatch)
     semi: [2, 'always'],
     'no-extra-semi': 2,
-    // no scalable, but it is what it is - need to enable explicitly
-    'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
-    'react-hooks/exhaustive-deps': 'error', // Checks effect dependencies
-    // specific project-based overrides, should really be none
+    // specific overrides
     'arrow-parens': ['error', 'always'],
     'jsx-quotes': ['error', 'prefer-single'],
+    'object-curly-newline': ['error', {
+      ImportDeclaration: 'never'
+    }],
     'padding-line-between-statements': [
       'error',
       { blankLine: 'always', prev: ['const', 'let', 'var'], next: '*' },
       { blankLine: 'any', prev: ['const', 'let', 'var'], next: ['const', 'let', 'var'] },
       { blankLine: 'always', prev: '*', next: 'block-like' },
       { blankLine: 'always', prev: 'block-like', next: '*' },
-      { blankLine: 'always', prev: '*', nex: 'function' },
-      { blankLine: 'always', prev: 'function', nex: '*' },
-      { blankLine: 'always', prev: '*', nex: 'try' },
-      { blankLine: 'always', prev: 'try', nex: '*' },
+      { blankLine: 'always', prev: '*', next: 'function' },
+      { blankLine: 'always', prev: 'function', next: '*' },
+      { blankLine: 'always', prev: '*', next: 'try' },
+      { blankLine: 'always', prev: 'try', next: '*' },
       { blankLine: 'always', prev: '*', next: 'return' }
     ],
-    'react/jsx-max-props-per-line': [2, { maximum: 1, when: 'always' }],
-    'react/jsx-sort-props': [2, { noSortAlphabetically: false }],
-    'sort-destructure-keys/sort-destructure-keys': [2, { caseSensitive: true }],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'error',
+    'react/jsx-max-props-per-line': [2, {
+      maximum: 1,
+      when: 'always'
+    }],
+    'react/jsx-sort-props': [2, {
+      noSortAlphabetically: false
+    }],
+    'sort-destructure-keys/sort-destructure-keys': [2, {
+      caseSensitive: true
+    }],
     'sort-keys': 'error'
   },
   settings: {
