@@ -52,6 +52,18 @@ module.exports = {
     // specific project-based overrides, should really be none
     'arrow-parens': ['error', 'always'],
     'jsx-quotes': ['error', 'prefer-single'],
+    'padding-line-between-statements': [
+      'error',
+      { blankLine: 'always', prev: ['const', 'let', 'var'], next: '*' },
+      { blankLine: 'any', prev: ['const', 'let', 'var'], next: ['const', 'let', 'var'] },
+      { blankLine: 'always', prev: '*', next: 'block-like' },
+      { blankLine: 'always', prev: 'block-like', next: '*' },
+      { blankLine: 'always', prev: '*', nex: 'function' },
+      { blankLine: 'always', prev: 'function', nex: '*' },
+      { blankLine: 'always', prev: '*', nex: 'try' },
+      { blankLine: 'always', prev: 'try', nex: '*' },
+      { blankLine: 'always', prev: '*', next: 'return' }
+    ],
     'react/jsx-max-props-per-line': [2, { maximum: 1, when: 'always' }],
     'react/jsx-sort-props': [2, { noSortAlphabetically: false }],
     'sort-destructure-keys/sort-destructure-keys': [2, { caseSensitive: true }],
