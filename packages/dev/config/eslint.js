@@ -48,7 +48,8 @@ module.exports = {
     // specific project-based overrides, should really be none
     'arrow-parens': ['error', 'always'],
     'react/jsx-max-props-per-line': [2, { maximum: 1, when: 'always' }],
-    'react/jsx-sort-props': [2, { noSortAlphabetically: false }]
+    'react/jsx-sort-props': [2, { noSortAlphabetically: false }],
+    'jsx-quotes': ['error', 'prefer-single']
   },
   settings: {
     'import/extensions': ['.js', '.ts', '.tsx'],
