@@ -2,6 +2,9 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+// ordering here important (at least form a rule maintenance pov)
+/* eslint-disable sort-keys */
+
 module.exports = {
   env: {
     browser: true,
@@ -33,7 +36,8 @@ module.exports = {
   plugins: [
     '@typescript-eslint',
     'import',
-    'react-hooks'
+    'react-hooks',
+    'sort-destructure-keys'
   ],
   rules: {
     // required as 'off' by @typescript-eslint/indent, 2 spaces is diff from defaults
@@ -47,8 +51,11 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'error', // Checks effect dependencies
     // specific project-based overrides, should really be none
     'arrow-parens': ['error', 'always'],
+    'jsx-quotes': ['error', 'prefer-single'],
     'react/jsx-max-props-per-line': [2, { maximum: 1, when: 'always' }],
-    'react/jsx-sort-props': [2, { noSortAlphabetically: false }]
+    'react/jsx-sort-props': [2, { noSortAlphabetically: false }],
+    'sort-destructure-keys/sort-destructure-keys': [1, { caseSensitive: true }],
+    'sort-keys': 'error'
   },
   settings: {
     'import/extensions': ['.js', '.ts', '.tsx'],
