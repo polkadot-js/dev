@@ -46,7 +46,9 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
     'react-hooks/exhaustive-deps': 'error', // Checks effect dependencies
     // specific project-based overrides, should really be none
-    'arrow-parens': ['error', 'always']
+    'arrow-parens': ['error', 'always'],
+    'react/jsx-max-props-per-line': [2, { maximum: 1, when: 'always' }],
+    'react/jsx-sort-props': [2, { noSortAlphabetically: false }]
   },
   settings: {
     'import/extensions': ['.js', '.ts', '.tsx'],
