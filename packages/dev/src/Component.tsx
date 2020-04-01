@@ -7,12 +7,27 @@ import React from 'react';
 interface Props {
   children: React.ReactNode;
   className?: string;
+  label?: string;
 }
 
-function Component ({ children, className }: Props): React.ReactElement<Props> {
+function Child ({ children, className, label }: Props): React.ReactElement<Props> {
   return (
     <div className={className}>
-      {children}
+      {label || ''}{children}
+    </div>
+  );
+}
+
+function Component ({ children, className, label }: Props): React.ReactElement<Props> {
+  return (
+    <div className={className}>
+      <Child
+        className='child'
+        label={label}
+      >
+        {children}
+      </Child>
+      <Child className='child'>bob</Child>
     </div>
   );
 }
