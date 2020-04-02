@@ -50,7 +50,7 @@ module.exports = {
     'arrow-parens': ['error', 'always'],
     'jsx-quotes': ['error', 'prefer-single'],
     'object-curly-newline': ['error', {
-      ImportDeclaration: 'never'
+      ImportDeclaration: { multiLine: true, minItem: 2048 }
     }],
     'padding-line-between-statements': [
       'error',
