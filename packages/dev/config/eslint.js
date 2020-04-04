@@ -35,6 +35,7 @@ module.exports = {
   },
   plugins: [
     '@typescript-eslint',
+    // 'header', // TODO Configure with regex
     'import',
     'react-hooks',
     'sort-destructure-keys'
@@ -50,7 +51,7 @@ module.exports = {
     'arrow-parens': ['error', 'always'],
     'jsx-quotes': ['error', 'prefer-single'],
     'object-curly-newline': ['error', {
-      ImportDeclaration: { multiLine: true, minItem: 2048 }
+      ImportDeclaration: { minItem: 2048 }
     }],
     'padding-line-between-statements': [
       'error',
