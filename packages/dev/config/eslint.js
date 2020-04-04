@@ -51,7 +51,7 @@ module.exports = {
     'arrow-parens': ['error', 'always'],
     'jsx-quotes': ['error', 'prefer-single'],
     'object-curly-newline': ['error', {
-      ImportDeclaration: { minItem: 2048 }
+      ImportDeclaration: { minProperties: 2048 }
     }],
     'padding-line-between-statements': [
       'error',
