@@ -2615,7 +2615,6 @@ __metadata:
     babel-plugin-module-resolver: ^4.0.0
     babel-plugin-styled-components: ^1.10.7
     browserslist: ^4.11.1
-    chalk: ^4.0.0
     coveralls: ^3.0.11
     cpx: ^1.5.0
     eslint: ^6.8.0
@@ -4843,16 +4842,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "chalk@npm:4.0.0"
-  dependencies:
-    ansi-styles: ^4.1.0
-    supports-color: ^7.1.0
-  checksum: 2/12b01a228b5ca2f03a82684c62d54c06e2ba2f7b81dd08fac56c5b9288958dd24f9cae866e140df5c29cb736059cb4be0165157ebb0b15039cc1ea511a2dab60
-  languageName: node
-  linkType: hard
-
 "chardet@npm:^0.7.0":
   version: 0.7.0
   resolution: "chardet@npm:0.7.0"
@@ -5708,13 +5697,13 @@ __metadata:
   linkType: hard
 
 "cross-spawn@npm:^7.0.0":
-  version: 7.0.1
-  resolution: "cross-spawn@npm:7.0.1"
+  version: 7.0.2
+  resolution: "cross-spawn@npm:7.0.2"
   dependencies:
     path-key: ^3.1.0
     shebang-command: ^2.0.0
     which: ^2.0.1
-  checksum: 2/c37c136bda1342fe8dbd40a99d9c434ef510fb9741da4d386d0f2fe3d707166fc92d8d8e815f636e7fea93cc32ecd3636bc1e5adcabdee0b4587b6d52b27f002
+  checksum: 2/31ad173414e82588537fb00b7c14533c8cfcfbfc87b4eb61c8d12aeb77c89c9afd0f0ef0f5bbe8a5204f888b127c7d8fb42ad22eeab5ac93502aa5f119a09846
   languageName: node
   linkType: hard
 
@@ -6737,9 +6726,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.3.390":
-  version: 1.3.396
-  resolution: "electron-to-chromium@npm:1.3.396"
-  checksum: 2/a2f091cc6ef32730d4171c32c78428754ea120f4bb70c90580c8c80107d783077f3c0acd061342226677b1963c57bbe319adf620eb1542eff71d72ac59d03a04
+  version: 1.3.397
+  resolution: "electron-to-chromium@npm:1.3.397"
+  checksum: 2/622ccf64598ca7f0923ad3e31ff479560a82b6c3e18a3b1f373598a43eea95efd03776b9459755546952816ce890f6b61fef5aa065a8aaa751ca9fd8692a4abc
   languageName: node
   linkType: hard
 
@@ -10632,13 +10621,13 @@ __metadata:
   linkType: hard
 
 "json5@npm:^2.1.2":
-  version: 2.1.2
-  resolution: "json5@npm:2.1.2"
+  version: 2.1.3
+  resolution: "json5@npm:2.1.3"
   dependencies:
     minimist: ^1.2.5
   bin:
     json5: lib/cli.js
-  checksum: 2/ca20dbb73c4ccb7c9cd8ec5d9c6f005294e25868d435825f147dde58a8f1fc5fe9397d3afcd12d26f765fe14d4b35add81f1bc5fece33c6b1c8d1a69625a43e8
+  checksum: 2/957e4937106cf59975aa0281e68911534d65c8a25be5b4d3559aa55eba351ccab516a943a60ba33e461e4b8af749939986e311de910cbcfd197410b57d971741
   languageName: node
   linkType: hard
 
@@ -14482,9 +14471,9 @@ __metadata:
   linkType: hard
 
 "regexpp@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "regexpp@npm:3.0.0"
-  checksum: 2/9528ff2d4d4c85c80ae866c558d8b61ae7da69dad240f4a8d69e73be51a04d466e5c6808e06837737eaf8ec499d41126ab397693ab5d0a1039376855ce331566
+  version: 3.1.0
+  resolution: "regexpp@npm:3.1.0"
+  checksum: 2/69d0ce6b449cf35d3732d6341a1e70850360ffc619f8eef10629871c462e614853fffb80d3f00fc17cd0bb5b8f34b0cde5be4b434e72c0eb3fbba2360c8b5ac4
   languageName: node
   linkType: hard
 
