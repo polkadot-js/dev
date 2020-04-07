@@ -35,7 +35,7 @@ module.exports = {
   },
   plugins: [
     '@typescript-eslint',
-    // 'header', // TODO Configure with regex
+    'header',
     'import',
     'react-hooks',
     'sort-destructure-keys'
@@ -49,6 +49,7 @@ module.exports = {
     'no-extra-semi': 2,
     // specific overrides
     'arrow-parens': ['error', 'always'],
+    'header/header': [2, 'line', [{ pattern: ' Copyright \\d{4}' }]],
     'jsx-quotes': ['error', 'prefer-single'],
     'object-curly-newline': ['error', {
       ImportDeclaration: { minProperties: 2048 }

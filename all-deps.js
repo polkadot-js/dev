@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-/* eslint-disable @typescript-eslint/no-var-requires */
 // Copyright 2017-2019 Jaco Greeff
 // This software may be modified and distributed under the terms
 // of the ISC license. See the LICENSE file for details.
