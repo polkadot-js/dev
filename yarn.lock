@@ -2594,11 +2594,11 @@ __metadata:
   linkType: hard
 
 "@octokit/types@npm:^2.0.0, @octokit/types@npm:^2.0.1, @octokit/types@npm:^2.8.2":
-  version: 2.9.0
-  resolution: "@octokit/types@npm:2.9.0"
+  version: 2.10.0
+  resolution: "@octokit/types@npm:2.10.0"
   dependencies:
     "@types/node": ">= 8"
-  checksum: 2/a175911389dc5e004a235e6f959a38e434b38a4786a0ce3399a10e1a7a96b13b58431b569d68b08f072268c033b33e733a2f81e0c1947c05e1990b828df7ad06
+  checksum: 2/5a99a37520974ede63d4be6f9b42e8a26e4d310cf28b2c05ebc941cc58f9aeae9aa64c894a571c7e55e4a093eba0486bf2b0130504b68371c8e5f45c20520042
   languageName: node
   linkType: hard
 
@@ -2627,7 +2627,7 @@ __metadata:
     "@babel/register": ^7.9.0
     "@babel/runtime": ^7.9.2
     "@types/jest": ^25.2.1
-    "@types/node": ^13.11.1
+    "@types/node": ^13.13.0
     "@types/react": ^16.9.34
     "@types/yargs": ^15.0.4
     "@typescript-eslint/eslint-plugin": 2.28.0
@@ -2649,7 +2649,7 @@ __metadata:
     eslint-plugin-promise: ^4.2.1
     eslint-plugin-react: ^7.19.0
     eslint-plugin-react-hooks: ^3.0.0
-    eslint-plugin-sort-destructure-keys: ^1.3.3
+    eslint-plugin-sort-destructure-keys: ^1.3.4
     eslint-plugin-standard: ^4.0.1
     fs-extra: ^9.0.0
     gh-pages: ^2.2.0
@@ -2841,10 +2841,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:>= 8, @types/node@npm:^13.11.1":
-  version: 13.11.1
-  resolution: "@types/node@npm:13.11.1"
-  checksum: 2/0ced8498fb982d1275ce4f2e13554243d53386315e57de641d934fddeb02d86bc745c2c6b2aacad1072f081b0984d5f3beb81d309823202ec6cf8653f6d8100b
+"@types/node@npm:*, @types/node@npm:>= 8, @types/node@npm:^13.13.0":
+  version: 13.13.0
+  resolution: "@types/node@npm:13.13.0"
+  checksum: 2/30bc5a1ade71f18de9a4324b273d140a131310e92245a449b39c3aaa1271ca03d6a59b79cb12154bbedd8960f99d184e0d757e53fe704d6d1736d9567696468e
   languageName: node
   linkType: hard
 
@@ -3595,14 +3595,15 @@ __metadata:
   linkType: hard
 
 "ajv@npm:^6.1.0, ajv@npm:^6.10.0, ajv@npm:^6.10.2, ajv@npm:^6.12.0, ajv@npm:^6.5.5":
-  version: 6.12.0
-  resolution: "ajv@npm:6.12.0"
+  version: 6.12.1
+  resolution: "ajv@npm:6.12.1"
   dependencies:
     fast-deep-equal: ^3.1.1
     fast-json-stable-stringify: ^2.0.0
     json-schema-traverse: ^0.4.1
+    opencollective-postinstall: ^2.0.2
     uri-js: ^4.2.2
-  checksum: 2/aed1e0ab1b906913e2b466b1a0372ee5e4fe2927802ff81bcce350f482b0546cdb49df6ab551adad191ac19766007cdaf6c2d8b70e992528b806d9a8275ce2bd
+  checksum: 2/8833fb9a16f9fd461fc316f0f68ef37947068a7e05f1366cf52dbeef784a0bf88ea89874298e5c2b90b70dfaf5a99fd29ea56bc3c9260026af9e2c1bee302f6f
   languageName: node
   linkType: hard
 
@@ -4831,9 +4832,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001038, caniuse-lite@npm:^1.0.30001039":
-  version: 1.0.30001042
-  resolution: "caniuse-lite@npm:1.0.30001042"
-  checksum: 2/c3d01cabc94f51b12411371b51e162396db7292a4b54efa4b6f767e7925057c4f4dc64312779dfeaa9569105fed25efdc5964ee4d34c03b89efa4af95ad6cb77
+  version: 1.0.30001043
+  resolution: "caniuse-lite@npm:1.0.30001043"
+  checksum: 2/142c04989837e6332a1d1ac451df98ef9ab08097df4e1c54b4d8a57dd496d0014edbc749834921e7d1cd5306a1cd6264daec5d5743214ea3d28019b5e70fe74c
   languageName: node
   linkType: hard
 
@@ -6771,9 +6772,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.3.390":
-  version: 1.3.409
-  resolution: "electron-to-chromium@npm:1.3.409"
-  checksum: 2/1bb414b3a447fff05ff96dbd0e59076d03771813c36dca0ad2abd0bb669a8e960ff7869b665dff611a746574c07e7d77fe331248a422aff3ed72458cb3ab26ee
+  version: 1.3.413
+  resolution: "electron-to-chromium@npm:1.3.413"
+  checksum: 2/5647038890ac4dc6e657b2951e1cbbe0e1cd66ccfaa27ca7677f6eb2b5df46e838e7f38c70c947f19f96432924f4ba64f8bb92b986919e03494acd0986ea6827
   languageName: node
   linkType: hard
 
@@ -7159,14 +7160,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-sort-destructure-keys@npm:^1.3.3":
-  version: 1.3.3
-  resolution: "eslint-plugin-sort-destructure-keys@npm:1.3.3"
+"eslint-plugin-sort-destructure-keys@npm:^1.3.4":
+  version: 1.3.4
+  resolution: "eslint-plugin-sort-destructure-keys@npm:1.3.4"
   dependencies:
     natural-compare-lite: ^1.4.0
   peerDependencies:
     eslint: ^3.0.0 || ^4.0.0 || ^5.0.0 || ^6.0.0
-  checksum: 2/bcf1e4c8d9ebd692269cfbec29fbd321eec86f13273b313c46d5cff6c9434873941db4dfa117f7b71a60e247c3be5df2cdc324d4216b824ac19e3fad259370fd
+  checksum: 2/3f31a9ac26d034e1d23bf01bfe61ddcd5d9788528945a42c12a181db4dcd70fdad0670e51bfd6cdf32bd41b39d271f9d6427686cc01cba4e4cc70bbd823c3bf2
   languageName: node
   linkType: hard
 
@@ -7293,11 +7294,11 @@ __metadata:
   linkType: hard
 
 "esquery@npm:^1.0.1":
-  version: 1.3.0
-  resolution: "esquery@npm:1.3.0"
+  version: 1.3.1
+  resolution: "esquery@npm:1.3.1"
   dependencies:
-    estraverse: ^5.0.0
-  checksum: 2/d00c54b3a9a726c6ecfe2458962ddba62c154a4ec982b73296ead579e2c128de3df67049f95e4c8ddcb823ce53cee6723f76536a5a82e9a6b7f96ac7e7015051
+    estraverse: ^5.1.0
+  checksum: 2/0aac7572bc8cf4aad87f4424b3e5e80917c214d15a1da02718c4bb0e6030552b0dea700777747507d5e310cfba43ea719e6397a45050fb50b9b68c0f7de6b26a
   languageName: node
   linkType: hard
 
@@ -7317,7 +7318,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"estraverse@npm:^5.0.0":
+"estraverse@npm:^5.1.0":
   version: 5.1.0
   resolution: "estraverse@npm:5.1.0"
   checksum: 2/1b8a47cf7c56ef3780437e4c3d733ac74d07e32f24c153d2dbe52b621802d2f88cf828c15746dabfd10a994a3ac74e1c5b74dba97d096fa9a7df2262c4f72ea9
@@ -14804,11 +14805,11 @@ __metadata:
   linkType: hard
 
 "resolve@npm:^1.1.6, resolve@npm:^1.1.7, resolve@npm:^1.10.0, resolve@npm:^1.10.1, resolve@npm:^1.11.1, resolve@npm:^1.12.0, resolve@npm:^1.13.1, resolve@npm:^1.15.1, resolve@npm:^1.2.0, resolve@npm:^1.3.2, resolve@npm:^1.8.1":
-  version: 1.16.0
-  resolution: "resolve@npm:1.16.0"
+  version: 1.16.1
+  resolution: "resolve@npm:1.16.1"
   dependencies:
     path-parse: ^1.0.6
-  checksum: 2/7b5d25493560d793a690dcaeada67a17c09c21a4fc276abfe899dc2ea825063a545b0450926e4162e8f93740491139bed1a3c4491139578ea61e41f051cd0c78
+  checksum: 2/0bb9648cf8d640144c0f2c1e490a14b1bffa123f93660d229c79ff8bc616f8d425bf9e8e80fc01ee2fbf0682f2a83fe2ffa70c91dffd88167527be01501ca00c
   languageName: node
   linkType: hard
 
@@ -15050,12 +15051,12 @@ __metadata:
   linkType: hard
 
 "schema-utils@npm:^2.6.5":
-  version: 2.6.5
-  resolution: "schema-utils@npm:2.6.5"
+  version: 2.6.6
+  resolution: "schema-utils@npm:2.6.6"
   dependencies:
     ajv: ^6.12.0
     ajv-keywords: ^3.4.1
-  checksum: 2/f41503bd6025c4ec77b7eacf98bf39799b9240e51e1f16881e71a90a9a39208f6d1489719acc59ae1b47aedcbcc8c66ceb09f23603e09ca6889c2521b2d9078f
+  checksum: 2/78ae62749e3a4a945de51ca47d22047e8959a96b1797af4abb2dfe3c10a7e5c12f877480a183e97158a8590bfde045a65af571fa68737721a975392e5606499c
   languageName: node
   linkType: hard
 
@@ -17944,12 +17945,12 @@ __metadata:
   linkType: hard
 
 "yargs-parser@npm:^18.1.1":
-  version: 18.1.2
-  resolution: "yargs-parser@npm:18.1.2"
+  version: 18.1.3
+  resolution: "yargs-parser@npm:18.1.3"
   dependencies:
     camelcase: ^5.0.0
     decamelize: ^1.2.0
-  checksum: 2/500c5c4268fdbf8ba31ee97132f218b547607987714b1d543f44c7da78baf18ac84b0fa6270070d1e4ca40417a08e3a509073da80c3de4e5ccf076bce40dd85d
+  checksum: 2/33871721679053cc38165afc6356c06c3e820459589b5db78f315886105070eb90cbb583cd6515fa4231937d60c80262ca2b7c486d5942576802446318a39597
   languageName: node
   linkType: hard
 
