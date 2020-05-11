@@ -10,7 +10,9 @@ const fs = require('fs');
 const mkdirp = require('mkdirp');
 const path = require('path');
 
-const CPX = ['package.json', 'src/**/*.css', 'src/**/*.gif', 'src/**/*.jpg', 'src/**/*.png', 'src/**/*.svg', 'src/**/*.d.ts', 'src/**/*.js'];
+const CPX = ['css', 'gif', 'hbs', 'jpg', 'js', 'png', 'svg', 'd.ts']
+  .map((ext) => `src/**/*.${ext}`)
+  .concat('package.json');
 
 console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 

@@ -2,6 +2,9 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+// ordering here important (at least form a rule maintenance pov)
+/* eslint-disable sort-keys */
+
 module.exports = {
   env: {
     browser: true,
@@ -32,17 +35,50 @@ module.exports = {
   },
   plugins: [
     '@typescript-eslint',
+    'header',
     'import',
-    'react-hooks'
+    'react-hooks',
+    'sort-destructure-keys'
   ],
   rules: {
-    // required as 'off' by @typescript-eslint/indent
+    // required as 'off' by @typescript-eslint/indent, 2 spaces is diff from defaults
     indent: 'off',
-    // our indentation is different from the TypeScript repo
     '@typescript-eslint/indent': ['error', 2],
     // rules from semistandard (don't include it, has standard dep version mismatch)
     semi: [2, 'always'],
-    'no-extra-semi': 2
+    'no-extra-semi': 2,
+    // specific overrides
+    'arrow-parens': ['error', 'always'],
+    'header/header': [2, 'line', [{ pattern: ' Copyright \\d{4}' }]],
+    'jsx-quotes': ['error', 'prefer-single'],
+    'object-curly-newline': ['error', {
+      ImportDeclaration: { minProperties: 2048 }
+    }],
+    'padding-line-between-statements': [
+      'error',
+      { blankLine: 'always', prev: ['const', 'let', 'var'], next: '*' },
+      { blankLine: 'any', prev: ['const', 'let', 'var'], next: ['const', 'let', 'var'] },
+      { blankLine: 'always', prev: '*', next: 'block-like' },
+      { blankLine: 'always', prev: 'block-like', next: '*' },
+      { blankLine: 'always', prev: '*', next: 'function' },
+      { blankLine: 'always', prev: 'function', next: '*' },
+      { blankLine: 'always', prev: '*', next: 'try' },
+      { blankLine: 'always', prev: 'try', next: '*' },
+      { blankLine: 'always', prev: '*', next: 'return' }
+    ],
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'error',
+    'react/jsx-max-props-per-line': [2, {
+      maximum: 1,
+      when: 'always'
+    }],
+    'react/jsx-sort-props': [2, {
+      noSortAlphabetically: false
+    }],
+    'sort-destructure-keys/sort-destructure-keys': [2, {
+      caseSensitive: true
+    }],
+    'sort-keys': 'error'
   },
   settings: {
     'import/extensions': ['.js', '.ts', '.tsx'],

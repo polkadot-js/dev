@@ -1,3 +1,12 @@
+# 0.52.1
+
+- Stricter JSX rules
+
+# 0.51.1
+
+- Arrow functions with ()
+- JSX sample tests
+
 # 0.50.1
 
 - Yarn 2
