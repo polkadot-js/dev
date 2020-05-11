@@ -10,7 +10,7 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "build": "polkadot-dev-build-ts && (cd packages/dev && copyfiles config/* scripts/* skeleton/* build)",
+    "build": "polkadot-dev-build-ts && (cd packages/dev && copyfiles config/* scripts/* build)",
     "build:release": "polkadot-ci-ghact-build --skip-beta",
     "docs": "polkadot-dev-build-docs",
     "lint": "polkadot-dev-run-lint",
