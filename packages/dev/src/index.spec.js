@@ -14,8 +14,4 @@ describe('index', () => {
       index.echo('something')
     ).toEqual('1: 123: something');
   });
-
-  it('has Buffer & Uint8array equivalency', () => {
-    expect(Buffer.from('') instanceof Uint8Array).toBeTruthy();
-  });
 });
