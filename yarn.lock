@@ -4907,9 +4907,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001039, caniuse-lite@npm:^1.0.30001043":
-  version: 1.0.30001054
-  resolution: "caniuse-lite@npm:1.0.30001054"
-  checksum: 2/13f0ed44628e888ecf04cca6d881bfd4e8ef23f7d97f9a9011c4c7969cef864ad7cf708182c59ade64bb0c2d660724ce57a2dd4294143f1e6527e9d69990c3e9
+  version: 1.0.30001055
+  resolution: "caniuse-lite@npm:1.0.30001055"
+  checksum: 2/0d635e8397c859f308bfe34b84a01aeb3f2e852a84d5054e9ce13a3d90827ef5ece854a27a9c7bac764f3ce7b31ccf4a8f16cd52cc3df13be515b9dcb0d27cc8
   languageName: node
   linkType: hard
 
@@ -7437,9 +7437,9 @@ __metadata:
   linkType: hard
 
 "eventemitter3@npm:^4.0.0":
-  version: 4.0.0
-  resolution: "eventemitter3@npm:4.0.0"
-  checksum: 2/af47e3a6e2c7492547b5de5afa02c8d37b48f822461827def23aa215154c9008438542985c77b47594696871dfe97c5d0fecccb844150ca15aa4c2f3dcd088b7
+  version: 4.0.1
+  resolution: "eventemitter3@npm:4.0.1"
+  checksum: 2/e0534c82318c52047c042cec1ef82f3a375d26702148ae438aa930b658351b48f0bdd65da0d2043d8fff44b417a74dadc26b3543f6475a1250dc1fe5cf3c0b1d
   languageName: node
   linkType: hard
 
@@ -15143,9 +15143,9 @@ __metadata:
   linkType: hard
 
 "safe-buffer@npm:^5.0.1, safe-buffer@npm:^5.1.0, safe-buffer@npm:^5.1.1, safe-buffer@npm:^5.1.2, safe-buffer@npm:^5.2.0, safe-buffer@npm:~5.2.0":
-  version: 5.2.0
-  resolution: "safe-buffer@npm:5.2.0"
-  checksum: 2/e513079353a235749e64dc3b1ade741caf651c09d1291ee826e68d42c08913dcd2c76b291dd23979b0fd0bd551d99f4a3d8cc05aef4e9c75bebf6cbbd310b129
+  version: 5.2.1
+  resolution: "safe-buffer@npm:5.2.1"
+  checksum: 2/0bb57f0d8f9d1fa4fe35ad8a2db1f83a027d48f2822d59ede88fd5cd4ddad83c0b497213feb7a70fbf90597a70c5217f735b0eb1850df40ce9b4ae81dd22b3f9
   languageName: node
   linkType: hard
 
