@@ -1,3 +1,7 @@
+# 0.53.1
+
+- TypeScript 3.9
+
 # 0.52.1
 
 - Stricter JSX rules
