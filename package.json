@@ -7,7 +7,7 @@
     "packages/*"
   ],
   "resolutions": {
-    "typescript": "^3.9.2"
+    "babel-core": "^7.0.0-bridge.0"
   },
   "scripts": {
     "build": "polkadot-dev-build-ts && (cd packages/dev && copyfiles config/* scripts/* build)",

@@ -17032,7 +17032,7 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"typescript@npm:^3.9.2":
+"typescript@^3.0.3, typescript@^3.7.5, typescript@^3.8.3, typescript@^3.9.2":
   version: 3.9.2
   resolution: "typescript@npm:3.9.2"
   bin:
@@ -17042,7 +17042,7 @@ fsevents@^2.1.2:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@npm%3A^3.9.2#builtin<compat/typescript>":
+"typescript@patch:typescript@^3.0.3#builtin<compat/typescript>, typescript@patch:typescript@^3.7.5#builtin<compat/typescript>, typescript@patch:typescript@^3.8.3#builtin<compat/typescript>, typescript@patch:typescript@^3.9.2#builtin<compat/typescript>":
   version: 3.9.2
   resolution: "typescript@patch:typescript@npm%3A3.9.2#builtin<compat/typescript>::version=3.9.2&hash=8cac75"
   bin:
