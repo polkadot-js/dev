@@ -1,3 +1,7 @@
+# 0.54.1
+
+- typescript-eslint 3
+
 # 0.53.1
 
 - TypeScript 3.9

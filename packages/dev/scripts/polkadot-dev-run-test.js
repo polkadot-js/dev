@@ -5,4 +5,5 @@
 
 console.log('$ polkadot-dev-run-test', process.argv.slice(2).join(' '));
 
+// eslint-disable-next-line
 require('jest-cli/build/cli').run();
