@@ -2728,7 +2728,7 @@ __metadata:
     typedoc: ^0.17.7
     typedoc-plugin-markdown: ^2.2.17
     typedoc-plugin-no-inherit: ^1.1.10
-    typescript: ^3.9.3
+    typescript: ^3.9.4
     vuepress: ^1.5.0
     webpack: ^4.43.0
     webpack-cli: ^3.3.11
@@ -11990,9 +11990,9 @@ __metadata:
   linkType: hard
 
 "min-indent@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "min-indent@npm:1.0.0"
-  checksum: 3/caed9fdecd22dbb2d73025c9fa5d808e6085ebeb1af355b4ac1b59018c7f9cd7dc9b2daf38af405367f80dcbd2f4e971d61d93476af27f65988488e808244cb1
+  version: 1.0.1
+  resolution: "min-indent@npm:1.0.1"
+  checksum: 3/c3aeea46bc432e6ce69b86717e98fbb544e338abb5e3c93cfa196c427e3d5a4a6ee4f76e6931a9e424fb53e83451b90fc417ce7db04440a92d68369704ad11d1
   languageName: node
   linkType: hard
 
@@ -17132,23 +17132,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@^3.0.3, typescript@^3.7.5, typescript@^3.8.3, typescript@^3.9.3":
-  version: 3.9.3
-  resolution: "typescript@npm:3.9.3"
+"typescript@^3.0.3, typescript@^3.7.5, typescript@^3.8.3, typescript@^3.9.4":
+  version: 3.9.4
+  resolution: "typescript@npm:3.9.4"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 3/f05e6f1c50c635bd7afc95fbc9eb704042b5bec9a77b9c86ddc0c56650c928617d608b9ec9aa468d7b4cf14ac1ea5f540c540c725005a179b54a86665abd9a55
+  checksum: 3/f364e86609679566abda039acf35030b78d738c456dae201bad71722b47aa753ea42f3076a2767b72b63a1b8641f1ffb3984dcbdf088bd401b4e7118e3601893
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^3.0.3#builtin<compat/typescript>, typescript@patch:typescript@^3.7.5#builtin<compat/typescript>, typescript@patch:typescript@^3.8.3#builtin<compat/typescript>, typescript@patch:typescript@^3.9.3#builtin<compat/typescript>":
-  version: 3.9.3
-  resolution: "typescript@patch:typescript@npm%3A3.9.3#builtin<compat/typescript>::version=3.9.3&hash=8cac75"
+"typescript@patch:typescript@^3.0.3#builtin<compat/typescript>, typescript@patch:typescript@^3.7.5#builtin<compat/typescript>, typescript@patch:typescript@^3.8.3#builtin<compat/typescript>, typescript@patch:typescript@^3.9.4#builtin<compat/typescript>":
+  version: 3.9.4
+  resolution: "typescript@patch:typescript@npm%3A3.9.4#builtin<compat/typescript>::version=3.9.4&hash=8cac75"
   bin:
     tsc: bin/tsc
     tsserver: bin/tsserver
-  checksum: 3/a3780f6fdf0502bb152a3ad56cd004db46f70496f1b8317657d9e89dd93c911483625fd25867d6aec1cd2854ccf036ecc614989c9f1b36bec2d5daffa9bfc230
+  checksum: 3/6fe6acffaf466fe06116a9adb089914b070b8363c38fa1c80a4728452eb8fc88b7977930b61a860ab37080733eddf4dacf25dc88f0dd14efe6d8312ed6fcfb12
   languageName: node
   linkType: hard
 
