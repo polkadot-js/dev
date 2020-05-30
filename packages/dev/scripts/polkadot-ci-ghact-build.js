@@ -19,8 +19,7 @@ const argv = require('yargs')
   .strict()
   .argv;
 
-const token = process.env.GH_PAT;
-const repo = `https://${token}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
+const repo = `https://${process.env.GH_PAT}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
 const hasLerna = fs.existsSync('lerna.json');
 
 console.log('$ polkadot-ci-ghact-build', process.argv.slice(2).join(' '));
@@ -168,7 +167,7 @@ skip-checks: true"`);
 
   execSync(`git push ${repo} HEAD:${process.env.GITHUB_REF}`, true);
 
-  if (!version.includes('-beta') && process.env.GH_RELEASE_GITHUB_API_TOKEN) {
+  if (process.env.GH_RELEASE_GITHUB_API_TOKEN) {
     const changes = fs.readFileSync('CHANGELOG.md', 'utf8');
 
     if (changes.includes(`## ${version}`)) {
