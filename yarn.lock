@@ -2748,6 +2748,7 @@ __metadata:
     polkadot-dev-yarn-only: ./scripts/polkadot-dev-yarn-only.js
     polkadot-exec-eslint: ./scripts/polkadot-exec-eslint.js
     polkadot-exec-ghpages: ./scripts/polkadot-exec-ghpages.js
+    polkadot-exec-ghrelease: ./scripts/polkadot-exec-ghrelease.js
     polkadot-exec-lerna: ./scripts/polkadot-exec-lerna.js
     polkadot-exec-tsc: ./scripts/polkadot-exec-tsc.js
     polkadot-exec-typedoc: ./scripts/polkadot-exec-typedoc.js
@@ -16545,7 +16546,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string-width@npm:^1.0.1, string-width@npm:^1.0.2 || 2":
+"string-width@npm:^1.0.1":
   version: 1.0.2
   resolution: "string-width@npm:1.0.2"
   dependencies:
@@ -16556,7 +16557,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"string-width@npm:^2.0.0, string-width@npm:^2.1.0, string-width@npm:^2.1.1":
+"string-width@npm:^1.0.2 || 2, string-width@npm:^2.0.0, string-width@npm:^2.1.0, string-width@npm:^2.1.1":
   version: 2.1.1
   resolution: "string-width@npm:2.1.1"
   dependencies:
