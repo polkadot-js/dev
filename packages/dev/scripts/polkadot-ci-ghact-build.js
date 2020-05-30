@@ -152,6 +152,8 @@ function gitBump () {
 }
 
 function gitPush () {
+  const version = npmGetVersion();
+
   execSync('git add --all .');
 
   if (fs.existsSync('docs/README.md')) {
@@ -159,12 +161,16 @@ function gitPush () {
   }
 
   // add the skip checks for GitHub ...
-  execSync(`git commit --no-status --quiet -m "[CI Skip] ${npmGetVersion()}
+  execSync(`git commit --no-status --quiet -m "[CI Skip] release/${version.includes('-beta') ? 'beta' : 'stable'} ${version}
 
 
 skip-checks: true"`);
 
   execSync(`git push ${repo} HEAD:${process.env.GITHUB_REF}`, true);
+
+  if (!version.includes('-beta') && process.env.GH_RELEASE_GITHUB_API_TOKEN) {
+    execSync(`yarn polkadot-exec-ghrelease --body ${version} --draft --yes`);
+  }
 }
 
 function loopFunc (fn) {
