@@ -171,7 +171,7 @@ skip-checks: true"`);
   if (!version.includes('-beta') && process.env.GH_RELEASE_GITHUB_API_TOKEN) {
     const changes = fs.readFileSync('CHANGELOG.md', 'utf8');
 
-    if (changes.includes(`# ${version}`)) {
+    if (changes.includes(`## ${version}`)) {
       execSync('yarn polkadot-exec-ghrelease --draft --yes');
     }
   }
