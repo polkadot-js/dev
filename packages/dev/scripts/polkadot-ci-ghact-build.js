@@ -159,7 +159,7 @@ function gitPush () {
 
     if (changes.includes(`## ${version}`)) {
       doGHRelease = true;
-    } else if (!version.contains('-beta') && version.endsWith('.1')) {
+    } else if (!version.includes('-beta.') && version.endsWith('.1')) {
       throw new Error(`Unable to release, no CHANGELOG entry for ${version}`);
     }
   }
@@ -171,7 +171,7 @@ function gitPush () {
   }
 
   // add the skip checks for GitHub ...
-  execSync(`git commit --no-status --quiet -m "[CI Skip] release/${version.includes('-beta') ? 'beta' : 'stable'} ${version}
+  execSync(`git commit --no-status --quiet -m "[CI Skip] release/${version.includes('-beta.') ? 'beta' : 'stable'} ${version}
 
 
 skip-checks: true"`);
