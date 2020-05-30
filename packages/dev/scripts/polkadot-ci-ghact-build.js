@@ -169,7 +169,11 @@ skip-checks: true"`);
   execSync(`git push ${repo} HEAD:${process.env.GITHUB_REF}`, true);
 
   if (!version.includes('-beta') && process.env.GH_RELEASE_GITHUB_API_TOKEN) {
-    execSync(`yarn polkadot-exec-ghrelease --body ${version} --draft --yes`);
+    const changes = fs.readFileSync('CHANGELOG.md', 'utf8');
+
+    if (changes.includes(`# ${version}`)) {
+      execSync('yarn polkadot-exec-ghrelease --draft --yes');
+    }
   }
 }
 
