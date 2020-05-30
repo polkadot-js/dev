@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.55.2
+## 0.55.3
 
 - Publish draft release
 

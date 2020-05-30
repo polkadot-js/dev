@@ -19,7 +19,7 @@ const argv = require('yargs')
   .strict()
   .argv;
 
-const token = process.env.GH_PAT || `x-access-token:${process.env.GITHUB_TOKEN}`;
+const token = process.env.GH_PAT;
 const repo = `https://${token}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
 const hasLerna = fs.existsSync('lerna.json');
 
