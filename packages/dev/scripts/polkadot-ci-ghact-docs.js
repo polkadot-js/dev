@@ -5,8 +5,7 @@
 
 const execSync = require('./execSync');
 
-const token = process.env.GH_PAT;
-const repo = `https://${token}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
+const repo = `https://${process.env.GH_PAT}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
 
 console.log('$ polkadot-ci-ghact-docs', process.argv.slice(2).join(' '));
 
