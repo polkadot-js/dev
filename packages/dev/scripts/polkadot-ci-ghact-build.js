@@ -172,7 +172,7 @@ skip-checks: true"`);
     const changes = fs.readFileSync('CHANGELOG.md', 'utf8');
 
     if (changes.includes(`# ${version}`)) {
-      execSync(`yarn polkadot-exec-ghrelease --body ${version} --draft --yes`);
+      execSync('yarn polkadot-exec-ghrelease --draft --yes');
     }
   }
 }
