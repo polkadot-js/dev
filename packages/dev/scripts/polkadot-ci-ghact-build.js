@@ -179,7 +179,11 @@ skip-checks: true"`);
   execSync(`git push ${repo} HEAD:${process.env.GITHUB_REF}`, true);
 
   if (doGHRelease) {
-    execSync('yarn polkadot-exec-ghrelease --draft --yes');
+    const files = process.env.GH_RELEASES_FILES
+      ? `--assets ${process.env.GH_RELEASES_FILES}`
+      : '';
+
+    execSync(`yarn polkadot-exec-ghrelease --draft ${files} --yes`);
   }
 }
 
