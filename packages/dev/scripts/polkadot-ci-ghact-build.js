@@ -71,7 +71,7 @@ function lernaBump () {
     // continue with first new minor as beta
     execSync('yarn polkadot-dev-version --type preminor');
   } else {
-    // some changes, so we can commit
+    // manual setting of version, make some changes so we can commit
     fs.appendFileSync(path.join(process.cwd(), '.123trigger'), lernaGetVersion());
   }
 }
