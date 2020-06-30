@@ -2699,7 +2699,7 @@ __metadata:
     eslint-plugin-import: ^2.22.0
     eslint-plugin-node: ^11.1.0
     eslint-plugin-promise: ^4.2.1
-    eslint-plugin-react: ^7.20.2
+    eslint-plugin-react: 7.20.1
     eslint-plugin-react-hooks: ^4.0.4
     eslint-plugin-sort-destructure-keys: ^1.3.5
     eslint-plugin-standard: ^4.0.1
@@ -7513,9 +7513,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-react@npm:^7.20.2":
-  version: 7.20.2
-  resolution: "eslint-plugin-react@npm:7.20.2"
+"eslint-plugin-react@npm:7.20.1":
+  version: 7.20.1
+  resolution: "eslint-plugin-react@npm:7.20.1"
   dependencies:
     array-includes: ^3.1.1
     array.prototype.flatmap: ^1.2.3
@@ -7530,7 +7530,7 @@ __metadata:
     string.prototype.matchall: ^4.0.2
   peerDependencies:
     eslint: ^3 || ^4 || ^5 || ^6 || ^7
-  checksum: 3/32c80f386189272f84909b6c742d058a838f429484524e8221ee76c0f25f7450668fd19ae26a651f85aa9f774da7cf1f01ee19dba7232e89d1211e887c967884
+  checksum: 3/30bbd36f01cb4db2b7833cedb964665d08907371ec5234fda2833fd203f7f1d630a1a406b720394214818c2569216d3f9ba211d511a64377271624610335fbca
   languageName: node
   linkType: hard
 
