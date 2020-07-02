@@ -56,6 +56,7 @@ module.exports = {
     'arrow-parens': ['error', 'always'],
     'header/header': [2, 'line', [{ pattern: ' Copyright \\d{4}' }]],
     'jsx-quotes': ['error', 'prefer-single'],
+    'react/prop-types': [0], // this is a completely broken rule
     'object-curly-newline': ['error', {
       ImportDeclaration: { minProperties: 2048 }
     }],
