@@ -73,10 +73,10 @@
     "babel-jest": "^26.1.0",
     "babel-plugin-module-resolver": "^4.0.0",
     "babel-plugin-styled-components": "^1.10.7",
-    "browserslist": "^4.12.2",
+    "browserslist": "^4.13.0",
     "coveralls": "^3.1.0",
     "cpx": "^1.5.0",
-    "eslint": "^7.3.1",
+    "eslint": "^7.4.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-import-resolver-node": "^0.3.4",
     "eslint-plugin-header": "^3.0.0",
@@ -106,7 +106,7 @@
     "vuepress": "^1.5.2",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12",
-    "yargs": "^15.3.1"
+    "yargs": "^15.4.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.3",
