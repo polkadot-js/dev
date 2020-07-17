@@ -3,8 +3,8 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+const fs = require('fs');
 const execSync = require('./execSync');
-const rimraf = require('rimraf');
 
 console.log('$ polkadot-ci-ghpages-force', process.argv.slice(2).join(' '));
 
@@ -17,11 +17,14 @@ execSync('git checkout gh-pages');
 execSync('git pull');
 execSync('git checkout --orphan gh-pages-temp');
 
-// cleanup
-rimraf.sync('node_modules');
-rimraf.sync('coverage');
-rimraf.sync('packages');
-rimraf.sync('test');
+// ignore relevant files
+fs.writeFileSync('.gitignore', `
+.yarn
+coverage
+node_modules
+packages
+test
+`);
 
 // add
 execSync('git add -A');
