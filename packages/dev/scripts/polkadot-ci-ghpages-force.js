@@ -19,11 +19,13 @@ execSync('git checkout --orphan gh-pages-temp');
 
 // ignore relevant files
 fs.writeFileSync('.gitignore', `
-.yarn
-coverage
-node_modules
-packages
-test
+.vscode/
+.yarn/
+build/
+coverage/
+node_modules/
+packages/
+test/
 `);
 
 // add
