@@ -76,7 +76,7 @@
     "browserslist": "^4.13.0",
     "coveralls": "^3.1.0",
     "cpx": "^1.5.0",
-    "eslint": "^7.4.0",
+    "eslint": "^7.5.0",
     "eslint-config-standard": "^14.1.1",
     "eslint-import-resolver-node": "^0.3.4",
     "eslint-plugin-header": "^3.0.0",
@@ -109,7 +109,7 @@
     "yargs": "^15.4.1"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.4",
+    "@types/jest": "^26.0.5",
     "@types/node": "^14.0.23",
     "@types/react": "^16.9.43",
     "@types/yargs": "^15.0.5",
