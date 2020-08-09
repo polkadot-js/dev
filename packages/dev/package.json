@@ -11,6 +11,7 @@
     "polkadot-dev-circular": "./scripts/polkadot-dev-circular.js",
     "polkadot-dev-clean-build": "./scripts/polkadot-dev-clean-build.js",
     "polkadot-dev-run-lint": "./scripts/polkadot-dev-run-lint.js",
+    "polkadot-dev-run-prettier": "./scripts/polkadot-dev-run-prettier.js",
     "polkadot-dev-run-test": "./scripts/polkadot-dev-run-test.js",
     "polkadot-dev-version": "./scripts/polkadot-dev-version.js",
     "polkadot-dev-yarn-only": "./scripts/polkadot-dev-yarn-only.js",
@@ -18,6 +19,7 @@
     "polkadot-exec-ghpages": "./scripts/polkadot-exec-ghpages.js",
     "polkadot-exec-ghrelease": "./scripts/polkadot-exec-ghrelease.js",
     "polkadot-exec-lerna": "./scripts/polkadot-exec-lerna.js",
+    "polkadot-exec-prettier": "./scripts/polkadot-exec-prettier.js",
     "polkadot-exec-tsc": "./scripts/polkadot-exec-tsc.js",
     "polkadot-exec-typedoc": "./scripts/polkadot-exec-typedoc.js",
     "polkadot-exec-vuepress": "./scripts/polkadot-exec-vuepress.js",
@@ -98,8 +100,9 @@
     "lerna": "^3.22.1",
     "madge": "^3.9.2",
     "mkdirp": "^1.0.4",
+    "prettier": "^2.0.5",
     "rimraf": "^3.0.2",
-    "typedoc": "^0.17.8",
+    "typedoc": "^0.18.0",
     "typedoc-plugin-markdown": "^2.4.0",
     "typedoc-plugin-no-inherit": "^1.1.10",
     "typescript": "^3.9.7",
@@ -111,7 +114,7 @@
   "devDependencies": {
     "@types/jest": "^26.0.9",
     "@types/node": "^14.0.27",
-    "@types/react": "^16.9.44",
+    "@types/react": "^16.9.45",
     "@types/yargs": "^15.0.5",
     "react": "^16.13.1"
   }
