@@ -3,7 +3,7 @@
 
 __metadata:
   version: 4
-  cacheKey: 5
+  cacheKey: 6
 
 "@ant-design-vue/babel-helper-vue-transform-on@npm:^1.0.0":
   version: 1.0.1
@@ -3145,7 +3145,6 @@ __metadata:
   peerDependencies:
     "@typescript-eslint/parser": ^4.0.0
     eslint: ^5.0.0 || ^6.0.0 || ^7.0.0
-    typescript: "*"
   peerDependenciesMeta:
     typescript:
       optional: true
@@ -3179,7 +3178,6 @@ __metadata:
     debug: ^4.1.1
   peerDependencies:
     eslint: ^5.0.0 || ^6.0.0 || ^7.0.0
-    typescript: "*"
   peerDependenciesMeta:
     typescript:
       optional: true
@@ -3216,8 +3214,6 @@ __metadata:
     lodash: ^4.17.15
     semver: ^7.3.2
     tsutils: ^3.17.1
-  peerDependencies:
-    typescript: "*"
   peerDependenciesMeta:
     typescript:
       optional: true
@@ -3236,8 +3232,6 @@ __metadata:
     lodash: ^4.17.15
     semver: ^7.3.2
     tsutils: ^3.17.1
-  peerDependencies:
-    typescript: "*"
   peerDependenciesMeta:
     typescript:
       optional: true
@@ -6624,8 +6618,6 @@ __metadata:
   resolution: "debug@npm:4.2.0"
   dependencies:
     ms: 2.1.2
-  peerDependencies:
-    supports-color: "*"
   peerDependenciesMeta:
     supports-color:
       optional: true
@@ -7286,9 +7278,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.3.523":
-  version: 1.3.559
-  resolution: "electron-to-chromium@npm:1.3.559"
-  checksum: 14ab6df1326f185b41dd8c8c072132d4bb756251bd2fc9fb7c112f58eda3ef543d1559aa40a94cdf578beded471391f5b489df1f274e5d7666ff308b0a4cdb5f
+  version: 1.3.560
+  resolution: "electron-to-chromium@npm:1.3.560"
+  checksum: 3dfb46e4216346fe78c8ed66b6eb94bf3b1fc08f050a6a5fb9c57d5c4a482b07d14db0edce9aa1432d48a023d0db0bbf777ce9ecaec554eb8df3ad1af079a4fc
   languageName: node
   linkType: hard
 
@@ -8727,20 +8719,20 @@ __metadata:
 
 "fsevents@patch:fsevents@^1.0.0#builtin<compat/fsevents>, fsevents@patch:fsevents@^1.2.7#builtin<compat/fsevents>":
   version: 1.2.13
-  resolution: "fsevents@patch:fsevents@npm%3A1.2.13#builtin<compat/fsevents>::version=1.2.13&hash=495457"
+  resolution: "fsevents@patch:fsevents@npm%3A1.2.13#builtin<compat/fsevents>::version=1.2.13&hash=87eb42"
   dependencies:
     bindings: ^1.5.0
     nan: ^2.12.1
-  checksum: 508a7e7e1e365236a7a0478392827145ba05c0181b1928b73b20c1a5212d15f6529735db897d617d7b0b051248c5720160f74c113bd727fc02de4f6cf885e1ff
+  checksum: 31c62373556f061f4b4c52ff61c91bc9080243ea074a38a81cf12c1f2c9098da731ea3d39705c805b738427e4284af6b8151efe65ce9ca6b11378d43f36db2c4
   languageName: node
   linkType: hard
 
 "fsevents@patch:fsevents@^2.1.2#builtin<compat/fsevents>, fsevents@patch:fsevents@~2.1.2#builtin<compat/fsevents>":
   version: 2.1.3
-  resolution: "fsevents@patch:fsevents@npm%3A2.1.3#builtin<compat/fsevents>::version=2.1.3&hash=495457"
+  resolution: "fsevents@patch:fsevents@npm%3A2.1.3#builtin<compat/fsevents>::version=2.1.3&hash=87eb42"
   dependencies:
     node-gyp: latest
-  checksum: 0005677b72f38a129a3cbe8c3794bdc83081a2bec53dfc03b085c2e5e4ca7a33a861a779d623313652df89746d97f79d24e4fef3b101c11c39ce1ea8a9690e18
+  checksum: d8ae862048fc127cdbd00d02b2feb7c25946c3ce4cbc44e958134be87e239577a16dafafa1c270d010b8624e1b1e0372e23f7865c55c6f83e83fc9f68b0a30d2
   languageName: node
   linkType: hard
 
@@ -17857,17 +17849,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"typescript@^3.0.3, typescript@^3.7.5, typescript@^3.8.3, typescript@^3.9.5":
-  version: 3.9.7
-  resolution: "typescript@npm:3.9.7"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: 10848a9c35fd8c70a8792b8bd9485317534bcd58768793d3b7d9c7486e9fd30cf345f83fa2a324e0bf6088bc8a4d8d061d58fda38b18c2ff187cf01fbbff6267
-  languageName: node
-  linkType: hard
-
-typescript@^4.0.2:
+"typescript@npm:^4.0.2":
   version: 4.0.2
   resolution: "typescript@npm:4.0.2"
   bin:
@@ -17877,17 +17859,7 @@ typescript@^4.0.2:
   languageName: node
   linkType: hard
 
-"typescript@patch:typescript@^3.0.3#builtin<compat/typescript>, typescript@patch:typescript@^3.7.5#builtin<compat/typescript>, typescript@patch:typescript@^3.8.3#builtin<compat/typescript>, typescript@patch:typescript@^3.9.5#builtin<compat/typescript>":
-  version: 3.9.7
-  resolution: "typescript@patch:typescript@npm%3A3.9.7#builtin<compat/typescript>::version=3.9.7&hash=5b02a2"
-  bin:
-    tsc: bin/tsc
-    tsserver: bin/tsserver
-  checksum: f0d3d9c987860c7c458229ab6dd7e3d322405db36b70abccba610b5efd9f9451e4e67a3fc7983c0d3741033c1f1a8d7aa859a1510caa8f20fad762fc39648bfa
-  languageName: node
-  linkType: hard
-
-"typescript@patch:typescript@^4.0.2#builtin<compat/typescript>":
+"typescript@patch:typescript@npm%3A^4.0.2#builtin<compat/typescript>":
   version: 4.0.2
   resolution: "typescript@patch:typescript@npm%3A4.0.2#builtin<compat/typescript>::version=4.0.2&hash=5b02a2"
   bin:
@@ -18391,9 +18363,7 @@ typescript@^4.0.2:
     vue-hot-reload-api: ^2.3.0
     vue-style-loader: ^4.1.0
   peerDependencies:
-    cache-loader: "*"
     css-loader: "*"
-    vue-template-compiler: "*"
     webpack: ^3.0.0 || ^4.1.0 || ^5.0.0-0
   peerDependenciesMeta:
     cache-loader:
@@ -18709,7 +18679,6 @@ typescript@^4.0.2:
     yargs: ^13.3.2
   peerDependencies:
     webpack: ^4.0.0 || ^5.0.0
-    webpack-cli: "*"
   peerDependenciesMeta:
     webpack-cli:
       optional: true
@@ -18775,9 +18744,6 @@ typescript@^4.0.2:
     terser-webpack-plugin: ^1.4.3
     watchpack: ^1.7.4
     webpack-sources: ^1.4.1
-  peerDependencies:
-    webpack-cli: "*"
-    webpack-command: "*"
   peerDependenciesMeta:
     webpack-cli:
       optional: true
