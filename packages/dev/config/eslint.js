@@ -2,8 +2,10 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
-// ordering here important (at least form a rule maintenance pov)
+// ordering here important (at least from a rule maintenance pov)
 /* eslint-disable sort-keys */
+
+require('@rushstack/eslint-patch/modern-module-resolution');
 
 module.exports = {
   env: {

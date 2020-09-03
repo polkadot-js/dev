@@ -2798,6 +2798,7 @@ __metadata:
     "@babel/preset-typescript": ^7.10.4
     "@babel/register": ^7.11.5
     "@babel/runtime": ^7.11.2
+    "@rushstack/eslint-patch": ^1.0.3
     "@types/jest": ^26.0.13
     "@types/node": ^14.6.3
     "@types/react": ^16.9.49
@@ -2870,6 +2871,13 @@ __metadata:
     polkadot-exec-webpack: ./scripts/polkadot-exec-webpack.js
   languageName: unknown
   linkType: soft
+
+"@rushstack/eslint-patch@npm:^1.0.3":
+  version: 1.0.3
+  resolution: "@rushstack/eslint-patch@npm:1.0.3"
+  checksum: e794b35b9df1c4878269da44440c60481d542a0f5e67242fec4b25e205a4c65c4052e0faa104f16585b6f8fe2e59deb32766ecedb8131acf9d120cd3b971dba3
+  languageName: node
+  linkType: hard
 
 "@sindresorhus/is@npm:^0.14.0":
   version: 0.14.0
