@@ -48,8 +48,9 @@ module.exports = {
     'sort-destructure-keys'
   ],
   rules: {
-    // required as 'off' by @typescript-eslint/indent, 2 spaces is diff from defaults
+    // required as 'off' since typescript-eslint has own versions
     indent: 'off',
+    'no-use-before-define': 'off',
     '@typescript-eslint/indent': ['error', 2],
     // rules from semistandard (don't include it, has standard dep version mismatch)
     semi: [2, 'always'],
