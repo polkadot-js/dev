@@ -111,7 +111,7 @@
     "vuepress": "^1.5.4",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12",
-    "yargs": "^15.4.1"
+    "yargs": "^16.0.0"
   },
   "devDependencies": {
     "@types/jest": "^26.0.13",

@@ -2846,7 +2846,7 @@ __metadata:
     vuepress: ^1.5.4
     webpack: ^4.44.1
     webpack-cli: ^3.3.12
-    yargs: ^15.4.1
+    yargs: ^16.0.0
   bin:
     polkadot-ci-ghact-build: ./scripts/polkadot-ci-ghact-build.js
     polkadot-ci-ghact-docs: ./scripts/polkadot-ci-ghact-docs.js
@@ -2946,11 +2946,11 @@ __metadata:
   linkType: hard
 
 "@types/babel__traverse@npm:*, @types/babel__traverse@npm:^7.0.6":
-  version: 7.0.13
-  resolution: "@types/babel__traverse@npm:7.0.13"
+  version: 7.0.14
+  resolution: "@types/babel__traverse@npm:7.0.14"
   dependencies:
     "@babel/types": ^7.3.0
-  checksum: 25d3cf96fcae3755d2d79ee5f696df56eba082cfc424a0b9d190dfad5c8e9167d1a4e2abbcb00bc5cd39853e4d638457caf894549ff583679dcb1b18b6a6ebc5
+  checksum: 322b1fc7dbd22c13aaef1d00fcd3569844240609c84558fff110290ad60a51d66735a1a6e122489a08250ec0076fcc6c8e7e44356f52e3fc93037de556631e82
   languageName: node
   linkType: hard
 
@@ -5230,9 +5230,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001109, caniuse-lite@npm:^1.0.30001124":
-  version: 1.0.30001124
-  resolution: "caniuse-lite@npm:1.0.30001124"
-  checksum: 61f208bfd7dc7fce7355392288d26180c48f095df251bd3fb94db542edfdea804cf2646f2f05c7f2b5bd613c7d935214bb0c4e257ae9508829d00644b823ceff
+  version: 1.0.30001125
+  resolution: "caniuse-lite@npm:1.0.30001125"
+  checksum: 1253f4fa1996d51c6fe4ccd659ae36a400476e9edb1427f956296f60265217b27e078f51d8820c40a8a6d7993d9530357f49ebd97be52c68ec44173814ba35fb
   languageName: node
   linkType: hard
 
@@ -5535,6 +5535,17 @@ __metadata:
     strip-ansi: ^6.0.0
     wrap-ansi: ^6.2.0
   checksum: e59d0642946dd300b1b002e69f43b32d55e682c84f6f2073705ffe77477b400aeabd4f4795467db0771a21d35ee070071f6a31925e4f83b52a7fe1f5c8e6e860
+  languageName: node
+  linkType: hard
+
+"cliui@npm:^7.0.0":
+  version: 7.0.1
+  resolution: "cliui@npm:7.0.1"
+  dependencies:
+    string-width: ^4.2.0
+    strip-ansi: ^6.0.0
+    wrap-ansi: ^7.0.0
+  checksum: 9c1433067a5860f9b8df76e5e0186a86992a180b8f8dd316357e19aa65b68d46964d448d18991fb598ab638a6c24218ce1331344fa4eec6767fcab40232b19fa
   languageName: node
   linkType: hard
 
@@ -7286,9 +7297,9 @@ __metadata:
   linkType: hard
 
 "electron-to-chromium@npm:^1.3.562":
-  version: 1.3.563
-  resolution: "electron-to-chromium@npm:1.3.563"
-  checksum: 342959259ed2bb776542870b8a08f65d1e2604e8039c6130a5e7eb40480803b4d72eefc27740e73cdce0bb3ef270afffb9ca84c434459011ef7ed8ad15c6187f
+  version: 1.3.564
+  resolution: "electron-to-chromium@npm:1.3.564"
+  checksum: 36915ddd4e2ed80c113abf5adc9d0ca962cdd966a110cfac9c90c8368f93f728d09da44765803ab3bad67894f61d756c427f75434e9eaa0371879e51c8f07f26
   languageName: node
   linkType: hard
 
@@ -8798,7 +8809,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"get-caller-file@npm:^2.0.1":
+"get-caller-file@npm:^2.0.1, get-caller-file@npm:^2.0.5":
   version: 2.0.5
   resolution: "get-caller-file@npm:2.0.5"
   checksum: 9dd9e1e2591039ee4c38c897365b904f66f1e650a8c1cb7b7db8ce667fa63e88cc8b13282b74df9d93de481114b3304a0487880d31cd926dfda6efe71455855d
@@ -13041,9 +13052,9 @@ __metadata:
   linkType: hard
 
 "node-releases@npm:^1.1.60":
-  version: 1.1.60
-  resolution: "node-releases@npm:1.1.60"
-  checksum: bed3480bd1d7a9c3ad0b4acf79eceabfb14c5ba3e5d48619c8ec1fb5197fb358c9d0c117e31c48d52b7dba75b71c1371c5e67d01f55b79cbd2d7b60ca30974d1
+  version: 1.1.61
+  resolution: "node-releases@npm:1.1.61"
+  checksum: 3aab2b13f55e7a5fdabc9d3d7f211b3d4b614e50b50467d01a2554f609cabe3f655e37a04b52da05aeec2d2001e92bf10821f70b821145ffc2e11a3abd7b457e
   languageName: node
   linkType: hard
 
@@ -18960,6 +18971,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"wrap-ansi@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "wrap-ansi@npm:7.0.0"
+  dependencies:
+    ansi-styles: ^4.0.0
+    string-width: ^4.1.0
+    strip-ansi: ^6.0.0
+  checksum: 09939dd775ae565bb99a25a6c072fe3775a95fa71751b5533c94265fe986ba3e3ab071a027ab76cf26876bd9afd10ac3c2d06d7c4bcce148bf7d2d9514e3a0df
+  languageName: node
+  linkType: hard
+
 "wrappy@npm:1":
   version: 1.0.2
   resolution: "wrappy@npm:1.0.2"
@@ -19103,6 +19125,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"y18n@npm:^5.0.1":
+  version: 5.0.1
+  resolution: "y18n@npm:5.0.1"
+  checksum: 602e3cc9460cab50c54e44da42b7faf4521fe5e1856a98b82c41031725c439531a044cede89da53555354216902a7a218b6cf2b79e0f32b1684fa51b8d97b37e
+  languageName: node
+  linkType: hard
+
 "yallist@npm:^2.1.2":
   version: 2.1.2
   resolution: "yallist@npm:2.1.2"
@@ -19154,6 +19183,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"yargs-parser@npm:^19.0.4":
+  version: 19.0.4
+  resolution: "yargs-parser@npm:19.0.4"
+  checksum: 69ed686f9f215b1aeccf767e6fa264e1d37b2ac9c5cf78cd55cab1afb994aa3cb8888c4e3d51c214050cdeefe133d61f4079c87f6621c13d0b7a6349b0677cb7
+  languageName: node
+  linkType: hard
+
 "yargs@npm:^13.3.2":
   version: 13.3.2
   resolution: "yargs@npm:13.3.2"
@@ -19191,7 +19227,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"yargs@npm:^15.3.1, yargs@npm:^15.4.1":
+"yargs@npm:^15.3.1":
   version: 15.4.1
   resolution: "yargs@npm:15.4.1"
   dependencies:
@@ -19207,6 +19243,21 @@ __metadata:
     y18n: ^4.0.0
     yargs-parser: ^18.1.2
   checksum: dbf687d6b938f01bbf11e158dde6df906282b70cd9295af0217ee8cefbd83ad09d49fa9458d0d5325b0e66f03df954a38986db96f91e5b46ccdbbaf9a0157b23
+  languageName: node
+  linkType: hard
+
+"yargs@npm:^16.0.0":
+  version: 16.0.0
+  resolution: "yargs@npm:16.0.0"
+  dependencies:
+    cliui: ^7.0.0
+    escalade: ^3.0.2
+    get-caller-file: ^2.0.5
+    require-directory: ^2.1.1
+    string-width: ^4.2.0
+    y18n: ^5.0.1
+    yargs-parser: ^19.0.4
+  checksum: b86497a09f25593600dd3d7c8850167499128f2eaf4393f03f6e2e8dcaed5ba0d417860f0c66b4d5f0c31cec6753eb5a12c9e149b69d682d48ab385d15a955ff
   languageName: node
   linkType: hard
 
