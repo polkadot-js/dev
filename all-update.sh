@@ -3,7 +3,7 @@
 # This software may be modified and distributed under the terms
 # of the ISC license. See the LICENSE file for details.
 
-DIRECTORIES=( "dev" "ts" "wasm" "common" "api" "ui" "extension" "tools" "apps" "client" )
+DIRECTORIES=( "dev" "ts" "wasm" "common" "api" "ui" "extension" "tools" "apps" ) # "client" )
 
 for REPO in "${DIRECTORIES[@]}"; do
   if [ "$REPO" != "" ] && [ -d "./$REPO/.git" ]; then
