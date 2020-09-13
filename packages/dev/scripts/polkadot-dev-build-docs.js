@@ -3,8 +3,8 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+const copySync = require('./copySync');
 const execSync = require('./execSync');
-const cpx = require('cpx');
 const fs = require('fs');
 const fse = require('fs-extra');
 const path = require('path');
@@ -47,7 +47,7 @@ function main () {
   if (fs.existsSync(path.join(process.cwd(), 'typedoc.js'))) {
     buildTypedoc(docRoot);
 
-    ['CHANGELOG.md', 'CONTRIBUTING.md'].forEach((file) => cpx.copySync(file, docRoot));
+    ['CHANGELOG.md', 'CONTRIBUTING.md'].forEach((file) => copySync(file, docRoot));
 
     if (fs.existsSync(path.join(process.cwd(), 'docs/.vuepress'))) {
       buildVuepress(docRoot);
