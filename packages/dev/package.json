@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/dev",
-  "version": "0.55.50",
+  "version": "0.55.51",
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "bin": {
     "polkadot-ci-ghact-build": "./scripts/polkadot-ci-ghact-build.js",
