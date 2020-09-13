@@ -3,8 +3,8 @@
 // This software may be modified and distributed under the terms
 // of the Apache-2.0 license. See the LICENSE file for details.
 
+const copySync = require('./copySync');
 const execSync = require('./execSync');
-const cpx = require('cpx');
 const os = require('os');
 const path = require('path');
 const fs = require('fs');
@@ -103,7 +103,7 @@ function npmPublish () {
   }
 
   rimraf.sync('build/package.json');
-  ['LICENSE', 'README.md', 'package.json'].forEach((file) => cpx.copySync(file, 'build'));
+  ['LICENSE', 'README.md', 'package.json'].forEach((file) => copySync(file, 'build'));
 
   process.chdir('build');
 
