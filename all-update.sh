@@ -1,9 +1,8 @@
 #!/bin/sh
 # Copyright 2017-2019 Jaco Greeff
-# This software may be modified and distributed under the terms
-# of the ISC license. See the LICENSE file for details.
+# SPDX-License-Identifier: Apache-2.0
 
-DIRECTORIES=( "dev" "ts" "wasm" "common" "api" "ui" "extension" "tools" "apps" ) # "client" )
+DIRECTORIES=( "dev" "ts" "polyfill" "wasm" "common" "api" "ui" "extension" "tools" "apps" ) # "client" )
 
 for REPO in "${DIRECTORIES[@]}"; do
   if [ "$REPO" != "" ] && [ -d "./$REPO/.git" ]; then
@@ -28,6 +27,8 @@ for REPO in "${DIRECTORIES[@]}"; do
         git branch -d -f $BRANCH
       fi
     done
+
+    git gc
 
     cd ..
   fi
