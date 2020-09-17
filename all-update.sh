@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright 2017-2019 Jaco Greeff
+# Copyright 2017-2020 Jaco Greeff
 # SPDX-License-Identifier: Apache-2.0
 
 DIRECTORIES=( "dev" "ts" "polyfill" "wasm" "common" "api" "ui" "extension" "tools" "apps" ) # "client" )
