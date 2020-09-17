@@ -56,7 +56,10 @@ module.exports = {
     'no-extra-semi': 2,
     // specific overrides
     'arrow-parens': ['error', 'always'],
-    'header/header': [2, 'line', [{ pattern: ' Copyright \\d{4}' }]],
+    'header/header': [2, 'line', [
+      { pattern: ' Copyright \\d{4}' },
+      ' SPDX-License-Identifier: Apache-2.0'
+    ]],
     'jsx-quotes': ['error', 'prefer-single'],
     'react/prop-types': [0], // this is a completely broken rule
     'object-curly-newline': ['error', {
