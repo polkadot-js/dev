@@ -1,4 +1,6 @@
 #!/bin/bash
+# Copyright 2017-2020 Jaco Greeff
+# SPDX-License-Identifier: Apache-2.0
 
 function copy_folder () {
   SRC="packages/$1/build"

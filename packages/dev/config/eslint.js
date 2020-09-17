@@ -1,6 +1,5 @@
 // Copyright 2017-2020 @polkadot/dev authors & contributors
-// This software may be modified and distributed under the terms
-// of the Apache-2.0 license. See the LICENSE file for details.
+// SPDX-License-Identifier: Apache-2.0
 
 // ordering here important (at least from a rule maintenance pov)
 /* eslint-disable sort-keys */
@@ -57,7 +56,10 @@ module.exports = {
     'no-extra-semi': 2,
     // specific overrides
     'arrow-parens': ['error', 'always'],
-    'header/header': [2, 'line', [{ pattern: ' Copyright \\d{4}' }]],
+    'header/header': [2, 'line', [
+      { pattern: ' Copyright \\d{4}' },
+      ' SPDX-License-Identifier: Apache-2.0'
+    ]],
     'jsx-quotes': ['error', 'prefer-single'],
     'react/prop-types': [0], // this is a completely broken rule
     'object-curly-newline': ['error', {
