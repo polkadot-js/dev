@@ -45,46 +45,7 @@ function runBuild () {
   execSync('yarn build');
 }
 
-function lernaGetVersion () {
-  return JSON.parse(
-    fs.readFileSync(path.resolve(process.cwd(), 'lerna.json'), 'utf8')
-  ).version;
-}
-
-function lernaBump () {
-  const currentVersion = lernaGetVersion();
-  const [version, tag] = currentVersion.split('-');
-  const [,, patch] = version.split('.');
-  const isBeta = !!tag && tag.includes('beta.');
-
-  if (isBeta) {
-    // if we have a beta version, just continue the stream of betas
-    execSync('yarn run polkadot-dev-version --type prerelease');
-  } else if (argv['skip-beta']) {
-    // don't allow beta versions
-    execSync('yarn polkadot-dev-version --type patch');
-  } else if (patch === '0') {
-    // patch is .0, so publish this as an actual release (surely we did out job on beta)
-    execSync('yarn polkadot-dev-version --type patch');
-  } else if (patch === '1') {
-    // continue with first new minor as beta
-    execSync('yarn polkadot-dev-version --type preminor');
-  } else {
-    // manual setting of version, make some changes so we can commit
-    fs.appendFileSync(path.join(process.cwd(), '.123trigger'), lernaGetVersion());
-  }
-}
-
-function npmBump () {
-  execSync('npm --no-git-tag-version --force version patch');
-  execSync('yarn install');
-}
-
-function npmGetVersion (noLerna) {
-  if (!noLerna && hasLerna) {
-    return lernaGetVersion();
-  }
-
+function npmGetVersion () {
   return JSON.parse(
     fs.readFileSync(path.resolve(process.cwd(), 'package.json'), 'utf8')
   ).version;
@@ -106,7 +67,7 @@ function npmPublish () {
 
   process.chdir('build');
 
-  const tag = npmGetVersion(true).includes('-beta.') ? '--tag beta' : '';
+  const tag = npmGetVersion().includes('-') ? '--tag beta' : '';
   let count = 1;
 
   while (true) {
@@ -140,10 +101,25 @@ function gitSetup () {
 }
 
 function gitBump () {
-  if (hasLerna) {
-    lernaBump();
+  const currentVersion = npmGetVersion();
+  const [version, tag] = currentVersion.split('-');
+  const [,, patch] = version.split('.');
+
+  if (tag) {
+    // if we have a beta version, just continue the stream of betas
+    execSync('yarn polkadot-dev-version --type prerelease');
+  } else if (argv['skip-beta']) {
+    // don't allow beta versions
+    execSync('yarn polkadot-dev-version --type patch');
+  } else if (patch === '0') {
+    // patch is .0, so publish this as an actual release (surely we did our job on beta)
+    execSync('yarn polkadot-dev-version --type patch');
+  } else if (patch === '1') {
+    // continue with first new minor as beta
+    execSync('yarn polkadot-dev-version --type preminor');
   } else {
-    npmBump();
+    // manual setting of version, make some changes so we can commit
+    fs.appendFileSync(path.join(process.cwd(), '.123trigger'), currentVersion);
   }
 
   execSync('git add --all .');
@@ -158,7 +134,7 @@ function gitPush () {
 
     if (changes.includes(`## ${version}`)) {
       doGHRelease = true;
-    } else if (!version.includes('-beta.') && version.endsWith('.1')) {
+    } else if (version.endsWith('.1')) {
       throw new Error(`Unable to release, no CHANGELOG entry for ${version}`);
     }
   }
@@ -170,7 +146,7 @@ function gitPush () {
   }
 
   // add the skip checks for GitHub ...
-  execSync(`git commit --no-status --quiet -m "[CI Skip] release/${version.includes('-beta.') ? 'beta' : 'stable'} ${version}
+  execSync(`git commit --no-status --quiet -m "[CI Skip] release/${version.includes('-') ? 'beta' : 'stable'} ${version}
 
 
 skip-checks: true"`);
