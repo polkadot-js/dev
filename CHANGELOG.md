@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.56.1
+
+- Optional lerna in publish
+
 ## 0.55.3
 
 - Publish draft release
