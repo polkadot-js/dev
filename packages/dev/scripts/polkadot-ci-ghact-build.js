@@ -19,7 +19,6 @@ const argv = require('yargs')
   .argv;
 
 const repo = `https://${process.env.GH_PAT}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
-const hasLerna = fs.existsSync('lerna.json');
 
 console.log('$ polkadot-ci-ghact-build', process.argv.slice(2).join(' '));
 
@@ -116,7 +115,7 @@ function gitBump () {
     execSync('yarn polkadot-dev-version --type patch');
   } else if (patch === '1') {
     // continue with first new minor as beta
-    execSync('yarn polkadot-dev-version --type preminor');
+    execSync('yarn polkadot-dev-version --type prerelease');
   } else {
     // manual setting of version, make some changes so we can commit
     fs.appendFileSync(path.join(process.cwd(), '.123trigger'), currentVersion);
@@ -163,7 +162,7 @@ skip-checks: true"`);
 }
 
 function loopFunc (fn) {
-  if (hasLerna) {
+  if (fs.existsSync('packages')) {
     fs
       .readdirSync('packages')
       .filter((dir) => {

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.57.1
+
+- Drop lerna dependency completely
+
 ## 0.56.1
 
 - Optional lerna in publish
