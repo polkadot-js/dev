@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 const fs = require('fs');
+const path = require('path');
 const { type } = require('yargs')
   .options({
     type: {
@@ -19,8 +20,16 @@ const execSync = require('./execSync');
 
 console.log('$ polkadot-dev-version', process.argv.slice(2).join(' '));
 
+execSync(`yarn version ${type}`);
+
 if (fs.existsSync('packages')) {
-  execSync(`yarn workspaces foreach --all version ${type}`);
-} else {
-  execSync(`yarn version ${type}`);
+  fs
+    .readdirSync('packages')
+    .filter((dir) => {
+      const pkgDir = path.join(process.cwd(), 'packages', dir);
+
+      return fs.statSync(pkgDir).isDirectory() &&
+        fs.existsSync(path.join(pkgDir, 'package.json'));
+    })
+    .forEach((package) => execSync(`yarn workspaces foreach --include ${package} version ${type}`));
 }
