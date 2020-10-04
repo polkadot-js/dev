@@ -18,27 +18,28 @@ const { type } = require('yargs')
   .argv;
 const lernaPath = path.join(process.cwd(), 'lerna.json');
 const pkgPath = path.join(process.cwd(), 'package.json');
+const spacePath = path.join(process.cwd(), 'packages');
 
 console.log('$ polkadot-dev-version', process.argv.slice(2).join(' '));
 
-const args = ['version', type]
-  .concat(
-    ['preminor', 'prerelease'].includes(type)
-      ? ['--preid', 'beta']
-      : []
-  )
-  .concat(['--yes', '--exact', '--no-git-tag-version', '--no-push', '--allow-branch', '"*"']);
+if (fs.existsSync(spacePath)) {
+  if (fs.existsSync(lernaPath)) {
+    const preid = ['preminor', 'prerelease'].includes(type)
+      ? '--preid beta'
+      : '';
 
-execSync(`yarn polkadot-exec-lerna ${args.join(' ')}`);
+    execSync(`yarn polkadot-exec-lerna version ${type} ${preid} --yes --exact --no-git-tag-version --no-push --allow-branch "*"`);
 
-if (fs.existsSync(lernaPath)) {
-  const { version } = require(lernaPath);
-  const pkgJson = require(pkgPath);
+    const { version } = require(lernaPath);
+    const pkgJson = require(pkgPath);
 
-  pkgJson.version = version;
-  fs.writeFileSync(pkgPath, JSON.stringify(pkgJson, null, 2), { flag: 'w' });
+    pkgJson.version = version;
+    fs.writeFileSync(pkgPath, JSON.stringify(pkgJson, null, 2), { flag: 'w' });
+
+    execSync('yarn install');
+  } else {
+    execSync(`yarn workspaces foreach version ${type}`);
+  }
 } else {
-  console.error('No root lerna.json');
+  execSync(`yarn version ${type}`);
 }
-
-execSync('yarn install');
