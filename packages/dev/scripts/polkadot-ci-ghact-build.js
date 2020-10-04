@@ -104,9 +104,8 @@ function gitBump () {
   const currentVersion = npmGetVersion();
   const [version, tag] = currentVersion.split('-');
   const [,, patch] = version.split('.');
-  const isBeta = !!tag;
 
-  if (isBeta) {
+  if (tag) {
     // if we have a beta version, just continue the stream of betas
     execSync('yarn polkadot-dev-version --type prerelease');
   } else if (argv['skip-beta']) {
