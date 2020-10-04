@@ -31,5 +31,5 @@ if (fs.existsSync('packages')) {
       return fs.statSync(pkgDir).isDirectory() &&
         fs.existsSync(path.join(pkgDir, 'package.json'));
     })
-    .forEach((package) => execSync(`yarn workspaces foreach --include ${package} version ${type}`));
+    .forEach((package) => execSync(`yarn workspace packages/${package} version ${type}`));
 }
