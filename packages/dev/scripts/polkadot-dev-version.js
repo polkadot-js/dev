@@ -38,8 +38,8 @@ if (fs.existsSync(spacePath)) {
 
     execSync('yarn install');
   } else {
-    execSync(`yarn workspaces foreach version ${type}`);
+    execSync(`yarn workspaces foreach version ${type === 'preminor' ? 'prerelease' : type}`);
   }
 } else {
-  execSync(`yarn version ${type}`);
+  execSync(`yarn version ${type === 'preminor' ? 'prerelease' : type}`);
 }

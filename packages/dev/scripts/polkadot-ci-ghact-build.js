@@ -67,7 +67,7 @@ function npmPublish () {
 
   process.chdir('build');
 
-  const tag = npmGetVersion().includes('0-') ? '--tag beta' : '';
+  const tag = npmGetVersion().includes('-') ? '--tag beta' : '';
   let count = 1;
 
   while (true) {
@@ -104,9 +104,8 @@ function gitBump () {
   const currentVersion = npmGetVersion();
   const [version, tag] = currentVersion.split('-');
   const [,, patch] = version.split('.');
-  const isBeta = !!tag;
 
-  if (isBeta) {
+  if (tag) {
     // if we have a beta version, just continue the stream of betas
     execSync('yarn polkadot-dev-version --type prerelease');
   } else if (argv['skip-beta']) {
@@ -147,7 +146,7 @@ function gitPush () {
   }
 
   // add the skip checks for GitHub ...
-  execSync(`git commit --no-status --quiet -m "[CI Skip] release/${version.includes('0-') ? 'beta' : 'stable'} ${version}
+  execSync(`git commit --no-status --quiet -m "[CI Skip] release/${version.includes('-') ? 'beta' : 'stable'} ${version}
 
 
 skip-checks: true"`);
