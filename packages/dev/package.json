@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/dev",
-  "version": "0.56.1",
+  "version": "0.57.0",
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "bin": {
     "polkadot-ci-ghact-build": "./scripts/polkadot-ci-ghact-build.js",
@@ -100,7 +100,6 @@
     "jest-config": "^26.4.2",
     "jest-haste-map": "^26.3.0",
     "jest-resolve": "^26.4.0",
-    "lerna": "^3.22.1",
     "madge": "^3.11.0",
     "minimatch": "^3.0.4",
     "mkdirp": "^1.0.4",
