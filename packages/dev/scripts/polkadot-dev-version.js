@@ -25,11 +25,7 @@ execSync(`yarn version ${type}`);
 if (fs.existsSync('packages')) {
   fs
     .readdirSync('packages')
-    .filter((dir) => {
-      const pkgDir = path.join(process.cwd(), 'packages', dir);
-
-      return fs.statSync(pkgDir).isDirectory() &&
-        fs.existsSync(path.join(pkgDir, 'package.json'));
-    })
-    .forEach((package) => execSync(`yarn workspace packages/${package} version ${type}`));
+    .map((dir) => path.join(process.cwd(), 'packages', dir, 'package.json'))
+    .filter((pkgPath) => fs.existsSync(pkgPath))
+    .forEach((pkgPath) => execSync(`yarn workspace ${JSON.parse(fs.readFileSync(pkgPath, 'utf8')).name} version ${type}`));
 }
