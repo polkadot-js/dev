@@ -20,7 +20,7 @@ const execSync = require('./execSync');
 console.log('$ polkadot-dev-version', process.argv.slice(2).join(' '));
 
 if (fs.existsSync('packages')) {
-  execSync(`yarn workspaces foreach --parallel --topological version ${type}`);
+  execSync(`yarn workspaces foreach --all --parallel --topological version ${type}`);
 } else {
   execSync(`yarn version ${type}`);
 }
