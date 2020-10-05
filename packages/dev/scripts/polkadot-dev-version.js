@@ -23,10 +23,12 @@ console.log('$ polkadot-dev-version', process.argv.slice(2).join(' '));
 execSync(`yarn version ${type}`);
 
 if (fs.existsSync('packages')) {
+  const { version } = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf8'));
+
   fs
     .readdirSync('packages')
     .map((dir) => path.join(process.cwd(), 'packages', dir, 'package.json'))
     .filter((pkgPath) => fs.existsSync(pkgPath))
     .map((pkgPath) => JSON.parse(fs.readFileSync(pkgPath, 'utf8')))
-    .forEach((pkgJson) => execSync(`yarn workspace ${pkgJson.name} version ${type}`));
+    .forEach((pkgJson) => execSync(`yarn workspace ${pkgJson.name} version ${version}`));
 }
