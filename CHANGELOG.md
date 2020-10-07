@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.58.1
+
+- Drop vuepress dependency completely
+
 ## 0.57.1
 
 - Drop lerna dependency completely
