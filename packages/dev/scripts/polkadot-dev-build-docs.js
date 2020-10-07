@@ -25,14 +25,6 @@ function buildTypedoc (docRoot) {
     });
 }
 
-function buildVuepress (docRoot) {
-  execSync(`yarn polkadot-exec-vuepress build ${docRoot}`);
-
-  rimraf.sync(`${docRoot}/assets`);
-  fse.copySync(`${docRoot}/.vuepress/dist`, docRoot);
-  rimraf.sync(`${docRoot}/.vuepress/dist`);
-}
-
 function main () {
   let docRoot = path.join(process.cwd(), 'docs');
 
@@ -47,10 +39,6 @@ function main () {
     buildTypedoc(docRoot);
 
     ['CHANGELOG.md', 'CONTRIBUTING.md'].forEach((file) => copySync(file, docRoot));
-
-    if (fs.existsSync(path.join(process.cwd(), 'docs/.vuepress'))) {
-      buildVuepress(docRoot);
-    }
   }
 }
 
