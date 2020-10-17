@@ -2,7 +2,7 @@
 # Copyright 2017-2020 Jaco Greeff
 # SPDX-License-Identifier: Apache-2.0
 
-DIRECTORIES=( "dev" "ts" "polyfill" "wasm" "common" "api" "docs" "ui" "extension" "tools" "apps" ) # "client" )
+DIRECTORIES=( "dev" "ts" "polyfill" "wasm" "common" "api" "docs" "ui" "phishing" "extension" "tools" "apps" ) # "client" )
 
 for REPO in "${DIRECTORIES[@]}"; do
   if [ "$REPO" != "" ] && [ -d "./$REPO/.git" ]; then
