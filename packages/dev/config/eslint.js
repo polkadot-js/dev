@@ -57,7 +57,7 @@ module.exports = {
     // specific overrides
     'arrow-parens': ['error', 'always'],
     'header/header': [2, 'line', [
-      { pattern: ' Copyright \\d{4}' },
+      { pattern: ' Copyright \\d{4}(-\\d{4})? @polkadot/' },
       ' SPDX-License-Identifier: Apache-2.0'
     ]],
     'jsx-quotes': ['error', 'prefer-single'],

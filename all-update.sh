@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright 2017-2020 Jaco Greeff
+# Copyright 2017-2020 @polkadot/dev authors & contributors
 # SPDX-License-Identifier: Apache-2.0
 
 DIRECTORIES=( "dev" "ts" "polyfill" "wasm" "common" "api" "docs" "ui" "phishing" "extension" "tools" "apps" ) # "client" )
