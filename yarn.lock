@@ -5181,8 +5181,8 @@ __metadata:
   linkType: hard
 
 "filing-cabinet@npm:^2.5.1":
-  version: 2.5.1
-  resolution: "filing-cabinet@npm:2.5.1"
+  version: 2.6.0
+  resolution: "filing-cabinet@npm:2.6.0"
   dependencies:
     app-module-path: ^2.2.0
     commander: ^2.13.0
@@ -5199,7 +5199,7 @@ __metadata:
     typescript: ^3.0.3
   bin:
     filing-cabinet: bin/cli.js
-  checksum: 0354d26627da10c91aa3b1e99066e25745ee9da672222b102bd31b9e37528d563306e0a7c746c4db41dfc49923f296db0ca3bd55bfd914e5958a900244af76cc
+  checksum: 6a2bac24e8678dbaf92310ff5c98e828ea2dd48e40933d706d88477271204afae5925af2ec3e000329ec6bf3bd08aa0c3243ba624161bafd070e5ab42ad7e119
   languageName: node
   linkType: hard
 
@@ -6002,9 +6002,9 @@ fsevents@^1.2.7:
   linkType: hard
 
 "highlight.js@npm:^10.2.0":
-  version: 10.2.1
-  resolution: "highlight.js@npm:10.2.1"
-  checksum: a799dabfbf78ae5f369d113bfedcf0ba6ea4f9aefcc44d4b27a6d77ec0d6b90fc31b01137497c9710c7d87ec8b2613e613c9499d69bfa65282bcbaf8ca7daeaa
+  version: 10.3.1
+  resolution: "highlight.js@npm:10.3.1"
+  checksum: fc7b665c4b00ea371b5a483dbd0586572a8229b24f5d7340afe0e9116364f36ec3b85d550c67f3dc622a19cf2649f6f01f0d2a926edcea9430bd050f79f5ce08
   languageName: node
   linkType: hard
 
@@ -11110,11 +11110,11 @@ fsevents@^1.2.7:
   linkType: hard
 
 "uglify-js@npm:^3.1.4":
-  version: 3.11.2
-  resolution: "uglify-js@npm:3.11.2"
+  version: 3.11.3
+  resolution: "uglify-js@npm:3.11.3"
   bin:
     uglifyjs: bin/uglifyjs
-  checksum: 2bc8806d47c615c7b594e716a7d6da80ff11260b3aa504cb5e9b2dffea5d7efe4764b7e7831bfd6e20a8713fe3b29700bc9228b706db7eaf6ac41edd010dfc94
+  checksum: 893090b962e6f1026c818a5b442e0ff84838560c4d91ab56dea154d51e1a531dfb34ec775e44c603d3ea40a25fe5374e679bd042afaf790372c8fabf3aa84694
   languageName: node
   linkType: hard
 
