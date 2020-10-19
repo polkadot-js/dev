@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.59.1
+
+- Default to new React runtime preset (after React 16.14)
+
 ## 0.58.1
 
 - Drop vuepress dependency completely
