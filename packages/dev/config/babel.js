@@ -26,7 +26,7 @@ module.exports = {
       }
     }],
     '@babel/preset-typescript',
-    '@babel/preset-react'
+    ['@babel/preset-react', { runtime: 'automatic' }]
   ]),
   plugins: resolver([
     // ordering important, decorators before class properties
