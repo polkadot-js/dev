@@ -1751,7 +1751,7 @@ __metadata:
     browserslist: ^4.14.5
     chalk: ^4.1.0
     coveralls: ^3.1.0
-    eslint: ^7.11.0
+    eslint: 7.11.0
     eslint-config-standard: ^15.0.0
     eslint-import-resolver-node: ^0.3.4
     eslint-plugin-header: ^3.1.0
@@ -3276,9 +3276,9 @@ __metadata:
   linkType: hard
 
 "caniuse-lite@npm:^1.0.30001135":
-  version: 1.0.30001150
-  resolution: "caniuse-lite@npm:1.0.30001150"
-  checksum: ff8944b2ca6db465e9e878be38f66efad7f4a8cf06aea7c3d463b428649266f75b84dddd130fd3fd46841e160cfac3cfedbe40f3434f428ceaaa709ef6b8b2b1
+  version: 1.0.30001151
+  resolution: "caniuse-lite@npm:1.0.30001151"
+  checksum: 3acb52ac17034d7abe4468e66293c9e5597cb5f123bd8f86ea3b87e758112ac4259fdbc35f8f4cbf5477e385dd975f11031bfbf26f4cec64d64a0c567a430b58
   languageName: node
   linkType: hard
 
@@ -4769,7 +4769,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:^7.11.0":
+"eslint@npm:7.11.0":
   version: 7.11.0
   resolution: "eslint@npm:7.11.0"
   dependencies:
