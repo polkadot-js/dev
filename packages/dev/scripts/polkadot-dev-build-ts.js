@@ -3,11 +3,12 @@
 // SPDX-License-Identifier: Apache-2.0
 
 const babel = require('@babel/cli/lib/babel/dir').default;
-const copySync = require('./copySync');
-const execSync = require('./execSync');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
 const path = require('path');
+
+const copySync = require('./copySync');
+const execSync = require('./execSync');
 
 const CPX = ['css', 'gif', 'hbs', 'jpg', 'js', 'png', 'svg', 'd.ts']
   .map((ext) => `src/**/*.${ext}`)

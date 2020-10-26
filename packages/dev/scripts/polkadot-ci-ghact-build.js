@@ -1,9 +1,6 @@
 #!/usr/bin/env node
 // Copyright 2017-2020 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
-
-const copySync = require('./copySync');
-const execSync = require('./execSync');
 const os = require('os');
 const path = require('path');
 const fs = require('fs');
@@ -17,6 +14,9 @@ const argv = require('yargs')
   })
   .strict()
   .argv;
+
+const copySync = require('./copySync');
+const execSync = require('./execSync');
 
 const repo = `https://${process.env.GH_PAT}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
 

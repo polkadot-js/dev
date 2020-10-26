@@ -4,7 +4,7 @@
 // adapted from the unmaintained https://github.com/mysticatea/cpx implementation
 // Copyright (c) 2015 Toru Nagashima under MIT
 //
-// This only uses the sync copy needed and removed unneeded dependencies (since as ancient chokidar)
+// This only uses the sync copy needed and removed unneeded dependencies (such as ancient chokidar)
 
 const fs = require('fs-extra');
 const glob = require('glob');
