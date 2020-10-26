@@ -40,6 +40,23 @@ echo "*** Updating inter-package-deps"
 ./dev/all-deps.js
 
 echo ""
+echo "*** Restoring updates to detached branches"
+
+for REPO in "${DIRECTORIES[@]}"; do
+  if [ "$REPO" != "" ] && [ -d "./$REPO/.git" ]; then
+    cd $REPO
+
+    DETACHED=$(git status | grep "HEAD detached")
+
+    if [ "$DETACHED" != "" ]; then
+      git reset --hard
+    fi
+
+    cd ..
+  fi
+done
+
+echo ""
 echo "*** Installing updated packages"
 
 for REPO in "${DIRECTORIES[@]}"; do
