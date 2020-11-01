@@ -13,10 +13,10 @@ function doCallback (fn: (a: string) => string): void {
 /**
  * This is just a test file to test the doc generation
  */
-export const echo = (value: EchoString): string => {
+export const echo = (value: EchoString, start = 0, end?: number): string => {
   count++;
 
   doCallback((a) => a);
 
-  return `${count}: ${A}: ${value}`;
+  return `${count}: ${A}: ${value}`.substr(start, end);
 };

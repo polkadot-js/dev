@@ -56,6 +56,7 @@ module.exports = {
     'no-extra-semi': 2,
     // specific overrides
     'arrow-parens': ['error', 'always'],
+    'default-param-last': [0], // conflicts with TS version (this one doesn't allow TS ?)
     'header/header': [2, 'line', [
       { pattern: ' Copyright \\d{4}(-\\d{4})? @polkadot/' },
       ' SPDX-License-Identifier: Apache-2.0'
