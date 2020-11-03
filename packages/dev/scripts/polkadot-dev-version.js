@@ -7,7 +7,7 @@ const path = require('path');
 const { type } = require('yargs')
   .options({
     type: {
-      choices: ['major', 'minor', 'patch', 'prerelease'],
+      choices: ['major', 'minor', 'patch', 'pre'],
       description: 'The type of version adjustment to apply',
       required: true,
       type: 'string'
@@ -33,7 +33,7 @@ function updateDependencies (dependencies, others, version) {
 
 console.log('$ polkadot-dev-version', process.argv.slice(2).join(' '));
 
-execSync(`yarn version ${type}`);
+execSync(`yarn version ${type === 'pre' ? 'prerelease' : type}`);
 
 // yarn workspaces does an OOM, manual looping takes ages
 if (fs.existsSync('packages')) {
