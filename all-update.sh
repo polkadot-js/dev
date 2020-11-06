@@ -17,7 +17,6 @@ for REPO in "${DIRECTORIES[@]}"; do
     if [ "$CURRENT" = "master" ]; then
       git fetch
       git pull
-      git prune
     else
       echo "$CURRENT !== master"
     fi
@@ -28,6 +27,7 @@ for REPO in "${DIRECTORIES[@]}"; do
       fi
     done
 
+    git prune
     git gc
 
     cd ..
