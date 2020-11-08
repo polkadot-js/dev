@@ -24,7 +24,9 @@ function updateDependencies (dependencies, others, version) {
     .sort((a, b) => a[0].localeCompare(b[0]))
     .reduce((result, [key, value]) => {
       result[key] = others.includes(key) && value !== '*'
-        ? `^${version}`
+        ? value.startsWith('^')
+          ? `^${version}`
+          : version
         : value;
 
       return result;
