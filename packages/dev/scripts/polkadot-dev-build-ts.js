@@ -71,7 +71,7 @@ async function buildJs (dir, withModules) {
 async function main () {
   execSync('yarn polkadot-dev-clean-build');
 
-  const withModules = fs.existsSync('babel.esnext.js');
+  const withModules = fs.existsSync(path.join(process.cwd(), 'babel.esnext.js'));
 
   process.chdir('packages');
 
