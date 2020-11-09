@@ -21,11 +21,13 @@ function buildWebpack () {
 }
 
 async function buildBabelConfig (dir, isModules) {
-  const outBase = isModules ? 'build/esnext' : 'build';
+  const [babelConfig, outBase, copySrc] = isModules
+    ? ['babel.esnext.json', 'build/esnext', ['package.json']]
+    : ['babel.config.js', 'build', [...CPX]];
 
   await babel({
     babelOptions: {
-      configFile: path.join(process.cwd(), `../../babel.${isModules ? 'esnext' : 'config'}.js`)
+      configFile: path.join(process.cwd(), `../../${babelConfig}`)
     },
     cliOptions: {
       extensions: ['.ts', '.tsx'],
@@ -34,10 +36,6 @@ async function buildBabelConfig (dir, isModules) {
       outDir: path.join(process.cwd(), outBase)
     }
   });
-
-  const copySrc = isModules
-    ? ['package.json']
-    : [...CPX];
 
   copySrc
     .concat(`../../build/${dir}/src/**/*.d.ts`, `../../build/packages/${dir}/src/**/*.d.ts`)
