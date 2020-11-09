@@ -35,7 +35,11 @@ async function buildBabelConfig (dir, isModules) {
     }
   });
 
-  [...CPX]
+  const copySrc = isModules
+    ? ['package.json']
+    : [...CPX];
+
+  copySrc
     .concat(`../../build/${dir}/src/**/*.d.ts`, `../../build/packages/${dir}/src/**/*.d.ts`)
     .forEach((src) => copySync(src, outBase));
 }
