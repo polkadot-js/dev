@@ -22,7 +22,7 @@ function buildWebpack () {
 
 async function buildBabelConfig (dir, isModules) {
   const [babelConfig, outBase, copySrc] = isModules
-    ? ['babel.esnext.json', 'build/esnext', ['package.json']]
+    ? ['babel.esnext.js', 'build/esnext', ['package.json']]
     : ['babel.config.js', 'build', [...CPX]];
 
   await babel({
