@@ -20,7 +20,9 @@ function buildWebpack () {
   execSync('yarn polkadot-exec-webpack --config webpack.config.js --mode production');
 }
 
-async function buildBabelConfig (isModules) {
+async function buildBabelConfig (dir, isModules) {
+  const outBase = isModules ? 'build/esnext' : 'build';
+
   await babel({
     babelOptions: {
       configFile: path.join(process.cwd(), `../../babel.${isModules ? 'esnext' : 'config'}.js`)
@@ -29,21 +31,21 @@ async function buildBabelConfig (isModules) {
       extensions: ['.ts', '.tsx'],
       filenames: ['src'],
       ignore: '**/*.d.ts',
-      outDir: path.join(process.cwd(), isModules ? 'build/esnext' : 'build')
+      outDir: path.join(process.cwd(), outBase)
     }
   });
-}
-
-async function buildBabel (dir, withModules) {
-  await buildBabelConfig(false);
-
-  if (withModules) {
-    await buildBabelConfig(true);
-  }
 
   [...CPX]
     .concat(`../../build/${dir}/src/**/*.d.ts`, `../../build/packages/${dir}/src/**/*.d.ts`)
-    .forEach((src) => copySync(src, 'build'));
+    .forEach((src) => copySync(src, outBase));
+}
+
+async function buildBabel (dir, withModules) {
+  await buildBabelConfig(dir, false);
+
+  if (withModules) {
+    await buildBabelConfig(dir, true);
+  }
 }
 
 async function buildJs (dir, withModules) {
