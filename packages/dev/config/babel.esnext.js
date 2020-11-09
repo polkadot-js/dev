@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 const plugins = require('./babel-plugins');
-const presets = require('./babel-presets-commonjs');
+const presets = require('./babel-presets-esnext');
 const resolver = require('./babel-resolver');
 
 // ordering here important
