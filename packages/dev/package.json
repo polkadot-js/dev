@@ -36,10 +36,6 @@
   "contributors": [],
   "license": "Apache-2.0",
   "engines": {},
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/polkadot-js/dev.git"

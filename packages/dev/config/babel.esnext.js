@@ -10,11 +10,5 @@ const resolver = require('./babel-resolver');
 
 module.exports = {
   presets: resolver(presets),
-  plugins: resolver([
-    ['babel-plugin-module-extension-resolver', {
-      dstExtension: '.mjs',
-      srcExtensions: ['.ts', '.tsx']
-    }],
-    ...plugins
-  ])
+  plugins: resolver(plugins)
 };
