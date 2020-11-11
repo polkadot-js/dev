@@ -4,5 +4,11 @@
 
 console.log('$ polkadot-dev-run-test', process.argv.slice(2).join(' '));
 
+process.env.NODE_OPTIONS = `--experimental-vm-modules${
+  process.env.NODE_OPTIONS
+    ? ` ${process.env.NODE_OPTIONS}`
+    : ''
+}`;
+
 // eslint-disable-next-line
-require('jest-cli/build/cli').run();
+require('jest-cli/bin/jest');

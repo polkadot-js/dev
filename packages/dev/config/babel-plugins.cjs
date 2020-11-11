@@ -17,5 +17,5 @@ module.exports = [
   '@babel/plugin-syntax-import-meta',
   '@babel/plugin-syntax-top-level-await',
   'babel-plugin-styled-components',
-  process.env.NODE_ENV === 'test' && '@polkadot/dev/config/babel-plugin-fix-istanbul'
+  process.env.NODE_ENV === 'test' && '@polkadot/dev/config/babel-plugin-fix-istanbul.cjs'
 ];
