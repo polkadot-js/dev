@@ -2,12 +2,13 @@
 // Copyright 2017-2020 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-const copySync = require('./copySync');
-const execSync = require('./execSync');
 const fs = require('fs');
 const fse = require('fs-extra');
 const path = require('path');
 const rimraf = require('rimraf');
+
+const copySync = require('./copySync.cjs');
+const execSync = require('./execSync.cjs');
 
 console.log('$ polkadot-dev-build-docs', process.argv.slice(2).join(' '));
 

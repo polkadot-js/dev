@@ -1,4 +1,11 @@
-// Copyright 2017-2020 @polkadot/dev authors & contributors
+// Copyright 2017-2020 @polkadot/util authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-module.exports = require('@polkadot/dev/config/jest');
+const config = require('@polkadot/dev/config/jest.cjs');
+
+module.exports = Object.assign({}, config, {
+  modulePathIgnorePatterns: [
+    '<rootDir>/packages/dev/build'
+  ],
+  resolver: '@polkadot/dev/config/jest-resolver.cjs'
+});

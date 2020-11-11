@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 // Copyright 2017-2020 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
+
 const os = require('os');
 const path = require('path');
 const fs = require('fs');
@@ -15,8 +16,8 @@ const argv = require('yargs')
   .strict()
   .argv;
 
-const copySync = require('./copySync');
-const execSync = require('./execSync');
+const copySync = require('./copySync.cjs');
+const execSync = require('./execSync.cjs');
 
 const repo = `https://${process.env.GH_PAT}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
 
@@ -106,16 +107,16 @@ function gitBump () {
 
   if (tag) {
     // if we have a beta version, just continue the stream of betas
-    execSync('yarn polkadot-dev-version --type pre');
+    execSync('yarn polkadot-dev-version pre');
   } else if (argv['skip-beta']) {
     // don't allow beta versions
-    execSync('yarn polkadot-dev-version --type patch');
+    execSync('yarn polkadot-dev-version patch');
   } else if (patch === '0') {
     // patch is .0, so publish this as an actual release (surely we did our job on beta)
-    execSync('yarn polkadot-dev-version --type patch');
+    execSync('yarn polkadot-dev-version patch');
   } else if (patch === '1') {
     // continue with first new minor as beta
-    execSync('yarn polkadot-dev-version --type pre');
+    execSync('yarn polkadot-dev-version pre');
   } else {
     // manual setting of version, make some changes so we can commit
     fs.appendFileSync(path.join(process.cwd(), '.123trigger'), currentVersion);
