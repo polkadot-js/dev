@@ -2,9 +2,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 const { defaults } = require('jest-config');
+const { createRequire } = require('module');
 
 module.exports = {
-  moduleFileExtensions: ['ts', 'tsx', ...defaults.moduleFileExtensions],
+  moduleFileExtensions: [...defaults.moduleFileExtensions, 'ts', 'tsx'],
   testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
   transform: {
     '^.+\\.(js|jsx|ts|tsx)$': require.resolve('babel-jest')
