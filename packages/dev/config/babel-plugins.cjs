@@ -20,7 +20,7 @@ module.exports = function (dstExtension) {
     '@babel/plugin-syntax-import-meta',
     '@babel/plugin-syntax-top-level-await',
     'babel-plugin-styled-components',
-    process.env.NODE_ENV === 'test' && '@polkadot/dev/config/babel-plugin-fix-istanbul.cjs',
+    // process.env.NODE_ENV === 'test' && '@polkadot/dev/config/babel-plugin-fix-istanbul.cjs',
     dstExtension && process.env.NODE_ENV !== 'test' && ['babel-plugin-module-extension-resolver', {
       dstExtension,
       srcExtensions: ['.ts', '.tsx']
