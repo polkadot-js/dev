@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/dev",
-  "version": "0.59.23",
+  "version": "0.60.0",
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "bin": {
     "polkadot-ci-ghact-build": "./scripts/polkadot-ci-ghact-build.js",
@@ -30,19 +30,12 @@
     "Polkadot"
   ],
   "author": "Jaco Greeff <jacogr@gmail.com>",
-  "maintainers": [
-    "Jaco Greeff <jacogr@gmail.com>"
-  ],
+  "maintainers": [],
   "contributors": [],
   "license": "Apache-2.0",
   "engines": {},
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/polkadot-js/dev.git"
-  },
-  "bugs": {
-    "url": "https://github.com/polkadot-js/dev/issues"
-  },
+  "repository": "github:polkadot-js/dev",
+  "bugs": "https://github.com/polkadot-js/dev/issues",
   "homepage": "https://github.com/polkadot-js/dev#readme",
   "dependencies": {
     "@babel/cli": "^7.12.1",

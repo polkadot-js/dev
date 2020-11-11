@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.60.1
+
+- Allow for both esm & cjs Babel config
+
 ## 0.59.1
 
 - Default to new React runtime preset (after React 16.14)

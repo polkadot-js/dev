@@ -106,16 +106,16 @@ function gitBump () {
 
   if (tag) {
     // if we have a beta version, just continue the stream of betas
-    execSync('yarn polkadot-dev-version --type pre');
+    execSync('yarn polkadot-dev-version pre');
   } else if (argv['skip-beta']) {
     // don't allow beta versions
-    execSync('yarn polkadot-dev-version --type patch');
+    execSync('yarn polkadot-dev-version patch');
   } else if (patch === '0') {
     // patch is .0, so publish this as an actual release (surely we did our job on beta)
-    execSync('yarn polkadot-dev-version --type patch');
+    execSync('yarn polkadot-dev-version patch');
   } else if (patch === '1') {
     // continue with first new minor as beta
-    execSync('yarn polkadot-dev-version --type pre');
+    execSync('yarn polkadot-dev-version pre');
   } else {
     // manual setting of version, make some changes so we can commit
     fs.appendFileSync(path.join(process.cwd(), '.123trigger'), currentVersion);

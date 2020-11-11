@@ -10,7 +10,7 @@ const path = require('path');
 const copySync = require('./copySync');
 const execSync = require('./execSync');
 
-const CPX = ['css', 'gif', 'hbs', 'jpg', 'js', 'png', 'svg', 'd.ts']
+const CPX = ['css', 'gif', 'hbs', 'jpg', 'js', 'json', 'png', 'svg', 'd.ts']
   .map((ext) => `src/**/*.${ext}`)
   .concat('package.json');
 
@@ -20,38 +20,26 @@ function buildWebpack () {
   execSync('yarn polkadot-exec-webpack --config webpack.config.js --mode production');
 }
 
-async function buildBabelConfig (dir, isModules) {
-  const [babelConfig, outDir, outFileExtension, copyPaths] = isModules
-    ? ['babel.esnext.js', 'build/esm', '.js', ['package.json']]
-    : ['babel.config.js', 'build', '.js', [...CPX]];
-
+async function buildBabel (dir) {
   await babel({
     babelOptions: {
-      configFile: path.join(process.cwd(), `../../${babelConfig}`)
+      configFile: path.join(process.cwd(), '../../babel.config.js')
     },
     cliOptions: {
       extensions: ['.ts', '.tsx'],
       filenames: ['src'],
       ignore: '**/*.d.ts',
-      outDir: path.join(process.cwd(), outDir),
-      outFileExtension
+      outDir: path.join(process.cwd(), 'build'),
+      outFileExtension: '.js'
     }
   });
 
-  copyPaths
+  [...CPX]
     .concat(`../../build/${dir}/src/**/*.d.ts`, `../../build/packages/${dir}/src/**/*.d.ts`)
-    .forEach((src) => copySync(src, outDir));
+    .forEach((src) => copySync(src, 'build'));
 }
 
-async function buildBabel (dir, withModules) {
-  await buildBabelConfig(dir, false);
-
-  if (withModules) {
-    await buildBabelConfig(dir, true);
-  }
-}
-
-async function buildJs (dir, withModules) {
+async function buildJs (dir) {
   if (!fs.existsSync(path.join(process.cwd(), '.skip-build'))) {
     const { name, version } = require(path.join(process.cwd(), './package.json'));
 
@@ -66,7 +54,7 @@ async function buildJs (dir, withModules) {
     if (fs.existsSync(path.join(process.cwd(), 'public'))) {
       buildWebpack(dir);
     } else {
-      await buildBabel(dir, withModules);
+      await buildBabel(dir);
     }
 
     console.log();
@@ -75,8 +63,6 @@ async function buildJs (dir, withModules) {
 
 async function main () {
   execSync('yarn polkadot-dev-clean-build');
-
-  const withModules = fs.existsSync(path.join(process.cwd(), 'babel.esnext.js'));
 
   process.chdir('packages');
 
@@ -89,7 +75,7 @@ async function main () {
   for (const dir of dirs) {
     process.chdir(dir);
 
-    await buildJs(dir, withModules);
+    await buildJs(dir);
 
     process.chdir('..');
   }

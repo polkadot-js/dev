@@ -4,19 +4,15 @@
 
 const fs = require('fs');
 const path = require('path');
-const { type } = require('yargs')
-  .options({
-    type: {
-      choices: ['major', 'minor', 'patch', 'pre'],
-      description: 'The type of version adjustment to apply',
-      required: true,
-      type: 'string'
-    }
-  })
-  .strict()
-  .argv;
+const [type] = require('yargs').demandCommand(1).argv._;
 
 const execSync = require('./execSync');
+
+const TYPES = ['major', 'minor', 'patch', 'pre'];
+
+if (!TYPES.includes(type)) {
+  throw new Error(`Invalid version bump "${type}", expected one of ${TYPES.join(', ')}`);
+}
 
 function updateDependencies (dependencies, others, version) {
   return Object

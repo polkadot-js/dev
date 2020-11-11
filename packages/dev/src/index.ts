@@ -3,6 +3,9 @@
 
 import { EchoString } from './types';
 
+import { blah } from './test1';
+import { add } from './util';
+
 const A = 123;
 let count = 0;
 
@@ -17,6 +20,8 @@ export const echo = (value: EchoString, start = 0, end?: number): string => {
   count++;
 
   doCallback((a) => a);
+  blah();
+  add(1, 2);
 
   return `${count}: ${A}: ${value}`.substr(start, end);
 };

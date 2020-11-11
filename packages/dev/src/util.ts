@@ -1,4 +1,6 @@
 // Copyright 2017-2020 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-module.exports = require('@polkadot/dev/config/babel.esnext.js');
+export function add (a: number, b: number): number {
+  return a + b;
+}
