@@ -3,7 +3,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 const fs = require('fs');
-const execSync = require('./execSync');
+
+const execSync = require('./execSync.cjs');
 
 console.log('$ polkadot-ci-ghpages-force', process.argv.slice(2).join(' '));
 

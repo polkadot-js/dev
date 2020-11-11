@@ -7,8 +7,8 @@ const mkdirp = require('mkdirp');
 const path = require('path');
 const rimraf = require('rimraf');
 
-const copySync = require('./copySync');
-const execSync = require('./execSync');
+const copySync = require('./copySync.cjs');
+const execSync = require('./execSync.cjs');
 
 const args = process.argv.slice(2);
 

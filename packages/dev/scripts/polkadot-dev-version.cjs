@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 const [type] = require('yargs').demandCommand(1).argv._;
 
-const execSync = require('./execSync');
+const execSync = require('./execSync.cjs');
 
 const TYPES = ['major', 'minor', 'patch', 'pre'];
 
