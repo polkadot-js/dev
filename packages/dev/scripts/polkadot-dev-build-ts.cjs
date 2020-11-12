@@ -10,6 +10,7 @@ const path = require('path');
 const copySync = require('./copySync.cjs');
 const execSync = require('./execSync.cjs');
 
+const CONFIGS = ['babel.config.js', 'babel.config.cjs'];
 const CPX = ['css', 'gif', 'hbs', 'jpg', 'js', 'json', 'png', 'svg', 'd.ts']
   .map((ext) => `src/**/*.${ext}`)
   .concat('package.json');
@@ -21,9 +22,12 @@ function buildWebpack () {
 }
 
 async function buildBabel (dir) {
+  const configs = CONFIGS.map((c) => path.join(process.cwd(), `../../${c}`));
+  const babelConfig = configs.find((f) => fs.existsSync(f)) || configs[0];
+
   await babel({
     babelOptions: {
-      configFile: path.join(process.cwd(), '../../babel.config.js')
+      configFile: babelConfig
     },
     cliOptions: {
       extensions: ['.ts', '.tsx'],
