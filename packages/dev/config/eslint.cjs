@@ -23,7 +23,7 @@ module.exports = {
     'plugin:react/recommended'
   ],
   overrides: [{
-    files: ['*.cjs', '*.js', '*.spec.js'],
+    files: ['*.js', '*.spec.js', '*.cjs', '*.mjs'],
     rules: {
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/no-var-requires': 'off',
