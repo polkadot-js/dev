@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 const { defaults } = require('jest-config');
-const { createRequire } = require('module');
 
 module.exports = {
   moduleFileExtensions: [...defaults.moduleFileExtensions, 'ts', 'tsx'],
