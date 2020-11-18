@@ -1957,14 +1957,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
-  version: 14.14.7
-  resolution: "@types/node@npm:14.14.7"
-  checksum: 4fc8434bfe81c2a3102fa76777712ecee9e9177d43ec5929ba0dfd5a77a6c459cf10a37df64ea880a328f06973f6210eabf04b312428e309b2e8998147a6cd63
-  languageName: node
-  linkType: hard
-
-"@types/node@npm:^14.14.8":
+"@types/node@npm:*, @types/node@npm:^14.14.8":
   version: 14.14.8
   resolution: "@types/node@npm:14.14.8"
   checksum: fa8c40702593d0a84eda8ca279072482e9b30c6d62df51eedc7115e6e8623f3b67e839f87d0e43b2d5880fd7b6b8825c0d15ffd836ee50a9f6661a3aa9b20b16
@@ -2025,16 +2018,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:^15.0.0":
-  version: 15.0.9
-  resolution: "@types/yargs@npm:15.0.9"
-  dependencies:
-    "@types/yargs-parser": "*"
-  checksum: 643069491a745b16e91485419bd4967b14b4814b0ecb8b84b5c410f2dec88e46d07711a19d790c0a952b09c4295dc990adbd88e5168bac5288a5496a4758c534
-  languageName: node
-  linkType: hard
-
-"@types/yargs@npm:^15.0.10":
+"@types/yargs@npm:^15.0.0, @types/yargs@npm:^15.0.10":
   version: 15.0.10
   resolution: "@types/yargs@npm:15.0.10"
   dependencies:
