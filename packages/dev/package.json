@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/dev",
-  "version": "0.60.3",
+  "version": "0.60.4",
   "type": "commonjs",
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "bin": {
