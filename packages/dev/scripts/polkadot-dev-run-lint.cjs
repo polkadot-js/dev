@@ -25,8 +25,7 @@ const execSync = require('./execSync.cjs');
 console.log('$ polkadot-dev-run-lint', process.argv.slice(2).join(' '));
 
 if (!argv['skip-eslint']) {
-  const fix = !argv['fix'] ? '' : '--fix';
-  execSync(`yarn polkadot-exec-eslint ${fix} --resolve-plugins-relative-to ${__dirname} --ext .js,.ts,.tsx ${process.cwd()}`);
+  execSync(`yarn polkadot-exec-eslint ${argv['fix'] ? '--fix ' : ''} --resolve-plugins-relative-to ${__dirname} --ext .js,.ts,.tsx ${process.cwd()}`);
 }
 
 if (!argv['skip-tsc']) {
