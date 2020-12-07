@@ -61,7 +61,7 @@ module.exports = {
     'header/header': [2, 'line', [
       { pattern: ' Copyright \\d{4}(-\\d{4})? @polkadot/' },
       ' SPDX-License-Identifier: Apache-2.0'
-    ]],
+    ], 2],
     'jsx-quotes': ['error', 'prefer-single'],
     'react/prop-types': [0], // this is a completely broken rule
     'object-curly-newline': ['error', {
