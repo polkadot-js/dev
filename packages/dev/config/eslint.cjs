@@ -77,7 +77,10 @@ module.exports = {
       { blankLine: 'always', prev: 'function', next: '*' },
       { blankLine: 'always', prev: '*', next: 'try' },
       { blankLine: 'always', prev: 'try', next: '*' },
-      { blankLine: 'always', prev: '*', next: 'return' }
+      { blankLine: 'always', prev: '*', next: 'return' },
+      { blankLine: 'always', prev: '*', next: 'import' },
+      { blankLine: 'always', prev: 'import', next: '*' },
+      { blankLine: 'any', prev: 'import', next: 'import' }
     ],
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'error',
