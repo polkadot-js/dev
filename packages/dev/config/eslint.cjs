@@ -61,7 +61,7 @@ module.exports = {
     'header/header': [2, 'line', [
       { pattern: ' Copyright \\d{4}(-\\d{4})? @polkadot/' },
       ' SPDX-License-Identifier: Apache-2.0'
-    ]],
+    ], 2],
     'jsx-quotes': ['error', 'prefer-single'],
     'react/prop-types': [0], // this is a completely broken rule
     'object-curly-newline': ['error', {
@@ -77,7 +77,10 @@ module.exports = {
       { blankLine: 'always', prev: 'function', next: '*' },
       { blankLine: 'always', prev: '*', next: 'try' },
       { blankLine: 'always', prev: 'try', next: '*' },
-      { blankLine: 'always', prev: '*', next: 'return' }
+      { blankLine: 'always', prev: '*', next: 'return' },
+      { blankLine: 'always', prev: '*', next: 'import' },
+      { blankLine: 'always', prev: 'import', next: '*' },
+      { blankLine: 'any', prev: 'import', next: 'import' }
     ],
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'error',

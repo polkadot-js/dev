@@ -1,7 +1,7 @@
 // Copyright 2017-2020 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { EchoString } from './types';
+import type { EchoString } from './types';
 
 import { adder, blah } from './test1';
 import { foo } from './test1/foo';
