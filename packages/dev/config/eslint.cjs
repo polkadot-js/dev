@@ -45,6 +45,7 @@ module.exports = {
     'header',
     'import',
     'react-hooks',
+    'simple-import-sort',
     'sort-destructure-keys'
   ],
   rules: {
@@ -94,6 +95,15 @@ module.exports = {
     }],
     'sort-destructure-keys/sort-destructure-keys': [2, {
       caseSensitive: true
+    }],
+    'simple-import-sort/imports': [2, {
+      groups: [
+        ['^\u0000'], // all side-effects (0 at start)
+        ['^.*\u0000$'], // types (0 at end)
+        ['^[^/\\.]'], // non-polkadot
+        ['^@polkadot'], // polkadot
+        ['^\\.'] // local
+      ]
     }],
     'sort-keys': 'error'
   },
