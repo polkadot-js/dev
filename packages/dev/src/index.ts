@@ -1,14 +1,20 @@
 // Copyright 2017-2020 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import type { Argv } from 'yargs';
+import type { BlahType } from '@polkadot/dev/types';
 import type { EchoString } from './types';
 
-import { adder, blah } from './test1';
 import { foo } from './test1/foo';
+import { adder, blah } from './test1';
 import { addThree } from './util';
 
-const A = 123;
+const A: BlahType = 123;
 let count = 0;
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+let argv: Argv;
 
 function doCallback (fn: (a: string) => string): void {
   fn('test');

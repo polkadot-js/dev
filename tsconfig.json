@@ -3,6 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@polkadot/dev/*": [ "packages/dev/src/*" ]
     },
     "skipLibCheck": true,
     "typeRoots": [
