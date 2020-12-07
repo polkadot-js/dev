@@ -1760,6 +1760,7 @@ __metadata:
     eslint-plugin-promise: ^4.2.1
     eslint-plugin-react: ^7.21.5
     eslint-plugin-react-hooks: ^4.2.0
+    eslint-plugin-simple-import-sort: ^7.0.0-beta.1
     eslint-plugin-sort-destructure-keys: ^1.3.5
     fs-extra: ^9.0.1
     gh-pages: ^3.1.0
@@ -1781,7 +1782,7 @@ __metadata:
     typedoc-plugin-markdown: ^3.0.11
     typedoc-plugin-no-inherit: ^1.2.0
     typescript: ^4.1.2
-    yargs: ^16.1.1
+    yargs: ^16.2.0
   bin:
     polkadot-ci-ghact-build: ./scripts/polkadot-ci-ghact-build.cjs
     polkadot-ci-ghact-docs: ./scripts/polkadot-ci-ghact-docs.cjs
@@ -4087,6 +4088,15 @@ __metadata:
   peerDependencies:
     eslint: ^3 || ^4 || ^5 || ^6 || ^7
   checksum: a7123f6feb287ad7e15d36b1c9fda8f78a0f0d39b9ee2d6479a5f0ad0effb8f60f639ef7449cecabb711095060e487f0950b69478b22768547b909c0de4f3afd
+  languageName: node
+  linkType: hard
+
+"eslint-plugin-simple-import-sort@npm:^7.0.0-beta.1":
+  version: 7.0.0-beta.1
+  resolution: "eslint-plugin-simple-import-sort@npm:7.0.0-beta.1"
+  peerDependencies:
+    eslint: ">=5.0.0"
+  checksum: ca77161eed5babb78a55182478dcc3534ffb2f4bff543ba8746944000eb04191eb53b8c634e1b61e69ee175088e098f50290e75c9bea1db7e3d0843c4155d8e7
   languageName: node
   linkType: hard
 
@@ -10288,9 +10298,9 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"yargs@npm:^16.0.3, yargs@npm:^16.1.0, yargs@npm:^16.1.1":
-  version: 16.1.1
-  resolution: "yargs@npm:16.1.1"
+"yargs@npm:^16.0.3, yargs@npm:^16.1.0, yargs@npm:^16.2.0":
+  version: 16.2.0
+  resolution: "yargs@npm:16.2.0"
   dependencies:
     cliui: ^7.0.2
     escalade: ^3.1.1
@@ -10299,6 +10309,6 @@ fsevents@~2.1.2:
     string-width: ^4.2.0
     y18n: ^5.0.5
     yargs-parser: ^20.2.2
-  checksum: f88462770b6d65107b7295bdd68c38bc3cba9ab0362df476f44c5f6770ee2f39f48bca9813e8a9dc792a15f93e051a7e37346c0f66cf0ec35c63869963c43e0c
+  checksum: a79ce1f043021cd645de1ffebb6149541d382ba68f4a6b5eca5d2ad65af51893371bbd78e240dc3b6cf0cbb419511ba5bda715dec992e4266e6863ea49f14feb
   languageName: node
   linkType: hard
