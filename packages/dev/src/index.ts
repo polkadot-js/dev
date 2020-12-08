@@ -9,6 +9,12 @@ import { foo } from './test1/foo';
 import { adder, blah } from './test1';
 import { addThree } from './util';
 
+const SOMETHING = {
+  a: 1,
+  b: 2,
+  c: 555
+};
+
 const A: BlahType = 123;
 let count = 0;
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -24,6 +30,10 @@ function doCallback (fn: (a: string) => string): void {
  * This is just a test file to test the doc generation
  */
 export const echo = (value: EchoString, start = 0, end?: number): string => {
+  const { a, b, c } = SOMETHING;
+
+  console.log(a, b, c);
+
   count++;
 
   doCallback((a) => a);

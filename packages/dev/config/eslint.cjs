@@ -66,7 +66,8 @@ module.exports = {
     'jsx-quotes': ['error', 'prefer-single'],
     'react/prop-types': [0], // this is a completely broken rule
     'object-curly-newline': ['error', {
-      ImportDeclaration: { minProperties: 2048 }
+      ImportDeclaration: 'never',
+      ObjectPattern: 'never'
     }],
     'padding-line-between-statements': [
       'error',
