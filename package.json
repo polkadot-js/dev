@@ -14,7 +14,7 @@
     "build": "polkadot-dev-build-ts && node ./tester.cjs && node ./tester.mjs && (cd packages/dev && copyfiles config/* scripts/* build)",
     "build:release": "polkadot-ci-ghact-build --skip-beta",
     "docs": "polkadot-dev-build-docs",
-    "lint": "polkadot-dev-run-lint --fix",
+    "lint": "polkadot-dev-run-lint",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "./packages/dev/scripts/polkadot-dev-yarn-only.cjs",
     "test": "polkadot-dev-run-test --coverage"
