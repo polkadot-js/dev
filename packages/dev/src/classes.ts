@@ -6,6 +6,9 @@ export class Testing123 {
 
   readonly and: number;
 
+  static staticProperty = 'babelIsCool';
+  static staticFunction = (): string => Testing123.staticProperty;
+
   constructor (and: number) {
     this.and = and;
     this.#something = this.#something & and;

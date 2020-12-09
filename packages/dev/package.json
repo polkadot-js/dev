@@ -53,6 +53,7 @@
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/plugin-syntax-import-meta": "^7.10.4",
     "@babel/plugin-syntax-top-level-await": "^7.12.1",
+    "@babel/plugin-transform-regenerator": "^7.12.1",
     "@babel/plugin-transform-runtime": "^7.12.1",
     "@babel/preset-env": "^7.12.7",
     "@babel/preset-react": "^7.12.7",
@@ -103,7 +104,7 @@
     "yargs": "^16.2.0"
   },
   "devDependencies": {
-    "@polkadot/api": "^2.10.2-7",
+    "@polkadot/api": "^2.10.2-9",
     "@types/jest": "^26.0.18",
     "@types/node": "^14.14.11",
     "@types/react": "^17.0.0",

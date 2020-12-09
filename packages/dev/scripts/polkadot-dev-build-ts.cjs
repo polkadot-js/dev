@@ -50,14 +50,12 @@ function esmSkeletonPkg (pkgPath) {
 function esmRewriteImportLine (line) {
   const [pre, post] = line.split(' from ');
   const [, oldPath] = post.split("'");
-  const newPath = oldPath
-    .split('/')
-    .map((part, index) =>
-      index === 1
-        ? `${part}/esm`
-        : part
-    )
-    .join('/');
+  const parts = oldPath.split('/');
+  const newPath = parts.map((part, index) =>
+    index === 1 && parts[2] !== 'esm'
+      ? `${part}/esm`
+      : part
+  ).join('/');
 
   return `${pre} from '${newPath}';`;
 }
