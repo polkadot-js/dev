@@ -7,10 +7,10 @@ const TARGETS_CJS = {
   browsers: '>0.25% and last 2 versions and not ie 11 and not OperaMini all',
   node: '12'
 };
-// const TARGETS_ESM  = {
-//   esmodules: true,
-//   node: 'current'
-// };
+const TARGETS_ESM = {
+  esmodules: true,
+  node: 'current'
+};
 
 module.exports = function (modules) {
   return resolver([
@@ -19,11 +19,13 @@ module.exports = function (modules) {
       runtime: 'automatic'
     }],
     ['@babel/preset-env', {
-      modules,
+      modules: modules === 'commonjs'
+        ? modules
+        : false,
       shippedProposals: modules !== 'commonjs',
       targets: modules === 'commonjs'
         ? TARGETS_CJS
-        : TARGETS_CJS
+        : TARGETS_ESM
     }]
   ]);
 };
