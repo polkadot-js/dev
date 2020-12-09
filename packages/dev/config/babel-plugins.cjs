@@ -3,7 +3,7 @@
 
 const resolver = require('./babel-resolver.cjs');
 
-module.exports = function (dstExtension) {
+module.exports = function (dstExtension, useESModules) {
   return resolver([
     // ordering important, decorators before class properties
     ['@babel/plugin-proposal-decorators', { legacy: true }],
@@ -14,7 +14,7 @@ module.exports = function (dstExtension) {
     '@babel/plugin-proposal-numeric-separator',
     '@babel/plugin-proposal-object-rest-spread',
     '@babel/plugin-proposal-optional-chaining',
-    '@babel/plugin-transform-runtime',
+    ['@babel/plugin-transform-runtime', { useESModules }],
     '@babel/plugin-syntax-bigint',
     '@babel/plugin-syntax-dynamic-import',
     '@babel/plugin-syntax-import-meta',
