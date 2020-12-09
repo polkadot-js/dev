@@ -22,6 +22,67 @@ function buildWebpack () {
   execSync('yarn polkadot-exec-webpack --config webpack.config.js --mode production');
 }
 
+// rewrites with a skeleton package.json
+function esmSkeletonPkg (pkgPath) {
+  const pkg = require(pkgPath);
+  const base = {};
+
+  // add the explicit type overrides, as required
+  ['browser', 'main', 'react-native'].forEach((key) => {
+    if (pkg[key]) {
+      base[key] = pkg[key];
+    }
+  });
+
+  fs.writeFileSync(pkgPath, JSON.stringify({
+    ...base,
+    author: pkg.author,
+    license: pkg.license,
+    name: pkg.name,
+    repository: pkg.repository,
+    sideEffects: pkg.sideEffects || false,
+    type: 'module',
+    version: pkg.version
+  }, null, 2));
+}
+
+// rewrites a single @polkadot/* import line
+function esmRewriteImportLine (line) {
+  const [pre, post] = line.split(' from ');
+  const [, oldPath] = post.split("'");
+  const newPath = oldPath
+    .split('/')
+    .map((part, index) =>
+      index === 1
+        ? `${part}/esm`
+        : part
+    )
+    .join('/');
+
+  return `${pre} from '${newPath}';`;
+}
+
+// rewrites the imports for all @polkadot/* packages
+function esmRewriteImports (curr) {
+  fs
+    .readdirSync(curr)
+    .forEach((name) => {
+      const full = path.join(curr, name);
+
+      if (fs.statSync(full).isDirectory()) {
+        esmRewriteImports(full);
+      } else if (name.endsWith('.js')) {
+        const contents = fs.readFileSync(full, { encoding: 'utf8' }).split('\n').map((line) =>
+          line.startsWith('import ') && line.includes(" from '@polkadot/")
+            ? esmRewriteImportLine(line)
+            : line
+        ).join('\n');
+
+        fs.writeFileSync(full, contents);
+      }
+    });
+}
+
 // compile via babel, either via supplied config or default
 async function buildBabel (dir, type) {
   const buildDir = `build${type === 'esm' ? '/esm' : ''}`;
@@ -49,30 +110,13 @@ async function buildBabel (dir, type) {
 
   // rewrite a skeleton package.json with a type=module
   if (type === 'esm') {
-    const pkgPath = path.join(outDir, 'package.json');
-    const pkg = require(pkgPath);
-    const base = {};
-
-    // overrides
-    if (pkg.browser) base.browser = pkg.browser;
-    if (pkg.main) base.main = pkg.main;
-    if (pkg['react-native']) base['react-native'] = pkg['react-native'];
-
-    fs.writeFileSync(pkgPath, JSON.stringify({
-      ...base,
-      author: pkg.author,
-      license: pkg.license,
-      name: pkg.name,
-      repository: pkg.repository,
-      sideEffects: pkg.sideEffects || false,
-      type: 'module',
-      version: pkg.version
-    }, null, 2));
+    esmSkeletonPkg(path.join(outDir, 'package.json'));
+    esmRewriteImports(outDir);
   }
 }
 
 // iterate through all the files that have been built, creating an exports map
-function buildExports (dir) {
+function buildExports () {
   // nothing atm
 }
 

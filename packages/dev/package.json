@@ -103,6 +103,7 @@
     "yargs": "^16.2.0"
   },
   "devDependencies": {
+    "@polkadot/api": "^2.10.1",
     "@types/jest": "^26.0.16",
     "@types/node": "^14.14.10",
     "@types/react": "^17.0.0",
