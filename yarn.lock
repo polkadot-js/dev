@@ -1776,8 +1776,8 @@ __metadata:
     "@babel/runtime": ^7.12.5
     "@polkadot/api": ^2.10.2-7
     "@rushstack/eslint-patch": ^1.0.6
-    "@types/jest": ^26.0.16
-    "@types/node": ^14.14.10
+    "@types/jest": ^26.0.18
+    "@types/node": ^14.14.11
     "@types/react": ^17.0.0
     "@types/yargs": ^15.0.11
     "@typescript-eslint/eslint-plugin": 4.9.1
@@ -1818,7 +1818,7 @@ __metadata:
     react: ^17.0.1
     rimraf: ^3.0.2
     typedoc: ^0.19.2
-    typedoc-plugin-markdown: ^3.0.11
+    typedoc-plugin-markdown: ^3.1.0
     typedoc-plugin-no-inherit: ^1.2.0
     typescript: ^4.1.2
     yargs: ^16.2.0
@@ -2174,7 +2174,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^26.0.16":
+"@types/jest@npm:^26.0.18":
   version: 26.0.18
   resolution: "@types/jest@npm:26.0.18"
   dependencies:
@@ -2217,7 +2217,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^14.14.10":
+"@types/node@npm:*, @types/node@npm:^14.14.11":
   version: 14.14.11
   resolution: "@types/node@npm:14.14.11"
   checksum: aa09069a4914819692278da742c11f629ce61ff40682e13afbc4421d0647107bffb6bcb8929d1cf8da22821779164078ae86a382f61324c9df7e1af8eaed567b
@@ -10315,14 +10315,14 @@ fsevents@~2.1.2:
   languageName: node
   linkType: hard
 
-"typedoc-plugin-markdown@npm:^3.0.11":
-  version: 3.0.11
-  resolution: "typedoc-plugin-markdown@npm:3.0.11"
+"typedoc-plugin-markdown@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "typedoc-plugin-markdown@npm:3.1.0"
   dependencies:
     handlebars: ^4.7.6
   peerDependencies:
-    typedoc: ">=0.19.0"
-  checksum: cc8f4e63e6dc9d81c21ab223997385bdc6323ac6b8043562b8ad14abb4911d1a3ee0865cfe18b24608d91715338ec84ed46f2d15cc28497dc8d223356822414a
+    typedoc: ">=0.19.0 < 0.20.0"
+  checksum: 77484200da39f88a70b3858694aff5ecee656339608112871f9951cb7de35c6259b8dc814a1be9222dc7258e7cfc5695442d698c6f9fcf616793c1cacdc339fd
   languageName: node
   linkType: hard
 
