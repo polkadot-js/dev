@@ -1,6 +1,6 @@
 {
   "name": "@polkadot/dev",
-  "version": "0.60.13",
+  "version": "0.60.15",
   "type": "commonjs",
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "bin": {
@@ -103,8 +103,9 @@
     "yargs": "^16.2.0"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.18",
-    "@types/node": "^14.14.11",
+    "@polkadot/api": "^2.10.2-7",
+    "@types/jest": "^26.0.16",
+    "@types/node": "^14.14.10",
     "@types/react": "^17.0.0",
     "@types/yargs": "^15.0.11",
     "react": "^17.0.1"
