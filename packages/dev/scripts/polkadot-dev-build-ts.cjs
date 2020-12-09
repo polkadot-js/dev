@@ -71,7 +71,7 @@ function esmRewriteImports (curr) {
 
       if (fs.statSync(full).isDirectory()) {
         esmRewriteImports(full);
-      } else if (name.endsWith('.js')) {
+      } else if (name.endsWith('.js') || name.endsWith('.ts')) {
         const contents = fs.readFileSync(full, { encoding: 'utf8' }).split('\n').map((line) =>
           line.startsWith('import ') && line.includes(" from '@polkadot/")
             ? esmRewriteImportLine(line)

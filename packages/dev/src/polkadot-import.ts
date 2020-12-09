@@ -4,6 +4,11 @@
 import { ApiPromise } from '@polkadot/api';
 import { WsProvider } from '@polkadot/rpc-provider/ws';
 
+export interface ApiStuff {
+  api: ApiPromise;
+  provider: WsProvider;
+}
+
 ApiPromise
   .create({ provider: new WsProvider() })
   .then(console.log)
