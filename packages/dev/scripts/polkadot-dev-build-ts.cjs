@@ -64,7 +64,7 @@ function findFiles (buildDir, extra = '') {
         fs.unlinkSync(thisPath);
       } else if (fs.statSync(thisPath).isDirectory()) {
         findFiles(buildDir, cjsPath).forEach((entry) => all.push(entry));
-      } else if (!cjsName.endsWith('.mjs')) {
+      } else if (!cjsName.endsWith('.mjs') && !cjsName.endsWith('.d.ts')) {
         const esmName = cjsName.replace('.js', '.mjs');
         const field = esmName !== cjsName && fs.existsSync(path.join(currDir, esmName))
           ? { default: `.${extra}/${esmName}`, require: `.${cjsPath}` }
@@ -73,17 +73,16 @@ function findFiles (buildDir, extra = '') {
         if (cjsName.endsWith('.js')) {
           if (cjsName === 'index.js') {
             all.push([`.${extra}`, field]);
+          } else {
+            all.push([`.${cjsPath.replace('.js', '')}`, field]);
           }
-
-          all.push([`.${cjsPath.replace('.js', '')}`, field]);
         } else {
           all.push([`.${cjsPath}`, field]);
         }
       }
 
       return all;
-    }, [])
-    .sort((a, b) => a[0].localeCompare(b[0]));
+    }, []);
 }
 
 // iterate through all the files that have been built, creating an exports map
@@ -102,7 +101,9 @@ function buildExports () {
     }]);
   }
 
-  pkg.exports = list.reduce((all, [path, config]) => ({ ...all, [path]: config }), {});
+  pkg.exports = list
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .reduce((all, [path, config]) => ({ ...all, [path]: config }), {});
 
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
 }
@@ -125,7 +126,7 @@ async function buildJs (dir) {
       await buildBabel(dir, 'cjs');
       // await buildBabel(dir, 'esm');
 
-      // buildExports(dir);
+      buildExports(dir);
     }
 
     console.log();
