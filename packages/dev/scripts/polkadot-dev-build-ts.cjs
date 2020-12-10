@@ -51,7 +51,7 @@ async function buildBabel (dir, type) {
 }
 
 // find the names of all the files in a certain directory
-function findFiles (buildDir, extra = '') {
+function findFiles (withEsm, buildDir, extra = '') {
   const currDir = extra ? path.join(buildDir, extra) : buildDir;
 
   return fs
@@ -63,11 +63,13 @@ function findFiles (buildDir, extra = '') {
       if (cjsName.includes('.spec.')) {
         fs.unlinkSync(thisPath);
       } else if (fs.statSync(thisPath).isDirectory()) {
-        findFiles(buildDir, cjsPath).forEach((entry) => all.push(entry));
+        findFiles(withEsm, buildDir, cjsPath).forEach((entry) => all.push(entry));
       } else if (!cjsName.endsWith('.mjs') && !cjsName.endsWith('.d.ts')) {
         const esmName = cjsName.replace('.js', '.mjs');
-        const field = esmName !== cjsName && fs.existsSync(path.join(currDir, esmName))
-          ? { default: `.${extra}/${esmName}`, require: `.${cjsPath}` }
+        const field = withEsm && esmName !== cjsName && fs.existsSync(path.join(currDir, esmName))
+          // ordering here is important: import, require, node/browser, default
+          // eslint-disable-next-line sort-keys
+          ? { require: `.${cjsPath}`, default: `.${extra}/${esmName}` }
           : `.${extra}/${cjsName}`;
 
         if (cjsName.endsWith('.js')) {
@@ -90,7 +92,7 @@ function buildExports () {
   const buildDir = path.join(process.cwd(), 'build');
   const pkgPath = path.join(buildDir, 'package.json');
   const pkg = require(pkgPath);
-  const list = findFiles(buildDir);
+  const list = findFiles(false, buildDir);
   const migrateDot = (value) => `${value.startsWith('./') ? '' : './'}${value}`;
 
   if (!list.some(([key]) => key === '.')) {
@@ -124,7 +126,7 @@ async function buildJs (dir) {
       buildWebpack(dir);
     } else {
       await buildBabel(dir, 'cjs');
-      // await buildBabel(dir, 'esm');
+      await buildBabel(dir, 'esm');
 
       buildExports(dir);
     }

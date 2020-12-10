@@ -3,7 +3,7 @@
 
 import { ApiPromise } from '@polkadot/api';
 import { WsProvider } from '@polkadot/rpc-provider/ws';
-import { u8aToHex } from '@polkadot/util/esm';
+import { u8aToHex } from '@polkadot/util';
 
 export interface ApiStuff {
   api: ApiPromise;

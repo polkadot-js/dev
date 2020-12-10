@@ -12,11 +12,8 @@ const CONFIG_CJS = {
 };
 
 const CONFIG_ESM = {
-  ignoreBrowserslistConfig: true,
   modules: false,
-  shippedProposals: true,
   targets: {
-    esmodules: true,
     node: 'current'
   }
 };
