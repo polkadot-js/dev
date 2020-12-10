@@ -22,70 +22,10 @@ function buildWebpack () {
   execSync('yarn polkadot-exec-webpack --config webpack.config.js --mode production');
 }
 
-// rewrites with a skeleton package.json
-function esmSkeletonPkg (pkgPath) {
-  const pkg = require(pkgPath);
-  const base = {};
-
-  // add the explicit type overrides, as required
-  ['browser', 'main', 'react-native'].forEach((key) => {
-    if (pkg[key]) {
-      base[key] = pkg[key];
-    }
-  });
-
-  fs.writeFileSync(pkgPath, JSON.stringify({
-    ...base,
-    author: pkg.author,
-    license: pkg.license,
-    name: pkg.name,
-    repository: pkg.repository,
-    sideEffects: pkg.sideEffects || false,
-    type: 'module',
-    version: pkg.version
-  }, null, 2));
-}
-
-// rewrites a single @polkadot/* import line
-function esmRewriteImportLine (line) {
-  const [pre, post] = line.split(' from ');
-  const [, oldPath] = post.split("'");
-  const parts = oldPath.split('/');
-  const newPath = parts.map((part, index) =>
-    index === 1 && parts[2] !== 'esm'
-      ? `${part}/esm`
-      : part
-  ).join('/');
-
-  return `${pre} from '${newPath}';`;
-}
-
-// rewrites the imports for all @polkadot/* packages
-function esmRewriteImports (curr) {
-  fs
-    .readdirSync(curr)
-    .forEach((name) => {
-      const full = path.join(curr, name);
-
-      if (fs.statSync(full).isDirectory()) {
-        esmRewriteImports(full);
-      } else if (name.endsWith('.js') || name.endsWith('.ts')) {
-        const contents = fs.readFileSync(full, { encoding: 'utf8' }).split('\n').map((line) =>
-          line.startsWith('import ') && line.includes(" from '@polkadot/")
-            ? esmRewriteImportLine(line)
-            : line
-        ).join('\n');
-
-        fs.writeFileSync(full, contents);
-      }
-    });
-}
-
 // compile via babel, either via supplied config or default
 async function buildBabel (dir, type) {
-  const buildDir = `build${type === 'esm' ? '/esm' : ''}`;
   const configs = CONFIGS.map((c) => path.join(process.cwd(), `../../${c}`));
-  const outDir = path.join(process.cwd(), buildDir);
+  const outDir = path.join(process.cwd(), 'build');
 
   await babel({
     babelOptions: {
@@ -98,24 +38,73 @@ async function buildBabel (dir, type) {
       filenames: ['src'],
       ignore: '**/*.d.ts',
       outDir,
-      outFileExtension: '.js'
+      outFileExtension: type === 'esm' ? '.mjs' : '.js'
     }
   });
 
-  [...CPX]
-    .concat(`../../build/${dir}/src/**/*.d.ts`, `../../build/packages/${dir}/src/**/*.d.ts`)
-    .forEach((src) => copySync(src, buildDir));
-
   // rewrite a skeleton package.json with a type=module
-  if (type === 'esm') {
-    esmSkeletonPkg(path.join(outDir, 'package.json'));
-    esmRewriteImports(outDir);
+  if (type !== 'esm') {
+    [...CPX]
+      .concat(`../../build/${dir}/src/**/*.d.ts`, `../../build/packages/${dir}/src/**/*.d.ts`)
+      .forEach((src) => copySync(src, 'build'));
   }
+}
+
+// find the names of all the files in a certain directory
+function findFiles (buildDir, extra = '') {
+  const currDir = extra ? path.join(buildDir, extra) : buildDir;
+
+  return fs
+    .readdirSync(currDir)
+    .reduce((all, cjsName) => {
+      const cjsPath = `${extra}/${cjsName}`;
+      const thisPath = path.join(buildDir, cjsPath);
+
+      if (cjsName.includes('.spec.')) {
+        fs.unlinkSync(thisPath);
+      } else if (fs.statSync(thisPath).isDirectory()) {
+        findFiles(buildDir, cjsPath).forEach((entry) => all.push(entry));
+      } else if (!cjsName.endsWith('.mjs')) {
+        const esmName = cjsName.replace('.js', '.mjs');
+        const field = esmName !== cjsName && fs.existsSync(path.join(currDir, esmName))
+          ? { default: `.${extra}/${esmName}`, require: `.${cjsPath}` }
+          : `.${extra}/${cjsName}`;
+
+        if (cjsName.endsWith('.js')) {
+          if (cjsName === 'index.js') {
+            all.push([`.${extra}`, field]);
+          }
+
+          all.push([`.${cjsPath.replace('.js', '')}`, field]);
+        } else {
+          all.push([`.${cjsPath}`, field]);
+        }
+      }
+
+      return all;
+    }, [])
+    .sort((a, b) => a[0].localeCompare(b[0]));
 }
 
 // iterate through all the files that have been built, creating an exports map
 function buildExports () {
-  // nothing atm
+  const buildDir = path.join(process.cwd(), 'build');
+  const pkgPath = path.join(buildDir, 'package.json');
+  const pkg = require(pkgPath);
+  const list = findFiles(buildDir);
+  const migrateDot = (value) => `${value.startsWith('./') ? '' : './'}${value}`;
+
+  if (!list.some(([key]) => key === '.')) {
+    list.push(['.', {
+      browser: migrateDot(pkg.browser),
+      node: migrateDot(pkg.main),
+      'react-native': migrateDot(pkg['react-native'])
+    }]);
+  }
+
+  pkg.exports = list.reduce((all, [path, config]) => ({ ...all, [path]: config }), {});
+
+  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
 }
 
 async function buildJs (dir) {
@@ -134,9 +123,9 @@ async function buildJs (dir) {
       buildWebpack(dir);
     } else {
       await buildBabel(dir, 'cjs');
-      await buildBabel(dir, 'esm');
+      // await buildBabel(dir, 'esm');
 
-      buildExports();
+      // buildExports(dir);
     }
 
     console.log();
@@ -145,6 +134,12 @@ async function buildJs (dir) {
 
 async function main () {
   execSync('yarn polkadot-dev-clean-build');
+
+  const pkg = require(path.join(process.cwd(), 'package.json'));
+
+  if (pkg.scripts && pkg.scripts['build:extra']) {
+    execSync('yarn build:extra');
+  }
 
   process.chdir('packages');
 
