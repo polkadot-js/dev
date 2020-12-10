@@ -3,7 +3,7 @@
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "license": "Apache-2",
   "private": true,
-  "type": "module",
+  "type": "commonjs",
   "workspaces": [
     "packages/*"
   ],

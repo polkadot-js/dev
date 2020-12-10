@@ -27,9 +27,6 @@
     "polkadot-exec-vuepress": "./scripts/polkadot-exec-vuepress.cjs",
     "polkadot-exec-webpack": "./scripts/polkadot-exec-webpack.cjs"
   },
-  "keywords": [
-    "Polkadot"
-  ],
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "maintainers": [],
   "contributors": [],

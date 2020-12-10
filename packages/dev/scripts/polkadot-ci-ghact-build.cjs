@@ -5,7 +5,6 @@
 const os = require('os');
 const path = require('path');
 const fs = require('fs');
-const rimraf = require('rimraf');
 const argv = require('yargs')
   .options({
     'skip-beta': {
@@ -62,8 +61,9 @@ function npmPublish () {
     return;
   }
 
-  rimraf.sync('build/package.json');
-  ['LICENSE', 'README.md', 'package.json'].forEach((file) => copySync(file, 'build'));
+  ['LICENSE', 'package.json']
+    .filter((file) => !fs.existsSync(path.join(process.cwd(), 'build', file)))
+    .forEach((file) => copySync(file, 'build'));
 
   process.chdir('build');
 
