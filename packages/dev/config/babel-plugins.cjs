@@ -24,7 +24,7 @@ module.exports = function (isEsm) {
     // 'index.js', but while executing only the 'index.ts' file would be available (However, in
     // the case of ESM transforms we do need the explicit extension here, so apply it)
     isEsm && process.env.NODE_ENV !== 'test' && ['babel-plugin-module-extension-resolver', {
-      dstExtension: '.js',
+      dstExtension: '.mjs',
       srcExtensions: ['.ts', '.tsx']
     }]
   ]);

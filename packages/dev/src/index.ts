@@ -52,9 +52,9 @@ function assert (a: boolean): void {
 export function tester (): void {
   console.log('Running sanity test');
 
+  console.log('  (1)', typeof require === 'undefined' ? 'mjs' : 'cjs');
+
   assert(adder(2, 4) === 6);
   assert(addThree(1, 2, 3) === 6);
   assert(foo() === 'foobar');
-
-  console.log('Sanity test all ok');
 }
