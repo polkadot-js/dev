@@ -60,7 +60,7 @@ function findFiles (withEsm, buildDir, extra = '') {
       const cjsPath = `${extra}/${cjsName}`;
       const thisPath = path.join(buildDir, cjsPath);
 
-      if (cjsName.includes('.spec.')) {
+      if (cjsName.includes('.spec.') || cjsName.endsWith('.d.js')) {
         fs.unlinkSync(thisPath);
       } else if (fs.statSync(thisPath).isDirectory()) {
         findFiles(withEsm, buildDir, cjsPath).forEach((entry) => all.push(entry));
