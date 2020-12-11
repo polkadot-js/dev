@@ -85,16 +85,19 @@ function findFiles (withEsm, buildDir, extra = '') {
     .reduce((all, cjsName) => {
       const cjsPath = `${extra}/${cjsName}`;
       const thisPath = path.join(buildDir, cjsPath);
-      const toDelete = cjsName.includes('.spec.') ||
-        cjsName.endsWith('.d.js') ||
-        cjsName.endsWith('.d.jms') ||
-        (cjsName.endsWith('.d.ts') && !fs.existsSync(path.join(buildDir, cjsPath.replace('.d.ts', '.js'))));
+      const toDelete = cjsName.includes('.spec.') || // no tests
+        cjsName.endsWith('.d.js') || // no .d.ts compiled outputs
+        cjsName.endsWith('.d.mjs') || // same as above, esm version
+        (
+          cjsName.endsWith('.d.ts') && // .d.ts without .js as an output
+          !fs.existsSync(path.join(buildDir, cjsPath.replace('.d.ts', '.js')))
+        );
 
       if (toDelete) {
         fs.unlinkSync(thisPath);
       } else if (fs.statSync(thisPath).isDirectory()) {
         findFiles(withEsm, buildDir, cjsPath).forEach((entry) => all.push(entry));
-      } else if (!cjsName.endsWith('.mjs') && !cjsName.endsWith('.d.js')) {
+      } else if (!cjsName.endsWith('.mjs')) {
         all.push(createMapEntry(withEsm, buildDir, cjsPath));
       }
 
