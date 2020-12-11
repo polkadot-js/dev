@@ -64,13 +64,13 @@ function findFiles (withEsm, buildDir, extra = '') {
         fs.unlinkSync(thisPath);
       } else if (fs.statSync(thisPath).isDirectory()) {
         findFiles(withEsm, buildDir, cjsPath).forEach((entry) => all.push(entry));
-      } else if (!cjsName.endsWith('.mjs') && !cjsName.endsWith('.d.ts')) {
+      } else if (!cjsName.endsWith('.mjs') && !cjsName.endsWith('.d.js')) {
         const esmName = cjsName.replace('.js', '.mjs');
         const field = withEsm && esmName !== cjsName && fs.existsSync(path.join(currDir, esmName))
-          // ordering here is important: import, require, node/browser, default
+          // ordering here is important: import, require, node/browser, default (last)
           // eslint-disable-next-line sort-keys
-          ? { require: `.${cjsPath}`, default: `.${extra}/${esmName}` }
-          : `.${extra}/${cjsName}`;
+          ? { import: `.${extra}/${esmName}`, default: `.${cjsPath}` }
+          : `.${cjsPath}`;
 
         if (cjsName.endsWith('.js')) {
           if (cjsName === 'index.js') {

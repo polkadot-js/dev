@@ -18,6 +18,14 @@ export class Testing123 {
     return this.#something;
   }
 
+  async doAsync (): Promise<boolean> {
+    const res = await new Promise<boolean>((resolve) => resolve(true));
+
+    console.log(res);
+
+    return res;
+  }
+
   setSomething = (something: number): number => {
     this.#something = something;
 
