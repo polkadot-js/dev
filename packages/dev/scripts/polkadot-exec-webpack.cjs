@@ -2,6 +2,8 @@
 // Copyright 2017-2020 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-console.log('$ webpack', process.argv.slice(2).join(' '));
+const execSync = require('./execSync.cjs');
 
-require('webpack-cli');
+const args = process.argv.slice(2).join(' ');
+
+execSync(`yarn webpack ${args}`);
