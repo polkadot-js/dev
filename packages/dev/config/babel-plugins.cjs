@@ -3,7 +3,7 @@
 
 const resolver = require('./babel-resolver.cjs');
 
-module.exports = function (isEsm) {
+module.exports = function (isEsm, withExt) {
   return resolver([
     // ordering important, decorators before class properties
     ['@babel/plugin-proposal-decorators', { legacy: true }],
@@ -23,8 +23,8 @@ module.exports = function (isEsm) {
     // Under Jest the conversion of paths leads to issues since the require would be from e.g.
     // 'index.js', but while executing only the 'index.ts' file would be available (However, in
     // the case of ESM transforms we do need the explicit extension here, so apply it)
-    isEsm && process.env.NODE_ENV !== 'test' && ['babel-plugin-module-extension-resolver', {
-      dstExtension: '.mjs',
+    withExt && ['babel-plugin-module-extension-resolver', {
+      dstExtension: isEsm ? '.mjs' : '.js',
       srcExtensions: ['.ts', '.tsx']
     }]
   ]);
