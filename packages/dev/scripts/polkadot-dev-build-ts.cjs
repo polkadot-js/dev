@@ -50,6 +50,32 @@ async function buildBabel (dir, type) {
   }
 }
 
+function relativePath (value) {
+  return `${value.startsWith('.') ? value : './'}${value}`.replace(/\/\//g, '/');
+}
+
+// creates an entry for the cjs/esm name
+function createMapEntry (withEsm, rootDir, cjsPath) {
+  cjsPath = relativePath(cjsPath);
+
+  const esmPath = cjsPath.replace('.js', '.mjs');
+  const field = withEsm && esmPath !== cjsPath && fs.existsSync(path.join(rootDir, esmPath))
+    // ordering here is important: import, require, node/browser, default (last)
+    // eslint-disable-next-line sort-keys
+    ? { import: esmPath, default: cjsPath }
+    : cjsPath;
+
+  if (cjsPath.endsWith('.js')) {
+    if (cjsPath.endsWith('/index.js')) {
+      return [cjsPath.replace('/index.js', ''), field];
+    } else {
+      return [cjsPath.replace('.js', ''), field];
+    }
+  }
+
+  return [cjsPath, field];
+}
+
 // find the names of all the files in a certain directory
 function findFiles (withEsm, buildDir, extra = '') {
   const currDir = extra ? path.join(buildDir, extra) : buildDir;
@@ -59,28 +85,17 @@ function findFiles (withEsm, buildDir, extra = '') {
     .reduce((all, cjsName) => {
       const cjsPath = `${extra}/${cjsName}`;
       const thisPath = path.join(buildDir, cjsPath);
+      const toDelete = cjsName.includes('.spec.') ||
+        cjsName.endsWith('.d.js') ||
+        cjsName.endsWith('.d.jms') ||
+        (cjsName.endsWith('.d.ts') && !fs.existsSync(path.join(buildDir, cjsPath.replace('.d.ts', '.js'))));
 
-      if (cjsName.includes('.spec.') || cjsName.endsWith('.d.js')) {
+      if (toDelete) {
         fs.unlinkSync(thisPath);
       } else if (fs.statSync(thisPath).isDirectory()) {
         findFiles(withEsm, buildDir, cjsPath).forEach((entry) => all.push(entry));
       } else if (!cjsName.endsWith('.mjs') && !cjsName.endsWith('.d.js')) {
-        const esmName = cjsName.replace('.js', '.mjs');
-        const field = withEsm && esmName !== cjsName && fs.existsSync(path.join(currDir, esmName))
-          // ordering here is important: import, require, node/browser, default (last)
-          // eslint-disable-next-line sort-keys
-          ? { import: `.${extra}/${esmName}`, default: `.${cjsPath}` }
-          : `.${cjsPath}`;
-
-        if (cjsName.endsWith('.js')) {
-          if (cjsName === 'index.js') {
-            all.push([`.${extra}`, field]);
-          } else {
-            all.push([`.${cjsPath.replace('.js', '')}`, field]);
-          }
-        } else {
-          all.push([`.${cjsPath}`, field]);
-        }
+        all.push(createMapEntry(withEsm, buildDir, cjsPath));
       }
 
       return all;
@@ -93,17 +108,16 @@ function buildExports (withEsm) {
   const pkgPath = path.join(buildDir, 'package.json');
   const pkg = require(pkgPath);
   const list = findFiles(withEsm, buildDir);
-  const migrateDot = (value) => `${value.startsWith('./') ? '' : './'}${value}`;
 
   if (!list.some(([key]) => key === '.')) {
     // for the env-specifics, add a root key (if not available)
     list.push(['.', {
-      browser: migrateDot(pkg.browser),
-      node: migrateDot(pkg.main),
-      'react-native': migrateDot(pkg['react-native'])
+      browser: createMapEntry(withEsm, buildDir, pkg.browser)[1],
+      node: createMapEntry(withEsm, buildDir, pkg.main)[1],
+      'react-native': createMapEntry(withEsm, buildDir, pkg['react-native'])[1]
     }]);
 
-    const indexDef = migrateDot(pkg.main).replace('.js', '.d.ts');
+    const indexDef = relativePath(pkg.main).replace('.js', '.d.ts');
     const indexKey = './index.d.ts';
 
     // additionally, add an index key, if not available
