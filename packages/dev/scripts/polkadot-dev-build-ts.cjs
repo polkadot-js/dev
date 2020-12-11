@@ -88,19 +88,28 @@ function findFiles (withEsm, buildDir, extra = '') {
 }
 
 // iterate through all the files that have been built, creating an exports map
-function buildExports () {
+function buildExports (withEsm) {
   const buildDir = path.join(process.cwd(), 'build');
   const pkgPath = path.join(buildDir, 'package.json');
   const pkg = require(pkgPath);
-  const list = findFiles(false, buildDir);
+  const list = findFiles(withEsm, buildDir);
   const migrateDot = (value) => `${value.startsWith('./') ? '' : './'}${value}`;
 
   if (!list.some(([key]) => key === '.')) {
+    // for the env-specifics, add a root key (if not available)
     list.push(['.', {
       browser: migrateDot(pkg.browser),
       node: migrateDot(pkg.main),
       'react-native': migrateDot(pkg['react-native'])
     }]);
+
+    const indexDef = migrateDot(pkg.main).replace('.js', '.d.ts');
+    const indexKey = './index.d.ts';
+
+    // additionally, add an index key, if not available
+    if (!list.some(([key]) => key === indexKey)) {
+      list.push([indexKey, indexDef]);
+    }
   }
 
   pkg.exports = list
@@ -128,7 +137,7 @@ async function buildJs (dir) {
       await buildBabel(dir, 'cjs');
       await buildBabel(dir, 'esm');
 
-      buildExports(dir);
+      buildExports(false); // !fs.existsSync(path.join(process.cwd(), '.skip-esm')));
     }
 
     console.log();
