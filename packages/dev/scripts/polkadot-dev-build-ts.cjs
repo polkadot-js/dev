@@ -134,10 +134,15 @@ async function buildJs (dir) {
     if (fs.existsSync(path.join(process.cwd(), 'public'))) {
       buildWebpack(dir);
     } else {
-      await buildBabel(dir, 'cjs');
-      await buildBabel(dir, 'esm');
+      const withEsm = !fs.existsSync(path.join(process.cwd(), '.skip-esm'));
 
-      buildExports(false); // !fs.existsSync(path.join(process.cwd(), '.skip-esm')));
+      await buildBabel(dir, 'cjs');
+
+      if (withEsm) {
+        await buildBabel(dir, 'esm');
+      }
+
+      buildExports(withEsm);
     }
 
     console.log();
