@@ -119,7 +119,7 @@ function gitBump () {
     execSync('yarn polkadot-dev-version pre');
   } else {
     // manual setting of version, make some changes so we can commit
-    fs.appendFileSync(path.join(process.cwd(), '.123trigger'), currentVersion);
+    fs.appendFileSync(path.join(process.cwd(), '.123trigger'), `\n${currentVersion}`);
   }
 
   execSync('git add --all .');
