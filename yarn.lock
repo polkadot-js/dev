@@ -1713,7 +1713,7 @@ __metadata:
     "@babel/runtime": ^7.12.5
     "@rushstack/eslint-patch": ^1.0.6
     "@types/jest": ^26.0.19
-    "@types/node": ^14.14.12
+    "@types/node": ^14.14.13
     "@types/react": ^17.0.0
     "@types/yargs": ^15.0.11
     "@typescript-eslint/eslint-plugin": 4.9.1
@@ -1756,7 +1756,7 @@ __metadata:
     typedoc: ^0.19.2
     typedoc-plugin-markdown: ^3.1.1
     typedoc-plugin-no-inherit: ^1.2.0
-    typescript: ^4.1.2
+    typescript: ^4.1.3
     yargs: ^16.2.0
   bin:
     polkadot-ci-ghact-build: ./scripts/polkadot-ci-ghact-build.cjs
@@ -1938,10 +1938,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^14.14.12":
+"@types/node@npm:*":
   version: 14.14.12
   resolution: "@types/node@npm:14.14.12"
   checksum: def4a93f6ba9ea5ccbed7b403988b5e888dcde27c9d00f3f487500a26a36e13826e294fabc6d01ce563059d3567f27ea8c458edc39b502e38659c5154667602b
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^14.14.13":
+  version: 14.14.13
+  resolution: "@types/node@npm:14.14.13"
+  checksum: a879dae2e047e75055b0f4fb217aac31e905e49f921054f6425e8494e7a75dec82d351770b1a0e79a00322345896646a4dadc5fa27c857e392d6909e54cdba9e
   languageName: node
   linkType: hard
 
