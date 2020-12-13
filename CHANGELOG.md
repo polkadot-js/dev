@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.61.1
+
+- Build & publish both esm and cjs
+
 ## 0.60.1
 
 - Allow for both esm & cjs Babel config
