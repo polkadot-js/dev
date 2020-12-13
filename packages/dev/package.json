@@ -20,7 +20,6 @@
     "polkadot-exec-eslint": "./scripts/polkadot-exec-eslint.cjs",
     "polkadot-exec-ghpages": "./scripts/polkadot-exec-ghpages.cjs",
     "polkadot-exec-ghrelease": "./scripts/polkadot-exec-ghrelease.cjs",
-    "polkadot-exec-lerna": "./scripts/polkadot-exec-lerna.cjs",
     "polkadot-exec-prettier": "./scripts/polkadot-exec-prettier.cjs",
     "polkadot-exec-tsc": "./scripts/polkadot-exec-tsc.cjs",
     "polkadot-exec-typedoc": "./scripts/polkadot-exec-typedoc.cjs",
