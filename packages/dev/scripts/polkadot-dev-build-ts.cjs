@@ -110,6 +110,12 @@ function buildExports (withEsm) {
   const buildDir = path.join(process.cwd(), 'build');
   const pkgPath = path.join(buildDir, 'package.json');
   const pkg = require(pkgPath);
+
+  fs.writeFileSync(pkgPath.replace('package.json', 'package-info.json'), JSON.stringify({
+    name: pkg.name,
+    version: pkg.version
+  }, null, 2));
+
   const list = findFiles(withEsm, buildDir);
 
   if (!list.some(([key]) => key === '.')) {
