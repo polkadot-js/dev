@@ -59,10 +59,14 @@ function createMapEntry (withEsm, rootDir, cjsPath) {
   cjsPath = relativePath(cjsPath);
 
   const esmPath = cjsPath.replace('.js', '.mjs');
+  const jsIsNode = fs.readFileSync(path.join(rootDir, cjsPath), 'utf8').includes('@polkadot/dev: exports-node');
   const field = withEsm && esmPath !== cjsPath && fs.existsSync(path.join(rootDir, esmPath))
     // ordering here is important: import, require, node/browser, default (last)
-    // eslint-disable-next-line sort-keys
-    ? { import: esmPath, default: cjsPath }
+    ? jsIsNode
+      // eslint-disable-next-line sort-keys
+      ? { node: cjsPath, import: esmPath, default: cjsPath }
+      // eslint-disable-next-line sort-keys
+      : { import: esmPath, default: cjsPath }
     : cjsPath;
 
   if (cjsPath.endsWith('.js')) {
