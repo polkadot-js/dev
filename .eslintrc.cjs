@@ -6,7 +6,7 @@ const base = require('@polkadot/dev/config/eslint.cjs');
 module.exports = {
   ...base,
   ignorePatterns: [
-    '.eslintrc.js',
+    '.eslintrc.cjs',
     '.github/**',
     '.vscode/**',
     '.yarn/**',

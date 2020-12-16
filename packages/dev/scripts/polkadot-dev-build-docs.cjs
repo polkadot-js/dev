@@ -43,4 +43,6 @@ function main () {
   }
 }
 
+// This looks like a false-positive
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 main();
