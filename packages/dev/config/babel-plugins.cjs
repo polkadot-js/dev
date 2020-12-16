@@ -25,7 +25,7 @@ module.exports = function (isEsm, withExt) {
     // the case of ESM transforms we do need the explicit extension here, so apply it)
     withExt && ['babel-plugin-module-extension-resolver', {
       dstExtension: isEsm ? '.mjs' : '.js',
-      srcExtensions: ['.ts', '.tsx']
+      srcExtensions: [isEsm ? '.mjs' : '.js', '.ts', '.tsx']
     }]
   ]);
 };
