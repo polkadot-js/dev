@@ -11,7 +11,7 @@ const copySync = require('./copySync.cjs');
 const execSync = require('./execSync.cjs');
 
 const CONFIGS = ['babel.config.js', 'babel.config.cjs'];
-const CPX = ['css', 'gif', 'hbs', 'jpg', 'js', 'json', 'png', 'svg', 'd.ts']
+const CPX = ['js', 'cjs', 'mjs', 'json', 'd.ts', 'css', 'gif', 'hbs', 'jpg', 'png', 'svg']
   .map((ext) => `src/**/*.${ext}`)
   .concat('package.json');
 
