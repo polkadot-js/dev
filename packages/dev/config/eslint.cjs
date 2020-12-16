@@ -23,7 +23,7 @@ module.exports = {
     'plugin:react/recommended'
   ],
   overrides: [{
-    files: ['*.js', '*.spec.js', '*.cjs', '*.mjs'],
+    files: ['*.js', '*.cjs', '*.mjs'],
     rules: {
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/no-var-requires': 'off',
@@ -37,7 +37,7 @@ module.exports = {
   }],
   parser: require.resolve('@typescript-eslint/parser'),
   parserOptions: {
-    extraFileExtensions: ['.cjs'],
+    extraFileExtensions: ['.cjs', '.mjs'],
     warnOnUnsupportedTypeScriptVersion: false
   },
   plugins: [

@@ -26,7 +26,7 @@ if (!argv['skip-eslint']) {
     ? ''
     : '--fix';
 
-  execSync(`yarn polkadot-exec-eslint ${extra} --resolve-plugins-relative-to ${__dirname} --ext .js,.ts,.tsx ${process.cwd()}`);
+  execSync(`yarn polkadot-exec-eslint ${extra} --resolve-plugins-relative-to ${__dirname} --ext .js,.cjs,.mjs,.ts,.tsx ${process.cwd()}`);
 }
 
 if (!argv['skip-tsc']) {
