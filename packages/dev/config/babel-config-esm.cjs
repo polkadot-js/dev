@@ -5,6 +5,9 @@ const plugins = require('./babel-plugins.cjs');
 const presets = require('./babel-presets.cjs');
 
 module.exports = {
+  generatorOpts: {
+    comments: false
+  },
   plugins: plugins(true, true),
   presets: presets(true)
 };
