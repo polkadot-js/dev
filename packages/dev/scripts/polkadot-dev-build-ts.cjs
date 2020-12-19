@@ -13,7 +13,7 @@ const execSync = require('./execSync.cjs');
 const CONFIGS = ['babel.config.js', 'babel.config.cjs'];
 const CPX = ['js', 'cjs', 'mjs', 'json', 'd.ts', 'css', 'gif', 'hbs', 'jpg', 'png', 'svg']
   .map((ext) => `src/**/*.${ext}`)
-  .concat('package.json');
+  .concat(['package.json', 'README.md']);
 
 console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
