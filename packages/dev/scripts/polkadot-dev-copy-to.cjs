@@ -50,4 +50,9 @@ fs
 
     // copy the build output
     copySync(`${pkgPath}/build/**/*`, outDest);
+
+    // copy node_modules, as available
+    if (fs.existsSync(`${pkgPath}/node_modules`)) {
+      copySync(`${pkgPath}/node_modules/**/*`, `${outDest}/node_modules`);
+    }
   });
