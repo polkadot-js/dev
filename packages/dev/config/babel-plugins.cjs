@@ -6,9 +6,7 @@ const resolver = require('./babel-resolver.cjs');
 module.exports = function (isEsm, withExt) {
   return resolver([
     // ordering important, decorators before class properties
-    ['@babel/plugin-proposal-decorators', { legacy: true }],
     ['@babel/plugin-proposal-class-properties', { loose: true }],
-    ['@babel/plugin-proposal-pipeline-operator', { proposal: 'fsharp' }],
     ['@babel/plugin-proposal-private-methods', { loose: true }],
     '@babel/plugin-proposal-nullish-coalescing-operator',
     '@babel/plugin-proposal-numeric-separator',
