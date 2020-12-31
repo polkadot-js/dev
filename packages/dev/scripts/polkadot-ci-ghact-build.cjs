@@ -104,22 +104,18 @@ function gitBump () {
   const currentVersion = npmGetVersion();
   const [version, tag] = currentVersion.split('-');
   const [,, patch] = version.split('.');
+  const triggerPath = path.join(process.cwd(), '.123trigger');
+  const available = fs.readFileSync(triggerPath, 'utf-8').split('\n');
 
-  if (tag) {
-    // if we have a beta version, just continue the stream of betas
-    execSync('yarn polkadot-dev-version pre');
-  } else if (argv['skip-beta']) {
+  if (argv['skip-beta'] || patch === '0') {
     // don't allow beta versions
     execSync('yarn polkadot-dev-version patch');
-  } else if (patch === '0') {
-    // patch is .0, so publish this as an actual release (surely we did our job on beta)
-    execSync('yarn polkadot-dev-version patch');
-  } else if (patch === '1') {
-    // continue with first new minor as beta
+  } else if (tag || patch === '1' || available.includes(currentVersion)) {
+    // if we have a beta version, just continue the stream of betas
     execSync('yarn polkadot-dev-version pre');
   } else {
     // manual setting of version, make some changes so we can commit
-    fs.appendFileSync(path.join(process.cwd(), '.123trigger'), `\n${currentVersion}`);
+    fs.appendFileSync(triggerPath, `\n${currentVersion}`);
   }
 
   execSync('git add --all .');
