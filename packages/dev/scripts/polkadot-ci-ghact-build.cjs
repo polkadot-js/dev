@@ -104,13 +104,16 @@ function gitBump () {
   const currentVersion = npmGetVersion();
   const [version, tag] = currentVersion.split('-');
   const [,, patch] = version.split('.');
-  const triggerPath = path.join(process.cwd(), '.123trigger');
-  const available = fs.readFileSync(triggerPath, 'utf-8').split('\n');
 
   if (argv['skip-beta'] || patch === '0') {
     // don't allow beta versions
     execSync('yarn polkadot-dev-version patch');
-  } else if (tag || patch === '1' || available.includes(currentVersion)) {
+  }
+
+  const triggerPath = path.join(process.cwd(), '.123trigger');
+  const available = fs.readFileSync(triggerPath, 'utf-8').split('\n');
+
+  if (tag || patch === '1' || available.includes(currentVersion)) {
     // if we have a beta version, just continue the stream of betas
     execSync('yarn polkadot-dev-version pre');
   } else {
