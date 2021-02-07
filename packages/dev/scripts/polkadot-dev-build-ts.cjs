@@ -17,6 +17,8 @@ const CPX = ['js', 'cjs', 'mjs', 'json', 'd.ts', 'css', 'gif', 'hbs', 'jpg', 'pn
 
 console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
+const ESM = '.mjs'; // .mjs
+
 // webpack build
 function buildWebpack () {
   execSync('yarn polkadot-exec-webpack --config webpack.config.js --mode production');
@@ -38,7 +40,7 @@ async function buildBabel (dir, type) {
       filenames: ['src'],
       ignore: '**/*.d.ts',
       outDir,
-      outFileExtension: type === 'esm' ? '.mjs' : '.js'
+      outFileExtension: type === 'esm' ? ESM : '.js'
     }
   });
 
@@ -58,7 +60,7 @@ function relativePath (value) {
 function createMapEntry (withEsm, rootDir, cjsPath) {
   cjsPath = relativePath(cjsPath);
 
-  const esmPath = cjsPath.replace('.js', '.mjs');
+  const esmPath = cjsPath.replace('.js', ESM);
   const jsIsNode = fs.readFileSync(path.join(rootDir, cjsPath), 'utf8').includes('@polkadot/dev: exports-node');
   const field = withEsm && esmPath !== cjsPath && fs.existsSync(path.join(rootDir, esmPath))
     // ordering here is important: import, require, node/browser, default (last)
@@ -91,7 +93,7 @@ function findFiles (withEsm, buildDir, extra = '') {
       const thisPath = path.join(buildDir, cjsPath);
       const toDelete = cjsName.includes('.spec.') || // no tests
         cjsName.endsWith('.d.js') || // no .d.ts compiled outputs
-        cjsName.endsWith('.d.mjs') || // same as above, esm version
+        cjsName.endsWith(`.d${ESM}`) || // same as above, esm version
         (
           cjsName.endsWith('.d.ts') && // .d.ts without .js as an output
           !fs.existsSync(path.join(buildDir, cjsPath.replace('.d.ts', '.js')))
@@ -101,7 +103,7 @@ function findFiles (withEsm, buildDir, extra = '') {
         fs.unlinkSync(thisPath);
       } else if (fs.statSync(thisPath).isDirectory()) {
         findFiles(withEsm, buildDir, cjsPath).forEach((entry) => all.push(entry));
-      } else if (!cjsName.endsWith('.mjs')) {
+      } else if (!cjsName.endsWith(ESM)) {
         all.push(createMapEntry(withEsm, buildDir, cjsPath));
       }
 
