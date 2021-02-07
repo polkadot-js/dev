@@ -18,7 +18,7 @@
     "lint": "polkadot-dev-run-lint",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "./packages/dev/scripts/polkadot-dev-yarn-only.cjs",
-    "test": "yarn test:esm && polkadot-dev-run-test --coverage",
+    "test": "yarn build && yarn test:esm && polkadot-dev-run-test --coverage",
     "test:esm": "node ./tester.cjs && node ./tester.mjs"
   },
   "devDependencies": {
