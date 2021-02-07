@@ -11,14 +11,15 @@
     "typescript": "^4.1.3"
   },
   "scripts": {
-    "build": "polkadot-dev-build-ts && node ./tester.cjs && node ./tester.mjs",
+    "build": "polkadot-dev-build-ts",
     "build:extra": "(cd packages/dev && copyfiles config/* scripts/* build)",
     "build:release": "polkadot-ci-ghact-build --skip-beta",
     "docs": "polkadot-dev-build-docs",
     "lint": "polkadot-dev-run-lint",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "./packages/dev/scripts/polkadot-dev-yarn-only.cjs",
-    "test": "polkadot-dev-run-test --coverage"
+    "test": "yarn build && yarn test:esm && polkadot-dev-run-test --coverage",
+    "test:esm": "node ./tester.cjs && node ./tester.mjs"
   },
   "devDependencies": {
     "@polkadot/dev": "workspace:packages/dev",

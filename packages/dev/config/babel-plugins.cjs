@@ -3,6 +3,8 @@
 
 const resolver = require('./babel-resolver.cjs');
 
+const ESM = '.mjs'; // .mjs
+
 module.exports = function (isEsm, withExt) {
   return resolver([
     // ordering important, decorators before class properties
@@ -22,8 +24,8 @@ module.exports = function (isEsm, withExt) {
     // 'index.js', but while executing only the 'index.ts' file would be available (However, in
     // the case of ESM transforms we do need the explicit extension here, so apply it)
     withExt && ['babel-plugin-module-extension-resolver', {
-      dstExtension: isEsm ? '.mjs' : '.js',
-      srcExtensions: [isEsm ? '.mjs' : '.js', '.ts', '.tsx']
+      dstExtension: isEsm ? ESM : '.js',
+      srcExtensions: [isEsm ? ESM : '.js', '.ts', '.tsx']
     }]
   ]);
 };
