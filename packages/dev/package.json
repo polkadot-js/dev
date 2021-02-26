@@ -47,12 +47,12 @@
     "@babel/plugin-syntax-import-meta": "^7.10.4",
     "@babel/plugin-syntax-top-level-await": "^7.12.13",
     "@babel/plugin-transform-regenerator": "^7.12.13",
-    "@babel/plugin-transform-runtime": "^7.13.6",
+    "@babel/plugin-transform-runtime": "^7.13.7",
     "@babel/preset-env": "^7.13.5",
     "@babel/preset-react": "^7.12.13",
     "@babel/preset-typescript": "^7.13.0",
     "@babel/register": "^7.13.0",
-    "@babel/runtime": "^7.13.6",
+    "@babel/runtime": "^7.13.7",
     "@rushstack/eslint-patch": "^1.0.6",
     "@typescript-eslint/eslint-plugin": "4.15.2",
     "@typescript-eslint/parser": "4.15.2",
@@ -93,7 +93,7 @@
     "typedoc": "^0.20.28",
     "typedoc-plugin-markdown": "^3.5.0",
     "typedoc-plugin-no-inherit": "^1.2.0",
-    "typescript": "^4.2.2",
+    "typescript": "^4.1.5",
     "yargs": "^16.2.0"
   },
   "devDependencies": {

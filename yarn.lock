@@ -1048,9 +1048,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-transform-runtime@npm:^7.13.6":
-  version: 7.13.6
-  resolution: "@babel/plugin-transform-runtime@npm:7.13.6"
+"@babel/plugin-transform-runtime@npm:^7.13.7":
+  version: 7.13.7
+  resolution: "@babel/plugin-transform-runtime@npm:7.13.7"
   dependencies:
     "@babel/helper-module-imports": ^7.12.13
     "@babel/helper-plugin-utils": ^7.13.0
@@ -1060,7 +1060,7 @@ __metadata:
     semver: 7.0.0
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 48d5f62f08fd3f410a580c7a242797651cae99453c18331ac4b7af2510deb3b8c877b3f6395605d675ce708994c6c163b0a678ca9f974fede5d631f642c6e299
+  checksum: f1bb7bb8541c483332c48036f4c68e21d5e4a25e8ddb006d390779756276bcae1950121bea5d2a1244b5273f64ed87ed69f038fb8d6415ee352c4856f2c0a2e4
   languageName: node
   linkType: hard
 
@@ -1292,12 +1292,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.13.6, @babel/runtime@npm:^7.8.4":
-  version: 7.13.6
-  resolution: "@babel/runtime@npm:7.13.6"
+"@babel/runtime@npm:^7.13.7, @babel/runtime@npm:^7.8.4":
+  version: 7.13.7
+  resolution: "@babel/runtime@npm:7.13.7"
   dependencies:
     regenerator-runtime: ^0.13.4
-  checksum: e839f042db4a22494d7dfc5d55846924d3234b45938859a483ce7f34719f11d7882725f0d2db85785b87a6f8548b11b6ed43f5aa146cb933127c4c28286436b3
+  checksum: 8be9fd44bb684ad42069170ca1bce9e225af7bc13861f5ac9c2517b6f1c585fb167cedb54f1a0c5b3f26a8391a9e1afef874829df494d945398d3f67b39e6116
   languageName: node
   linkType: hard
 
@@ -1788,12 +1788,12 @@ __metadata:
     "@babel/plugin-syntax-import-meta": ^7.10.4
     "@babel/plugin-syntax-top-level-await": ^7.12.13
     "@babel/plugin-transform-regenerator": ^7.12.13
-    "@babel/plugin-transform-runtime": ^7.13.6
+    "@babel/plugin-transform-runtime": ^7.13.7
     "@babel/preset-env": ^7.13.5
     "@babel/preset-react": ^7.12.13
     "@babel/preset-typescript": ^7.13.0
     "@babel/register": ^7.13.0
-    "@babel/runtime": ^7.13.6
+    "@babel/runtime": ^7.13.7
     "@rushstack/eslint-patch": ^1.0.6
     "@types/jest": ^26.0.20
     "@types/node": ^14.14.31
@@ -1839,7 +1839,7 @@ __metadata:
     typedoc: ^0.20.28
     typedoc-plugin-markdown: ^3.5.0
     typedoc-plugin-no-inherit: ^1.2.0
-    typescript: ^4.2.2
+    typescript: ^4.1.5
     yargs: ^16.2.0
   bin:
     polkadot-ci-ghact-build: ./scripts/polkadot-ci-ghact-build.cjs
