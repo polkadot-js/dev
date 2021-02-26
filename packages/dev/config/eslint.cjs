@@ -57,6 +57,7 @@ module.exports = {
     semi: [2, 'always'],
     'no-extra-semi': 2,
     // specific overrides
+    '@typescript-eslint/no-non-null-assertion': 'error',
     '@typescript-eslint/type-annotation-spacing': 'error',
     'arrow-parens': ['error', 'always'],
     'default-param-last': [0], // conflicts with TS version (this one doesn't allow TS ?)
