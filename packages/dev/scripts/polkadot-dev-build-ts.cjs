@@ -18,8 +18,8 @@ const CPX = ['js', 'cjs', 'mjs', 'json', 'd.ts', 'css', 'gif', 'hbs', 'jpg', 'pn
 
 console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
-const IS_MODULE = EXT_ESM === '.js';
-const EXT_OTHER = IS_MODULE ? EXT_CJS : EXT_ESM;
+const isTypeModule = EXT_ESM === '.js';
+const EXT_OTHER = isTypeModule ? EXT_CJS : EXT_ESM;
 
 // webpack build
 function buildWebpack () {
@@ -67,14 +67,14 @@ function createMapEntry (rootDir, jsPath) {
   const field = otherPath !== jsPath && fs.existsSync(path.join(rootDir, otherPath))
     // ordering here is important: import, require, node/browser, default (last)
     ? jsIsNode
-      ? IS_MODULE
+      ? isTypeModule
         // eslint-disable-next-line sort-keys
-        ? { node: jsPath, require: jsPath, default: otherPath }
+        ? { node: otherPath, require: otherPath, default: jsPath }
         // eslint-disable-next-line sort-keys
         : { node: jsPath, import: otherPath, default: jsPath }
-      : IS_MODULE
+      : isTypeModule
         // eslint-disable-next-line sort-keys
-        ? { require: jsPath, default: otherPath }
+        ? { require: otherPath, default: jsPath }
         // eslint-disable-next-line sort-keys
         : { import: otherPath, default: jsPath }
     : jsPath;
