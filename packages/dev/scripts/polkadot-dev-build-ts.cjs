@@ -140,10 +140,12 @@ function buildExports () {
     .sort((a, b) => a[0].localeCompare(b[0]))
     .reduce((all, [path, config]) => ({
       ...all,
-      [path]: {
-        ...((pkg.exports && pkg.exports[list]) || {}),
-        ...config
-      }
+      [path]: typeof config === 'string'
+        ? config
+        : {
+          ...((pkg.exports && pkg.exports[list]) || {}),
+          ...config
+        }
     }), {});
 
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
