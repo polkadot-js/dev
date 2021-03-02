@@ -7,6 +7,7 @@ const fs = require('fs');
 const mkdirp = require('mkdirp');
 const path = require('path');
 
+const { EXT_CJS, EXT_ESM } = require('../config/babel-extensions.cjs');
 const copySync = require('./copySync.cjs');
 const execSync = require('./execSync.cjs');
 
@@ -17,7 +18,8 @@ const CPX = ['js', 'cjs', 'mjs', 'json', 'd.ts', 'css', 'gif', 'hbs', 'jpg', 'pn
 
 console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
-const ESM = '.mjs'; // .mjs
+const IS_MODULE = EXT_ESM === '.js';
+const EXT_OTHER = IS_MODULE ? EXT_CJS : EXT_ESM;
 
 // webpack build
 function buildWebpack () {
@@ -40,7 +42,7 @@ async function buildBabel (dir, type) {
       filenames: ['src'],
       ignore: '**/*.d.ts',
       outDir,
-      outFileExtension: type === 'esm' ? ESM : '.js'
+      outFileExtension: type === 'esm' ? EXT_ESM : EXT_CJS
     }
   });
 
@@ -57,54 +59,60 @@ function relativePath (value) {
 }
 
 // creates an entry for the cjs/esm name
-function createMapEntry (withEsm, rootDir, cjsPath) {
-  cjsPath = relativePath(cjsPath);
+function createMapEntry (rootDir, jsPath) {
+  jsPath = relativePath(jsPath);
 
-  const esmPath = cjsPath.replace('.js', ESM);
-  const jsIsNode = fs.readFileSync(path.join(rootDir, cjsPath), 'utf8').includes('@polkadot/dev: exports-node');
-  const field = withEsm && esmPath !== cjsPath && fs.existsSync(path.join(rootDir, esmPath))
+  const otherPath = jsPath.replace('.js', EXT_OTHER);
+  const jsIsNode = fs.readFileSync(path.join(rootDir, jsPath), 'utf8').includes('@polkadot/dev: exports-node');
+  const field = otherPath !== jsPath && fs.existsSync(path.join(rootDir, otherPath))
     // ordering here is important: import, require, node/browser, default (last)
     ? jsIsNode
-      // eslint-disable-next-line sort-keys
-      ? { node: cjsPath, import: esmPath, default: cjsPath }
-      // eslint-disable-next-line sort-keys
-      : { import: esmPath, default: cjsPath }
-    : cjsPath;
+      ? IS_MODULE
+        // eslint-disable-next-line sort-keys
+        ? { node: jsPath, require: jsPath, default: otherPath }
+        // eslint-disable-next-line sort-keys
+        : { node: jsPath, import: otherPath, default: jsPath }
+      : IS_MODULE
+        // eslint-disable-next-line sort-keys
+        ? { require: jsPath, default: otherPath }
+        // eslint-disable-next-line sort-keys
+        : { import: otherPath, default: jsPath }
+    : jsPath;
 
-  if (cjsPath.endsWith('.js')) {
-    if (cjsPath.endsWith('/index.js')) {
-      return [cjsPath.replace('/index.js', ''), field];
+  if (jsPath.endsWith('.js')) {
+    if (jsPath.endsWith('/index.js')) {
+      return [jsPath.replace('/index.js', ''), field];
     } else {
-      return [cjsPath.replace('.js', ''), field];
+      return [jsPath.replace('.js', ''), field];
     }
   }
 
-  return [cjsPath, field];
+  return [jsPath, field];
 }
 
 // find the names of all the files in a certain directory
-function findFiles (withEsm, buildDir, extra = '') {
+function findFiles (buildDir, extra = '') {
   const currDir = extra ? path.join(buildDir, extra) : buildDir;
 
   return fs
     .readdirSync(currDir)
     .reduce((all, cjsName) => {
-      const cjsPath = `${extra}/${cjsName}`;
-      const thisPath = path.join(buildDir, cjsPath);
+      const jsPath = `${extra}/${cjsName}`;
+      const thisPath = path.join(buildDir, jsPath);
       const toDelete = cjsName.includes('.spec.') || // no tests
         cjsName.endsWith('.d.js') || // no .d.ts compiled outputs
-        cjsName.endsWith(`.d${ESM}`) || // same as above, esm version
+        cjsName.endsWith(`.d${EXT_OTHER}`) || // same as above, esm version
         (
           cjsName.endsWith('.d.ts') && // .d.ts without .js as an output
-          !fs.existsSync(path.join(buildDir, cjsPath.replace('.d.ts', '.js')))
+          !fs.existsSync(path.join(buildDir, jsPath.replace('.d.ts', '.js')))
         );
 
       if (toDelete) {
         fs.unlinkSync(thisPath);
       } else if (fs.statSync(thisPath).isDirectory()) {
-        findFiles(withEsm, buildDir, cjsPath).forEach((entry) => all.push(entry));
-      } else if (!cjsName.endsWith(ESM)) {
-        all.push(createMapEntry(withEsm, buildDir, cjsPath));
+        findFiles(buildDir, jsPath).forEach((entry) => all.push(entry));
+      } else if (!cjsName.endsWith(EXT_OTHER)) {
+        all.push(createMapEntry(buildDir, jsPath));
       }
 
       return all;
@@ -112,18 +120,18 @@ function findFiles (withEsm, buildDir, extra = '') {
 }
 
 // iterate through all the files that have been built, creating an exports map
-function buildExports (withEsm) {
+function buildExports () {
   const buildDir = path.join(process.cwd(), 'build');
   const pkgPath = path.join(buildDir, 'package.json');
   const pkg = require(pkgPath);
-  const list = findFiles(withEsm, buildDir);
+  const list = findFiles(buildDir);
 
   if (!list.some(([key]) => key === '.')) {
     // for the env-specifics, add a root key (if not available)
     list.push(['.', {
-      browser: createMapEntry(withEsm, buildDir, pkg.browser)[1],
-      node: createMapEntry(withEsm, buildDir, pkg.main)[1],
-      'react-native': createMapEntry(withEsm, buildDir, pkg['react-native'])[1]
+      browser: createMapEntry(buildDir, pkg.browser)[1],
+      node: createMapEntry(buildDir, pkg.main)[1],
+      'react-native': createMapEntry(buildDir, pkg['react-native'])[1]
     }]);
 
     const indexDef = relativePath(pkg.main).replace('.js', '.d.ts');
@@ -164,15 +172,10 @@ export const packageInfo = { name: '${name}', version: '${version}' };
     if (fs.existsSync(path.join(process.cwd(), 'public'))) {
       buildWebpack(dir);
     } else {
-      const withEsm = !fs.existsSync(path.join(process.cwd(), '.skip-esm'));
-
       await buildBabel(dir, 'cjs');
+      await buildBabel(dir, 'esm');
 
-      if (withEsm) {
-        await buildBabel(dir, 'esm');
-      }
-
-      buildExports(withEsm);
+      buildExports();
     }
 
     console.log();

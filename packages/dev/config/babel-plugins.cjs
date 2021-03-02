@@ -1,9 +1,8 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+const { EXT_CJS, EXT_ESM } = require('./babel-extensions.cjs');
 const resolver = require('./babel-resolver.cjs');
-
-const ESM = '.mjs'; // .mjs
 
 module.exports = function (isEsm, withExt) {
   return resolver([
@@ -23,9 +22,9 @@ module.exports = function (isEsm, withExt) {
     // Under Jest the conversion of paths leads to issues since the require would be from e.g.
     // 'index.js', but while executing only the 'index.ts' file would be available (However, in
     // the case of ESM transforms we do need the explicit extension here, so apply it)
-    withExt && ['babel-plugin-module-extension-resolver', {
-      dstExtension: isEsm ? ESM : '.js',
-      srcExtensions: [isEsm ? ESM : '.js', '.ts', '.tsx']
+    !process.env.JEST_WORKER_ID && withExt && ['babel-plugin-module-extension-resolver', {
+      dstExtension: isEsm ? EXT_ESM : EXT_CJS,
+      srcExtensions: [isEsm ? EXT_ESM : EXT_CJS, '.ts', '.tsx']
     }]
   ]);
 };
