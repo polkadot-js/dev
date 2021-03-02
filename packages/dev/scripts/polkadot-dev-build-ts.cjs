@@ -143,7 +143,7 @@ function buildExports () {
       [path]: typeof config === 'string'
         ? config
         : {
-          ...((pkg.exports && pkg.exports[list]) || {}),
+          ...((pkg.exports && pkg.exports[path]) || {}),
           ...config
         }
     }), {});
