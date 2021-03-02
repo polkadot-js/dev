@@ -25,7 +25,7 @@
     "@polkadot/dev": "workspace:packages/dev",
     "copyfiles": "^2.4.1"
   },
-  "version": "0.62.3",
+  "version": "0.62.4",
   "exports": {
     "./packages/dev/build": {
       "default": "./packages/dev/build/index.mjs",
