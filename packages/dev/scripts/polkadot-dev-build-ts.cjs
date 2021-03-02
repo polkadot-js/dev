@@ -7,7 +7,6 @@ const fs = require('fs');
 const mkdirp = require('mkdirp');
 const path = require('path');
 
-const { EXT_CJS, EXT_ESM } = require('../config/babel-extensions.cjs');
 const copySync = require('./copySync.cjs');
 const execSync = require('./execSync.cjs');
 
@@ -18,7 +17,7 @@ const CPX = ['js', 'cjs', 'mjs', 'json', 'd.ts', 'css', 'gif', 'hbs', 'jpg', 'pn
 
 console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
-const IS_MODULE = EXT_ESM === '.js';
+const ESM = '.mjs'; // .mjs
 
 // webpack build
 function buildWebpack () {
@@ -41,7 +40,7 @@ async function buildBabel (dir, type) {
       filenames: ['src'],
       ignore: '**/*.d.ts',
       outDir,
-      outFileExtension: type === 'esm' ? EXT_ESM : EXT_CJS
+      outFileExtension: type === 'esm' ? ESM : '.js'
     }
   });
 
@@ -61,28 +60,22 @@ function relativePath (value) {
 function createMapEntry (withEsm, rootDir, cjsPath) {
   cjsPath = relativePath(cjsPath);
 
-  const esmPath = cjsPath.replace(EXT_CJS, EXT_ESM);
+  const esmPath = cjsPath.replace('.js', ESM);
   const jsIsNode = fs.readFileSync(path.join(rootDir, cjsPath), 'utf8').includes('@polkadot/dev: exports-node');
   const field = withEsm && esmPath !== cjsPath && fs.existsSync(path.join(rootDir, esmPath))
     // ordering here is important: import, require, node/browser, default (last)
     ? jsIsNode
-      ? IS_MODULE
-        // eslint-disable-next-line sort-keys
-        ? { node: cjsPath, require: cjsPath, default: esmPath }
-        // eslint-disable-next-line sort-keys
-        : { node: cjsPath, import: esmPath, default: cjsPath }
-      : IS_MODULE
-        // eslint-disable-next-line sort-keys
-        ? { require: cjsPath, default: esmPath }
-        // eslint-disable-next-line sort-keys
-        : { import: esmPath, default: cjsPath }
+      // eslint-disable-next-line sort-keys
+      ? { node: cjsPath, import: esmPath, default: cjsPath }
+      // eslint-disable-next-line sort-keys
+      : { import: esmPath, default: cjsPath }
     : cjsPath;
 
-  if (cjsPath.endsWith(EXT_CJS)) {
-    if (cjsPath.endsWith(`/index${EXT_CJS}`)) {
-      return [cjsPath.replace(`/index${EXT_CJS}`, ''), field];
+  if (cjsPath.endsWith('.js')) {
+    if (cjsPath.endsWith('/index.js')) {
+      return [cjsPath.replace('/index.js', ''), field];
     } else {
-      return [cjsPath.replace(EXT_CJS, ''), field];
+      return [cjsPath.replace('.js', ''), field];
     }
   }
 
@@ -98,25 +91,20 @@ function findFiles (withEsm, buildDir, extra = '') {
     .reduce((all, cjsName) => {
       const cjsPath = `${extra}/${cjsName}`;
       const thisPath = path.join(buildDir, cjsPath);
+      const toDelete = cjsName.includes('.spec.') || // no tests
+        cjsName.endsWith('.d.js') || // no .d.ts compiled outputs
+        cjsName.endsWith(`.d${ESM}`) || // same as above, esm version
+        (
+          cjsName.endsWith('.d.ts') && // .d.ts without .js as an output
+          !fs.existsSync(path.join(buildDir, cjsPath.replace('.d.ts', '.js')))
+        );
 
-      if (fs.statSync(thisPath).isDirectory()) {
+      if (toDelete) {
+        fs.unlinkSync(thisPath);
+      } else if (fs.statSync(thisPath).isDirectory()) {
         findFiles(withEsm, buildDir, cjsPath).forEach((entry) => all.push(entry));
-      } else {
-        const toDelete = cjsName.includes('.spec.') || // no tests
-          cjsName.endsWith('.d.js') || // no .d.ts compiled outputs
-          cjsName.endsWith(`.d${EXT_CJS}`) || // no .d.ts compiled outputs
-          cjsName.endsWith(`.d${EXT_ESM}`) || // same as above, esm version
-          (
-            cjsName.endsWith('.d.ts') && // .d.ts without as an output
-            !fs.existsSync(path.join(buildDir, cjsPath.replace('.d.ts', EXT_CJS))) &&
-            !fs.existsSync(path.join(buildDir, cjsPath.replace('.d.ts', EXT_ESM)))
-          );
-
-        if (toDelete) {
-          fs.unlinkSync(thisPath);
-        } else if (!cjsName.endsWith(EXT_ESM)) {
-          all.push(createMapEntry(withEsm, buildDir, cjsPath));
-        }
+      } else if (!cjsName.endsWith(ESM)) {
+        all.push(createMapEntry(withEsm, buildDir, cjsPath));
       }
 
       return all;
@@ -128,7 +116,7 @@ function buildExports (withEsm) {
   const buildDir = path.join(process.cwd(), 'build');
   const pkgPath = path.join(buildDir, 'package.json');
   const pkg = require(pkgPath);
-  const list = findFiles(withEsm, buildDir, '');
+  const list = findFiles(withEsm, buildDir);
 
   if (!list.some(([key]) => key === '.')) {
     // for the env-specifics, add a root key (if not available)
