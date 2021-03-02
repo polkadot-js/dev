@@ -148,6 +148,9 @@ function buildExports () {
           ...config
         }
     }), {});
+  pkg.type = isTypeModule
+    ? 'module'
+    : 'commonjs';
 
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
 }
