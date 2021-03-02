@@ -89,14 +89,14 @@ function findFiles (buildDir, extra = '') {
 
   return fs
     .readdirSync(currDir)
-    .reduce((all, cjsName) => {
-      const jsPath = `${extra}/${cjsName}`;
+    .reduce((all, jsName) => {
+      const jsPath = `${extra}/${jsName}`;
       const thisPath = path.join(buildDir, jsPath);
-      const toDelete = cjsName.includes('.spec.') || // no tests
-        cjsName.endsWith('.d.js') || // no .d.ts compiled outputs
-        cjsName.endsWith(`.d${EXT_OTHER}`) || // same as above, esm version
+      const toDelete = jsName.includes('.spec.') || // no tests
+        jsName.endsWith('.d.js') || // no .d.ts compiled outputs
+        jsName.endsWith(`.d${EXT_OTHER}`) || // same as above, esm version
         (
-          cjsName.endsWith('.d.ts') && // .d.ts without .js as an output
+          jsName.endsWith('.d.ts') && // .d.ts without .js as an output
           !fs.existsSync(path.join(buildDir, jsPath.replace('.d.ts', '.js')))
         );
 
@@ -104,7 +104,8 @@ function findFiles (buildDir, extra = '') {
         fs.unlinkSync(thisPath);
       } else if (fs.statSync(thisPath).isDirectory()) {
         findFiles(buildDir, jsPath).forEach((entry) => all.push(entry));
-      } else if (!cjsName.endsWith(EXT_OTHER)) {
+      } else if (!jsName.endsWith(EXT_OTHER) || !fs.existsSync(path.join(buildDir, jsPath.replace(EXT_OTHER, '.js')))) {
+        // this is not mapped to a compiled .js file (where we have dual esm/cjs mappings)
         all.push(createMapEntry(buildDir, jsPath));
       }
 
