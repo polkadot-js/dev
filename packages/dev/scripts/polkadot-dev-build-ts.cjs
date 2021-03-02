@@ -24,7 +24,7 @@ const EXT_OTHER = isTypeModule ? EXT_CJS : EXT_ESM;
 
 // webpack build
 function buildWebpack () {
-  const config = WP_CONFIGS.find((c) => path.join(process.cwd(), c));
+  const config = WP_CONFIGS.find((c) => fs.existsSync(path.join(process.cwd(), c)));
 
   execSync(`yarn polkadot-exec-webpack --config ${config} --mode production`);
 }
