@@ -1,11 +1,19 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+const { EXT_CJS, EXT_ESM } = require('./babel-extensions.cjs');
 const resolver = require('./babel-resolver.cjs');
 
-const ESM = '.mjs'; // .mjs
-
 module.exports = function (isEsm, withExt) {
+  // 1. Under cjs we only add the extension when is is not the default .js
+  // 2. Under Jest the conversion of paths leads to issues since the require would be from e.g.
+  // 'index.js', but while executing only the 'index.ts' file would be available
+  //  3. In the case of esm we always need the explicit extension here
+  const rewriteExt = !process.env.JEST_WORKER_ID && withExt && (
+    isEsm ||
+    EXT_CJS !== '.js'
+  );
+
   return resolver([
     // ordering important, decorators before class properties
     ['@babel/plugin-proposal-class-properties', { loose: true }],
@@ -20,12 +28,9 @@ module.exports = function (isEsm, withExt) {
     '@babel/plugin-syntax-import-meta',
     '@babel/plugin-syntax-top-level-await',
     'babel-plugin-styled-components',
-    // Under Jest the conversion of paths leads to issues since the require would be from e.g.
-    // 'index.js', but while executing only the 'index.ts' file would be available (However, in
-    // the case of ESM transforms we do need the explicit extension here, so apply it)
-    withExt && ['babel-plugin-module-extension-resolver', {
-      dstExtension: isEsm ? ESM : '.js',
-      srcExtensions: [isEsm ? ESM : '.js', '.ts', '.tsx']
+    rewriteExt && ['babel-plugin-module-extension-resolver', {
+      dstExtension: isEsm ? EXT_ESM : EXT_CJS,
+      srcExtensions: [isEsm ? EXT_ESM : EXT_CJS, '.ts', '.tsx']
     }]
   ]);
 };

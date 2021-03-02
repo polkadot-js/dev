@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.62.1
+
+- Swap default package build to esm with type: module
+
 ## 0.61.1
 
 - Build & publish both esm and cjs
