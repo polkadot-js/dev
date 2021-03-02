@@ -6,6 +6,5 @@ const config = require('@polkadot/dev/config/jest.cjs');
 module.exports = Object.assign({}, config, {
   modulePathIgnorePatterns: [
     '<rootDir>/packages/dev/build'
-  ],
-  resolver: '@polkadot/dev/config/jest-resolver.cjs'
+  ]
 });
