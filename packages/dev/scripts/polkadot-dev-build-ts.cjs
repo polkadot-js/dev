@@ -63,14 +63,9 @@ function createMapEntry (rootDir, jsPath) {
   jsPath = relativePath(jsPath);
 
   const otherPath = jsPath.replace('.js', EXT_OTHER);
-  const jsIsNode = fs.readFileSync(path.join(rootDir, jsPath), 'utf8').includes('@polkadot/dev: exports-node');
   const otherReq = isTypeModule ? 'require' : 'import';
   const field = otherPath !== jsPath && fs.existsSync(path.join(rootDir, otherPath))
     ? {
-      ...(jsIsNode
-        ? { node: otherPath }
-        : {}
-      ),
       [otherReq]: otherPath,
       // eslint-disable-next-line sort-keys
       default: jsPath
@@ -143,7 +138,13 @@ function buildExports () {
 
   pkg.exports = list
     .sort((a, b) => a[0].localeCompare(b[0]))
-    .reduce((all, [path, config]) => ({ ...all, [path]: config }), {});
+    .reduce((all, [path, config]) => ({
+      ...all,
+      [path]: {
+        ...((pkg.exports && pkg.exports[list]) || {}),
+        ...config
+      }
+    }), {});
 
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
 }
