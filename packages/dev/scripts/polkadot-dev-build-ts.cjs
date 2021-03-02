@@ -64,19 +64,17 @@ function createMapEntry (rootDir, jsPath) {
 
   const otherPath = jsPath.replace('.js', EXT_OTHER);
   const jsIsNode = fs.readFileSync(path.join(rootDir, jsPath), 'utf8').includes('@polkadot/dev: exports-node');
+  const otherReq = isTypeModule ? 'require' : 'import';
   const field = otherPath !== jsPath && fs.existsSync(path.join(rootDir, otherPath))
-    // ordering here is important: import, require, node/browser, default (last)
-    ? jsIsNode
-      ? isTypeModule
-        // eslint-disable-next-line sort-keys
-        ? { node: otherPath, require: otherPath, default: jsPath }
-        // eslint-disable-next-line sort-keys
-        : { node: jsPath, import: otherPath, default: jsPath }
-      : isTypeModule
-        // eslint-disable-next-line sort-keys
-        ? { require: otherPath, default: jsPath }
-        // eslint-disable-next-line sort-keys
-        : { import: otherPath, default: jsPath }
+    ? {
+      ...(jsIsNode
+        ? { node: otherPath }
+        : {}
+      ),
+      [otherReq]: otherPath,
+      // eslint-disable-next-line sort-keys
+      default: jsPath
+    }
     : jsPath;
 
   if (jsPath.endsWith('.js')) {
