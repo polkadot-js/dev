@@ -34,7 +34,7 @@
   "homepage": "https://github.com/polkadot-js/dev#readme",
   "dependencies": {
     "@babel/cli": "^7.13.16",
-    "@babel/core": "^7.13.16",
+    "@babel/core": "^7.14.0",
     "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
     "@babel/plugin-proposal-numeric-separator": "^7.12.13",
@@ -47,11 +47,11 @@
     "@babel/plugin-syntax-top-level-await": "^7.12.13",
     "@babel/plugin-transform-regenerator": "^7.13.15",
     "@babel/plugin-transform-runtime": "^7.13.15",
-    "@babel/preset-env": "^7.13.15",
+    "@babel/preset-env": "^7.14.0",
     "@babel/preset-react": "^7.13.13",
     "@babel/preset-typescript": "^7.13.0",
     "@babel/register": "^7.13.16",
-    "@babel/runtime": "^7.13.17",
+    "@babel/runtime": "^7.14.0",
     "@rushstack/eslint-patch": "^1.0.6",
     "@typescript-eslint/eslint-plugin": "4.22.0",
     "@typescript-eslint/parser": "4.22.0",
@@ -93,9 +93,9 @@
     "yargs": "^16.2.0"
   },
   "devDependencies": {
-    "@types/jest": "^26.0.22",
-    "@types/node": "^14.14.41",
-    "@types/react": "^17.0.3",
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.0.1",
+    "@types/react": "^17.0.4",
     "@types/yargs": "^16.0.1",
     "react": "^17.0.2"
   }
