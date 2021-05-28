@@ -178,7 +178,7 @@ export const packageInfo = { name: '${name}', version: '${version}' };
 `);
 
     if (fs.existsSync(path.join(process.cwd(), 'public'))) {
-      buildWebpack(dir);
+      buildWebpack();
     } else {
       await buildBabel(dir, 'cjs');
       await buildBabel(dir, 'esm');
