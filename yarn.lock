@@ -1910,7 +1910,7 @@ __metadata:
     prettier: ^2.3.0
     react: ^17.0.2
     rimraf: ^3.0.2
-    typescript: ^4.3.2
+    typescript: ^4.2.4
     yargs: ^17.0.1
   bin:
     polkadot-ci-ghact-build: ./scripts/polkadot-ci-ghact-build.cjs
