@@ -25,5 +25,5 @@
     "@polkadot/dev": "workspace:packages/dev",
     "copyfiles": "^2.4.1"
   },
-  "version": "0.62.21"
+  "version": "0.62.22"
 }
