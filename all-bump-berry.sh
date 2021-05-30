@@ -10,4 +10,8 @@ for PKG in "${DIRECTORIES[@]}"; do
   cp -R dev/.yarn/plugins $PKG/.yarn
   cp -R dev/.yarn/releases $PKG/.yarn
   cat dev/.yarnrc.yml > $PKG/.yarnrc.yml
+
+  cd $PKG
+  yarn
+  cd ..
 done
