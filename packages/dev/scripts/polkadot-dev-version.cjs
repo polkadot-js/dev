@@ -45,7 +45,7 @@ if (fs.existsSync('packages')) {
 
   packages.forEach(([pkgPath, json]) => {
     const updated = Object.keys(json).reduce((result, key) => {
-      if (key === 'version') {
+      if (key === 'version' || key === 'stableVersion') {
         result[key] = version;
       } else if (['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies', 'resolutions'].includes(key)) {
         result[key] = updateDependencies(json[key], others, version);
