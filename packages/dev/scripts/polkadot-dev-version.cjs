@@ -29,9 +29,30 @@ function updateDependencies (dependencies, others, version) {
     }, {});
 }
 
+function updatePackage (version, others, pkgPath, json) {
+  const updated = Object.keys(json).reduce((result, key) => {
+    if (key === 'version') {
+      result[key] = version;
+    } else if (['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies', 'resolutions'].includes(key)) {
+      result[key] = updateDependencies(json[key], others, version);
+    } else if (key !== 'stableVersion') {
+      result[key] = json[key];
+    }
+
+    return result;
+  }, {});
+
+  fs.writeFileSync(pkgPath, `${JSON.stringify(updated, null, 2)}\n`);
+}
+
 console.log('$ polkadot-dev-version', process.argv.slice(2).join(' '));
 
 execSync(`yarn version ${type === 'pre' ? 'prerelease' : type}`);
+
+const rootPath = path.join(process.cwd(), 'package.json');
+const rootJson = JSON.parse(fs.readFileSync(rootPath, 'utf8'));
+
+updatePackage(rootJson.version, [], rootPath, rootJson);
 
 // yarn workspaces does an OOM, manual looping takes ages
 if (fs.existsSync('packages')) {
@@ -41,22 +62,9 @@ if (fs.existsSync('packages')) {
     .filter((pkgPath) => fs.existsSync(pkgPath))
     .map((pkgPath) => [pkgPath, JSON.parse(fs.readFileSync(pkgPath, 'utf8'))]);
   const others = packages.map(([, json]) => json.name);
-  const { version } = JSON.parse(fs.readFileSync(path.join(process.cwd(), 'package.json'), 'utf8'));
 
   packages.forEach(([pkgPath, json]) => {
-    const updated = Object.keys(json).reduce((result, key) => {
-      if (key === 'version' || key === 'stableVersion') {
-        result[key] = version;
-      } else if (['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies', 'resolutions'].includes(key)) {
-        result[key] = updateDependencies(json[key], others, version);
-      } else {
-        result[key] = json[key];
-      }
-
-      return result;
-    }, {});
-
-    fs.writeFileSync(pkgPath, `${JSON.stringify(updated, null, 2)}\n`);
+    updatePackage(rootJson.version, others, pkgPath, json);
   });
 }
 
