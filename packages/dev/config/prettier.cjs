@@ -10,7 +10,7 @@ module.exports = {
   jsxBracketSameLine: false,
   jsxSingleQuote: true,
   parser: 'babel-ts',
-  printWidth: 1024,
+  printWidth: 2048,
   proseWrap: 'preserve',
   quoteProps: 'as-needed',
   semi: true,
