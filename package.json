@@ -18,6 +18,7 @@
     "lint": "polkadot-dev-run-lint",
     "clean": "polkadot-dev-clean-build",
     "postinstall": "./packages/dev/scripts/polkadot-dev-yarn-only.cjs",
+    "prettier": "./packages/dev/scripts/polkadot-dev-run-prettier.cjs",
     "test": "yarn build && yarn test:esm && polkadot-dev-run-test --coverage",
     "test:esm": "node ./tester.cjs && node ./tester.mjs"
   },
