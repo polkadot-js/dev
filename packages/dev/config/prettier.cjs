@@ -2,10 +2,20 @@
 // SPDX-License-Identifier: Apache-2.0
 
 module.exports = {
+  arrowParens: 'always',
+  bracketSpacing: true,
+  embeddedLanguageFormatting: 'off',
+  endOfLine: 'lf',
+  htmlWhitespaceSensitivity: 'ignore',
+  jsxBracketSameLine: false,
   jsxSingleQuote: true,
   parser: 'babel-ts',
+  printWidth: 1024,
+  proseWrap: 'preserve',
+  quoteProps: 'as-needed',
+  semi: true,
   singleQuote: true,
   tabWidth: 2,
-  // this conflicts with eslint, default override
-  trailingComma: 'none'
+  trailingComma: 'none',
+  useTabs: false
 };
