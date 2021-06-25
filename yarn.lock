@@ -1876,6 +1876,7 @@ __metadata:
     "@typescript-eslint/parser": 4.28.0
     "@vue/component-compiler-utils": ^3.2.2
     babel-jest: ^27.0.5
+    babel-plugin-add-import-extension: ^1.5.1
     babel-plugin-module-extension-resolver: ^1.0.0-rc.2
     babel-plugin-module-resolver: ^4.1.0
     babel-plugin-styled-components: ^1.12.0
@@ -2736,6 +2737,17 @@ __metadata:
   peerDependencies:
     "@babel/core": ^7.8.0
   checksum: 565e2b39d651dc2cfdb873bd78edc9595a6954106683a75f5ce8f5cee8e44ee2aa8e08e8844e1c67dce036bf6a23cf95a358a7a750be2a0af7f0ec4ed4199af4
+  languageName: node
+  linkType: hard
+
+"babel-plugin-add-import-extension@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "babel-plugin-add-import-extension@npm:1.5.1"
+  dependencies:
+    "@babel/helper-plugin-utils": ^7.13.0
+  peerDependencies:
+    "@babel/core": ">=7.0.0"
+  checksum: 662ee88a3f9f42dadf88d70366d12df774854c7899602eafbcb4c79b6c84097268bfec45a6693d390b17627f50481c7ce7a5fe0bc779e437395ac35b8db3fcde
   languageName: node
   linkType: hard
 
