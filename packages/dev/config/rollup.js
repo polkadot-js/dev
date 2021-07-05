@@ -8,7 +8,19 @@ import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 
-export function createOutput (pkg, name, globals) {
+function createName (input) {
+  return `polkadot-${input}`
+    .toLowerCase()
+    .replace(/[^a-zA-Z0-9]+(.)/g, (_, c) => c.toUpperCase());
+}
+
+export function createInput (pkg, index = 'index.js') {
+  return `packages/${pkg}/build/${index}`;
+}
+
+export function createOutput (pkg, globals) {
+  const name = createName(pkg);
+
   return {
     file: `packages/${pkg}/build/bundle/${name}.js`,
     format: 'iife',
