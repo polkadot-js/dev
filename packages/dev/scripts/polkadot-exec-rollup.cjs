@@ -8,4 +8,4 @@
 
 console.log('$ rollup', process.argv.slice(2).join(' '));
 
-require('dist/bin/rollup');
+require('rollup/dist/bin/rollup');
