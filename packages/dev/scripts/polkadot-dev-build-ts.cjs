@@ -217,7 +217,7 @@ async function main () {
 
   process.chdir('..');
 
-  if (fs.existsSync(path.join(process.cwd(), 'rollup.config.js'))) {
+  if (['js', 'mjs', 'cjs'].some((e) => fs.existsSync(path.join(process.cwd(), `rollup.config.${e}`)))) {
     execSync('yarn polkadot-exec-rollup --config');
   }
 }
