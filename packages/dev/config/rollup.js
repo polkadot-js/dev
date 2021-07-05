@@ -8,9 +8,9 @@ import commonjs from '@rollup/plugin-commonjs';
 import json from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 
-export function createOutput (name, outDir, globals) {
+export function createOutput (pkg, name, globals) {
   return {
-    file: `${outDir}/${name}.js`,
+    file: `packages/${pkg}/build/bundle/${name}.js`,
     format: 'iife',
     globals,
     name,
