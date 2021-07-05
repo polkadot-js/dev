@@ -9,7 +9,7 @@ import json from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 
 function createName (input) {
-  return `polkadot-${input}`
+  return `polkadot-${input.replace('@polkadot/', '')}`
     .toLowerCase()
     .replace(/[^a-zA-Z0-9]+(.)/g, (_, c) => c.toUpperCase());
 }
@@ -18,13 +18,16 @@ export function createInput (pkg, index = 'index.js') {
   return `packages/${pkg}/build/${index}`;
 }
 
-export function createOutput (pkg, globals) {
+export function createOutput (pkg, external, globals = {}) {
   const name = createName(pkg);
 
   return {
     file: `packages/${pkg}/build/bundle/${name}.js`,
     format: 'iife',
-    globals,
+    globals: external.reduce((all, pkg) => ({
+      ...all,
+      [pkg]: createName(pkg)
+    }), { ...globals }),
     name,
     preferConst: true
   };
