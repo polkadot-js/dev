@@ -216,6 +216,10 @@ async function main () {
   }
 
   process.chdir('..');
+
+  if (fs.existsSync(path.join(process.cwd(), 'rollup.config.js'))) {
+    execSync('yarn polkadot-exec-rollup --config');
+  }
 }
 
 main().catch((error) => {
