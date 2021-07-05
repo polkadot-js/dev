@@ -1952,6 +1952,7 @@ __metadata:
     polkadot-exec-ghpages: ./scripts/polkadot-exec-ghpages.cjs
     polkadot-exec-ghrelease: ./scripts/polkadot-exec-ghrelease.cjs
     polkadot-exec-prettier: ./scripts/polkadot-exec-prettier.cjs
+    polkadot-exec-rollup: ./scripts/polkadot-exec-rollup.cjs
     polkadot-exec-tsc: ./scripts/polkadot-exec-tsc.cjs
     polkadot-exec-webpack: ./scripts/polkadot-exec-webpack.cjs
   languageName: unknown
