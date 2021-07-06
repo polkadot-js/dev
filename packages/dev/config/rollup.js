@@ -24,8 +24,12 @@ export function createInput (pkg, _index) {
   const partialPath = `packages/${sanitizePkg(pkg)}/build`;
   const index = (
     _index ||
-    JSON.parse(fs.readFileSync(path.join(process.cwd(), partialPath, 'package.json'), 'utf8')).browser ||
-    'index.js'
+    fs.existsSync(path.join(process.cwd(), partialPath, 'bundle.js'))
+      ? 'bundle.js'
+      : (
+        JSON.parse(fs.readFileSync(path.join(process.cwd(), partialPath, 'package.json'), 'utf8')).browser ||
+        'index.js'
+      )
   );
 
   return `${partialPath}/${index}`;
