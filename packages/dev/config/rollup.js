@@ -20,8 +20,15 @@ function createName (input) {
     .replace(/[^a-zA-Z0-9]+(.)/g, (_, c) => c.toUpperCase());
 }
 
-export function createInput (pkg, index = 'index.js') {
-  return `packages/${sanitizePkg(pkg)}/build/${index}`;
+export function createInput (pkg, _index) {
+  const partialPath = `packages/${sanitizePkg(pkg)}/build`;
+  const index = (
+    _index ||
+    JSON.parse(fs.readFileSync(path.join(process.cwd(), partialPath, 'package.json'), 'utf8')).browser ||
+    'index.js'
+  );
+
+  return `${partialPath}/${index}`;
 }
 
 export function createOutput (_pkg, external, globals = {}) {
@@ -49,7 +56,7 @@ export function createPlugins (entries = []) {
   ];
 }
 
-export function createBundle ({ entries = [], external, index = 'index.js', pkg }) {
+export function createBundle ({ entries = [], external, index, pkg }) {
   return {
     external,
     input: createInput(pkg, index),
