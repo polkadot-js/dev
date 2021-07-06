@@ -9,6 +9,7 @@ import json from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import fs from 'fs';
 import path from 'path';
+import polyfills from 'rollup-plugin-polyfill-node';
 
 function sanitizePkg (pkg) {
   return pkg.replace('@polkadot/', '');
@@ -51,16 +52,17 @@ export function createOutput (_pkg, external, globals = {}) {
   };
 }
 
-export function createPlugins (entries = []) {
+export function createPlugins (entries = [], polyfill = true) {
   return [
     alias({ entries }),
     json(),
     nodeResolve({ browser: true }),
+    polyfill && polyfills(),
     commonjs()
-  ];
+  ].filter((p) => !!p);
 }
 
-export function createBundle ({ entries = [], external, index, pkg }) {
+export function createBundle ({ entries = [], external, index, pkg, polyfill = true }) {
   return {
     external,
     input: createInput(pkg, index),
@@ -76,7 +78,8 @@ export function createBundle ({ entries = [], external, index, pkg }) {
             find: `${p}/packageInfo`,
             replacement: `../../${sanitizePkg(p)}/build/packageInfo.js`
           }
-        ], [...entries])
+        ], [...entries]),
+      polyfill
     )
   };
 }

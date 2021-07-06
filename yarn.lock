@@ -1932,6 +1932,7 @@ __metadata:
     react: ^17.0.2
     rimraf: ^3.0.2
     rollup: ^2.52.7
+    rollup-plugin-polyfill-node: ^0.6.2
     typescript: ^4.3.5
     yargs: ^17.0.1
   bin:
@@ -1992,6 +1993,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rollup/plugin-inject@npm:^4.0.0":
+  version: 4.0.2
+  resolution: "@rollup/plugin-inject@npm:4.0.2"
+  dependencies:
+    "@rollup/pluginutils": ^3.0.4
+    estree-walker: ^1.0.1
+    magic-string: ^0.25.5
+  peerDependencies:
+    rollup: ^1.20.0 || ^2.0.0
+  checksum: f3e35f76fbba3fc7576ba5bcaf0304521033c8faaece98a1b903647513d9318377231f4f0b841bdfecbfc09659bd2d3481134e767ab5ea418fc5a52cc26756de
+  languageName: node
+  linkType: hard
+
 "@rollup/plugin-json@npm:^4.1.0":
   version: 4.1.0
   resolution: "@rollup/plugin-json@npm:4.1.0"
@@ -2019,7 +2033,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/pluginutils@npm:^3.0.8, @rollup/pluginutils@npm:^3.1.0":
+"@rollup/pluginutils@npm:^3.0.4, @rollup/pluginutils@npm:^3.0.8, @rollup/pluginutils@npm:^3.1.0":
   version: 3.1.0
   resolution: "@rollup/pluginutils@npm:3.1.0"
   dependencies:
@@ -7280,7 +7294,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"magic-string@npm:^0.25.7":
+"magic-string@npm:^0.25.5, magic-string@npm:^0.25.7":
   version: 0.25.7
   resolution: "magic-string@npm:0.25.7"
   dependencies:
@@ -8929,6 +8943,15 @@ resolve@^2.0.0-next.3:
   bin:
     rimraf: bin.js
   checksum: 87f4164e396f0171b0a3386cc1877a817f572148ee13a7e113b238e48e8a9f2f31d009a92ec38a591ff1567d9662c6b67fd8818a2dbbaed74bc26a87a2a4a9a0
+  languageName: node
+  linkType: hard
+
+"rollup-plugin-polyfill-node@npm:^0.6.2":
+  version: 0.6.2
+  resolution: "rollup-plugin-polyfill-node@npm:0.6.2"
+  dependencies:
+    "@rollup/plugin-inject": ^4.0.0
+  checksum: ab54c237be140b814ac178bafe4f6e9518e893d52f8ed8399ade979f335e0d41d6aebf23b16e39aa24ecc6e7146e476903518c234f038d8e07920ed9e2c6dcb7
   languageName: node
   linkType: hard
 
