@@ -56,9 +56,9 @@ export function createPlugins (entries = [], polyfill = true) {
   return [
     alias({ entries }),
     json(),
-    nodeResolve({ browser: true }),
+    commonjs(),
     polyfill && polyfills(),
-    commonjs()
+    nodeResolve({ browser: true })
   ].filter((p) => !!p);
 }
 
