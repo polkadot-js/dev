@@ -11,7 +11,7 @@ import fs from 'fs';
 import path from 'path';
 
 // import polyfills from 'rollup-plugin-polyfill-node';
-import polyfills from './rollup-polyfill-node';
+import polyfills from './rollup-polyfill-node.js';
 
 function sanitizePkg (pkg) {
   return pkg.replace('@polkadot/', '');
