@@ -9,7 +9,9 @@ import json from '@rollup/plugin-json';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import fs from 'fs';
 import path from 'path';
-import polyfills from 'rollup-plugin-polyfill-node';
+
+// import polyfills from 'rollup-plugin-polyfill-node';
+import polyfills from './rollup-polyfill-node';
 
 function sanitizePkg (pkg) {
   return pkg.replace('@polkadot/', '');
@@ -47,6 +49,7 @@ export function createOutput (_pkg, external, globals = {}) {
       [pkg]: createName(pkg),
       ...all
     }), { ...globals }),
+    intro: 'const global = window;',
     name,
     preferConst: true
   };
@@ -62,24 +65,11 @@ export function createPlugins (entries = [], polyfill = true) {
   ].filter((p) => !!p);
 }
 
-export function createBundle ({ entries = [], external, index, pkg, polyfill = true }) {
+export function createBundle ({ entries, external, index, pkg, polyfill }) {
   return {
     external,
     input: createInput(pkg, index),
     output: createOutput(pkg, external),
-    plugins: createPlugins(
-      external
-        .filter((p) =>
-          fs.existsSync(path.join(process.cwd(), 'packages', sanitizePkg(p)))
-        )
-        .reduce((all, p) => [
-          ...all,
-          {
-            find: `${p}/packageInfo`,
-            replacement: `../../${sanitizePkg(p)}/build/packageInfo.js`
-          }
-        ], [...entries]),
-      polyfill
-    )
+    plugins: createPlugins(entries, polyfill)
   };
 }

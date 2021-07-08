@@ -1887,6 +1887,7 @@ __metadata:
     "@babel/runtime": ^7.14.6
     "@rollup/plugin-alias": ^3.1.2
     "@rollup/plugin-commonjs": ^19.0.0
+    "@rollup/plugin-inject": ^4.0.2
     "@rollup/plugin-json": ^4.1.0
     "@rollup/plugin-node-resolve": ^13.0.0
     "@rushstack/eslint-patch": ^1.0.6
@@ -1993,7 +1994,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-inject@npm:^4.0.0":
+"@rollup/plugin-inject@npm:^4.0.0, @rollup/plugin-inject@npm:^4.0.2":
   version: 4.0.2
   resolution: "@rollup/plugin-inject@npm:4.0.2"
   dependencies:
