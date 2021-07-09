@@ -38,38 +38,33 @@ export function createInput (pkg, _index) {
   return `${partialPath}/${index}`;
 }
 
-export function createOutput (_pkg, external, globals = {}) {
-  const name = createName(_pkg);
+export function createOutput (_pkg, external, globals) {
   const pkg = sanitizePkg(_pkg);
 
   return {
-    file: `packages/${pkg}/build/bundle/${name}.js`,
+    file: `packages/${pkg}/build/bundle-polkadot-${pkg}.js`,
     format: 'iife',
     globals: external.reduce((all, pkg) => ({
       [pkg]: createName(pkg),
       ...all
     }), { ...globals }),
     intro: 'const global = window;',
-    name,
+    name: createName(_pkg),
     preferConst: true
   };
 }
 
-export function createPlugins (entries = [], polyfill = true) {
-  return [
-    alias({ entries }),
-    json(),
-    commonjs(),
-    polyfill && polyfills(),
-    nodeResolve({ browser: true })
-  ].filter((p) => !!p);
-}
-
-export function createBundle ({ entries, external, index, pkg, polyfill }) {
+export function createBundle ({ entries = {}, external, globals = {}, index, pkg, polyfill = true }) {
   return {
     external,
     input: createInput(pkg, index),
-    output: createOutput(pkg, external),
-    plugins: createPlugins(entries, polyfill)
+    output: createOutput(pkg, external, globals),
+    plugins: [
+      alias({ entries }),
+      json(),
+      commonjs(),
+      polyfill && polyfills(),
+      nodeResolve({ browser: true })
+    ].filter((p) => !!p)
   };
 }
