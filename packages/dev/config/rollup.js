@@ -3,15 +3,13 @@
 
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
-import alias from '@rollup/plugin-alias';
-import commonjs from '@rollup/plugin-commonjs';
-import json from '@rollup/plugin-json';
-import { nodeResolve } from '@rollup/plugin-node-resolve';
+import pluginAlias from '@rollup/plugin-alias';
+import pluginCommonjs from '@rollup/plugin-commonjs';
+import pluginInject from '@rollup/plugin-inject';
+import pluginJson from '@rollup/plugin-json';
+import { nodeResolve as pluginResolve } from '@rollup/plugin-node-resolve';
 import fs from 'fs';
 import path from 'path';
-
-// import polyfills from 'rollup-plugin-polyfill-node';
-import polyfills from './rollup-polyfill-node.js';
 
 function sanitizePkg (pkg) {
   return pkg.replace('@polkadot/', '');
@@ -54,17 +52,17 @@ export function createOutput (_pkg, external, globals) {
   };
 }
 
-export function createBundle ({ entries = {}, external, globals = {}, index, pkg, polyfill = true }) {
+export function createBundle ({ entries = {}, external, globals = {}, index, inject = {}, pkg }) {
   return {
     external,
     input: createInput(pkg, index),
     output: createOutput(pkg, external, globals),
     plugins: [
-      alias({ entries }),
-      json(),
-      commonjs(),
-      polyfill && polyfills(),
-      nodeResolve({ browser: true })
-    ].filter((p) => !!p)
+      pluginAlias({ entries }),
+      pluginJson(),
+      pluginCommonjs(),
+      pluginInject(inject),
+      pluginResolve({ browser: true })
+    ]
   };
 }
