@@ -1,7 +1,7 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { blah } from './test1';
+import { adder, blah, circ1, circ2 } from './test1';
 import { echo } from '.';
 
 describe('index', () => {
@@ -11,5 +11,14 @@ describe('index', () => {
     expect(
       echo('something')
     ).toEqual('1: 123: something');
+  });
+
+  it('runs the adder function', () => {
+    expect(adder(1, 2)).toBe(3);
+  });
+
+  it('runs circ stuff', () => {
+    circ1();
+    circ2();
   });
 });
