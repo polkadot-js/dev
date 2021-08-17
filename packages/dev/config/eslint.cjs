@@ -44,6 +44,7 @@ module.exports = {
     '@typescript-eslint',
     'header',
     'import',
+    'import-newlines',
     'react-hooks',
     'simple-import-sort',
     'sort-destructure-keys'
@@ -65,6 +66,7 @@ module.exports = {
       { pattern: ' Copyright \\d{4}(-\\d{4})? @polkadot/' },
       ' SPDX-License-Identifier: Apache-2.0'
     ], 2],
+    'import-newlines/enforce': ['error', 2048],
     'jsx-quotes': ['error', 'prefer-single'],
     'react/prop-types': [0], // this is a completely broken rule
     'object-curly-newline': ['error', {
