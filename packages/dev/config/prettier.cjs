@@ -13,6 +13,7 @@ module.exports = {
   printWidth: 2048,
   proseWrap: 'preserve',
   quoteProps: 'as-needed',
+  requirePragma: true, // only on those files explicitly asked for
   semi: true,
   singleQuote: true,
   tabWidth: 2,
