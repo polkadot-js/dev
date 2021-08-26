@@ -90,12 +90,15 @@ module.exports = {
     ],
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'error',
+    'react/jsx-closing-bracket-location': [1, 'tag-aligned'],
+    'react/jsx-first-prop-new-line': [1, 'multiline-multiprop'],
     'react/jsx-fragments': 'error',
-    'react/jsx-max-props-per-line': [2, {
+    'react/jsx-max-props-per-line': [1, {
       maximum: 1,
       when: 'always'
     }],
-    'react/jsx-sort-props': [2, {
+    'react/jsx-no-bind': 2,
+    'react/jsx-sort-props': [1, {
       noSortAlphabetically: false
     }],
     'sort-destructure-keys/sort-destructure-keys': [2, {
