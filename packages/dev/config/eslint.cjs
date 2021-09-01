@@ -15,9 +15,6 @@ module.exports = {
   extends: [
     'eslint:recommended',
     require.resolve('eslint-config-standard'),
-    // 'plugin:import/errors',
-    // 'plugin:import/warnings',
-    // 'plugin:import/typescript',
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
     'plugin:react/recommended'
@@ -100,6 +97,12 @@ module.exports = {
     'react/jsx-no-bind': 2,
     'react/jsx-sort-props': [1, {
       noSortAlphabetically: false
+    }],
+    'react/jsx-tag-spacing': [2, {
+      closingSlash: 'never',
+      beforeSelfClosing: 'always',
+      afterOpening: 'never',
+      beforeClosing: 'never'
     }],
     'sort-destructure-keys/sort-destructure-keys': [2, {
       caseSensitive: true
