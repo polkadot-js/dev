@@ -4,8 +4,5 @@
 const config = require('@polkadot/dev/config/jest.cjs');
 
 module.exports = {
-  ...config,
-  modulePathIgnorePatterns: [
-    '<rootDir>/packages/dev/build'
-  ]
+  ...config
 };
