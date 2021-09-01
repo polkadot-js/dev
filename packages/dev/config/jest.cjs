@@ -8,10 +8,7 @@ module.exports = {
   moduleFileExtensions: [...defaults.moduleFileExtensions, 'ts', 'tsx'],
   modulePathIgnorePatterns: fs
     .readdirSync('packages')
-    .filter((p) =>
-      fs.statSync(`packages/${p}`).isDirectory() &&
-      fs.statSync(`packages/${p}/src`).isDirectory()
-    )
+    .filter((p) => fs.statSync(`packages/${p}`).isDirectory())
     .map((p) => `<rootDir>/packages/${p}/build`),
   testMatch: ['**/__tests__/**/*.[jt]s?(x)', '**/?(*.)+(spec|test).[jt]s?(x)'],
   transform: {
