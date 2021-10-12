@@ -2,6 +2,8 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-console.log('$ eslint', process.argv.slice(2).join(' '));
+const execSync = require('./execSync.cjs');
 
-require('eslint/bin/eslint');
+const args = process.argv.slice(2).join(' ');
+
+execSync(`yarn eslint ${args}`);
