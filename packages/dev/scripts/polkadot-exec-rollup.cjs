@@ -2,4 +2,6 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-require('./requireBin.cjs')('rollup', 'rollup/dist/bin/rollup');
+console.log('$ rollup', process.argv.slice(2).join(' '));
+
+require('rollup/dist/bin/rollup');
