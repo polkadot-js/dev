@@ -2,4 +2,4 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-require('./requireBin.cjs')('eslint', 'eslint/bin/eslint.js');
+require('./requireBin.cjs')('eslint', 'eslint/bin/eslint');
