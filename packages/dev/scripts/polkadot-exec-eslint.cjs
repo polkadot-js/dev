@@ -2,4 +2,6 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-require('./requireBin.cjs')('eslint', 'eslint/bin/eslint');
+const reqPath = require('./requirePath.cjs');
+
+require(reqPath('eslint', 'eslint/bin/eslint'));

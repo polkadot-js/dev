@@ -6,5 +6,5 @@ const path = require('path');
 module.exports = function requireBin (bin, req) {
   console.log(`$ ${bin} ${process.argv.slice(2).join(' ')}`);
 
-  require(path.join(process.cwd(), 'node_modules', req));
+  return path.join(process.cwd(), 'node_modules', req);
 };

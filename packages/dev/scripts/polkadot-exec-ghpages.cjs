@@ -2,7 +2,9 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-require('./requireBin.cjs')('gh-pages', 'gh-pages/bin/gh-pages')(process.argv)
+const reqPath = require('./requirePath.cjs');
+
+require(reqPath('gh-pages', 'gh-pages/bin/gh-pages'))(process.argv)
   .then(() => {
     process.stdout.write('Published\n');
   })
