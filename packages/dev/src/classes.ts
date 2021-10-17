@@ -30,7 +30,7 @@ export class Testing123 {
     this.#something = something;
 
     return this.#something;
-  }
+  };
 
   toString (): string {
     return `something=${this.#something}`;
