@@ -4,9 +4,6 @@
 
 const path = require('path');
 
-const execSync = require('./execSync.cjs');
+console.log('$ eslint', process.argv.slice(2).join(' '));
 
-const args = process.argv.slice(2).join(' ');
-const bin = path.join(process.cwd(), 'node_modules/eslint/bin/eslint.js');
-
-execSync(`${bin} ${args}`);
+require(path.join(process.cwd(), 'node_modules/eslint/bin/eslint.js'));
