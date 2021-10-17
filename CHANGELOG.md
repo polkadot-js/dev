@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.63.1
+
+- eslint 8
+
 ## 0.62.1
 
 - Swap default package build to esm with type: module
