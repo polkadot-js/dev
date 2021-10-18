@@ -26,6 +26,6 @@
     "@polkadot/dev": "workspace:packages/dev",
     "copyfiles": "^2.4.1"
   },
-  "version": "0.63.3",
+  "version": "0.63.4",
   "packageManager": "yarn@3.0.1"
 }
