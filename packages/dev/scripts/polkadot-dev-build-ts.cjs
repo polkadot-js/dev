@@ -245,6 +245,8 @@ async function main () {
     execSync('yarn build:extra');
   }
 
+  execSync('ls -alR .git');
+
   const repoPath = fs
     .readFileSync(path.join(process.cwd(), '.git/config'), 'utf8')
     .split('git@github.com:')[1]
