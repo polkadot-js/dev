@@ -188,7 +188,9 @@ function orderPackageJson (repoPath, dir, json) {
   ['browser', 'electron', 'main', 'react-native'].forEach((d) => {
     delete sorted[d];
 
-    sorted[d] = json[d];
+    if (json[d]) {
+      sorted[d] = json[d];
+    }
   });
 
   // move bin, scripts & dependencies to the end
@@ -199,10 +201,8 @@ function orderPackageJson (repoPath, dir, json) {
     a.forEach((d) => {
       delete sorted[d];
 
-      if (json[d]) {
+      if (json[d] && Object.keys(json[d]).length) {
         sorted[d] = sortJson(json[d]);
-      } else {
-        sorted[d] = {};
       }
     })
   );

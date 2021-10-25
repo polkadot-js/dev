@@ -16,7 +16,6 @@
   "workspaces": [
     "packages/*"
   ],
-  "bin": {},
   "scripts": {
     "build": "polkadot-dev-build-ts",
     "build:extra": "(cd packages/dev && copyfiles config/* scripts/* build)",
@@ -29,13 +28,10 @@
     "test": "yarn build && yarn test:esm && polkadot-dev-run-test --coverage",
     "test:esm": "node ./tester.cjs && node ./tester.mjs"
   },
-  "dependencies": {},
   "devDependencies": {
     "@polkadot/dev": "workspace:packages/dev",
     "copyfiles": "^2.4.1"
   },
-  "optionalDependencies": {},
-  "peerDependencies": {},
   "resolutions": {
     "typescript": "^4.4.4"
   }
