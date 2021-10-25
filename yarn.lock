@@ -1828,6 +1828,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@polkadot/dev-unused@workspace:packages/unused":
+  version: 0.0.0-use.local
+  resolution: "@polkadot/dev-unused@workspace:packages/unused"
+  languageName: unknown
+  linkType: soft
+
 "@polkadot/dev@workspace:packages/dev":
   version: 0.0.0-use.local
   resolution: "@polkadot/dev@workspace:packages/dev"
@@ -1923,12 +1929,6 @@ __metadata:
     polkadot-exec-rollup: ./scripts/polkadot-exec-rollup.cjs
     polkadot-exec-tsc: ./scripts/polkadot-exec-tsc.cjs
     polkadot-exec-webpack: ./scripts/polkadot-exec-webpack.cjs
-  languageName: unknown
-  linkType: soft
-
-"@polkadot/unused@workspace:packages/unused":
-  version: 0.0.0-use.local
-  resolution: "@polkadot/unused@workspace:packages/unused"
   languageName: unknown
   linkType: soft
 

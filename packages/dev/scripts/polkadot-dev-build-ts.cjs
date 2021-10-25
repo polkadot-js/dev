@@ -158,16 +158,62 @@ function buildExports () {
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
 }
 
-async function buildJs (dir) {
-  if (!fs.existsSync(path.join(process.cwd(), '.skip-build'))) {
-    const { name, version } = require(path.join(process.cwd(), './package.json'));
+function sortJson (json) {
+  return Object
+    .entries(json)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .reduce((all, [k, v]) => ({ ...all, [k]: v }), {});
+}
 
-    if (!name.startsWith('@polkadot/')) {
-      return;
+function orderPackageJson (repoPath, dir, json) {
+  json.bugs = `https://github.com/${repoPath}/issues`;
+  json.homepage = `https://github.com/${repoPath}/tree/master/packages/${dir}#readme`;
+  json.repository = {
+    directory: `packages/${dir}`,
+    type: 'git',
+    url: `https://github.com/${repoPath}.git`
+  };
+  json.engines = json.engines || {};
+  json.private = json.private || false;
+  json.sideEffects = json.sideEffects || false;
+
+  // sort the object
+  const sorted = sortJson(json);
+
+  // move the different entry points to the (almost) end
+  ['browser', 'electron', 'main', 'react-native'].forEach((d) => {
+    delete sorted[d];
+
+    sorted[d] = json[d];
+  });
+
+  // move dependencies, bin & scripts to the end
+  ['bin', 'dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies', 'resolutions', 'scripts'].forEach((d) => {
+    delete sorted[d];
+
+    if (json[d]) {
+      sorted[d] = sortJson(json[d]);
+    } else {
+      sorted[d] = {};
     }
+  });
 
-    console.log(`*** ${name} ${version}`);
+  fs.writeFileSync(path.join(process.cwd(), 'package.json'), JSON.stringify(sorted, null, 2));
+}
 
+async function buildJs (repoPath, dir) {
+  const json = require(path.join(process.cwd(), './package.json'));
+  const { name, version } = json;
+
+  if (!json.name.startsWith('@polkadot/')) {
+    return;
+  }
+
+  console.log(`*** ${name} ${version}`);
+
+  orderPackageJson(repoPath, dir, json);
+
+  if (!fs.existsSync(path.join(process.cwd(), '.skip-build'))) {
     mkdirp.sync('build');
     fs.writeFileSync(path.join(process.cwd(), 'src/packageInfo.ts'), `// Copyright 2017-2021 ${name} authors & contributors
 // SPDX-License-Identifier: Apache-2.0
@@ -199,6 +245,11 @@ async function main () {
     execSync('yarn build:extra');
   }
 
+  const repoPath = fs
+    .readFileSync(path.join(process.cwd(), '.git/config'), 'utf8')
+    .split('git@github.com:')[1]
+    .split('.git')[0];
+
   process.chdir('packages');
 
   execSync('yarn polkadot-exec-tsc --emitDeclarationOnly --outdir ../build');
@@ -210,7 +261,7 @@ async function main () {
   for (const dir of dirs) {
     process.chdir(dir);
 
-    await buildJs(dir);
+    await buildJs(repoPath, dir);
 
     process.chdir('..');
   }
