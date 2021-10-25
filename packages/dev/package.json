@@ -30,9 +30,13 @@
   "contributors": [],
   "license": "Apache-2.0",
   "engines": {},
-  "repository": "github:polkadot-js/dev",
   "bugs": "https://github.com/polkadot-js/dev/issues",
   "homepage": "https://github.com/polkadot-js/dev#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/polkadot-js/dev.git",
+    "directory": "packages/dev"
+  },
   "dependencies": {
     "@babel/cli": "^7.15.7",
     "@babel/core": "^7.15.8",
