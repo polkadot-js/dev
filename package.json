@@ -12,7 +12,7 @@
   },
   "sideEffects": false,
   "type": "commonjs",
-  "version": "0.63.7",
+  "version": "0.63.8",
   "workspaces": [
     "packages/*"
   ],
