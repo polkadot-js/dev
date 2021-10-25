@@ -158,16 +158,71 @@ function buildExports () {
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
 }
 
-async function buildJs (dir) {
+function sortJson (json) {
+  return Object
+    .entries(json)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .reduce((all, [k, v]) => ({ ...all, [k]: v }), {});
+}
+
+function orderPackageJson (repoPath, dir, json) {
+  json.bugs = `https://github.com/${repoPath}/issues`;
+  json.engines = json.engines || {};
+  json.homepage = `https://github.com/${repoPath}${dir ? `/tree/master/packages/${dir}` : ''}#readme`;
+  json.license = json.license || 'Apache-2';
+  json.repository = {
+    ...(dir
+      ? { directory: `packages/${dir}` }
+      : {}
+    ),
+    type: 'git',
+    url: `https://github.com/${repoPath}.git`
+  };
+  json.private = json.private || false;
+  json.sideEffects = json.sideEffects || false;
+
+  // sort the object
+  const sorted = sortJson(json);
+
+  // move the different entry points to the (almost) end
+  ['browser', 'electron', 'main', 'react-native'].forEach((d) => {
+    delete sorted[d];
+
+    sorted[d] = json[d];
+  });
+
+  // move bin, scripts & dependencies to the end
+  [
+    ['bin', 'scripts'],
+    ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies', 'resolutions']
+  ].forEach((a) =>
+    a.forEach((d) => {
+      delete sorted[d];
+
+      if (json[d]) {
+        sorted[d] = sortJson(json[d]);
+      } else {
+        sorted[d] = {};
+      }
+    })
+  );
+
+  fs.writeFileSync(path.join(process.cwd(), 'package.json'), JSON.stringify(sorted, null, 2));
+}
+
+async function buildJs (repoPath, dir) {
+  const json = require(path.join(process.cwd(), './package.json'));
+  const { name, version } = json;
+
+  if (!json.name.startsWith('@polkadot/')) {
+    return;
+  }
+
+  console.log(`*** ${name} ${version}`);
+
+  orderPackageJson(repoPath, dir, json);
+
   if (!fs.existsSync(path.join(process.cwd(), '.skip-build'))) {
-    const { name, version } = require(path.join(process.cwd(), './package.json'));
-
-    if (!name.startsWith('@polkadot/')) {
-      return;
-    }
-
-    console.log(`*** ${name} ${version}`);
-
     mkdirp.sync('build');
     fs.writeFileSync(path.join(process.cwd(), 'src/packageInfo.ts'), `// Copyright 2017-2021 ${name} authors & contributors
 // SPDX-License-Identifier: Apache-2.0
@@ -199,6 +254,12 @@ async function main () {
     execSync('yarn build:extra');
   }
 
+  const repoPath = pkg.repository.url
+    .split('https://github.com/')[1]
+    .split('.git')[0];
+
+  orderPackageJson(repoPath, null, pkg);
+
   process.chdir('packages');
 
   execSync('yarn polkadot-exec-tsc --emitDeclarationOnly --outdir ../build');
@@ -210,7 +271,7 @@ async function main () {
   for (const dir of dirs) {
     process.chdir(dir);
 
-    await buildJs(dir);
+    await buildJs(repoPath, dir);
 
     process.chdir('..');
   }

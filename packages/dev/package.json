@@ -1,9 +1,22 @@
 {
-  "name": "@polkadot/dev",
-  "version": "0.63.7",
-  "license": "Apache-2.0",
-  "type": "module",
+  "author": "Jaco Greeff <jacogr@gmail.com>",
+  "bugs": "https://github.com/polkadot-js/dev/issues",
+  "contributors": [],
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
+  "engines": {},
+  "homepage": "https://github.com/polkadot-js/dev/tree/master/packages/dev#readme",
+  "license": "Apache-2.0",
+  "maintainers": [],
+  "name": "@polkadot/dev",
+  "private": false,
+  "repository": {
+    "directory": "packages/dev",
+    "type": "git",
+    "url": "https://github.com/polkadot-js/dev.git"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "version": "0.63.7",
   "bin": {
     "polkadot-ci-ghact-build": "./scripts/polkadot-ci-ghact-build.cjs",
     "polkadot-ci-ghact-docs": "./scripts/polkadot-ci-ghact-docs.cjs",
@@ -26,18 +39,7 @@
     "polkadot-exec-tsc": "./scripts/polkadot-exec-tsc.cjs",
     "polkadot-exec-webpack": "./scripts/polkadot-exec-webpack.cjs"
   },
-  "author": "Jaco Greeff <jacogr@gmail.com>",
-  "maintainers": [],
-  "contributors": [],
-  "bugs": "https://github.com/polkadot-js/dev/issues",
-  "homepage": "https://github.com/polkadot-js/dev#readme",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/polkadot-js/dev.git",
-    "directory": "packages/dev"
-  },
-  "sideEffects": false,
-  "engines": {},
+  "scripts": {},
   "dependencies": {
     "@babel/cli": "^7.15.7",
     "@babel/core": "^7.15.8",
@@ -111,5 +113,8 @@
     "@types/react": "^17.0.31",
     "@types/yargs": "^17.0.4",
     "react": "^17.0.2"
-  }
+  },
+  "optionalDependencies": {},
+  "peerDependencies": {},
+  "resolutions": {}
 }

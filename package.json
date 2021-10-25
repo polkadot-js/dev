@@ -1,31 +1,42 @@
 {
-  "repository": "https://github.com/polkadot-js/dev",
   "author": "Jaco Greeff <jacogr@gmail.com>",
+  "bugs": "https://github.com/polkadot-js/dev/issues",
+  "engines": {},
+  "homepage": "https://github.com/polkadot-js/dev#readme",
   "license": "Apache-2",
+  "packageManager": "yarn@3.0.1",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/polkadot-js/dev.git"
+  },
+  "sideEffects": false,
   "type": "commonjs",
+  "version": "0.63.7",
   "workspaces": [
     "packages/*"
   ],
-  "resolutions": {
-    "typescript": "^4.4.4"
-  },
+  "bin": {},
   "scripts": {
     "build": "polkadot-dev-build-ts",
     "build:extra": "(cd packages/dev && copyfiles config/* scripts/* build)",
     "build:release": "polkadot-ci-ghact-build --skip-beta",
+    "clean": "polkadot-dev-clean-build",
     "docs": "polkadot-dev-build-docs",
     "lint": "polkadot-dev-run-lint",
-    "clean": "polkadot-dev-clean-build",
     "postinstall": "./packages/dev/scripts/polkadot-dev-yarn-only.cjs",
     "prettier": "./packages/dev/scripts/polkadot-dev-run-prettier.cjs",
     "test": "yarn build && yarn test:esm && polkadot-dev-run-test --coverage",
     "test:esm": "node ./tester.cjs && node ./tester.mjs"
   },
+  "dependencies": {},
   "devDependencies": {
     "@polkadot/dev": "workspace:packages/dev",
     "copyfiles": "^2.4.1"
   },
-  "version": "0.63.7",
-  "packageManager": "yarn@3.0.1"
+  "optionalDependencies": {},
+  "peerDependencies": {},
+  "resolutions": {
+    "typescript": "^4.4.4"
+  }
 }
