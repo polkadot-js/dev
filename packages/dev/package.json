@@ -1,6 +1,7 @@
 {
   "name": "@polkadot/dev",
   "version": "0.63.6",
+  "license": "Apache-2.0",
   "type": "module",
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
   "bin": {
@@ -28,11 +29,15 @@
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "maintainers": [],
   "contributors": [],
-  "license": "Apache-2.0",
-  "engines": {},
-  "repository": "github:polkadot-js/dev",
   "bugs": "https://github.com/polkadot-js/dev/issues",
   "homepage": "https://github.com/polkadot-js/dev#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/polkadot-js/dev.git",
+    "directory": "packages/dev"
+  },
+  "sideEffects": false,
+  "engines": {},
   "dependencies": {
     "@babel/cli": "^7.15.7",
     "@babel/core": "^7.15.8",
