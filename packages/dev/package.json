@@ -39,6 +39,7 @@
     "polkadot-exec-tsc": "./scripts/polkadot-exec-tsc.cjs",
     "polkadot-exec-webpack": "./scripts/polkadot-exec-webpack.cjs"
   },
+  "scripts": {},
   "dependencies": {
     "@babel/cli": "^7.15.7",
     "@babel/core": "^7.15.8",
@@ -115,6 +116,5 @@
   },
   "optionalDependencies": {},
   "peerDependencies": {},
-  "resolutions": {},
-  "scripts": {}
+  "resolutions": {}
 }

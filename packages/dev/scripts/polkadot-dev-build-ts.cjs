@@ -167,13 +167,17 @@ function sortJson (json) {
 
 function orderPackageJson (repoPath, dir, json) {
   json.bugs = `https://github.com/${repoPath}/issues`;
-  json.homepage = `https://github.com/${repoPath}/tree/master/packages/${dir}#readme`;
+  json.engines = json.engines || {};
+  json.homepage = `https://github.com/${repoPath}${dir ? `/tree/master/packages/${dir}` : ''}#readme`;
+  json.license = json.license || 'Apache-2';
   json.repository = {
-    directory: `packages/${dir}`,
+    ...(dir
+      ? { directory: `packages/${dir}` }
+      : {}
+    ),
     type: 'git',
     url: `https://github.com/${repoPath}.git`
   };
-  json.engines = json.engines || {};
   json.private = json.private || false;
   json.sideEffects = json.sideEffects || false;
 
@@ -187,16 +191,21 @@ function orderPackageJson (repoPath, dir, json) {
     sorted[d] = json[d];
   });
 
-  // move dependencies, bin & scripts to the end
-  ['bin', 'dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies', 'resolutions', 'scripts'].forEach((d) => {
-    delete sorted[d];
+  // move bin, scripts & dependencies to the end
+  [
+    ['bin', 'scripts'],
+    ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies', 'resolutions']
+  ].forEach((a) =>
+    a.forEach((d) => {
+      delete sorted[d];
 
-    if (json[d]) {
-      sorted[d] = sortJson(json[d]);
-    } else {
-      sorted[d] = {};
-    }
-  });
+      if (json[d]) {
+        sorted[d] = sortJson(json[d]);
+      } else {
+        sorted[d] = {};
+      }
+    })
+  );
 
   fs.writeFileSync(path.join(process.cwd(), 'package.json'), JSON.stringify(sorted, null, 2));
 }
@@ -248,6 +257,8 @@ async function main () {
   const repoPath = pkg.repository.url
     .split('https://github.com/')[1]
     .split('.git')[0];
+
+  orderPackageJson(repoPath, null, pkg);
 
   process.chdir('packages');
 

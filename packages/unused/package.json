@@ -18,10 +18,10 @@
   "version": "0.63.7",
   "main": "index.js",
   "bin": {},
+  "scripts": {},
   "dependencies": {},
   "devDependencies": {},
   "optionalDependencies": {},
   "peerDependencies": {},
-  "resolutions": {},
-  "scripts": {}
+  "resolutions": {}
 }
