@@ -205,7 +205,7 @@ function orderPackageJson (repoPath, dir, json) {
     })
   );
 
-  fs.writeFileSync(path.join(process.cwd(), 'package.json'), JSON.stringify(sorted, null, 2));
+  fs.writeFileSync(path.join(process.cwd(), 'package.json'), `${JSON.stringify(sorted, null, 2)}\n`);
 }
 
 async function buildJs (repoPath, dir) {
