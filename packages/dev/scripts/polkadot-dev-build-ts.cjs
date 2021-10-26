@@ -167,7 +167,6 @@ function sortJson (json) {
 
 function orderPackageJson (repoPath, dir, json) {
   json.bugs = `https://github.com/${repoPath}/issues`;
-  json.engines = json.engines || {};
   json.homepage = `https://github.com/${repoPath}${dir ? `/tree/master/packages/${dir}` : ''}#readme`;
   json.license = json.license || 'Apache-2';
   json.repository = {
@@ -178,7 +177,6 @@ function orderPackageJson (repoPath, dir, json) {
     type: 'git',
     url: `https://github.com/${repoPath}.git`
   };
-  json.private = json.private || false;
   json.sideEffects = json.sideEffects || false;
 
   // sort the object
@@ -207,7 +205,7 @@ function orderPackageJson (repoPath, dir, json) {
     })
   );
 
-  fs.writeFileSync(path.join(process.cwd(), 'package.json'), JSON.stringify(sorted, null, 2));
+  fs.writeFileSync(path.join(process.cwd(), 'package.json'), `${JSON.stringify(sorted, null, 2)}\n`);
 }
 
 async function buildJs (repoPath, dir) {
