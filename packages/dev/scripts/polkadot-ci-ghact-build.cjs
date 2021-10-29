@@ -107,7 +107,7 @@ function createContributors () {
     stdio: ['inherit', 'pipe', 'pipe']
   });
 
-  const contributions = child.stdout
+  const contributors = child.stdout
     .split('\n')
     .filter((l) =>
       l.includes('\t') &&
@@ -151,7 +151,7 @@ function createContributors () {
     .map(([count, name, email]) => `${count.toString().padStart(8)}    ${name} ${email}`)
     .join('\n');
 
-  fs.writeFileSync('CONTRIBUTORS', `${contributions}\n`);
+  fs.writeFileSync('CONTRIBUTORS', `${contributors}\n`);
 }
 
 function gitBump () {
