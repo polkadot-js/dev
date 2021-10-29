@@ -107,6 +107,8 @@ function createContributors () {
     stdio: ['inherit', 'pipe', 'pipe']
   });
 
+  console.log(child.stdout);
+
   const contributors = child.stdout
     .split('\n')
     .filter((l) =>
