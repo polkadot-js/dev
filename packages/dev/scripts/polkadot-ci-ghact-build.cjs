@@ -138,6 +138,7 @@ function gitPush () {
     }
   }
 
+  execSync('yarn polkadot-dev-contributors');
   execSync('git add --all .');
 
   if (fs.existsSync('docs/README.md')) {

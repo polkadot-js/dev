@@ -182,6 +182,13 @@ function orderPackageJson (repoPath, dir, json) {
   // sort the object
   const sorted = sortJson(json);
 
+  // remove empty artifacts
+  ['engines'].forEach((d) => {
+    if (typeof json[d] === 'object' && Object.keys(json[d]).length === 0) {
+      delete sorted[d];
+    }
+  });
+
   // move the different entry points to the (almost) end
   ['browser', 'electron', 'main', 'react-native'].forEach((d) => {
     delete sorted[d];
