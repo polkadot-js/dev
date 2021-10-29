@@ -3,7 +3,6 @@
   "bugs": "https://github.com/polkadot-js/dev/issues",
   "contributors": [],
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
-  "engines": {},
   "homepage": "https://github.com/polkadot-js/dev/tree/master/packages/dev#readme",
   "license": "Apache-2.0",
   "maintainers": [],
@@ -15,7 +14,7 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.63.10",
+  "version": "0.63.11",
   "bin": {
     "polkadot-ci-ghact-build": "./scripts/polkadot-ci-ghact-build.cjs",
     "polkadot-ci-ghact-docs": "./scripts/polkadot-ci-ghact-docs.cjs",

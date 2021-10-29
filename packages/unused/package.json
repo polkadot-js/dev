@@ -3,7 +3,6 @@
   "bugs": "https://github.com/polkadot-js/dev/issues",
   "contributors": [],
   "description": "Dummy",
-  "engines": {},
   "homepage": "https://github.com/polkadot-js/dev/tree/master/packages/unused#readme",
   "license": "Apache-2.0",
   "maintainers": [],
@@ -15,6 +14,6 @@
     "url": "https://github.com/polkadot-js/dev.git"
   },
   "sideEffects": false,
-  "version": "0.63.10",
+  "version": "0.63.11",
   "main": "index.js"
 }
