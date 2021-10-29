@@ -99,8 +99,6 @@ function gitSetup () {
   execSync('git config user.name "Github Actions"');
   execSync('git config user.email "action@github.com"');
   execSync('git checkout master');
-  execSync('git fetch --all');
-  execSync('git pull --unshallow');
 }
 
 function createContributors () {
