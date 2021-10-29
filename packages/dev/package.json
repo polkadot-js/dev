@@ -23,7 +23,6 @@
     "polkadot-dev-build-ts": "./scripts/polkadot-dev-build-ts.cjs",
     "polkadot-dev-circular": "./scripts/polkadot-dev-circular.cjs",
     "polkadot-dev-clean-build": "./scripts/polkadot-dev-clean-build.cjs",
-    "polkadot-dev-contributors": "./scripts/polkadot-dev-contributors.cjs",
     "polkadot-dev-copy-to": "./scripts/polkadot-dev-copy-to.cjs",
     "polkadot-dev-run-lint": "./scripts/polkadot-dev-run-lint.cjs",
     "polkadot-dev-run-prettier": "./scripts/polkadot-dev-run-prettier.cjs",
