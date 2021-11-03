@@ -2,13 +2,13 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import babel from '@babel/cli/lib/babel/dir';
+import babel from '@babel/cli/lib/babel/dir.js';
 import fs from 'fs';
 import mkdirp from 'mkdirp';
 import path from 'path';
 
-import { EXT_CJS, EXT_ESM } from '../config/babel-extensions.mjs';
-import copySync from './copySync';
+import { EXT_CJS, EXT_ESM } from '../config/babel-extensions.cjs';
+import copySync from './copySync.mjs';
 import { __dirname } from './dirname.mjs';
 import execSync from './execSync.mjs';
 
@@ -35,7 +35,7 @@ async function buildBabel (dir, type) {
   const configs = BL_CONFIGS.map((c) => path.join(process.cwd(), `../../${c}`));
   const outDir = path.join(process.cwd(), 'build');
 
-  await babel({
+  await babel.default({
     babelOptions: {
       configFile: type === 'esm'
         ? path.join(__dirname, '../config/babel-config-esm.cjs')
