@@ -2,7 +2,7 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { importDirect } from './imports.mjs';
+import { importDirect } from './import.mjs';
 
 console.log('$ polkadot-dev-run-test', process.argv.slice(2).join(' '));
 
