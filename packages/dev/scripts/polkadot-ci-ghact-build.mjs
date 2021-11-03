@@ -10,9 +10,11 @@ import yargs from 'yargs';
 import copySync from './copySync.mjs';
 import execSync from './execSync.mjs';
 
+console.log('$ polkadot-ci-ghact-build', process.argv.slice(2).join(' '));
+
 const repo = `https://${process.env.GH_PAT}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
 
-const argv = yargs
+const argv = yargs(process.argv.slice(2))
   .options({
     'skip-beta': {
       description: 'Do not increment as beta',
@@ -21,8 +23,6 @@ const argv = yargs
   })
   .strict()
   .argv;
-
-console.log('$ polkadot-ci-ghact-build', process.argv.slice(2).join(' '));
 
 function runClean () {
   execSync('yarn polkadot-dev-clean-build');

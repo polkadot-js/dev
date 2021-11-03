@@ -4,7 +4,7 @@
 
 import { importRelative } from './import.mjs';
 
-importRelative('gh-pages', 'gh-pages/bin/gh-pages').then((fn) =>
+importRelative('gh-pages', 'gh-pages/bin/gh-pages.js').then((fn) =>
   fn(process.argv).then(() =>
     process.stdout.write('Published\n')
   )

@@ -10,7 +10,7 @@ import execSync from './execSync.mjs';
 
 const TYPES = ['major', 'minor', 'patch', 'pre'];
 
-const [type] = yargs.demandCommand(1).argv._;
+const [type] = yargs(process.argv.slice(2)).demandCommand(1).argv._;
 
 if (!TYPES.includes(type)) {
   throw new Error(`Invalid version bump "${type}", expected one of ${TYPES.join(', ')}`);

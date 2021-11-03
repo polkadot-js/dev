@@ -4,6 +4,6 @@
 
 import { importRelative } from './import.mjs';
 
-importRelative('eslint', 'eslint/bin/eslint').then(() =>
+importRelative('eslint', 'eslint/bin/eslint.js').then(() =>
   process.exit(0)
 );

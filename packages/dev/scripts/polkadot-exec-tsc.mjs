@@ -4,6 +4,6 @@
 
 import { importDirect } from './import.mjs';
 
-importDirect('tsc', 'typescript/lib/tsc').then(() =>
+importDirect('tsc', 'typescript/lib/tsc.js').then(() =>
   process.exit(0)
 );

@@ -9,6 +9,7 @@ import path from 'path';
 
 import { EXT_CJS, EXT_ESM } from '../config/babel-extensions.mjs';
 import copySync from './copySync';
+import { __dirname } from './dirname.mjs';
 import execSync from './execSync.mjs';
 
 const BL_CONFIGS = ['babel.config.js', 'babel.config.cjs'];

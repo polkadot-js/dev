@@ -4,6 +4,6 @@
 
 import { importRelative } from './import.mjs';
 
-importRelative('gh-release', 'gh-release/bin/cli').then(() =>
+importRelative('gh-release', 'gh-release/bin/cli.js').then(() =>
   process.exit(0)
 );

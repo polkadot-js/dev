@@ -4,6 +4,6 @@
 
 import { importRelative } from './import.mjs';
 
-importRelative('prettier', 'prettier/bin-prettier').then(() =>
+importRelative('prettier', 'prettier/bin-prettier.js').then(() =>
   process.exit(0)
 );

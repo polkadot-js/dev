@@ -4,9 +4,12 @@
 
 import yargs from 'yargs';
 
+import { __dirname } from './dirname.mjs';
 import execSync from './execSync.mjs';
 
-const argv = yargs
+console.log('$ polkadot-dev-run-lint', process.argv.slice(2).join(' '));
+
+const argv = yargs(process.argv.slice(2))
   .options({
     'skip-eslint': {
       description: 'Skips running eslint',
@@ -19,8 +22,6 @@ const argv = yargs
   })
   .strict()
   .argv;
-
-console.log('$ polkadot-dev-run-lint', process.argv.slice(2).join(' '));
 
 if (!argv['skip-eslint']) {
   // We don't want to run with fix on CI
