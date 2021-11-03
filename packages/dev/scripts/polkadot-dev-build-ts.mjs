@@ -2,14 +2,15 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-const babel = require('@babel/cli/lib/babel/dir').default;
-const fs = require('fs');
-const mkdirp = require('mkdirp');
-const path = require('path');
+import babel from '@babel/cli/lib/babel/dir.js';
+import fs from 'fs';
+import mkdirp from 'mkdirp';
+import path from 'path';
 
-const { EXT_CJS, EXT_ESM } = require('../config/babel-extensions.cjs');
-const copySync = require('./copySync.cjs');
-const execSync = require('./execSync.cjs');
+import { EXT_CJS, EXT_ESM } from '../config/babel-extensions.cjs';
+import copySync from './copySync.mjs';
+import { __dirname } from './dirname.mjs';
+import execSync from './execSync.mjs';
 
 const BL_CONFIGS = ['babel.config.js', 'babel.config.cjs'];
 const WP_CONFIGS = ['webpack.config.js', 'webpack.config.cjs'];
@@ -34,7 +35,7 @@ async function buildBabel (dir, type) {
   const configs = BL_CONFIGS.map((c) => path.join(process.cwd(), `../../${c}`));
   const outDir = path.join(process.cwd(), 'build');
 
-  await babel({
+  await babel.default({
     babelOptions: {
       configFile: type === 'esm'
         ? path.join(__dirname, '../config/babel-config-esm.cjs')
@@ -120,7 +121,7 @@ function findFiles (buildDir, extra = '') {
 function buildExports () {
   const buildDir = path.join(process.cwd(), 'build');
   const pkgPath = path.join(buildDir, 'package.json');
-  const pkg = require(pkgPath);
+  const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
   const list = findFiles(buildDir);
 
   if (!list.some(([key]) => key === '.')) {
@@ -216,7 +217,7 @@ function orderPackageJson (repoPath, dir, json) {
 }
 
 async function buildJs (repoPath, dir) {
-  const json = require(path.join(process.cwd(), './package.json'));
+  const json = JSON.parse(fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf-8'));
   const { name, version } = json;
 
   if (!json.name.startsWith('@polkadot/')) {
@@ -253,7 +254,7 @@ export const packageInfo = { name: '${name}', version: '${version}' };
 async function main () {
   execSync('yarn polkadot-dev-clean-build');
 
-  const pkg = require(path.join(process.cwd(), 'package.json'));
+  const pkg = JSON.parse(fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf-8'));
 
   if (pkg.scripts && pkg.scripts['build:extra']) {
     execSync('yarn build:extra');

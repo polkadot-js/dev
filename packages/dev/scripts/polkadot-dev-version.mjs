@@ -2,13 +2,15 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-const fs = require('fs');
-const path = require('path');
-const [type] = require('yargs').demandCommand(1).argv._;
+import fs from 'fs';
+import path from 'path';
+import yargs from 'yargs';
 
-const execSync = require('./execSync.cjs');
+import execSync from './execSync.mjs';
 
 const TYPES = ['major', 'minor', 'patch', 'pre'];
+
+const [type] = yargs(process.argv.slice(2)).demandCommand(1).argv._;
 
 if (!TYPES.includes(type)) {
   throw new Error(`Invalid version bump "${type}", expected one of ${TYPES.join(', ')}`);

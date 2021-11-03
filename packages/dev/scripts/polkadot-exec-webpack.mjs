@@ -2,6 +2,8 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-const reqPath = require('./requirePath.cjs');
+import execSync from './execSync.mjs';
 
-require(reqPath('gh-release', 'gh-release/bin/cli'));
+const args = process.argv.slice(2).join(' ');
+
+execSync(`yarn webpack ${args}`);

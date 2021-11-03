@@ -2,7 +2,7 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-const chalk = require('chalk');
+import chalk from 'chalk';
 
 if (process.env.npm_execpath.includes('yarn')) {
   process.exit(0);

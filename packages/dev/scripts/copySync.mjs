@@ -6,11 +6,11 @@
 //
 // This only uses the sync copy needed and removed unneeded dependencies (such as ancient chokidar)
 
-const fs = require('fs-extra');
-const glob = require('glob');
-const glob2base = require('glob2base');
-const { Minimatch } = require('minimatch');
-const path = require('path');
+import fs from 'fs-extra';
+import glob from 'glob';
+import glob2base from 'glob2base';
+import minimatch from 'minimatch';
+import path from 'path';
 
 function normalizePath (originalPath) {
   const normalizedPath = path
@@ -22,10 +22,10 @@ function normalizePath (originalPath) {
     : normalizedPath || '.';
 }
 
-module.exports = function copySync (src, dst) {
+export default function copySync (src, dst) {
   const normalizedSource = normalizePath(src);
   const normalizedOutputDir = normalizePath(dst);
-  const baseDir = normalizePath(glob2base({ minimatch: new Minimatch(normalizedSource) }));
+  const baseDir = normalizePath(glob2base({ minimatch: new minimatch.Minimatch(normalizedSource) }));
 
   glob
     .sync(normalizedSource, {
@@ -51,4 +51,4 @@ module.exports = function copySync (src, dst) {
         fs.chmodSync(dst, stat.mode);
       }
     });
-};
+}
