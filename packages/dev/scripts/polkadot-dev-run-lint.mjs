@@ -2,7 +2,11 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-const argv = require('yargs')
+import yargs from 'yargs';
+
+import execSync from './execSync.cjs';
+
+const argv = yargs
   .options({
     'skip-eslint': {
       description: 'Skips running eslint',
@@ -15,8 +19,6 @@ const argv = require('yargs')
   })
   .strict()
   .argv;
-
-const execSync = require('./execSync.cjs');
 
 console.log('$ polkadot-dev-run-lint', process.argv.slice(2).join(' '));
 

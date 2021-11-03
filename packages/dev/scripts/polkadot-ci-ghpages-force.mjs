@@ -2,9 +2,9 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-const fs = require('fs');
+import fs from 'fs';
 
-const execSync = require('./execSync.cjs');
+import execSync from './execSync.cjs';
 
 console.log('$ polkadot-ci-ghpages-force', process.argv.slice(2).join(' '));
 

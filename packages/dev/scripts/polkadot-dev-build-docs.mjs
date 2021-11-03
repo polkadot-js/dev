@@ -2,10 +2,10 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-const fs = require('fs');
-const fse = require('fs-extra');
-const path = require('path');
-const rimraf = require('rimraf');
+import fs from 'fs';
+import fse from 'fs-extra';
+import path from 'path';
+import rimraf from 'rimraf';
 
 console.log('$ polkadot-dev-build-docs', process.argv.slice(2).join(' '));
 

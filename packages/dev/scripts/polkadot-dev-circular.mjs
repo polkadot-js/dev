@@ -2,8 +2,8 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-const chalk = require('chalk');
-const madge = require('madge');
+import chalk from 'chalk';
+import madge from 'madge';
 
 console.log('$ polkadot-dev-circular', process.argv.slice(2).join(' '));
 

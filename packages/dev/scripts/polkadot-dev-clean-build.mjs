@@ -2,9 +2,9 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-const fs = require('fs');
-const path = require('path');
-const rimraf = require('rimraf');
+import fs from 'fs';
+import path from 'path';
+import rimraf from 'rimraf';
 
 const PKGS = path.join(process.cwd(), 'packages');
 

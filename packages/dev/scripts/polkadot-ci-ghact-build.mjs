@@ -2,11 +2,17 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// const { spawnSync } = require('child_process');
-const fs = require('fs');
-const os = require('os');
-const path = require('path');
-const argv = require('yargs')
+import fs from 'fs';
+import os from 'os';
+import path from 'path';
+import yargs from 'yargs';
+
+import copySync from './copySync.cjs';
+import execSync from './execSync.cjs';
+
+const repo = `https://${process.env.GH_PAT}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
+
+const argv = yargs
   .options({
     'skip-beta': {
       description: 'Do not increment as beta',
@@ -15,11 +21,6 @@ const argv = require('yargs')
   })
   .strict()
   .argv;
-
-const copySync = require('./copySync.cjs');
-const execSync = require('./execSync.cjs');
-
-const repo = `https://${process.env.GH_PAT}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
 
 console.log('$ polkadot-ci-ghact-build', process.argv.slice(2).join(' '));
 

@@ -2,13 +2,13 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-const fs = require('fs');
-const mkdirp = require('mkdirp');
-const path = require('path');
-const rimraf = require('rimraf');
+import fs from 'fs';
+import mkdirp from 'mkdirp';
+import path from 'path';
+import rimraf from 'rimraf';
 
-const copySync = require('./copySync.cjs');
-const execSync = require('./execSync.cjs');
+import copySync from './copySync';
+import execSync from './execSync.cjs';
 
 const args = process.argv.slice(2);
 

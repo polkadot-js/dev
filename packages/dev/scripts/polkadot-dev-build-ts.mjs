@@ -2,14 +2,14 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-const babel = require('@babel/cli/lib/babel/dir').default;
-const fs = require('fs');
-const mkdirp = require('mkdirp');
-const path = require('path');
+import babel from '@babel/cli/lib/babel/dir';
+import fs from 'fs';
+import mkdirp from 'mkdirp';
+import path from 'path';
 
-const { EXT_CJS, EXT_ESM } = require('../config/babel-extensions.cjs');
-const copySync = require('./copySync.cjs');
-const execSync = require('./execSync.cjs');
+import { EXT_CJS, EXT_ESM } from '../config/babel-extensions.cjs';
+import copySync from './copySync';
+import execSync from './execSync.cjs';
 
 const BL_CONFIGS = ['babel.config.js', 'babel.config.cjs'];
 const WP_CONFIGS = ['webpack.config.js', 'webpack.config.cjs'];
