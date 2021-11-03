@@ -4,11 +4,13 @@
 
 import fs from 'fs';
 import path from 'path';
-const [type] = require('yargs').demandCommand(1).argv._;
+import yargs from 'yargs';
 
 import execSync from './execSync.mjs';
 
 const TYPES = ['major', 'minor', 'patch', 'pre'];
+
+const [type] = yargs.demandCommand(1).argv._;
 
 if (!TYPES.includes(type)) {
   throw new Error(`Invalid version bump "${type}", expected one of ${TYPES.join(', ')}`);
