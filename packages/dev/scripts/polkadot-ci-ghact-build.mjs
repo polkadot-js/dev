@@ -7,8 +7,8 @@ import os from 'os';
 import path from 'path';
 import yargs from 'yargs';
 
-import copySync from './copySync.cjs';
-import execSync from './execSync.cjs';
+import copySync from './copySync.mjs';
+import execSync from './execSync.mjs';
 
 const repo = `https://${process.env.GH_PAT}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
 

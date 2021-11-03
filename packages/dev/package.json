@@ -29,12 +29,12 @@
     "polkadot-dev-run-test": "./scripts/polkadot-dev-run-test.mjs",
     "polkadot-dev-version": "./scripts/polkadot-dev-version.mjs",
     "polkadot-dev-yarn-only": "./scripts/polkadot-dev-yarn-only.mjs",
-    "polkadot-exec-eslint": "./scripts/polkadot-exec-eslint.cjs",
-    "polkadot-exec-ghpages": "./scripts/polkadot-exec-ghpages.cjs",
-    "polkadot-exec-ghrelease": "./scripts/polkadot-exec-ghrelease.cjs",
-    "polkadot-exec-prettier": "./scripts/polkadot-exec-prettier.cjs",
-    "polkadot-exec-rollup": "./scripts/polkadot-exec-rollup.cjs",
-    "polkadot-exec-tsc": "./scripts/polkadot-exec-tsc.cjs",
+    "polkadot-exec-eslint": "./scripts/polkadot-exec-eslint.mjs",
+    "polkadot-exec-ghpages": "./scripts/polkadot-exec-ghpages.mjs",
+    "polkadot-exec-ghrelease": "./scripts/polkadot-exec-ghrelease.mjs",
+    "polkadot-exec-prettier": "./scripts/polkadot-exec-prettier.mjs",
+    "polkadot-exec-rollup": "./scripts/polkadot-exec-rollup.mjs",
+    "polkadot-exec-tsc": "./scripts/polkadot-exec-tsc.mjs",
     "polkadot-exec-webpack": "./scripts/polkadot-exec-webpack.mjs"
   },
   "dependencies": {

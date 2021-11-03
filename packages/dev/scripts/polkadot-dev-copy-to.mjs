@@ -8,7 +8,7 @@ import path from 'path';
 import rimraf from 'rimraf';
 
 import copySync from './copySync';
-import execSync from './execSync.cjs';
+import execSync from './execSync.mjs';
 
 const args = process.argv.slice(2);
 

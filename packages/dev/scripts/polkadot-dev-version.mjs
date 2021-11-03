@@ -6,7 +6,7 @@ import fs from 'fs';
 import path from 'path';
 const [type] = require('yargs').demandCommand(1).argv._;
 
-import execSync from './execSync.cjs';
+import execSync from './execSync.mjs';
 
 const TYPES = ['major', 'minor', 'patch', 'pre'];
 

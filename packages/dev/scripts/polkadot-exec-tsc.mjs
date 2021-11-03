@@ -2,6 +2,8 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-const reqPath = require('./requirePath.cjs');
+import { importDirect } from './import.mjs';
 
-require(reqPath('gh-release', 'gh-release/bin/cli'));
+importDirect('tsc', 'typescript/lib/tsc').then(() =>
+  process.exit(0)
+);

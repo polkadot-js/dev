@@ -7,9 +7,9 @@ import fs from 'fs';
 import mkdirp from 'mkdirp';
 import path from 'path';
 
-import { EXT_CJS, EXT_ESM } from '../config/babel-extensions.cjs';
+import { EXT_CJS, EXT_ESM } from '../config/babel-extensions.mjs';
 import copySync from './copySync';
-import execSync from './execSync.cjs';
+import execSync from './execSync.mjs';
 
 const BL_CONFIGS = ['babel.config.js', 'babel.config.cjs'];
 const WP_CONFIGS = ['webpack.config.js', 'webpack.config.cjs'];

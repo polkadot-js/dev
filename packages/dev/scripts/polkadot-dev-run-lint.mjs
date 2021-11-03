@@ -4,7 +4,7 @@
 
 import yargs from 'yargs';
 
-import execSync from './execSync.cjs';
+import execSync from './execSync.mjs';
 
 const argv = yargs
   .options({
