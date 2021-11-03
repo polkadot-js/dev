@@ -2,8 +2,6 @@
 // Copyright 2017-2021 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { importDirect } from './import.mjs';
+import { importDirect } from './import.cjs';
 
-importDirect('rollup', 'rollup/dist/bin/rollup').then(() =>
-  process.exit(0)
-);
+importDirect('rollup', 'rollup/dist/bin/rollup');
