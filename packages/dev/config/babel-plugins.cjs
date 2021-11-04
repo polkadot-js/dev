@@ -15,7 +15,11 @@ module.exports = function (isEsm, withExt) {
   );
 
   return resolver([
-    // ordering important, decorators before class properties
+    // The private methods/properties should be removed, but as of now stick to
+    // trying to keep the support overhead low (it is still relatively new spec-wise)
+    ['@babel/plugin-proposal-private-methods', { loose: true }],
+    ['@babel/plugin-proposal-private-property-in-object', { loose: true }],
+    // Keep as-is, optimize as required
     '@babel/plugin-proposal-nullish-coalescing-operator',
     '@babel/plugin-proposal-numeric-separator',
     '@babel/plugin-proposal-optional-chaining',
