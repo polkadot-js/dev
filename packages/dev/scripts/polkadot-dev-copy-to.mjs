@@ -7,7 +7,7 @@ import mkdirp from 'mkdirp';
 import path from 'path';
 import rimraf from 'rimraf';
 
-import copySync from './copySync';
+import copySync from './copySync.mjs';
 import execSync from './execSync.mjs';
 
 const args = process.argv.slice(2);
