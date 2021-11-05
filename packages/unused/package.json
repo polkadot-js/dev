@@ -14,6 +14,6 @@
     "url": "https://github.com/polkadot-js/dev.git"
   },
   "sideEffects": false,
-  "version": "0.63.25",
+  "version": "0.63.26",
   "main": "index.js"
 }
