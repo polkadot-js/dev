@@ -14,7 +14,7 @@ const CONFIG_CJS = {
 const CONFIG_ESM = {
   modules: false,
   targets: {
-    node: 'current'
+    node: '12'
   }
 };
 
