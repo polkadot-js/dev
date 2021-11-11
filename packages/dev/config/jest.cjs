@@ -5,6 +5,8 @@ const fs = require('fs');
 const { defaults } = require('jest-config');
 
 module.exports = {
+  // See https://jestjs.io/docs/configuration#extraglobals-arraystring
+  extraGlobals: ['Math'],
   moduleFileExtensions: [
     ...defaults.moduleFileExtensions,
     'ts',
@@ -25,6 +27,5 @@ module.exports = {
   },
   transformIgnorePatterns: [
     '/node_modules/(?!@polkadot|@babel/runtime/helpers/esm/)'
-  ],
-  verbose: true
+  ]
 };
