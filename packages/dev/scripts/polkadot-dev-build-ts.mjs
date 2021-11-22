@@ -265,9 +265,7 @@ function lintOutput (pkg, dir) {
           .split('\n')
           .forEach((line, index) => {
             if (line.includes('import') && line.includes('/src/')) {
-              const path = full.split('/packages/')[1];
-
-              throw new Error(`${path}:: line ${index + 1}:: /src/ import:: ${line}`);
+              throw new Error(`${full.split('/packages/')[1]}:: line ${index + 1}:: /src/ import:: ${line}`);
             }
           });
       }
