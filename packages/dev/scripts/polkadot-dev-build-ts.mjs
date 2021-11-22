@@ -251,14 +251,14 @@ export const packageInfo = { name: '${name}', version: '${version}' };
   }
 }
 
-function lintOutput (pkg, dir) {
+function lintOutput (dir) {
   fs
     .readdirSync(dir)
     .forEach((sub) => {
       const full = path.join(dir, sub);
 
       if (fs.statSync(full).isDirectory()) {
-        lintOutput(pkg, full);
+        lintOutput(full);
       } else if (full.endsWith('.d.ts') || full.endsWith('.js') || full.endsWith('.cjs')) {
         fs
           .readFileSync(full, 'utf-8')
@@ -303,7 +303,7 @@ async function main () {
     const buildPath = path.join(process.cwd(), 'build');
 
     if (fs.existsSync(buildPath)) {
-      lintOutput(dir, buildPath);
+      lintOutput(buildPath);
     }
 
     process.chdir('..');
