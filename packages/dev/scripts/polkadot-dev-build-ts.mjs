@@ -251,6 +251,10 @@ export const packageInfo = { name: '${name}', version: '${version}' };
   }
 }
 
+function lintError (full, line, lineNumber, error) {
+  throw new Error(`${full.split('/packages/')[1]}:: line ${lineNumber + 1}:: ${error}:: \n\n\t${line}\n`);
+}
+
 function lintOutput (dir) {
   fs
     .readdirSync(dir)
@@ -263,9 +267,9 @@ function lintOutput (dir) {
         fs
           .readFileSync(full, 'utf-8')
           .split('\n')
-          .forEach((line, index) => {
+          .forEach((line, lineNumber) => {
             if (line.includes('import') && line.includes('/src/')) {
-              throw new Error(`${full.split('/packages/')[1]}:: line ${index + 1}:: /src/ import:: \n\n\t${line}\n`);
+              lintError(full, line, lineNumber, 'invalid /src/ import');
             }
           });
       }
