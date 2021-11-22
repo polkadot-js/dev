@@ -251,6 +251,31 @@ export const packageInfo = { name: '${name}', version: '${version}' };
   }
 }
 
+function lintError (full, line, lineNumber, error) {
+  throw new Error(`${full.split('/packages/')[1]}:: line ${lineNumber + 1}:: ${error}:: \n\n\t${line}\n`);
+}
+
+function lintOutput (dir) {
+  fs
+    .readdirSync(dir)
+    .forEach((sub) => {
+      const full = path.join(dir, sub);
+
+      if (fs.statSync(full).isDirectory()) {
+        lintOutput(full);
+      } else if (full.endsWith('.d.ts') || full.endsWith('.js') || full.endsWith('.cjs')) {
+        fs
+          .readFileSync(full, 'utf-8')
+          .split('\n')
+          .forEach((line, lineNumber) => {
+            if (line.includes('import') && line.includes('/src/')) {
+              lintError(full, line, lineNumber, 'invalid /src/ import');
+            }
+          });
+      }
+    });
+}
+
 async function main () {
   execSync('yarn polkadot-dev-clean-build');
 
@@ -278,6 +303,12 @@ async function main () {
     process.chdir(dir);
 
     await buildJs(repoPath, dir);
+
+    const buildPath = path.join(process.cwd(), 'build');
+
+    if (fs.existsSync(buildPath)) {
+      lintOutput(buildPath);
+    }
 
     process.chdir('..');
   }
