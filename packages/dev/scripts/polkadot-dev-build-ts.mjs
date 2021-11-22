@@ -265,7 +265,7 @@ function lintOutput (dir) {
           .split('\n')
           .forEach((line, index) => {
             if (line.includes('import') && line.includes('/src/')) {
-              throw new Error(`${full.split('/packages/')[1]}:: line ${index + 1}:: /src/ import:: ${line}`);
+              throw new Error(`${full.split('/packages/')[1]}:: line ${index + 1}:: /src/ import:: \n\n\t${line}\n`);
             }
           });
       }
