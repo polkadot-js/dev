@@ -10,7 +10,7 @@ console.log('$ polkadot-ci-ghact-docs', process.argv.slice(2).join(' '));
 
 execSync('git config push.default simple');
 execSync('git config merge.ours.driver true');
-execSync('git config user.name "Github Actions"');
+execSync('git config user.name "github-actions[bot]"');
 execSync('git config user.email "action@github.com"');
 execSync('git checkout master');
 

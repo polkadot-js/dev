@@ -97,7 +97,7 @@ function npmPublish () {
 function gitSetup () {
   execSync('git config push.default simple');
   execSync('git config merge.ours.driver true');
-  execSync('git config user.name "Github Actions"');
+  execSync('git config user.name "github-actions[bot]"');
   execSync('git config user.email "action@github.com"');
   execSync('git checkout master');
 }
