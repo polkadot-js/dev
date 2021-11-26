@@ -14,7 +14,7 @@ import execSync from './execSync.mjs';
 
 const BL_CONFIGS = ['babel.config.js', 'babel.config.cjs'];
 const WP_CONFIGS = ['webpack.config.js', 'webpack.config.cjs'];
-const CPX = ['js', 'cjs', 'mjs', 'json', 'd.ts', 'css', 'gif', 'hbs', 'jpg', 'png', 'svg']
+const CPX = ['patch', 'js', 'cjs', 'mjs', 'json', 'd.ts', 'css', 'gif', 'hbs', 'jpg', 'png', 'svg']
   .map((ext) => `src/**/*.${ext}`)
   .concat(['package.json', 'README.md']);
 
