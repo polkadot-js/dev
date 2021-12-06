@@ -4,13 +4,13 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 import pluginAlias from '@rollup/plugin-alias';
-import pluginCleanup from 'rollup-plugin-cleanup';
 import pluginCommonjs from '@rollup/plugin-commonjs';
 import pluginInject from '@rollup/plugin-inject';
 import pluginJson from '@rollup/plugin-json';
 import { nodeResolve as pluginResolve } from '@rollup/plugin-node-resolve';
 import fs from 'fs';
 import path from 'path';
+import pluginCleanup from 'rollup-plugin-cleanup';
 
 function sanitizePkg (pkg) {
   return pkg.replace('@polkadot/', '');
