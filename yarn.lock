@@ -1914,6 +1914,7 @@ __metadata:
     react: ^17.0.2
     rimraf: ^3.0.2
     rollup: ^2.60.2
+    rollup-plugin-cleanup: ^3.2.1
     typescript: ^4.5.2
     yargs: ^17.3.0
   bin:
@@ -4461,6 +4462,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"estree-walker@npm:^0.6.1":
+  version: 0.6.1
+  resolution: "estree-walker@npm:0.6.1"
+  checksum: 9d6f82a4921f11eec18f8089fb3cce6e53bcf45a8e545c42a2674d02d055fb30f25f90495f8be60803df6c39680c80dcee7f944526867eb7aa1fc9254883b23d
+  languageName: node
+  linkType: hard
+
 "estree-walker@npm:^1.0.1":
   version: 1.0.1
   resolution: "estree-walker@npm:1.0.1"
@@ -6404,6 +6412,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"js-cleanup@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "js-cleanup@npm:1.2.0"
+  dependencies:
+    magic-string: ^0.25.7
+    perf-regexes: ^1.0.1
+    skip-regex: ^1.0.2
+  checksum: eea17bce5157f66c1415a5e537f89dfbc15c4e4a36e638bc09db48e70ca0efd6f85331d8f6154817a17057304d56db82478c8dfdac8ee39dc481302f93abd59d
+  languageName: node
+  linkType: hard
+
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -7554,6 +7573,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"perf-regexes@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "perf-regexes@npm:1.0.1"
+  checksum: 28dca5634a4be56133db6a99b4d0ce1f4c70dad77075c0de1f8359396c14ccebd861194430eac09defcd6b8d111a0724cbbfdafb611395e1cae50fec591275bd
+  languageName: node
+  linkType: hard
+
 "performance-now@npm:^2.1.0":
   version: 2.1.0
   resolution: "performance-now@npm:2.1.0"
@@ -8284,6 +8310,27 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
+"rollup-plugin-cleanup@npm:^3.2.1":
+  version: 3.2.1
+  resolution: "rollup-plugin-cleanup@npm:3.2.1"
+  dependencies:
+    js-cleanup: ^1.2.0
+    rollup-pluginutils: ^2.8.2
+  peerDependencies:
+    rollup: ">=2.0"
+  checksum: e11a6ac0a697a9c17154073cf1e663e31e7b99e3e507dacccd58ea10e9c9ae4c10fe93ee93f68432b9beda8834a71b4dfa73700923f3415ecdac4ee283531c54
+  languageName: node
+  linkType: hard
+
+"rollup-pluginutils@npm:^2.8.2":
+  version: 2.8.2
+  resolution: "rollup-pluginutils@npm:2.8.2"
+  dependencies:
+    estree-walker: ^0.6.1
+  checksum: 339fdf866d8f4ff6e408fa274c0525412f7edb01dc46b5ccda51f575b7e0d20ad72965773376fb5db95a77a7fcfcab97bf841ec08dbadf5d6b08af02b7a2cf5e
+  languageName: node
+  linkType: hard
+
 "rollup@npm:^2.60.2":
   version: 2.60.2
   resolution: "rollup@npm:2.60.2"
@@ -8503,6 +8550,13 @@ resolve@^2.0.0-next.3:
   version: 1.0.5
   resolution: "sisteransi@npm:1.0.5"
   checksum: aba6438f46d2bfcef94cf112c835ab395172c75f67453fe05c340c770d3c402363018ae1ab4172a1026a90c47eaccf3af7b6ff6fa749a680c2929bd7fa2b37a4
+  languageName: node
+  linkType: hard
+
+"skip-regex@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "skip-regex@npm:1.0.2"
+  checksum: a121a045860343da183c678d53b44c78283b018db71d60af8524ffef179fa028ef419629bb65198bfb9c09854123e7019cfd4c23be4e175254a50c7563b26e8e
   languageName: node
   linkType: hard
 

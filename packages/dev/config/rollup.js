@@ -10,6 +10,7 @@ import pluginJson from '@rollup/plugin-json';
 import { nodeResolve as pluginResolve } from '@rollup/plugin-node-resolve';
 import fs from 'fs';
 import path from 'path';
+import pluginCleanup from 'rollup-plugin-cleanup';
 
 function sanitizePkg (pkg) {
   return pkg.replace('@polkadot/', '');
@@ -62,7 +63,8 @@ export function createBundle ({ entries = {}, external, globals = {}, index, inj
       pluginJson(),
       pluginCommonjs(),
       pluginInject(inject),
-      pluginResolve({ browser: true })
+      pluginResolve({ browser: true }),
+      pluginCleanup()
     ]
   };
 }
