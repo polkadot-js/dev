@@ -12,8 +12,9 @@ import copySync from './copySync.mjs';
 import { __dirname } from './dirname.mjs';
 import execSync from './execSync.mjs';
 
-const BL_CONFIGS = ['babel.config.js', 'babel.config.cjs'];
-const WP_CONFIGS = ['webpack.config.js', 'webpack.config.cjs'];
+const BL_CONFIGS = ['js', 'cjs'].map((e) => `babel.config.${e}`);
+const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
+const RL_CONFIGS = ['js', 'mjs', 'cjs'].map((e) => `rollup.config.${e}`);
 const CPX = ['patch', 'js', 'cjs', 'mjs', 'json', 'd.ts', 'css', 'gif', 'hbs', 'jpg', 'png', 'svg']
   .map((ext) => `src/**/*.${ext}`)
   .concat(['package.json', 'README.md']);
@@ -267,9 +268,14 @@ function lintOutput (dir) {
         fs
           .readFileSync(full, 'utf-8')
           .split('\n')
-          .forEach((line, lineNumber) => {
-            if (line.includes('import') && line.includes('/src/')) {
-              lintError(full, line, lineNumber, 'invalid /src/ import');
+          .forEach((l, n) => {
+            if (l.includes('import') && l.includes('/src/')) {
+              // we are not allowed to import from /src/
+              lintError(full, l, n, 'Invalid import from /src/');
+            // eslint-disable-next-line no-useless-escape
+            } else if (/[\+\-\*\/\=\<\>\|\&\%\^\(\)\{\}\[\] ][0-9]{1,}n/.test(l)) {
+              // we don't want untamed BigInt literals
+              lintError(full, l, n, 'Prefer BigInt(<digits>) to <dignits>n');
             }
           });
       }
@@ -304,19 +310,21 @@ async function main () {
 
     await buildJs(repoPath, dir);
 
-    const buildPath = path.join(process.cwd(), 'build');
-
-    if (fs.existsSync(buildPath)) {
-      lintOutput(buildPath);
-    }
-
     process.chdir('..');
   }
 
   process.chdir('..');
 
-  if (['js', 'mjs', 'cjs'].some((e) => fs.existsSync(path.join(process.cwd(), `rollup.config.${e}`)))) {
+  if (RL_CONFIGS.some((c) => fs.existsSync(path.join(process.cwd(), c)))) {
     execSync('yarn polkadot-exec-rollup --config');
+  }
+
+  for (const dir of dirs) {
+    const buildPath = path.join(process.cwd(), 'packages', dir, 'build');
+
+    if (fs.existsSync(buildPath)) {
+      lintOutput(buildPath);
+    }
   }
 }
 
