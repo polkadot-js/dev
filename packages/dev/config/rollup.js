@@ -4,6 +4,7 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 import pluginAlias from '@rollup/plugin-alias';
+import pluginCleanup from 'rollup-plugin-cleanup';
 import pluginCommonjs from '@rollup/plugin-commonjs';
 import pluginInject from '@rollup/plugin-inject';
 import pluginJson from '@rollup/plugin-json';
@@ -62,7 +63,8 @@ export function createBundle ({ entries = {}, external, globals = {}, index, inj
       pluginJson(),
       pluginCommonjs(),
       pluginInject(inject),
-      pluginResolve({ browser: true })
+      pluginResolve({ browser: true }),
+      pluginCleanup()
     ]
   };
 }

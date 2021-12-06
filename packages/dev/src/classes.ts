@@ -9,6 +9,9 @@ export class Testing123 {
   static staticProperty = 'babelIsCool';
   static staticFunction = (): string|null => Testing123.staticProperty;
 
+  /**
+   * @param and the number we should and with
+   */
   constructor (and: number) {
     this.and = and;
     this.#something = this.#something & and;
@@ -26,6 +29,10 @@ export class Testing123 {
     return res;
   }
 
+  /**
+   * @description Sets something to something
+   * @param something The addition
+   */
   setSomething = (something: number): number => {
     this.#something = something;
 
