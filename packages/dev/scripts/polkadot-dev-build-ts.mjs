@@ -268,14 +268,14 @@ function lintOutput (dir) {
         fs
           .readFileSync(full, 'utf-8')
           .split('\n')
-          .forEach((line, lineNumber) => {
-            if (line.includes('import') && line.includes('/src/')) {
+          .forEach((l, n) => {
+            if (l.includes('import') && l.includes('/src/')) {
               // we are not allowed to import from /src/
-              lintError(full, line, lineNumber, 'Invalid import from /src/');
+              lintError(full, l, n, 'Invalid import from /src/');
             // eslint-disable-next-line no-useless-escape
-            } else if (line.includes(/\d/) && line.includes(/[\+\-\*\/\=\<\>\|\&\%\^\(\)\{\}\[\] ][0-9]{1,}n/)) {
+            } else if (l.includes(/\d/) && l.includes(/[\+\-\*\/\=\<\>\|\&\%\^\(\)\{\}\[\] ][0-9]{1,}n/)) {
               // we don't want untamed BigInt literals
-              lintError(full, line, lineNumber, 'Prefer BigInt(<digits>) to <dignits>n');
+              lintError(full, l, n, 'Prefer BigInt(<digits>) to <dignits>n');
             }
           });
       }
