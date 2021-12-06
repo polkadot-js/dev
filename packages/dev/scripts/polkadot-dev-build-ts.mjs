@@ -273,7 +273,7 @@ function lintOutput (dir) {
               // we are not allowed to import from /src/
               lintError(full, line, lineNumber, 'Invalid import from /src/');
             // eslint-disable-next-line no-useless-escape
-            } else if (line.includes(/\d/) && line.includes(/[\+\\\-\*\/\=\<\>\|\&\%\^\(\)\{\}\[\] ][0-9]{1,}n/)) {
+            } else if (line.includes(/\d/) && line.includes(/[\+\-\*\/\=\<\>\|\&\%\^\(\)\{\}\[\] ][0-9]{1,}n/)) {
               // we don't want untamed BigInt literals
               lintError(full, line, lineNumber, 'Prefer BigInt(<digits>) to <dignits>n');
             }
