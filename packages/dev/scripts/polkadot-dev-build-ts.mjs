@@ -268,6 +268,12 @@ function lintOutput (dir) {
         fs
           .readFileSync(full, 'utf-8')
           .split('\n')
+          .map((l) =>
+            // not perfect, but gets over the initial hump of handling comments
+            l
+              .replace(/\/\/.*/, '')
+              .replace(/\/\*.*\*\//, '')
+          )
           .forEach((l, n) => {
             if (l.includes('import') && l.includes('/src/')) {
               // we are not allowed to import from /src/
