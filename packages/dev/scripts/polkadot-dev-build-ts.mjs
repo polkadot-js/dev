@@ -122,15 +122,7 @@ function buildExports () {
   const buildDir = path.join(process.cwd(), 'build');
   const pkgPath = path.join(buildDir, 'package.json');
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
-  const list = findFiles(buildDir).filter(([p]) => {
-    if (p.endsWith('.jsx')) {
-      rimraf.sync(path.join(buildDir, p));
-
-      return false;
-    }
-
-    return true;
-  });
+  const list = findFiles(buildDir);
 
   if (!list.some(([key]) => key === '.')) {
     // for the env-specifics, add a root key (if not available)
