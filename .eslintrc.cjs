@@ -8,8 +8,14 @@ module.exports = {
   ignorePatterns: [
     '.eslintrc.cjs',
     '.github/**',
+    '.prettierrc.cjs',
     '.vscode/**',
     '.yarn/**',
+    'all-deps.js',
+    'babel.config.cjs',
+    'jest.config.cjs',
+    'tester.cjs',
+    'tester.mjs',
     '**/build/*',
     '**/coverage/*',
     '**/node_modules/*'
@@ -17,7 +23,7 @@ module.exports = {
   parserOptions: {
     ...base.parserOptions,
     project: [
-      './tsconfig.json'
+      './packages/**/tsconfig.json'
     ]
   }
 };
