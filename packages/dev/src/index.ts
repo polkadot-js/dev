@@ -34,7 +34,7 @@ export const echo = (value: EchoString, start = 0, end?: number): string => {
   doCallback((a) => a);
   blah();
 
-  return `${count}: ${A}: ${value}`.substr(start, end);
+  return `${count}: ${A as number}: ${value}`.substr(start, end);
 };
 
 function assert (a: boolean): void {
