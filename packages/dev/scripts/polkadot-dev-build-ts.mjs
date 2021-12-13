@@ -10,6 +10,7 @@ import { EXT_CJS, EXT_ESM } from '../config/babel-extensions.cjs';
 import copySync from './copySync.mjs';
 import { __dirname } from './dirname.mjs';
 import execSync from './execSync.mjs';
+import forEachPackage from './forEachPackage.mjs';
 
 const BL_CONFIGS = ['js', 'cjs'].map((e) => `babel.config.${e}`);
 const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
@@ -222,8 +223,6 @@ async function buildJs (repoPath, dir) {
     return;
   }
 
-  console.log(`*** ${name} ${version}`);
-
   orderPackageJson(repoPath, dir, json);
   execSync('yarn polkadot-exec-tsc --emitDeclarationOnly');
 
@@ -244,8 +243,6 @@ export const packageInfo = { name: '${name}', version: '${version}' };
 
       buildExports();
     }
-
-    console.log();
   }
 }
 
@@ -300,22 +297,7 @@ async function main () {
 
   orderPackageJson(repoPath, null, pkg);
 
-  process.chdir('packages');
-  console.log();
-
-  const dirs = fs
-    .readdirSync('.')
-    .filter((dir) => fs.statSync(dir).isDirectory() && fs.existsSync(path.join(process.cwd(), dir, 'src')));
-
-  for (const dir of dirs) {
-    process.chdir(dir);
-
-    await buildJs(repoPath, dir);
-
-    process.chdir('..');
-  }
-
-  process.chdir('..');
+  const dirs = await forEachPackage((dir) => buildJs(repoPath, dir));
 
   if (RL_CONFIGS.some((c) => fs.existsSync(path.join(process.cwd(), c)))) {
     execSync('yarn polkadot-exec-rollup --config');
