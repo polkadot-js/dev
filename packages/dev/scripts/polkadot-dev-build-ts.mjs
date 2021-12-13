@@ -5,6 +5,7 @@
 import babel from '@babel/cli/lib/babel/dir.js';
 import fs from 'fs';
 import path from 'path';
+import rimraf from 'rimraf';
 
 import { EXT_CJS, EXT_ESM } from '../config/babel-extensions.cjs';
 import copySync from './copySync.mjs';
@@ -121,7 +122,15 @@ function buildExports () {
   const buildDir = path.join(process.cwd(), 'build');
   const pkgPath = path.join(buildDir, 'package.json');
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
-  const list = findFiles(buildDir);
+  const list = findFiles(buildDir).filter(([p]) => {
+    if (p.endsWith('.jsx')) {
+      rimraf.sync(path.join(buildDir, p));
+
+      return false;
+    }
+
+    return true;
+  });
 
   if (!list.some(([key]) => key === '.')) {
     // for the env-specifics, add a root key (if not available)
@@ -224,7 +233,8 @@ async function buildJs (repoPath, dir) {
   }
 
   orderPackageJson(repoPath, dir, json);
-  execSync('yarn polkadot-exec-tsc --emitDeclarationOnly');
+  // execSync('yarn polkadot-exec-tsc --emitDeclarationOnly');
+  // execSync('../../node_modules/@polkadot/dev/scripts/polkadot-exec-tsc.mjs --declaration --emitDeclarationOnly');
 
   if (!fs.existsSync(path.join(process.cwd(), '.skip-build'))) {
     fs.writeFileSync(path.join(process.cwd(), 'src/packageInfo.ts'), `// Copyright 2017-2021 ${name} authors & contributors
@@ -296,6 +306,9 @@ async function main () {
     .split('.git')[0];
 
   orderPackageJson(repoPath, null, pkg);
+
+  // execSync('yarn polkadot-exec-tsc --declaration --emitDeclarationOnly');
+  execSync('yarn polkadot-exec-tsc -b');
 
   const dirs = await forEachPackage((dir) => buildJs(repoPath, dir));
 

@@ -13,16 +13,20 @@ module.exports = {
     node: true
   },
   ignorePatterns: [
+    '**/build/*',
+    '**/coverage/*',
+    '**/node_modules/*',
     '.eslintrc.cjs',
+    '.eslintrc.js',
+    '.eslintrc.mjs',
     '.github/**',
     '.prettierrc.cjs',
     '.vscode/**',
     '.yarn/**',
     'babel.config.cjs',
     'jest.config.cjs',
-    '**/build/*',
-    '**/coverage/*',
-    '**/node_modules/*'
+    'rollup.config.js',
+    'rollup.config.mjs'
   ],
   extends: [
     'eslint:recommended',

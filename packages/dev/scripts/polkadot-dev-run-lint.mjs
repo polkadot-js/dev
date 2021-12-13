@@ -6,7 +6,6 @@ import yargs from 'yargs';
 
 import { __dirname } from './dirname.mjs';
 import execSync from './execSync.mjs';
-import forEachPackage from './forEachPackage.mjs';
 
 console.log('$ polkadot-dev-run-lint', process.argv.slice(2).join(' '));
 
@@ -24,7 +23,7 @@ const argv = yargs(process.argv.slice(2))
   .strict()
   .argv;
 
-async function main () {
+function main () {
   if (!argv['skip-eslint']) {
     // We don't want to run with fix on CI
     const extra = process.env.GITHUB_REPOSITORY
@@ -35,11 +34,8 @@ async function main () {
   }
 
   if (!argv['skip-tsc']) {
-    await forEachPackage(() => Promise.resolve(execSync('yarn polkadot-exec-tsc --noEmit --pretty')));
+    execSync('yarn polkadot-exec-tsc --noEmit');
   }
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(-1);
-});
+main();

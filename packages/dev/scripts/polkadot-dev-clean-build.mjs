@@ -11,7 +11,7 @@ const PKGS = path.join(process.cwd(), 'packages');
 console.log('$ polkadot-dev-clean-build', process.argv.slice(2).join(' '));
 
 function getDirs (dir) {
-  return [path.join(dir, 'build'), path.join(dir, 'build-docs')];
+  return [path.join(dir, 'build'), path.join(dir, 'build-docs'), path.join(dir, 'tsconfig.tsbuildinfo')];
 }
 
 function cleanDirs (dirs) {
