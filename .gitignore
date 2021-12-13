@@ -15,5 +15,6 @@ tmp/
 !.yarn/sdks
 cc-test-reporter
 npm-debug.log*
+tsconfig.*buildinfo
 yarn-debug.log*
 yarn-error.log*
