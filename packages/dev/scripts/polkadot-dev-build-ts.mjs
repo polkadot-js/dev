@@ -225,7 +225,7 @@ async function buildJs (repoPath, dir) {
   console.log(`*** ${name} ${version}`);
 
   orderPackageJson(repoPath, dir, json);
-  execSync('yarn polkadot-exec-tsc');
+  execSync('yarn polkadot-exec-tsc --emitDeclarationOnly');
 
   if (!fs.existsSync(path.join(process.cwd(), '.skip-build'))) {
     fs.writeFileSync(path.join(process.cwd(), 'src/packageInfo.ts'), `// Copyright 2017-2021 ${name} authors & contributors
