@@ -225,8 +225,6 @@ async function buildJs (repoPath, dir) {
   }
 
   orderPackageJson(repoPath, dir, json);
-  // execSync('yarn polkadot-exec-tsc --emitDeclarationOnly');
-  // execSync('../../node_modules/@polkadot/dev/scripts/polkadot-exec-tsc.mjs --declaration --emitDeclarationOnly');
 
   if (!fs.existsSync(path.join(process.cwd(), '.skip-build'))) {
     fs.writeFileSync(path.join(process.cwd(), 'src/packageInfo.ts'), `// Copyright 2017-2021 ${name} authors & contributors
