@@ -306,9 +306,7 @@ async function main () {
     .split('.git')[0];
 
   orderPackageJson(repoPath, null, pkg);
-
-  // execSync('yarn polkadot-exec-tsc --declaration --emitDeclarationOnly');
-  execSync('yarn polkadot-exec-tsc -b');
+  execSync('yarn polkadot-exec-tsc --build');
 
   const dirs = await forEachPackage((dir) => buildJs(repoPath, dir));
 
