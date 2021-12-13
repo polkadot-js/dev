@@ -1,13 +1,6 @@
 {
-  "extends": "@polkadot/dev/config/tsconfig.json",
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@polkadot/dev/*": [ "packages/dev/src/*" ]
-    },
-    "skipLibCheck": true,
-    "typeRoots": [
-      "./node_modules/@types"
-    ]
+    "baseUrl": "./packages"
   }
 }
