@@ -11,7 +11,6 @@ import { EXT_CJS, EXT_ESM } from '../config/babel-extensions.cjs';
 import copySync from './copySync.mjs';
 import { __dirname } from './dirname.mjs';
 import execSync from './execSync.mjs';
-import forEachPackage from './forEachPackage.mjs';
 
 const BL_CONFIGS = ['js', 'cjs'].map((e) => `babel.config.${e}`);
 const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
@@ -232,9 +231,9 @@ async function buildJs (repoPath, dir) {
     return;
   }
 
+  console.log(`*** ${name} ${version}`);
+
   orderPackageJson(repoPath, dir, json);
-  // execSync('yarn polkadot-exec-tsc --emitDeclarationOnly');
-  // execSync('../../node_modules/@polkadot/dev/scripts/polkadot-exec-tsc.mjs --declaration --emitDeclarationOnly');
 
   if (!fs.existsSync(path.join(process.cwd(), '.skip-build'))) {
     fs.writeFileSync(path.join(process.cwd(), 'src/packageInfo.ts'), `// Copyright 2017-2021 ${name} authors & contributors
@@ -254,6 +253,8 @@ export const packageInfo = { name: '${name}', version: '${version}' };
       buildExports();
     }
   }
+
+  console.log();
 }
 
 function lintError (full, line, lineNumber, error) {
@@ -308,7 +309,21 @@ async function main () {
   orderPackageJson(repoPath, null, pkg);
   execSync('yarn polkadot-exec-tsc --build');
 
-  const dirs = await forEachPackage((dir) => buildJs(repoPath, dir));
+  process.chdir('packages');
+
+  const dirs = fs
+    .readdirSync('.')
+    .filter((dir) => fs.statSync(dir).isDirectory() && fs.existsSync(path.join(process.cwd(), dir, 'src')));
+
+  for (const dir of dirs) {
+    process.chdir(dir);
+
+    await buildJs(repoPath, dir);
+
+    process.chdir('..');
+  }
+
+  process.chdir('..');
 
   if (RL_CONFIGS.some((c) => fs.existsSync(path.join(process.cwd(), c)))) {
     execSync('yarn polkadot-exec-rollup --config');
