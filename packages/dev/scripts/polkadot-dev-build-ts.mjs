@@ -5,7 +5,6 @@
 import babel from '@babel/cli/lib/babel/dir.js';
 import fs from 'fs';
 import path from 'path';
-import rimraf from 'rimraf';
 
 import { EXT_CJS, EXT_ESM } from '../config/babel-extensions.cjs';
 import copySync from './copySync.mjs';

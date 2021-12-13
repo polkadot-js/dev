@@ -23,19 +23,15 @@ const argv = yargs(process.argv.slice(2))
   .strict()
   .argv;
 
-function main () {
-  if (!argv['skip-eslint']) {
-    // We don't want to run with fix on CI
-    const extra = process.env.GITHUB_REPOSITORY
-      ? ''
-      : '--fix';
+if (!argv['skip-eslint']) {
+  // We don't want to run with fix on CI
+  const extra = process.env.GITHUB_REPOSITORY
+    ? ''
+    : '--fix';
 
-    execSync(`yarn polkadot-exec-eslint ${extra} --resolve-plugins-relative-to ${__dirname} --ext .js,.cjs,.mjs,.ts,.tsx ${process.cwd()}`);
-  }
-
-  if (!argv['skip-tsc']) {
-    execSync('yarn polkadot-exec-tsc --noEmit');
-  }
+  execSync(`yarn polkadot-exec-eslint ${extra} --resolve-plugins-relative-to ${__dirname} --ext .js,.cjs,.mjs,.ts,.tsx ${process.cwd()}`);
 }
 
-main();
+if (!argv['skip-tsc']) {
+  execSync('yarn polkadot-exec-tsc --noEmit --pretty');
+}
