@@ -4,7 +4,6 @@
 
 import babel from '@babel/cli/lib/babel/dir.js';
 import fs from 'fs';
-import mkdirp from 'mkdirp';
 import path from 'path';
 
 import { EXT_CJS, EXT_ESM } from '../config/babel-extensions.cjs';
@@ -53,9 +52,7 @@ async function buildBabel (dir, type) {
 
   // rewrite a skeleton package.json with a type=module
   if (type !== 'esm') {
-    [...CPX]
-      .concat(`../../build/${dir}/src/**/*.d.ts`, `../../build/packages/${dir}/src/**/*.d.ts`)
-      .forEach((src) => copySync(src, 'build'));
+    CPX.forEach((s) => copySync(s, 'build'));
   }
 }
 
@@ -230,7 +227,6 @@ async function buildJs (repoPath, dir) {
   orderPackageJson(repoPath, dir, json);
 
   if (!fs.existsSync(path.join(process.cwd(), '.skip-build'))) {
-    mkdirp.sync('build');
     fs.writeFileSync(path.join(process.cwd(), 'src/packageInfo.ts'), `// Copyright 2017-2021 ${name} authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
@@ -247,9 +243,9 @@ export const packageInfo = { name: '${name}', version: '${version}' };
 
       buildExports();
     }
-
-    console.log();
   }
+
+  console.log();
 }
 
 function lintError (full, line, lineNumber, error) {
@@ -302,10 +298,9 @@ async function main () {
     .split('.git')[0];
 
   orderPackageJson(repoPath, null, pkg);
+  execSync('yarn polkadot-exec-tsc --build');
 
   process.chdir('packages');
-
-  execSync('yarn polkadot-exec-tsc --emitDeclarationOnly --outdir ../build');
 
   const dirs = fs
     .readdirSync('.')

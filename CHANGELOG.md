@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.64.1
+
+- Use tsconfig references and per-package TS build/lint
+
 ## 0.63.1
 
 - eslint 8

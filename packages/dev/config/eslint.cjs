@@ -12,6 +12,22 @@ module.exports = {
     jest: true,
     node: true
   },
+  ignorePatterns: [
+    '**/build/*',
+    '**/coverage/*',
+    '**/node_modules/*',
+    '.eslintrc.cjs',
+    '.eslintrc.js',
+    '.eslintrc.mjs',
+    '.github/**',
+    '.prettierrc.cjs',
+    '.vscode/**',
+    '.yarn/**',
+    'babel.config.cjs',
+    'jest.config.cjs',
+    'rollup.config.js',
+    'rollup.config.mjs'
+  ],
   extends: [
     'eslint:recommended',
     require.resolve('eslint-config-standard'),

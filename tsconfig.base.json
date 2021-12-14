@@ -1,13 +1,13 @@
 {
   "extends": "@polkadot/dev/config/tsconfig.json",
-	"compilerOptions": {
-		"composite": true,
-		"paths": {
+  "compilerOptions": {
+    "composite": true,
+    "paths": {
       "@polkadot/dev/*": [ "dev/src/*" ]
     },
     "skipLibCheck": true,
     "typeRoots": [
       "./node_modules/@types"
     ]
-	}
- }
+  }
+}
