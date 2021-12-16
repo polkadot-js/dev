@@ -1880,7 +1880,7 @@ __metadata:
     "@rollup/plugin-node-resolve": ^13.1.1
     "@rushstack/eslint-patch": ^1.1.0
     "@types/jest": ^27.0.3
-    "@types/node": ^16.11.12
+    "@types/node": ^16.11.14
     "@types/react": ^17.0.37
     "@types/yargs": ^17.0.7
     "@typescript-eslint/eslint-plugin": 5.7.0
@@ -1890,7 +1890,7 @@ __metadata:
     babel-plugin-module-extension-resolver: ^1.0.0-rc.2
     babel-plugin-module-resolver: ^4.1.0
     babel-plugin-styled-components: ^2.0.2
-    browserslist: ^4.19.0
+    browserslist: ^4.19.1
     coveralls: ^3.1.1
     eslint: ^8.4.1
     eslint-config-standard: ^16.0.3
@@ -2199,10 +2199,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:>= 8, @types/node@npm:^16.11.12":
-  version: 16.11.12
-  resolution: "@types/node@npm:16.11.12"
-  checksum: a3feb346d61a56f5a137c29bb8c63cfa3cc02e184b9dffdc18ef1528dcce55596e570575215a2e39e6ce69343eeb2a5ba71c271938f1dc8db4cc393902855412
+"@types/node@npm:*, @types/node@npm:>= 8, @types/node@npm:^16.11.14":
+  version: 16.11.14
+  resolution: "@types/node@npm:16.11.14"
+  checksum: 0bd4333fb4e56532db7f5174732268b18089913ddbb0e97957228e64f9fe3babf9923c77ce6f07d3d354445cfbb8d31b95c1f8be3c0f7426308bd8b93d3aaa02
   languageName: node
   linkType: hard
 
@@ -3053,9 +3053,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserslist@npm:^4.17.5, browserslist@npm:^4.17.6, browserslist@npm:^4.19.0":
-  version: 4.19.0
-  resolution: "browserslist@npm:4.19.0"
+"browserslist@npm:^4.17.5, browserslist@npm:^4.17.6, browserslist@npm:^4.19.1":
+  version: 4.19.1
+  resolution: "browserslist@npm:4.19.1"
   dependencies:
     caniuse-lite: ^1.0.30001286
     electron-to-chromium: ^1.4.17
@@ -3064,7 +3064,7 @@ __metadata:
     picocolors: ^1.0.0
   bin:
     browserslist: cli.js
-  checksum: 17f23eca9c56c726532f199797fa11a48c41b271d36f7ab565c10c952c83d83368487ae415d435419da7443f660d4bb8b024c303f3c49d0aa7f3e1dadb4fe3b1
+  checksum: c0777fd483691638fd6801e16c9d809e1d65f6d2b06db2e806654be51045cbab1452a89841a2c5caea2cbe19d621b4f1d391cffbb24512aa33280039ab345875
   languageName: node
   linkType: hard
 

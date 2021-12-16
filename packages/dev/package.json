@@ -67,7 +67,7 @@
     "babel-plugin-module-extension-resolver": "^1.0.0-rc.2",
     "babel-plugin-module-resolver": "^4.1.0",
     "babel-plugin-styled-components": "^2.0.2",
-    "browserslist": "^4.19.0",
+    "browserslist": "^4.19.1",
     "coveralls": "^3.1.1",
     "eslint": "^8.4.1",
     "eslint-config-standard": "^16.0.3",
@@ -103,7 +103,7 @@
   },
   "devDependencies": {
     "@types/jest": "^27.0.3",
-    "@types/node": "^16.11.12",
+    "@types/node": "^16.11.14",
     "@types/react": "^17.0.37",
     "@types/yargs": "^17.0.7",
     "react": "^17.0.2"
