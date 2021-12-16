@@ -52,7 +52,11 @@ async function buildBabel (dir, type) {
 
   // rewrite a skeleton package.json with a type=module
   if (type !== 'esm') {
-    CPX.forEach((s) => copySync(s, 'build'));
+    [
+      ...CPX,
+      `../../build/${dir}/src/**/*.d.ts`,
+      `../../build/packages/${dir}/src/**/*.d.ts`
+    ].forEach((s) => copySync(s, 'build'));
   }
 }
 
