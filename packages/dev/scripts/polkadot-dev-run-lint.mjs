@@ -33,5 +33,5 @@ if (!argv['skip-eslint']) {
 }
 
 if (!argv['skip-tsc']) {
-  execSync('yarn polkadot-exec-tsc --noEmit --pretty');
+  execSync('yarn polkadot-exec-tsc --noEmit --emitDeclarationOnly false --pretty');
 }
