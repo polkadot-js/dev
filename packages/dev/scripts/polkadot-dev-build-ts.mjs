@@ -99,6 +99,7 @@ function findFiles (buildDir, extra = '') {
       const jsPath = `${extra}/${jsName}`;
       const thisPath = path.join(buildDir, jsPath);
       const toDelete = jsName.includes('.spec.') || // no tests
+        jsName.includes('.manual.') || // no manual checks
         jsName.endsWith('.d.js') || // no .d.ts compiled outputs
         jsName.endsWith(`.d${EXT_OTHER}`) || // same as above, esm version
         (
