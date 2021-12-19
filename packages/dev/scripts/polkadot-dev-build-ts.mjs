@@ -106,12 +106,13 @@ function findFiles (buildDir, extra = '') {
         (
           jsName.endsWith('.d.ts') && // .d.ts without .js as an output
           !fs.existsSync(path.join(buildDir, jsPath.replace('.d.ts', '.js')))
-        );
+        ) ||
+        thisPath.includes('/test/');
 
-      if (toDelete) {
-        fs.unlinkSync(thisPath);
-      } else if (fs.statSync(thisPath).isDirectory()) {
+      if (fs.statSync(thisPath).isDirectory()) {
         findFiles(buildDir, jsPath).forEach((entry) => all.push(entry));
+      } else if (toDelete) {
+        fs.unlinkSync(thisPath);
       } else if (!jsName.endsWith(EXT_OTHER) || !fs.existsSync(path.join(buildDir, jsPath.replace(EXT_OTHER, '.js')))) {
         // this is not mapped to a compiled .js file (where we have dual esm/cjs mappings)
         all.push(createMapEntry(buildDir, jsPath));
@@ -279,12 +280,6 @@ function loopJsLines (dir, fn) {
           fs
             .readFileSync(full, 'utf-8')
             .split('\n')
-            .map((l) =>
-              // not perfect, but gets over the initial hump of handling comments
-              l
-                .replace(/\/\/.*/, '')
-                .replace(/\/\*.*\*\//, '')
-            )
             .map((l, n) => fn(full, l, n))
             .filter((e) => !!e)
         );
@@ -297,7 +292,7 @@ function loopJsLines (dir, fn) {
 function lintOutput (dir) {
   throwOnErrors(
     loopJsLines(dir, (full, l, n) => {
-      if (l.includes('import ') && l.includes(" from '") && l.includes('/src/')) {
+      if (l.startsWith('import ') && l.includes(" from '") && l.includes('/src/')) {
         // we are not allowed to import from /src/
         return createError(full, l, n, 'Invalid import from /src/');
       // eslint-disable-next-line no-useless-escape
@@ -322,7 +317,7 @@ function lintDependencies (dir, locals) {
 
   throwOnErrors(
     loopJsLines(dir, (full, l, n) => {
-      if (l.includes('import ') && l.includes(" from '")) {
+      if (l.startsWith('import ') && l.includes(" from '")) {
         const dep = l
           .split("from '")[1]
           .split("'")[0]
