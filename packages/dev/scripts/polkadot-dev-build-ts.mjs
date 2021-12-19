@@ -22,7 +22,7 @@ console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
 const isTypeModule = EXT_ESM === '.js';
 const EXT_OTHER = isTypeModule ? EXT_CJS : EXT_ESM;
-const IGNORE_IMPORTS = ['fs', 'path', 'react'];
+const IGNORE_IMPORTS = ['fs', 'path', 'process', 'react'];
 
 // webpack build
 function buildWebpack () {
