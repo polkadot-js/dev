@@ -22,6 +22,7 @@ console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
 const isTypeModule = EXT_ESM === '.js';
 const EXT_OTHER = isTypeModule ? EXT_CJS : EXT_ESM;
+const IGNORE_IMPORTS = ['fs', 'path', 'react'];
 
 // webpack build
 function buildWebpack () {
@@ -224,7 +225,7 @@ async function buildJs (repoPath, dir) {
   const { name, version } = json;
 
   if (!json.name.startsWith('@polkadot/')) {
-    return;
+    return null;
   }
 
   console.log(`*** ${name} ${version}`);
@@ -251,42 +252,112 @@ export const packageInfo = { name: '${name}', version: '${version}' };
   }
 
   console.log();
+
+  return name;
 }
 
-function lintError (full, line, lineNumber, error) {
-  throw new Error(`${full.split('/packages/')[1]}:: line ${lineNumber + 1}:: ${error}:: \n\n\t${line}\n`);
+function createError (full, line, lineNumber, error) {
+  return `${full.split('/packages/')[1]}:: ${lineNumber >= 0 ? `line ${lineNumber + 1}:: ` : ''}${error}:: \n\n\t${line}\n`;
 }
 
-function lintOutput (dir) {
-  fs
+function throwOnErrors (errors) {
+  if (errors.length) {
+    throw new Error(errors.join('\n'));
+  }
+}
+
+function loopJsLines (dir, fn) {
+  return fs
     .readdirSync(dir)
-    .forEach((sub) => {
+    .reduce((errors, sub) => {
       const full = path.join(dir, sub);
 
       if (fs.statSync(full).isDirectory()) {
-        lintOutput(full);
+        return errors.concat(loopJsLines(full, fn));
       } else if (full.endsWith('.d.ts') || full.endsWith('.js') || full.endsWith('.cjs')) {
-        fs
-          .readFileSync(full, 'utf-8')
-          .split('\n')
-          .map((l) =>
-            // not perfect, but gets over the initial hump of handling comments
-            l
-              .replace(/\/\/.*/, '')
-              .replace(/\/\*.*\*\//, '')
-          )
-          .forEach((l, n) => {
-            if (l.includes('import') && l.includes('/src/')) {
-              // we are not allowed to import from /src/
-              lintError(full, l, n, 'Invalid import from /src/');
-            // eslint-disable-next-line no-useless-escape
-            } else if (/[\+\-\*\/\=\<\>\|\&\%\^\(\)\{\}\[\] ][0-9]{1,}n/.test(l)) {
-              // we don't want untamed BigInt literals
-              lintError(full, l, n, 'Prefer BigInt(<digits>) to <dignits>n');
-            }
-          });
+        return errors.concat(
+          fs
+            .readFileSync(full, 'utf-8')
+            .split('\n')
+            .map((l) =>
+              // not perfect, but gets over the initial hump of handling comments
+              l
+                .replace(/\/\/.*/, '')
+                .replace(/\/\*.*\*\//, '')
+            )
+            .map((l, n) => fn(full, l, n))
+            .filter((e) => !!e)
+        );
       }
-    });
+
+      return errors;
+    }, []);
+}
+
+function lintOutput (dir) {
+  throwOnErrors(
+    loopJsLines(dir, (full, l, n) => {
+      if (l.includes('import ') && l.includes(" from '") && l.includes('/src/')) {
+        // we are not allowed to import from /src/
+        return createError(full, l, n, 'Invalid import from /src/');
+      // eslint-disable-next-line no-useless-escape
+      } else if (/[\+\-\*\/\=\<\>\|\&\%\^\(\)\{\}\[\] ][0-9]{1,}n/.test(l)) {
+        // we don't want untamed BigInt literals
+        return createError(full, l, n, 'Prefer BigInt(<digits>) to <dignits>n');
+      }
+
+      return null;
+    })
+  );
+}
+
+function lintDependencies (dir, locals) {
+  const { dependencies, name } = JSON.parse(fs.readFileSync(path.join(dir, './package.json'), 'utf-8'));
+  const deps = Object.keys(dependencies);
+  const references = JSON
+    .parse(fs.readFileSync(path.join(dir, '../tsconfig.json'), 'utf-8'))
+    .references
+    .map(({ path }) => path.replace('../', ''));
+  const refsFound = [];
+
+  throwOnErrors(
+    loopJsLines(dir, (full, l, n) => {
+      if (l.includes('import ') && l.includes(" from '")) {
+        const dep = l
+          .split("from '")[1]
+          .split("'")[0]
+          .split('/')
+          .slice(0, 2)
+          .join('/');
+
+        if (name !== dep && !dep.startsWith('.') && !IGNORE_IMPORTS.includes(dep)) {
+          const local = locals.find(([, name]) => name === dep);
+
+          if (!deps.includes(dep)) {
+            return createError(full, l, n, `${dep} is not included in package.json dependencies`);
+          } else if (local) {
+            const ref = local[0];
+
+            if (!references.includes(ref)) {
+              return createError(full, l, n, `../${ref} not included in tsconfig.json references`);
+            }
+
+            if (!refsFound.includes(ref)) {
+              refsFound.push(ref);
+            }
+          }
+        }
+
+        return null;
+      }
+    })
+  );
+
+  // const extraRefs = references.filter((r) => !refsFound.includes(r));
+
+  // if (extraRefs.length) {
+  //   lintError(`${dir.replace('build/', '')}/tsconfig.json`, extraRefs.join(', '), -1, 'Unused tsconfig.json references found');
+  // }
 }
 
 async function main () {
@@ -310,11 +381,16 @@ async function main () {
   const dirs = fs
     .readdirSync('.')
     .filter((dir) => fs.statSync(dir).isDirectory() && fs.existsSync(path.join(process.cwd(), dir, 'src')));
+  const locals = [];
 
   for (const dir of dirs) {
     process.chdir(dir);
 
-    await buildJs(repoPath, dir);
+    const name = await buildJs(repoPath, dir);
+
+    if (name) {
+      locals.push([dir, name]);
+    }
 
     process.chdir('..');
   }
@@ -330,6 +406,7 @@ async function main () {
 
     if (fs.existsSync(buildPath)) {
       lintOutput(buildPath);
+      lintDependencies(buildPath, locals);
     }
   }
 }
