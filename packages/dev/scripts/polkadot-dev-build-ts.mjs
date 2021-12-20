@@ -324,7 +324,12 @@ function lintOutput (dir) {
 }
 
 function lintDependencies (dir, locals) {
-  const { dependencies, name, optionalDependencies = {}, peerDependencies = {} } = JSON.parse(fs.readFileSync(path.join(dir, './package.json'), 'utf-8'));
+  const { dependencies, name, private: isPrivate, optionalDependencies = {}, peerDependencies = {} } = JSON.parse(fs.readFileSync(path.join(dir, '../package.json'), 'utf-8'));
+
+  if (isPrivate) {
+    return;
+  }
+
   const deps = [
     ...Object.keys(dependencies),
     ...Object.keys(peerDependencies),
