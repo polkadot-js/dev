@@ -324,8 +324,12 @@ function lintOutput (dir) {
 }
 
 function lintDependencies (dir, locals) {
-  const { dependencies, name, optionalDependencies = {} } = JSON.parse(fs.readFileSync(path.join(dir, './package.json'), 'utf-8'));
-  const deps = [...Object.keys(dependencies), ...Object.keys(optionalDependencies)];
+  const { dependencies, name, optionalDependencies = {}, peerDependencies = {} } = JSON.parse(fs.readFileSync(path.join(dir, './package.json'), 'utf-8'));
+  const deps = [
+    ...Object.keys(dependencies),
+    ...Object.keys(peerDependencies),
+    ...Object.keys(optionalDependencies)
+  ];
   const references = JSON
     .parse(fs.readFileSync(path.join(dir, '../tsconfig.json'), 'utf-8'))
     .references
