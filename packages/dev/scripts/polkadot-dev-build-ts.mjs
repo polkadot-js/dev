@@ -24,7 +24,7 @@ const isTypeModule = EXT_ESM === '.js';
 const EXT_OTHER = isTypeModule ? EXT_CJS : EXT_ESM;
 const IGNORE_IMPORTS = [
   // node
-  'crypto', 'fs', 'path', 'process', 'util',
+  'crypto', 'fs', 'path', 'process', 'readline', 'util',
   // other
   'react', 'react-native'
 ];
