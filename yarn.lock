@@ -1892,14 +1892,14 @@ __metadata:
     babel-plugin-styled-components: ^2.0.2
     browserslist: ^4.19.1
     coveralls: ^3.1.1
-    eslint: ^8.4.1
+    eslint: ^8.5.0
     eslint-config-standard: ^16.0.3
     eslint-import-resolver-node: ^0.3.6
     eslint-plugin-header: ^3.1.1
     eslint-plugin-import: ^2.25.3
-    eslint-plugin-import-newlines: ^1.1.5
+    eslint-plugin-import-newlines: ^1.1.6
     eslint-plugin-node: ^11.1.0
-    eslint-plugin-promise: ^5.2.0
+    eslint-plugin-promise: ^6.0.0
     eslint-plugin-react: ^7.27.1
     eslint-plugin-react-hooks: ^4.3.0
     eslint-plugin-simple-import-sort: ^7.0.0
@@ -4195,14 +4195,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-import-newlines@npm:^1.1.5":
-  version: 1.1.5
-  resolution: "eslint-plugin-import-newlines@npm:1.1.5"
+"eslint-plugin-import-newlines@npm:^1.1.6":
+  version: 1.1.6
+  resolution: "eslint-plugin-import-newlines@npm:1.1.6"
   peerDependencies:
     eslint: ">=6.0.0"
   bin:
     import-linter: lib/index.js
-  checksum: e26a61b5e3b0f70b522db047d54c5691bc46f2a39cdcd824c25611e427cca195ed0075275ce9170afd9e12ce3bfe461fad02fec810312f4af0709ad8b8e94e0e
+  checksum: 3a6c20bc5538289ac69ae5551482b46124deb0869f0f457e98efb6e1f70cdb9ce677ffc7973fbb4267a72de91a57c4021962a7d65fc88baca302408282915856
   languageName: node
   linkType: hard
 
@@ -4245,12 +4245,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-promise@npm:^5.2.0":
-  version: 5.2.0
-  resolution: "eslint-plugin-promise@npm:5.2.0"
+"eslint-plugin-promise@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "eslint-plugin-promise@npm:6.0.0"
   peerDependencies:
-    eslint: ^7.0.0
-  checksum: 5d6b2d28408c5afde6386942862427af3d83c9a130eb2555bb54b26a1761914e2c7326aca1be26dd3fee6405e65a2ee9432a4526147e5962545060ea0ef64058
+    eslint: ^7.0.0 || ^8.0.0
+  checksum: 7e761507c51267b77e4ad710e7c8938aa4f8f69b975886034e57497a1816e9527eda364e25aac03d1b4e0df2e738ba98e49ad075d028824fcfea533a1419751c
   languageName: node
   linkType: hard
 
@@ -4368,9 +4368,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint@npm:8.4.1, eslint@npm:^8.4.1":
-  version: 8.4.1
-  resolution: "eslint@npm:8.4.1"
+"eslint@npm:8.5.0, eslint@npm:^8.5.0":
+  version: 8.5.0
+  resolution: "eslint@npm:8.5.0"
   dependencies:
     "@eslint/eslintrc": ^1.0.5
     "@humanwhocodes/config-array": ^0.9.2
@@ -4412,7 +4412,7 @@ __metadata:
     v8-compile-cache: ^2.0.3
   bin:
     eslint: bin/eslint.js
-  checksum: d962cd7cd0f68ddc2412f47154b8992ad3af987cf47fa6e60e51a2b7d32a91f934388f7d29e2c45b16b7ac69f0d220d0a483189ec6ba43a8a480110c34f158f9
+  checksum: c1a9e26070520a308cc30b62ba0d37d5b115ed23987a93219819537bdea9398e6ebe57c27d97be36ecc83b5162c72e82ecb0a9e5b44b7992980f9be90eb5c4b3
   languageName: node
   linkType: hard
 
