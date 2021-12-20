@@ -22,7 +22,12 @@ console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
 const isTypeModule = EXT_ESM === '.js';
 const EXT_OTHER = isTypeModule ? EXT_CJS : EXT_ESM;
-const IGNORE_IMPORTS = ['fs', 'path', 'process', 'react'];
+const IGNORE_IMPORTS = [
+  // node
+  'crypto', 'fs', 'path', 'process', 'util',
+  // other
+  'react', 'react-native'
+];
 
 // webpack build
 function buildWebpack () {
@@ -280,7 +285,19 @@ function loopJsLines (dir, fn) {
           fs
             .readFileSync(full, 'utf-8')
             .split('\n')
-            .map((l, n) => fn(full, l, n))
+            .map((l, n) => {
+              const t = l
+                // no leading/trailing whitespace
+                .trim()
+                // anything starting with * (multi-line comments)
+                .replace(/^\*.*/, '')
+                // anything between /* ... */
+                .replace(/\/\*.*\*\//g, '')
+                // single line comments with // ...
+                .replace(/\/\/.*/, '');
+
+              return fn(full, t, n);
+            })
             .filter((e) => !!e)
         );
       }
@@ -307,8 +324,8 @@ function lintOutput (dir) {
 }
 
 function lintDependencies (dir, locals) {
-  const { dependencies, name } = JSON.parse(fs.readFileSync(path.join(dir, './package.json'), 'utf-8'));
-  const deps = Object.keys(dependencies);
+  const { dependencies, name, optionalDependencies = {} } = JSON.parse(fs.readFileSync(path.join(dir, './package.json'), 'utf-8'));
+  const deps = [...Object.keys(dependencies), ...Object.keys(optionalDependencies)];
   const references = JSON
     .parse(fs.readFileSync(path.join(dir, '../tsconfig.json'), 'utf-8'))
     .references
