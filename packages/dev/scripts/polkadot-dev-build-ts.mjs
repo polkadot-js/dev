@@ -324,7 +324,7 @@ function lintOutput (dir) {
 }
 
 function lintDependencies (dir, locals) {
-  const { dependencies, name, optionalDependencies = {}, peerDependencies = {} } = JSON.parse(fs.readFileSync(path.join(dir, './package.json'), 'utf-8'));
+  const { dependencies, name, private: isPrivate, optionalDependencies = {}, peerDependencies = {} } = JSON.parse(fs.readFileSync(path.join(dir, './package.json'), 'utf-8'));
   const deps = [
     ...Object.keys(dependencies),
     ...Object.keys(peerDependencies),
@@ -349,7 +349,7 @@ function lintDependencies (dir, locals) {
         if (name !== dep && !dep.startsWith('.') && !IGNORE_IMPORTS.includes(dep)) {
           const local = locals.find(([, name]) => name === dep);
 
-          if (!deps.includes(dep)) {
+          if (!deps.includes(dep) && !isPrivate) {
             return createError(full, l, n, `${dep} is not included in package.json dependencies`);
           } else if (local) {
             const ref = local[0];
