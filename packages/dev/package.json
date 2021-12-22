@@ -60,8 +60,8 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.1.1",
     "@rushstack/eslint-patch": "^1.1.0",
-    "@typescript-eslint/eslint-plugin": "5.7.0",
-    "@typescript-eslint/parser": "5.7.0",
+    "@typescript-eslint/eslint-plugin": "5.8.0",
+    "@typescript-eslint/parser": "5.8.0",
     "@vue/component-compiler-utils": "^3.3.0",
     "babel-jest": "^27.4.5",
     "babel-plugin-module-extension-resolver": "^1.0.0-rc.2",
@@ -74,7 +74,7 @@
     "eslint-import-resolver-node": "^0.3.6",
     "eslint-plugin-header": "^3.1.1",
     "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-import-newlines": "^1.1.6",
+    "eslint-plugin-import-newlines": "^1.1.7",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.27.1",
@@ -103,7 +103,7 @@
   },
   "devDependencies": {
     "@types/jest": "^27.0.3",
-    "@types/node": "^16.11.14",
+    "@types/node": "^16.11.15",
     "@types/react": "^17.0.37",
     "@types/yargs": "^17.0.7",
     "react": "^17.0.2"
