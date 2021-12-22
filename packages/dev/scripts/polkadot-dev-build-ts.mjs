@@ -272,15 +272,15 @@ function throwOnErrors (errors) {
   }
 }
 
-function loopJsLines (dir, fn) {
+function loopFiles (exts, dir, fn) {
   return fs
     .readdirSync(dir)
     .reduce((errors, sub) => {
       const full = path.join(dir, sub);
 
       if (fs.statSync(full).isDirectory()) {
-        return errors.concat(loopJsLines(full, fn));
-      } else if (full.endsWith('.d.ts') || full.endsWith('.js') || full.endsWith('.cjs')) {
+        return errors.concat(loopFiles(exts, full, fn));
+      } else if (exts.some((e) => full.endsWith(e))) {
         return errors.concat(
           fs
             .readFileSync(full, 'utf-8')
@@ -304,6 +304,10 @@ function loopJsLines (dir, fn) {
 
       return errors;
     }, []);
+}
+
+function loopJsLines (dir, fn) {
+  return loopFiles(['.d.ts', '.js', '.cjs'], dir, fn);
 }
 
 function lintOutput (dir) {
@@ -343,9 +347,13 @@ function lintDependencies (dir, locals) {
 
   throwOnErrors(
     loopJsLines(dir, (full, l, n) => {
-      if (l.startsWith('import ') && l.includes(" from '")) {
+      if (l.startsWith("import '") || (l.startsWith('import ') && l.includes(" from '"))) {
         const dep = l
-          .split("from '")[1]
+          .split(
+            l.includes(" from '")
+              ? " from '"
+              : " '"
+          )[1]
           .split("'")[0]
           .split('/')
           .slice(0, 2)
@@ -374,11 +382,13 @@ function lintDependencies (dir, locals) {
     })
   );
 
-  // const extraRefs = references.filter((r) => !refsFound.includes(r));
+  const extraRefs = references.filter((r) => !refsFound.includes(r));
 
-  // if (extraRefs.length) {
-  //   lintError(`${dir.replace('build/', '')}/tsconfig.json`, extraRefs.join(', '), -1, 'Unused tsconfig.json references found');
-  // }
+  if (extraRefs.length) {
+    throwOnErrors([
+      createError(`${dir.replace('build/', '')}/tsconfig.json`, extraRefs.join(', '), -1, 'Unused tsconfig.json references found')
+    ]);
+  }
 }
 
 async function main () {
