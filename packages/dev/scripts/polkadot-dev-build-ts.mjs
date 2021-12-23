@@ -244,7 +244,7 @@ function orderPackageJson (repoPath, dir, json) {
 }
 
 function createError (full, line, lineNumber, error) {
-  return `${full.split('/packages/')[1]}:: ${lineNumber >= 0 ? `line ${lineNumber + 1}:: ` : ''}${error}:: \n\n\t${line}\n`;
+  return `${full}:: ${lineNumber >= 0 ? `line ${lineNumber + 1}:: ` : ''}${error}:: \n\n\t${line}\n`;
 }
 
 function throwOnErrors (errors) {
