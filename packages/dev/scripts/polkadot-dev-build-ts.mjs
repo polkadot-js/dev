@@ -15,8 +15,8 @@ const BL_CONFIGS = ['js', 'cjs'].map((e) => `babel.config.${e}`);
 const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
 const RL_CONFIGS = ['js', 'mjs', 'cjs'].map((e) => `rollup.config.${e}`);
 const CPX = ['patch', 'js', 'cjs', 'mjs', 'json', 'd.ts', 'css', 'gif', 'hbs', 'jpg', 'png', 'svg']
-  .map((ext) => `src/**/*.${ext}`)
-  .concat(['package.json', 'README.md']);
+  .map((e) => `src/**/*.${e}`)
+  .concat(['package.json', 'README.md', 'LICENSE']);
 
 console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
@@ -110,7 +110,7 @@ function createMapEntry (rootDir, jsPath, noTypes) {
 }
 
 // find the names of all the files in a certain directory
-function findFiles (buildDir, extra = '') {
+function findFiles (buildDir, extra = '', exclude = []) {
   const currDir = extra ? path.join(buildDir, extra) : buildDir;
 
   return fs
@@ -133,8 +133,10 @@ function findFiles (buildDir, extra = '') {
       } else if (toDelete) {
         fs.unlinkSync(thisPath);
       } else if (!jsName.endsWith(EXT_OTHER) || !fs.existsSync(path.join(buildDir, jsPath.replace(EXT_OTHER, '.js')))) {
-        // this is not mapped to a compiled .js file (where we have dual esm/cjs mappings)
-        all.push(createMapEntry(buildDir, jsPath));
+        if (!exclude.some((e) => jsName === e)) {
+          // this is not mapped to a compiled .js file (where we have dual esm/cjs mappings)
+          all.push(createMapEntry(buildDir, jsPath));
+        }
       }
 
       return all;
@@ -146,7 +148,7 @@ function buildExports () {
   const buildDir = path.join(process.cwd(), 'build');
   const pkgPath = path.join(buildDir, 'package.json');
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
-  const list = findFiles(buildDir);
+  const list = findFiles(buildDir, '', ['README.md', 'LICENSE']);
 
   if (!list.some(([key]) => key === '.')) {
     const indexDef = relativePath(pkg.main).replace('.js', '.d.ts');
