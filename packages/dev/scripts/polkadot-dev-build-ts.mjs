@@ -26,7 +26,7 @@ const IGNORE_IMPORTS = [
   // node
   'crypto', 'fs', 'path', 'process', 'readline', 'util',
   // other
-  'react', 'react-native'
+  '@jest/globals', 'react', 'react-native'
 ];
 
 // webpack build
@@ -304,6 +304,28 @@ function lintOutput (dir) {
   );
 }
 
+function getReferences (config) {
+  const configPath = path.join(process.cwd(), config);
+
+  if (fs.existsSync(configPath)) {
+    try {
+      return [
+        JSON
+          .parse(fs.readFileSync(configPath, 'utf-8'))
+          .references
+          .map(({ path }) => path.replace('../', '')),
+        true
+      ];
+    } catch (error) {
+      console.error(`Unable to parse ${configPath}`);
+
+      throw error;
+    }
+  }
+
+  return [[], false];
+}
+
 function lintDependencies (dir, locals) {
   const { dependencies = {}, devDependencies = {}, name, private: isPrivate, optionalDependencies = {}, peerDependencies = {} } = JSON.parse(fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf-8'));
 
@@ -320,10 +342,8 @@ function lintDependencies (dir, locals) {
     ...Object.keys(devDependencies),
     ...deps
   ];
-  const references = JSON
-    .parse(fs.readFileSync(path.join(process.cwd(), './tsconfig.json'), 'utf-8'))
-    .references
-    .map(({ path }) => path.replace('../', ''));
+  const [references] = getReferences('tsconfig.json');
+  const [devRefs, hasDevConfig] = getReferences('tsconfig.spec.json');
   const refsFound = [];
 
   throwOnErrors(
@@ -342,14 +362,15 @@ function lintDependencies (dir, locals) {
 
         if (name !== dep && !dep.startsWith('.') && !IGNORE_IMPORTS.includes(dep)) {
           const local = locals.find(([, name]) => name === dep);
+          const isSpec = full.endsWith('.spec.ts') || full.endsWith('.manual.ts') || full.includes('/test/');
 
-          if (!(full.endsWith('.spec.ts') ? devDeps : deps).includes(dep)) {
+          if (!(isSpec ? devDeps : deps).includes(dep)) {
             return createError(full, l, n, `${dep} is not included in package.json dependencies`);
           } else if (local) {
             const ref = local[0];
 
-            if (!references.includes(ref)) {
-              return createError(full, l, n, `../${ref} not included in tsconfig.json references`);
+            if (!(isSpec && hasDevConfig ? devRefs : references).includes(ref)) {
+              return createError(full, l, n, `../${ref} not included in ${(isSpec && hasDevConfig ? 'tsconfig.spec.json' : 'tsconfig.json')} references`);
             }
 
             if (!refsFound.includes(ref)) {
