@@ -287,17 +287,9 @@ function loopFiles (exts, dir, sub, fn) {
     }, []);
 }
 
-function loopBuildLines (dir, fn) {
-  return loopFiles(['.d.ts', '.js', '.cjs'], dir, 'build', fn);
-}
-
-function loopSrcLines (dir, fn) {
-  return loopFiles(['.ts'], dir, 'src', fn);
-}
-
 function lintOutput (dir) {
   throwOnErrors(
-    loopBuildLines(dir, (full, l, n) => {
+    loopFiles(['.d.ts', '.js', '.cjs'], dir, 'build', (full, l, n) => {
       if (l.startsWith('import ') && l.includes(" from '") && l.includes('/src/')) {
         // we are not allowed to import from /src/
         return createError(full, l, n, 'Invalid import from /src/');
@@ -331,7 +323,7 @@ function lintDependencies (dir, locals) {
   const refsFound = [];
 
   throwOnErrors(
-    loopSrcLines(dir, (full, l, n) => {
+    loopFiles(['.ts'], dir, 'src', (full, l, n) => {
       if (l.startsWith("import '") || (l.startsWith('import ') && l.includes(" from '"))) {
         const dep = l
           .split(
