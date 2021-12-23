@@ -287,13 +287,9 @@ function loopFiles (exts, dir, sub, fn) {
     }, []);
 }
 
-function loopJsLines (dir, fn) {
-  return loopFiles(['.d.ts', '.js', '.cjs'], dir, 'build', fn);
-}
-
 function lintOutput (dir) {
   throwOnErrors(
-    loopJsLines(dir, (full, l, n) => {
+    loopFiles(['.d.ts', '.js', '.cjs'], dir, 'build', (full, l, n) => {
       if (l.startsWith('import ') && l.includes(" from '") && l.includes('/src/')) {
         // we are not allowed to import from /src/
         return createError(full, l, n, 'Invalid import from /src/');
@@ -309,7 +305,7 @@ function lintOutput (dir) {
 }
 
 function lintDependencies (dir, locals) {
-  const { dependencies, name, private: isPrivate, optionalDependencies = {}, peerDependencies = {} } = JSON.parse(fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf-8'));
+  const { dependencies = {}, devDependencies = {}, name, private: isPrivate, optionalDependencies = {}, peerDependencies = {} } = JSON.parse(fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf-8'));
 
   if (isPrivate) {
     return;
@@ -320,6 +316,10 @@ function lintDependencies (dir, locals) {
     ...Object.keys(peerDependencies),
     ...Object.keys(optionalDependencies)
   ];
+  const devDeps = [
+    ...Object.keys(devDependencies),
+    ...deps
+  ];
   const references = JSON
     .parse(fs.readFileSync(path.join(process.cwd(), './tsconfig.json'), 'utf-8'))
     .references
@@ -327,7 +327,7 @@ function lintDependencies (dir, locals) {
   const refsFound = [];
 
   throwOnErrors(
-    loopJsLines(dir, (full, l, n) => {
+    loopFiles(['.ts'], dir, 'src', (full, l, n) => {
       if (l.startsWith("import '") || (l.startsWith('import ') && l.includes(" from '"))) {
         const dep = l
           .split(
@@ -343,7 +343,7 @@ function lintDependencies (dir, locals) {
         if (name !== dep && !dep.startsWith('.') && !IGNORE_IMPORTS.includes(dep)) {
           const local = locals.find(([, name]) => name === dep);
 
-          if (!deps.includes(dep)) {
+          if (!(full.endsWith('.spec.ts') ? devDeps : deps).includes(dep)) {
             return createError(full, l, n, `${dep} is not included in package.json dependencies`);
           } else if (local) {
             const ref = local[0];
