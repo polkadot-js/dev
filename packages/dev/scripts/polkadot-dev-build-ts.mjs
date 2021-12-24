@@ -349,7 +349,7 @@ function lintDependencies (dir, locals) {
   const refsFound = [];
 
   throwOnErrors(
-    loopFiles(['.ts'], dir, 'src', (full, l, n) => {
+    loopFiles(['.ts', '.tsx'], dir, 'src', (full, l, n) => {
       if (l.startsWith("import '") || (l.startsWith('import ') && l.includes(" from '"))) {
         const dep = l
           .split(
