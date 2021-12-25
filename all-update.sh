@@ -2,7 +2,7 @@
 # Copyright 2017-2021 @polkadot/dev authors & contributors
 # SPDX-License-Identifier: Apache-2.0
 
-DIRECTORIES=( "dev" "ts" "wasm" "common" "api" "docs" "ui" "phishing" "extension" "tools" "apps" ) # "client" )
+DIRECTORIES=( "dev" "wasm" "common" "api" "docs" "ui" "phishing" "extension" "tools" "apps" ) # "client" )
 
 for REPO in "${DIRECTORIES[@]}"; do
   if [ "$REPO" != "" ] && [ -d "./$REPO/.git" ]; then
