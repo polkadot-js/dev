@@ -119,6 +119,7 @@ function findFiles (buildDir, extra = '', exclude = []) {
       const jsPath = `${extra}/${jsName}`;
       const thisPath = path.join(buildDir, jsPath);
       const toDelete = jsName.includes('.spec.') || // no tests
+      jsName.includes('.test.') || // no tests
         jsName.includes('.manual.') || // no manual checks
         jsName.endsWith('.d.js') || // no .d.ts compiled outputs
         jsName.endsWith(`.d${EXT_OTHER}`) || // same as above, esm version
@@ -364,15 +365,15 @@ function lintDependencies (dir, locals) {
 
         if (name !== dep && !dep.startsWith('.') && !IGNORE_IMPORTS.includes(dep)) {
           const local = locals.find(([, name]) => name === dep);
-          const isSpec = full.endsWith('.spec.ts') || full.endsWith('.manual.ts') || full.includes('/test/');
+          const isTest = full.endsWith('.spec.ts') || full.endsWith('.test.ts') || full.endsWith('.manual.ts') || full.includes('/test/');
 
-          if (!(isSpec ? devDeps : deps).includes(dep)) {
+          if (!(isTest ? devDeps : deps).includes(dep)) {
             return createError(full, l, n, `${dep} is not included in package.json dependencies`);
           } else if (local) {
             const ref = local[0];
 
-            if (!(isSpec && hasDevConfig ? devRefs : references).includes(ref)) {
-              return createError(full, l, n, `../${ref} not included in ${(isSpec && hasDevConfig ? 'tsconfig.spec.json' : 'tsconfig.json')} references`);
+            if (!(isTest && hasDevConfig ? devRefs : references).includes(ref)) {
+              return createError(full, l, n, `../${ref} not included in ${(isTest && hasDevConfig ? 'tsconfig.spec.json' : 'tsconfig.json')} references`);
             }
 
             if (!refsFound.includes(ref)) {
