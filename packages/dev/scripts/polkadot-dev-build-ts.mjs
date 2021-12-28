@@ -120,7 +120,7 @@ function findFiles (buildDir, extra = '', exclude = []) {
       const thisPath = path.join(buildDir, jsPath);
       const toDelete = thisPath.includes('/test/') || // no test paths
         ['.manual.', '.spec.', '.test.'].some((t) => jsName.includes(t)) || // no tests
-        ['.js', EXT_OTHER].some((e) => jsName.endsWith(`.d${e}`)) || // no .d.ts compiled outputs
+        ['.d.js', '.d.cjs', '.d.mjs'].some((e) => jsName.endsWith(e)) || // no .d.ts compiled outputs
         (
           jsName.endsWith('.d.ts') && // .d.ts without .js as an output
           !fs.existsSync(path.join(buildDir, jsPath.replace('.d.ts', '.js')))
