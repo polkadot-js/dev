@@ -118,16 +118,13 @@ function findFiles (buildDir, extra = '', exclude = []) {
     .reduce((all, jsName) => {
       const jsPath = `${extra}/${jsName}`;
       const thisPath = path.join(buildDir, jsPath);
-      const toDelete = jsName.includes('.spec.') || // no tests
-      jsName.includes('.test.') || // no tests
-        jsName.includes('.manual.') || // no manual checks
-        jsName.endsWith('.d.js') || // no .d.ts compiled outputs
-        jsName.endsWith(`.d${EXT_OTHER}`) || // same as above, esm version
+      const toDelete = thisPath.includes('/test/') || // no test paths
+        ['.manual.', '.spec.', '.test.'].some((t) => jsName.includes(t)) || // no tests
+        ['.js', EXT_OTHER].some((e) => jsName.endsWith(`.d${e}`)) || // no .d.ts compiled outputs
         (
           jsName.endsWith('.d.ts') && // .d.ts without .js as an output
           !fs.existsSync(path.join(buildDir, jsPath.replace('.d.ts', '.js')))
-        ) ||
-        thisPath.includes('/test/');
+        );
 
       if (fs.statSync(thisPath).isDirectory()) {
         findFiles(buildDir, jsPath).forEach((entry) => all.push(entry));
