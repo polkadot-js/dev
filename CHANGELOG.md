@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.65.1
+
+- 2022
+- Generate `detectPackage` template (with cjs `__dirname`)
+
 ## 0.64.1
 
 - Use tsconfig references and per-package TS build/lint
