@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## master
+## 0.65.1
 
 - 2022
 - Generate `detectPackage` template (with cjs `__dirname`)
