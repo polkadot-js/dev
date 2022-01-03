@@ -77,7 +77,7 @@ module.exports = {
     'arrow-parens': ['error', 'always'],
     'default-param-last': [0], // conflicts with TS version (this one doesn't allow TS ?)
     'header/header': [2, 'line', [
-      { pattern: ' Copyright \\d{4}(-\\d{4})? @polkadot/' },
+      { pattern: ' Copyright 20(17|18|19|20|21|22)(-2022)? @polkadot/' },
       ' SPDX-License-Identifier: Apache-2.0'
     ], 2],
     'import-newlines/enforce': ['error', 2048],
