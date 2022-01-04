@@ -26,17 +26,26 @@ const all = Object
         const [c, e] = line.split('\t');
         const count = parseInt(c, 10);
         const [name, email] = e.split(' <');
-        const isExcluded = ['GitHub', 'Travis CI'].some((n) => name.startsWith(n)) ||
+        const isExcluded = (
+          ['GitHub', 'Travis CI'].some((n) => name.startsWith(n)) ||
           ['>', 'action@github.com>'].some((e) => email === e) ||
-          name.includes('[bot]');
+          name.includes('[bot]')
+        );
 
         if (!isExcluded) {
-          const key = `<${email}`;
+          let email = `<${email}`;
 
-          if (all[key]) {
-            all[key].count += count;
+          if (!all[email]) {
+            email = Object.keys(all).find((k) =>
+              name.includes(' ') &&
+              all[k].name === name
+            ) || email;
+          }
+
+          if (all[email]) {
+            all[email].count += count;
           } else {
-            all[key] = { count, name };
+            all[email] = { count, name };
           }
         }
 
@@ -50,6 +59,6 @@ const all = Object
       ? a[1].name.localeCompare(b[1].name)
       : diff;
   })
-  .map(([email, { count, name }]) => `${`${count}`.padStart(8)}\t${name} ${email}`);
+  .map(([, { count, name }]) => `${`${count}`.padStart(8)}\t${name}`);
 
 fs.writeFileSync('CONTRIBUTORS', all.join('\n'));
