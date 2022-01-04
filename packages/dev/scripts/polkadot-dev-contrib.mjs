@@ -13,7 +13,7 @@ const tmpFile = `${tmpDir}/CONTRIBUTORS`;
 console.log('$ polkadot-dev-contrib', process.argv.slice(2).join(' '));
 
 mkdirp.sync(tmpDir);
-execSync(`git shortlog -e -n -s > ${tmpFile}`);
+execSync(`git shortlog HEAD -e -n -s > ${tmpFile}`);
 
 const all = Object
   .entries(
