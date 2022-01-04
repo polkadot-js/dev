@@ -42,7 +42,7 @@ export function createOutput (_pkg, external, globals) {
 
   return {
     file: `packages/${pkg}/build/bundle-polkadot-${pkg}.js`,
-    format: 'iife',
+    format: 'umd',
     globals: external.reduce((all, pkg) => ({
       [pkg]: createName(pkg),
       ...all
