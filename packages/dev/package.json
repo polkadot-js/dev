@@ -23,6 +23,7 @@
     "polkadot-dev-build-ts": "./scripts/polkadot-dev-build-ts.mjs",
     "polkadot-dev-circular": "./scripts/polkadot-dev-circular.mjs",
     "polkadot-dev-clean-build": "./scripts/polkadot-dev-clean-build.mjs",
+    "polkadot-dev-contrib": "./scripts/polkadot-dev-contrib.mjs",
     "polkadot-dev-copy-to": "./scripts/polkadot-dev-copy-to.mjs",
     "polkadot-dev-run-lint": "./scripts/polkadot-dev-run-lint.mjs",
     "polkadot-dev-run-prettier": "./scripts/polkadot-dev-run-prettier.mjs",
@@ -60,8 +61,8 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.1.2",
     "@rushstack/eslint-patch": "^1.1.0",
-    "@typescript-eslint/eslint-plugin": "5.8.1",
-    "@typescript-eslint/parser": "5.8.1",
+    "@typescript-eslint/eslint-plugin": "5.9.0",
+    "@typescript-eslint/parser": "5.9.0",
     "@vue/component-compiler-utils": "^3.3.0",
     "babel-jest": "^27.4.5",
     "babel-plugin-module-extension-resolver": "^1.0.0-rc.2",
@@ -103,7 +104,7 @@
   },
   "devDependencies": {
     "@types/jest": "^27.4.0",
-    "@types/node": "^16.11.18",
+    "@types/node": "^17.0.7",
     "@types/react": "^17.0.38",
     "@types/yargs": "^17.0.8",
     "react": "^17.0.2"
