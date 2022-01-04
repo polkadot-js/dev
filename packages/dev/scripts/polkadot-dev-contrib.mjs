@@ -50,6 +50,6 @@ const all = Object
       ? a[1].name.localeCompare(b[1].name)
       : diff;
   })
-  .map(([email, { count, name }]) => `${`${count}`.padStart(8)}\t${name} ${email}`);
+  .map(([, { count, name }]) => `${`${count}`.padStart(8)}\t${name}`);
 
 fs.writeFileSync('CONTRIBUTORS', all.join('\n'));
