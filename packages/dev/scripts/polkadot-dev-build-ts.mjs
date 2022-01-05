@@ -450,7 +450,7 @@ async function buildJs (repoPath, dir, locals) {
 
       const cjsRoot = path.join(process.cwd(), 'src/cjs');
 
-      if (fs.existsSync(cjsRoot)) {
+      if (fs.existsSync(path.join(cjsRoot, 'dirname.d.ts'))) {
         rimraf.sync(cjsRoot);
       }
     }
