@@ -25,15 +25,15 @@ const all = Object
       .reduce((all, line) => {
         const [c, e] = line.split('\t');
         const count = parseInt(c, 10);
-        const [name, email] = e.split(' <');
+        const [name, rest] = e.split(' <');
         const isExcluded = (
           ['GitHub', 'Travis CI'].some((n) => name.startsWith(n)) ||
-          ['>', 'action@github.com>'].some((e) => email === e) ||
+          ['>', 'action@github.com>'].some((e) => rest === e) ||
           name.includes('[bot]')
         );
 
         if (!isExcluded) {
-          let email = `<${email}`;
+          let email = `<${rest}`;
 
           if (!all[email]) {
             email = Object.keys(all).find((k) =>
