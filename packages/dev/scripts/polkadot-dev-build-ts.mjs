@@ -17,7 +17,7 @@ const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
 const RL_CONFIGS = ['js', 'mjs', 'cjs'].map((e) => `rollup.config.${e}`);
 const CPX = ['patch', 'js', 'cjs', 'mjs', 'json', 'd.ts', 'css', 'gif', 'hbs', 'jpg', 'png', 'svg']
   .map((e) => `src/**/*.${e}`)
-  .concat(['package.json', 'README.md', 'LICENSE']);
+  .concat(['package.json', 'README.md', 'LICENSE', 'src/**/mod.ts']);
 
 console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
@@ -122,6 +122,7 @@ function findFiles (buildDir, extra = '', exclude = []) {
       const toDelete = thisPath.includes('/test/') || // no test paths
         ['.manual.', '.spec.', '.test.'].some((t) => jsName.includes(t)) || // no tests
         ['.d.js', '.d.cjs', '.d.mjs'].some((e) => jsName.endsWith(e)) || // no .d.ts compiled outputs
+        ['mod.js', 'mod.cjs', 'mod.mjs'].some((e) => jsName === e) || // no deno compiles
         (
           jsName.endsWith('.d.ts') && // .d.ts without .js as an output
           !fs.existsSync(path.join(buildDir, jsPath.replace('.d.ts', '.js')))
