@@ -188,6 +188,21 @@ function buildExports () {
     }]);
   }
 
+  if (!pkg.main && fs.existsSync(path.join(buildDir, 'index.js'))) {
+    pkg.main = 'index.js';
+  }
+
+  if (pkg.main) {
+    const main = pkg.main;
+
+    pkg.main = main.replace('.js', isTypeModule ? '.cjs' : '.js');
+    pkg.module = main.replace('.js', isTypeModule ? '.js' : '.mjs');
+  }
+
+  pkg.type = isTypeModule
+    ? 'module'
+    : 'commonjs';
+
   pkg.exports = list
     .filter(([path, config]) =>
       typeof config === 'object' ||
@@ -206,9 +221,6 @@ function buildExports () {
           ...config
         }
     }), {});
-  pkg.type = isTypeModule
-    ? 'module'
-    : 'commonjs';
 
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
 }
@@ -245,7 +257,7 @@ function orderPackageJson (repoPath, dir, json) {
   });
 
   // move the different entry points to the (almost) end
-  ['browser', 'electron', 'main', 'react-native'].forEach((d) => {
+  ['browser', 'electron', 'main', 'module', 'react-native'].forEach((d) => {
     delete sorted[d];
 
     if (json[d]) {
