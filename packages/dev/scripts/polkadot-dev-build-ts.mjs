@@ -164,6 +164,26 @@ function tweakPackageInfo (buildDir) {
         )
     );
   });
+
+  ['js', 'cjs'].forEach((ext) => {
+    const fileName = path.join(buildDir, `detectOther.${ext}`);
+
+    if (fs.existsSync(fileName)) {
+      fs.writeFileSync(
+        fileName,
+        fs
+          .readFileSync(fileName, 'utf8')
+          .replace(
+            /\/packageInfo'/g,
+            `/packageInfo.${ext}'`
+          )
+          .replace(
+            /\/packageInfo"/g,
+            `/packageInfo.${ext}"`
+          )
+      );
+    }
+  });
 }
 
 // iterate through all the files that have been built, creating an exports map
@@ -214,6 +234,11 @@ function buildExports () {
     .sort((a, b) => a[0].localeCompare(b[0]))
     .reduce((all, [path, config]) => ({
       ...all,
+      ...(
+        path === './packageInfo'
+          ? { './packageInfo.cjs': './packageInfo.cjs', './packageInfo.js': './packageInfo.js' }
+          : {}
+      ),
       [path]: typeof config === 'string'
         ? config
         : {
