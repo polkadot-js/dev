@@ -144,6 +144,9 @@ function findFiles (buildDir, extra = '', exclude = []) {
 }
 
 function tweakPackageInfo (buildDir) {
+  const cjsDirname = "typeof __dirname === 'string' ? __dirname : 'auto'";
+  const esmDirname = "new URL('.', import.meta.url).pathname";
+
   ['js', 'cjs'].forEach((ext) => {
     const fileName = path.join(buildDir, `packageInfo.${ext}`);
 
@@ -151,9 +154,14 @@ function tweakPackageInfo (buildDir) {
       fileName,
       fs
         .readFileSync(fileName, 'utf8')
-        .replace("type: 'auto'", `type: '${ext === 'cjs' ? 'cjs' : 'esm'}'`)
-        // TODO For ESM use new URL(import.meta.url).pathname
-        .replace("path: 'auto'", "path: typeof __dirname === 'string' ? __dirname : 'auto'")
+        .replace(
+          "type: 'auto'",
+          `type: '${ext === 'cjs' ? 'cjs' : 'esm'}'`
+        )
+        .replace(
+          "path: 'auto'",
+          `path: ${ext === 'cjs' ? cjsDirname : esmDirname}`
+        )
     );
   });
 }
