@@ -145,8 +145,7 @@ function findFiles (buildDir, extra = '', exclude = []) {
 
 function tweakPackageInfo (buildDir) {
   const cjsDirname = "typeof __dirname === 'string' ? __dirname : 'auto'";
-  // FIXME Couple of issues: WP4, Jest (neither of the 2 is surprising)
-  const esmDirname = `/* new URL('.', import.meta.url).pathname */ ${cjsDirname}`;
+  const esmDirname = "new URL('.', import.meta.url).pathname";
 
   ['js', 'cjs'].forEach((ext) => {
     const fileName = path.join(buildDir, `packageInfo.${ext}`);
