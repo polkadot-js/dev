@@ -208,7 +208,7 @@ function buildExports () {
     }]);
   }
 
-  if (!pkg.main && fs.existsSync(path.join(buildDir, 'index.js'))) {
+  if (!pkg.main && fs.existsSync(path.join(buildDir, 'index.d.ts'))) {
     pkg.main = 'index.js';
   }
 
@@ -217,6 +217,7 @@ function buildExports () {
 
     pkg.main = main.replace('.js', isTypeModule ? '.cjs' : '.js');
     pkg.module = main.replace('.js', isTypeModule ? '.js' : '.mjs');
+    pkg.types = main.replace('.js', '.d.ts');
   }
 
   pkg.type = isTypeModule
