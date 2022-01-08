@@ -208,12 +208,19 @@ function buildExports () {
     }]);
   }
 
+  // cleanup extraneous fields
+  delete pkg.devDependencies;
+
   if (!pkg.main && fs.existsSync(path.join(buildDir, 'index.d.ts'))) {
     pkg.main = 'index.js';
   }
 
   if (pkg.main) {
     const main = pkg.main;
+
+    delete pkg.main;
+    delete pkg.module;
+    delete pkg.types;
 
     pkg.main = main.replace('.js', isTypeModule ? '.cjs' : '.js');
     pkg.module = main.replace('.js', isTypeModule ? '.js' : '.mjs');
