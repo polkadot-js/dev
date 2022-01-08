@@ -186,6 +186,18 @@ function tweakPackageInfo (buildDir) {
   });
 }
 
+function moveFields (pkg, fields) {
+  fields.forEach((k) => {
+    if (typeof pkg[k] !== 'undefined') {
+      const value = pkg[k];
+
+      delete pkg[k];
+
+      pkg[k] = value;
+    }
+  });
+}
+
 // iterate through all the files that have been built, creating an exports map
 function buildExports () {
   const buildDir = path.join(process.cwd(), 'build');
@@ -207,6 +219,9 @@ function buildExports () {
       'react-native': createMapEntry(buildDir, pkg['react-native'], true)[1]
     }]);
   }
+
+  // cleanup extraneous fields
+  delete pkg.devDependencies;
 
   if (!pkg.main && fs.existsSync(path.join(buildDir, 'index.d.ts'))) {
     pkg.main = 'index.js';
@@ -247,6 +262,8 @@ function buildExports () {
           ...config
         }
     }), {});
+
+  moveFields(pkg, ['main', 'module', 'browser', 'deno', 'react-native', 'types', 'exports', 'dependencies', 'optionalDependencies', 'peerDependencies']);
 
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
 }
