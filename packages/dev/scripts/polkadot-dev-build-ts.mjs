@@ -263,7 +263,7 @@ function buildExports () {
         }
     }), {});
 
-  moveFields(pkg, ['main', 'module', 'browser', 'react-native', 'types', 'exports', 'dependencies', 'optionalDependencies', 'peerDependencies']);
+  moveFields(pkg, ['main', 'module', 'browser', 'deno', 'react-native', 'types', 'exports', 'dependencies', 'optionalDependencies', 'peerDependencies']);
 
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
 }
