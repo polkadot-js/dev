@@ -550,7 +550,12 @@ async function main () {
     .split('.git')[0];
 
   orderPackageJson(repoPath, null, pkg);
-  execSync('yarn polkadot-exec-tsc --build');
+
+  const config = fs.existsSync(path.join(process.cwd(), 'tsconfig.tsc.json'))
+    ? ' --project tsconfig.tsc.json'
+    : '';
+
+  execSync(`yarn polkadot-exec-tsc --build${config}`);
 
   process.chdir('packages');
 
