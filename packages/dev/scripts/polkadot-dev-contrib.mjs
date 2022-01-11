@@ -15,50 +15,61 @@ console.log('$ polkadot-dev-contrib', process.argv.slice(2).join(' '));
 mkdirp.sync(tmpDir);
 execSync(`git shortlog master -e -n -s > ${tmpFile}`);
 
-const all = Object
-  .entries(
-    fs
-      .readFileSync(tmpFile, 'utf-8')
-      .split('\n')
-      .map((l) => l.trim())
-      .filter((l) => !!l)
-      .reduce((all, line) => {
-        const [c, e] = line.split('\t');
-        const count = parseInt(c, 10);
-        const [name, rest] = e.split(' <');
-        const isExcluded = (
-          ['GitHub', 'Travis CI'].some((n) => name.startsWith(n)) ||
-          ['>', 'action@github.com>'].some((e) => rest === e) ||
-          name.includes('[bot]')
-        );
+fs.writeFileSync(
+  'CONTRIBUTORS',
+  Object
+    .entries(
+      fs
+        .readFileSync(tmpFile, 'utf-8')
+        .split('\n')
+        .map((l) => l.trim())
+        .filter((l) => !!l)
+        .reduce((all, line) => {
+          const [c, e] = line.split('\t');
+          const count = parseInt(c, 10);
+          const [name, rest] = e.split(' <');
+          const isExcluded = (
+            ['GitHub', 'Travis CI'].some((n) => name.startsWith(n)) ||
+            ['>', 'action@github.com>'].some((e) => rest === e) ||
+            name.includes('[bot]')
+          );
 
-        if (!isExcluded) {
-          let email = `<${rest}`;
+          if (!isExcluded) {
+            let [email] = rest.split('>');
 
-          if (!all[email]) {
-            email = Object.keys(all).find((k) =>
-              name.includes(' ') &&
-              all[k].name === name
-            ) || email;
+            if (!all[email]) {
+              email = Object.keys(all).find((k) =>
+                name.includes(' ') &&
+                all[k].name === name
+              ) || email;
+            }
+
+            if (all[email]) {
+              all[email].count += count;
+            } else {
+              all[email] = { count, name };
+            }
           }
 
-          if (all[email]) {
-            all[email].count += count;
-          } else {
-            all[email] = { count, name };
-          }
-        }
+          return all;
+        }, {})
+    )
+    .sort((a, b) => {
+      const diff = b[1].count - a[1].count;
 
-        return all;
-      }, {})
-  )
-  .sort((a, b) => {
-    const diff = b[1].count - a[1].count;
+      return diff === 0
+        ? a[1].name.localeCompare(b[1].name)
+        : diff;
+    })
+    .map(([email, { count, name }], i) => {
+      execSync(`git log master -1 --author=${email} > ${tmpFile}-${i}`);
 
-    return diff === 0
-      ? a[1].name.localeCompare(b[1].name)
-      : diff;
-  })
-  .map(([, { count, name }]) => `${`${count}`.padStart(8)}\t${name}`);
+      const commit = fs
+        .readFileSync(`${tmpFile}-${i}`, 'utf-8')
+        .split('\n')[4]
+        .trim();
 
-fs.writeFileSync('CONTRIBUTORS', all.join('\n'));
+      return `${`${count}`.padStart(8)}\t${name.padEnd(30)}\t${commit}`;
+    })
+    .join('\n')
+);
