@@ -2,6 +2,8 @@
 // Copyright 2017-2022 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import fs from 'fs';
+import path from 'path';
 import yargs from 'yargs';
 
 import { __dirname } from './dirname.mjs';
@@ -33,5 +35,9 @@ if (!argv['skip-eslint']) {
 }
 
 if (!argv['skip-tsc']) {
-  execSync('yarn polkadot-exec-tsc --noEmit --emitDeclarationOnly false --pretty');
+  const project = fs.existsSync(path.join(process.cwd(), 'tsconfig.build.json'))
+    ? ' --project tsconfig.build.json '
+    : '';
+
+  execSync(`yarn polkadot-exec-tsc ${project}--noEmit --emitDeclarationOnly false --pretty`);
 }
