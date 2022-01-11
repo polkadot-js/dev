@@ -39,5 +39,5 @@ if (!argv['skip-tsc']) {
     ? '--project tsconfig.build.json'
     : '';
 
-  execSync(`yarn polkadot-exec-tsc ${project} --noEmit --emitDeclarationOnly false --pretty`);
+  execSync(`yarn polkadot-exec-tsc --noEmit --emitDeclarationOnly false --pretty ${project}`);
 }
