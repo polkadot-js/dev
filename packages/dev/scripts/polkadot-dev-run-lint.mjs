@@ -36,8 +36,8 @@ if (!argv['skip-eslint']) {
 
 if (!argv['skip-tsc']) {
   const project = fs.existsSync(path.join(process.cwd(), 'tsconfig.build.json'))
-    ? ' --project tsconfig.build.json '
+    ? '--project tsconfig.build.json'
     : '';
 
-  execSync(`yarn polkadot-exec-tsc ${project}--noEmit --emitDeclarationOnly false --pretty`);
+  execSync(`yarn polkadot-exec-tsc ${project} --noEmit --emitDeclarationOnly false --pretty`);
 }
