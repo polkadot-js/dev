@@ -424,7 +424,7 @@ function lintDependencies (dir, locals) {
     ...Object.keys(devDependencies),
     ...deps
   ];
-  const [references] = getReferences('tsconfig.json');
+  const [references] = getReferences('tsconfig.build.json');
   const [devRefs, hasDevConfig] = getReferences('tsconfig.spec.json');
   const refsFound = [];
 
@@ -452,7 +452,7 @@ function lintDependencies (dir, locals) {
             const ref = local[0];
 
             if (!(isTest && hasDevConfig ? devRefs : references).includes(ref)) {
-              return createError(full, l, n, `../${ref} not included in ${(isTest && hasDevConfig ? 'tsconfig.spec.json' : 'tsconfig.json')} references`);
+              return createError(full, l, n, `../${ref} not included in ${(isTest && hasDevConfig ? 'tsconfig.spec.json' : 'tsconfig.build.json')} references`);
             }
 
             if (!refsFound.includes(ref)) {
@@ -470,7 +470,7 @@ function lintDependencies (dir, locals) {
 
   if (extraRefs.length) {
     throwOnErrors([
-      createError(`${dir}/tsconfig.json`, extraRefs.join(', '), -1, 'Unused tsconfig.json references found')
+      createError(`${dir}/tsconfig.build.json`, extraRefs.join(', '), -1, 'Unused tsconfig.build.json references found')
     ]);
   }
 }
