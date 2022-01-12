@@ -1361,9 +1361,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/register@npm:^7.16.8":
-  version: 7.16.8
-  resolution: "@babel/register@npm:7.16.8"
+"@babel/register@npm:^7.16.9":
+  version: 7.16.9
+  resolution: "@babel/register@npm:7.16.9"
   dependencies:
     clone-deep: ^4.0.1
     find-cache-dir: ^2.0.0
@@ -1372,7 +1372,7 @@ __metadata:
     source-map-support: ^0.5.16
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: e6b53de9eff3766cf62397561d3250c1c9da0cd67c5879c439140c42cf5a0a017b69025ec526c015af0b5ae7a50f7df61415be68ff6bb0af78af99a58ba59f85
+  checksum: bbe9552c9e5816aec2bf7d899b43f95fd649714f38d14de48f42c895cc9ef65708f1359f393c235d5f02224c115544aeeb174495682a07734cdf9484ed2e6175
   languageName: node
   linkType: hard
 
@@ -1872,7 +1872,7 @@ __metadata:
     "@babel/preset-env": ^7.16.8
     "@babel/preset-react": ^7.16.7
     "@babel/preset-typescript": ^7.16.7
-    "@babel/register": ^7.16.8
+    "@babel/register": ^7.16.9
     "@babel/runtime": ^7.16.7
     "@rollup/plugin-alias": ^3.1.9
     "@rollup/plugin-commonjs": ^21.0.1
