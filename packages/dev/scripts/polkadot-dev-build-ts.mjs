@@ -540,50 +540,6 @@ async function buildJs (repoPath, dir, locals) {
   console.log();
 }
 
-function renameTscBuildRefs (dirs) {
-  const rootPath = path.join(process.cwd(), '../tsconfig.build.json');
-
-  function updateTsc (filePath) {
-    const tsc = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-
-    tsc.references.forEach((r) => {
-      if (!r.path.includes('/tsconfig.')) {
-        r.path += '/tsconfig.build.json';
-      }
-    });
-
-    const output = {};
-
-    if (tsc.extends) {
-      output.extends = tsc.extends;
-    }
-
-    Object
-      .keys(tsc)
-      .filter((k) => !['extends'].includes(k))
-      .sort()
-      .forEach((k) => {
-        output[k] = tsc[k];
-      });
-
-    return JSON.stringify(output, null, 2) + '\n';
-  }
-
-  if (fs.existsSync(rootPath)) {
-    fs.writeFileSync(rootPath, updateTsc(rootPath));
-
-    for (const dir of dirs) {
-      const buildPath = path.join(process.cwd(), dir, 'tsconfig.build.json');
-      const tscPath = path.join(process.cwd(), dir, 'tsconfig.json');
-
-      if (!fs.existsSync(buildPath) && fs.existsSync(tscPath)) {
-        fs.writeFileSync(buildPath, updateTsc(tscPath));
-        rimraf.sync(tscPath);
-      }
-    }
-  }
-}
-
 async function main () {
   execSync('yarn polkadot-dev-clean-build');
 
@@ -598,12 +554,7 @@ async function main () {
     .split('.git')[0];
 
   orderPackageJson(repoPath, null, pkg);
-
-  const project = fs.existsSync(path.join(process.cwd(), 'tsconfig.build.json'))
-    ? '--build tsconfig.build.json'
-    : '--build';
-
-  execSync(`yarn polkadot-exec-tsc ${project} `);
+  execSync('yarn polkadot-exec-tsc --build tsconfig.build.json');
 
   process.chdir('packages');
 
@@ -611,8 +562,6 @@ async function main () {
     .readdirSync('.')
     .filter((dir) => fs.statSync(dir).isDirectory() && fs.existsSync(path.join(process.cwd(), dir, 'src')));
   const locals = [];
-
-  renameTscBuildRefs(dirs);
 
   // get all package names
   for (const dir of dirs) {
