@@ -395,7 +395,11 @@ function getReferences (config) {
         JSON
           .parse(fs.readFileSync(configPath, 'utf-8'))
           .references
-          .map(({ path }) => path.replace('../', '')),
+          .map(({ path }) =>
+            path
+              .replace('../', '')
+              .replace('/tsconfig.build.json', '')
+          ),
         true
       ];
     } catch (error) {
