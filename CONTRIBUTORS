@@ -1,4 +1,4 @@
-     818	Jaco                          	Remove build-refs adjustment helper (#575)
+     819	Jaco                          	Update mailmap (#576)
        1	Alex Wang                     	support build when using lerna with on package (#214)
        1	Amaury Martiny                	Allow .spec.ts files (#143)
        1	Axel Chalon                   	Include dotfiles when pushing to gh-pages (#268)
