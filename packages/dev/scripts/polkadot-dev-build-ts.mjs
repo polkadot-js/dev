@@ -550,9 +550,17 @@ function renameTscBuildRefs (dirs) {
 
     const output = {};
 
-    Object.keys(tsc).sort().forEach((k) => {
-      output[k] = tsc[k];
-    });
+    if (tsc.extends) {
+      output.extends = tsc.extends;
+    }
+
+    Object
+      .keys(tsc)
+      .filter((k) => !['extends'].includes(k))
+      .sort()
+      .forEach((k) => {
+        output[k] = tsc[k];
+      });
 
     return JSON.stringify(output, null, 2) + '\n';
   }
