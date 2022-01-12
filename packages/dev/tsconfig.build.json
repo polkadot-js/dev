@@ -1,5 +1,4 @@
 {
-  "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": "..",
     "outDir": "./build",
@@ -8,5 +7,6 @@
   "exclude": [
     "**/mod.ts"
   ],
+  "extends": "../../tsconfig.base.json",
   "references": []
 }

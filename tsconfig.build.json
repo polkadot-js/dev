@@ -4,6 +4,8 @@
   },
   "files": [],
   "references": [
-    { "path": "./packages/dev" }
+    {
+      "path": "./packages/dev/tsconfig.build.json"
+    }
   ]
 }
