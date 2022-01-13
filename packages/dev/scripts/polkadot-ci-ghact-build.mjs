@@ -9,6 +9,7 @@ import yargs from 'yargs';
 
 import copySync from './copySync.mjs';
 import execSync from './execSync.mjs';
+import gitSetup from './gitSetup.mjs';
 
 console.log('$ polkadot-ci-ghact-build', process.argv.slice(2).join(' '));
 
@@ -92,14 +93,6 @@ function npmPublish () {
   }
 
   process.chdir('..');
-}
-
-function gitSetup () {
-  execSync('git config push.default simple');
-  execSync('git config merge.ours.driver true');
-  execSync('git config user.name "github-actions[bot]"');
-  execSync('git config user.email "action@github.com"');
-  execSync('git checkout master');
 }
 
 function gitBump () {

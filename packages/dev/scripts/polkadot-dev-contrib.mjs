@@ -31,7 +31,7 @@ fs.writeFileSync(
           const isExcluded = (
             ['GitHub', 'Travis CI'].some((n) => name.startsWith(n)) ||
             ['>', 'action@github.com>'].some((e) => rest === e) ||
-            name.includes('[bot]')
+            [name, rest].some((n) => n.includes('[bot]'))
           );
 
           if (!isExcluded) {
