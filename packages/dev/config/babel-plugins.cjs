@@ -4,16 +4,7 @@
 const { EXT_CJS, EXT_ESM } = require('./babel-extensions.cjs');
 const resolver = require('./babel-resolver.cjs');
 
-module.exports = function (isEsm, withExt) {
-  // 1. Under cjs we only add the extension when is is not the default .js
-  // 2. Under Jest the conversion of paths leads to issues since the require would be from e.g.
-  // 'index.js', but while executing only the 'index.ts' file would be available
-  //  3. In the case of esm we always need the explicit extension here
-  const rewriteExt = !process.env.JEST_WORKER_ID && withExt && (
-    isEsm ||
-    EXT_CJS !== '.js'
-  );
-
+module.exports = function (isEsm) {
   return resolver([
     // ordering important, decorators before class properties
     '@babel/plugin-proposal-nullish-coalescing-operator',
@@ -25,7 +16,7 @@ module.exports = function (isEsm, withExt) {
     '@babel/plugin-syntax-import-meta',
     '@babel/plugin-syntax-top-level-await',
     'babel-plugin-styled-components',
-    rewriteExt && ['babel-plugin-module-extension-resolver', {
+    !process.env.JEST_WORKER_ID && ['babel-plugin-module-extension-resolver', {
       dstExtension: isEsm ? EXT_ESM : EXT_CJS,
       srcExtensions: [isEsm ? EXT_ESM : EXT_CJS, '.ts', '.tsx']
     }]

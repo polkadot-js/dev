@@ -21,8 +21,6 @@ const CPX = ['patch', 'js', 'cjs', 'mjs', 'json', 'd.ts', 'css', 'gif', 'hbs', '
 
 console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
-const isTypeModule = EXT_ESM === '.js';
-const EXT_OTHER = isTypeModule ? EXT_CJS : EXT_ESM;
 const IGNORE_IMPORTS = [
   // node
   'crypto', 'fs', 'path', 'process', 'readline', 'util',
@@ -53,7 +51,9 @@ async function buildBabel (dir, type) {
       filenames: ['src'],
       ignore: '**/*.d.ts',
       outDir,
-      outFileExtension: type === 'esm' ? EXT_ESM : EXT_CJS
+      outFileExtension: type === 'esm'
+        ? EXT_ESM
+        : EXT_CJS
     }
   });
 
@@ -75,11 +75,10 @@ function relativePath (value) {
 function createMapEntry (rootDir, jsPath, noTypes) {
   jsPath = relativePath(jsPath);
 
-  const otherPath = jsPath.replace('.js', EXT_OTHER);
+  const otherPath = jsPath.replace('.js', EXT_CJS);
   const hasOther = fs.existsSync(path.join(rootDir, otherPath));
   const typesPath = jsPath.replace('.js', '.d.ts');
   const hasTypes = !noTypes && jsPath.endsWith('.js') && fs.existsSync(path.join(rootDir, typesPath));
-  const otherReq = isTypeModule ? 'require' : 'import';
   const field = otherPath !== jsPath && hasOther
     ? {
       ...(
@@ -87,7 +86,7 @@ function createMapEntry (rootDir, jsPath, noTypes) {
           ? { types: typesPath }
           : {}
       ),
-      [otherReq]: otherPath,
+      require: otherPath,
       // eslint-disable-next-line sort-keys
       default: jsPath
     }
@@ -132,7 +131,7 @@ function findFiles (buildDir, extra = '', exclude = []) {
         findFiles(buildDir, jsPath).forEach((entry) => all.push(entry));
       } else if (toDelete) {
         fs.unlinkSync(thisPath);
-      } else if (!jsName.endsWith(EXT_OTHER) || !fs.existsSync(path.join(buildDir, jsPath.replace(EXT_OTHER, '.js')))) {
+      } else if (!jsName.endsWith(EXT_CJS) || !fs.existsSync(path.join(buildDir, jsPath.replace(EXT_CJS, '.js')))) {
         if (!exclude.some((e) => jsName === e)) {
           // this is not mapped to a compiled .js file (where we have dual esm/cjs mappings)
           all.push(createMapEntry(buildDir, jsPath));
@@ -230,14 +229,12 @@ function buildExports () {
   if (pkg.main) {
     const main = pkg.main;
 
-    pkg.main = main.replace('.js', isTypeModule ? '.cjs' : '.js');
-    pkg.module = main.replace('.js', isTypeModule ? '.js' : '.mjs');
+    pkg.main = main.replace('.js', '.cjs');
+    pkg.module = main.replace('.cjs', '.js');
     pkg.types = main.replace('.js', '.d.ts');
   }
 
-  pkg.type = isTypeModule
-    ? 'module'
-    : 'commonjs';
+  pkg.type = 'module';
 
   pkg.exports = list
     .filter(([path, config]) =>
