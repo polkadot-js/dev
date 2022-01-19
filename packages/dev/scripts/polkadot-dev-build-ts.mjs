@@ -230,7 +230,7 @@ function buildExports () {
     const main = pkg.main;
 
     pkg.main = main.replace('.js', '.cjs');
-    pkg.module = main.replace('.js', '.js');
+    pkg.module = main.replace('.cjs', '.js');
     pkg.types = main.replace('.js', '.d.ts');
   }
 
