@@ -278,7 +278,9 @@ function sortJson (json) {
 function orderPackageJson (repoPath, dir, json) {
   json.bugs = `https://github.com/${repoPath}/issues`;
   json.homepage = `https://github.com/${repoPath}${dir ? `/tree/master/packages/${dir}` : ''}#readme`;
-  json.license = json.license || 'Apache-2';
+  json.license = !json.license || json.license === 'Apache-2'
+    ? 'Apache-2.0'
+    : json.license;
   json.repository = {
     ...(dir
       ? { directory: `packages/${dir}` }
