@@ -214,9 +214,10 @@ function buildExports () {
     list.push(['.', {
       types: indexDef,
       // eslint-disable-next-line sort-keys
+      'react-native': createMapEntry(buildDir, pkg['react-native'], true)[1],
+      // eslint-disable-next-line sort-keys
       browser: createMapEntry(buildDir, pkg.browser, true)[1],
-      node: createMapEntry(buildDir, pkg.main, true)[1],
-      'react-native': createMapEntry(buildDir, pkg['react-native'], true)[1]
+      node: createMapEntry(buildDir, pkg.main, true)[1]
     }]);
   }
 
