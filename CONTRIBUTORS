@@ -1,4 +1,4 @@
-     836	Jaco                          	Bump babel (#589)
+     837	Jaco                          	Update Jest (#590)
        1	Alex Wang                     	support build when using lerna with on package (#214)
        1	Amaury Martiny                	Allow .spec.ts files (#143)
        1	Axel Chalon                   	Include dotfiles when pushing to gh-pages (#268)
