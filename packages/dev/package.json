@@ -39,8 +39,8 @@
     "polkadot-exec-webpack": "./scripts/polkadot-exec-webpack.mjs"
   },
   "dependencies": {
-    "@babel/cli": "^7.17.0",
-    "@babel/core": "^7.17.2",
+    "@babel/cli": "^7.17.3",
+    "@babel/core": "^7.17.3",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.16.7",
     "@babel/plugin-proposal-numeric-separator": "^7.16.7",
     "@babel/plugin-proposal-optional-chaining": "^7.16.7",
@@ -93,7 +93,7 @@
     "jest-haste-map": "^27.5.1",
     "jest-resolve": "^27.5.1",
     "madge": "^5.0.1",
-    "minimatch": "^4.1.1",
+    "minimatch": "^5.0.0",
     "mkdirp": "^1.0.4",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
