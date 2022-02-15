@@ -2,6 +2,7 @@ queue_rules:
   - name: default
     conditions:
       - check-success=build
+      - check-success=docs
       - check-success=lint
       - check-success=test
       - label=automerge
@@ -13,6 +14,7 @@ pull_request_rules:
   - name: auto merge
     conditions:
       - check-success=build
+      - check-success=docs
       - check-success=lint
       - check-success=test
       - label=automerge
