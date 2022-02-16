@@ -1,4 +1,4 @@
-     846	Jaco                          	Bump deps (#599)
+     847	Jaco                          	Another day, another babel bump (#600)
        1	Alex Wang                     	support build when using lerna with on package (#214)
        1	Amaury Martiny                	Allow .spec.ts files (#143)
        1	Axel Chalon                   	Include dotfiles when pushing to gh-pages (#268)
