@@ -40,7 +40,7 @@
   },
   "dependencies": {
     "@babel/cli": "^7.17.3",
-    "@babel/core": "^7.17.4",
+    "@babel/core": "^7.17.5",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.16.7",
     "@babel/plugin-proposal-numeric-separator": "^7.16.7",
     "@babel/plugin-proposal-optional-chaining": "^7.16.7",
@@ -67,8 +67,8 @@
     "babel-jest": "^27.5.1",
     "babel-plugin-module-extension-resolver": "^1.0.0-rc.2",
     "babel-plugin-module-resolver": "^4.1.0",
-    "babel-plugin-styled-components": "^2.0.2",
-    "browserslist": "^4.19.1",
+    "babel-plugin-styled-components": "^2.0.3",
+    "browserslist": "^4.19.3",
     "coveralls": "^3.1.1",
     "eslint": "^8.9.0",
     "eslint-config-standard": "^16.0.3",
@@ -97,7 +97,7 @@
     "mkdirp": "^1.0.4",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
-    "rollup": "^2.67.2",
+    "rollup": "^2.67.3",
     "rollup-plugin-cleanup": "^3.2.1",
     "typescript": "^4.5.5",
     "yargs": "^17.3.1"
