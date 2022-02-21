@@ -1915,7 +1915,7 @@ __metadata:
     "@rollup/plugin-node-resolve": ^13.1.3
     "@rushstack/eslint-patch": ^1.1.0
     "@types/jest": ^27.4.0
-    "@types/node": ^17.0.18
+    "@types/node": ^17.0.19
     "@types/react": ^17.0.39
     "@types/yargs": ^17.0.8
     "@typescript-eslint/eslint-plugin": 5.12.0
@@ -1932,7 +1932,7 @@ __metadata:
     eslint-import-resolver-node: ^0.3.6
     eslint-plugin-header: ^3.1.1
     eslint-plugin-import: ^2.25.4
-    eslint-plugin-import-newlines: ^1.2.0
+    eslint-plugin-import-newlines: ^1.2.1
     eslint-plugin-node: ^11.1.0
     eslint-plugin-promise: ^6.0.0
     eslint-plugin-react: ^7.28.0
@@ -2235,10 +2235,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:>= 8, @types/node@npm:^17.0.18":
-  version: 17.0.18
-  resolution: "@types/node@npm:17.0.18"
-  checksum: 6c4edfc2b3ba2342a9c3d56e934c5245948ab752f4dc04bd6790b9603e6ebc53bc4f5befc3662e207f7dba2ddd17ccf657f915e319ea7cdd4f77b851079d1611
+"@types/node@npm:*, @types/node@npm:>= 8, @types/node@npm:^17.0.19":
+  version: 17.0.19
+  resolution: "@types/node@npm:17.0.19"
+  checksum: 6bbd35bfc23dd50d1aefd4ae49c31f7fd632be209dba67c0322bb4fe8b555f4bb6e894018963146ad7758ae596857d5cbecc2d46ddf90a54f6a4424811cf4351
   languageName: node
   linkType: hard
 
@@ -4241,14 +4241,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-import-newlines@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "eslint-plugin-import-newlines@npm:1.2.0"
+"eslint-plugin-import-newlines@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "eslint-plugin-import-newlines@npm:1.2.1"
   peerDependencies:
     eslint: ">=6.0.0"
   bin:
     import-linter: lib/index.js
-  checksum: aa6db47826dd11e775fd18a367b1cf14d411c371c6f5d421aeaca917b426934cff6b411de5c4253b03f8f962634d8b9d247ba874d5310296dc0a43690dc17d7e
+  checksum: c2eb87241f73d1a968a46a10c0529ea17ac00ef534571e0755bf6b3ed07b6ea2fa2152f19700fd9bfc91c32936cd65b69dc66c0cc23a752169b3409a176ddb7f
   languageName: node
   linkType: hard
 
