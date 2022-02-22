@@ -1,4 +1,4 @@
-     851	Jaco                          	Use polkadot-js-bot as approver (#604)
+     852	Jaco                          	Test new mergify rules (#605)
        1	Alex Wang                     	support build when using lerna with on package (#214)
        1	Amaury Martiny                	Allow .spec.ts files (#143)
        1	Axel Chalon                   	Include dotfiles when pushing to gh-pages (#268)
