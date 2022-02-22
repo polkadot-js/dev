@@ -24,6 +24,7 @@ pull_request_rules:
     actions:
       queue:
         name: default
+        merge_bot_account: polkadot-js-bot
         method: squash
 
   - name: auto approval
@@ -33,4 +34,5 @@ pull_request_rules:
     actions:
       review:
         type: APPROVE
+        bot_account: polkadot-js-bot
         message: This auto-approval rule should be removed once more JS maintainers are active.
