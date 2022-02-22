@@ -24,6 +24,7 @@ pull_request_rules:
     actions:
       queue:
         name: default
+        merge_bot_account: polkadot-js-bot
         method: squash
 
   - name: auto approval
