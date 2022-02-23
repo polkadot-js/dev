@@ -1,4 +1,4 @@
-name: Auto-approve pull request
+name: PR
 
 on: pull_request
 
