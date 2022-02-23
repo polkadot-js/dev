@@ -1,4 +1,4 @@
-name: Auto-approve pull request
+name: Approve
 
 on: pull_request
 
