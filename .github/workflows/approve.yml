@@ -2,7 +2,7 @@ name: PR
 
 on:
   pull_request:
-    types: [opened, reopened, labeled, synchronize]
+    types: [opened, reopened, labeled]
 
 jobs:
   auto-approve:
