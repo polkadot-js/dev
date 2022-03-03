@@ -1,4 +1,4 @@
-name: auto
+name: bot
 
 on:
   pull_request:
