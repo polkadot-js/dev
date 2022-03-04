@@ -78,7 +78,7 @@
     "eslint-plugin-import-newlines": "^1.2.1",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",
-    "eslint-plugin-react": "^7.29.2",
+    "eslint-plugin-react": "^7.29.3",
     "eslint-plugin-react-hooks": "^4.3.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "eslint-plugin-sort-destructure-keys": "^1.4.0",
@@ -97,7 +97,7 @@
     "mkdirp": "^1.0.4",
     "prettier": "^2.5.1",
     "rimraf": "^3.0.2",
-    "rollup": "^2.69.0",
+    "rollup": "^2.69.1",
     "rollup-plugin-cleanup": "^3.2.1",
     "typescript": "^4.6.2",
     "yargs": "^17.3.1"
