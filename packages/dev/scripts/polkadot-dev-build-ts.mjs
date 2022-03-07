@@ -144,8 +144,11 @@ function findFiles (buildDir, extra = '', exclude = []) {
 }
 
 function tweakPackageInfo (buildDir) {
+  // Hack around some bundler issues, in this case Vite which has import.meta.url
+  // as undefined in production contexts (and subsequently makes URL fail)
+  // See https://github.com/vitejs/vite/issues/5558
+  const esmDirname = "(import.meta && import.meta.url) ? new URL('.', import.meta.url).pathname : 'auto'";
   const cjsDirname = "typeof __dirname === 'string' ? __dirname : 'auto'";
-  const esmDirname = "new URL('.', import.meta.url).pathname";
 
   ['js', 'cjs'].forEach((ext) => {
     const fileName = path.join(buildDir, `packageInfo.${ext}`);
