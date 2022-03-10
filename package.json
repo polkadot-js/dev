@@ -3,7 +3,7 @@
   "bugs": "https://github.com/polkadot-js/dev/issues",
   "homepage": "https://github.com/polkadot-js/dev#readme",
   "license": "Apache-2.0",
-  "packageManager": "yarn@3.1.1",
+  "packageManager": "yarn@3.2.0",
   "private": true,
   "repository": {
     "type": "git",
