@@ -70,7 +70,7 @@
     "babel-plugin-styled-components": "^2.0.6",
     "browserslist": "^4.20.0",
     "coveralls": "^3.1.1",
-    "eslint": "^8.10.0",
+    "eslint": "^8.11.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-import-resolver-node": "^0.3.6",
     "eslint-plugin-header": "^3.1.1",
