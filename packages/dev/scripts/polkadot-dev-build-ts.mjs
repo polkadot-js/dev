@@ -239,6 +239,11 @@ function buildExports () {
     pkg.types = main.replace('.js', '.d.ts');
   }
 
+  // Ensure the top-level entry always points to the CJS version
+  if (pkg['react-native']) {
+    pkg['react-native'] = pkg['react-native'].replace('.js', isTypeModule ? '.cjs' : '.js');
+  }
+
   pkg.type = isTypeModule
     ? 'module'
     : 'commonjs';
