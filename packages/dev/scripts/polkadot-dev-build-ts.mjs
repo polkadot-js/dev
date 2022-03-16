@@ -7,10 +7,18 @@ import fs from 'fs';
 import path from 'path';
 import rimraf from 'rimraf';
 
-import { EXT_CJS, EXT_ESM } from '../config/babel-extensions.cjs';
+import { EXT_CJS, EXT_ESM, EXT_TS } from '../config/babel-extensions.cjs';
 import copySync from './copySync.mjs';
 import { __dirname } from './dirname.mjs';
 import execSync from './execSync.mjs';
+
+// ESM default
+// const EXT_ONE = EXT_ESM;
+// const EXT_TWO = EXT_CJS;
+
+// CJS default
+const EXT_ONE = EXT_CJS;
+const EXT_TWO = EXT_ESM;
 
 const BL_CONFIGS = ['js', 'cjs'].map((e) => `babel.config.${e}`);
 const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
@@ -21,8 +29,6 @@ const CPX = ['patch', 'js', 'cjs', 'mjs', 'json', 'd.ts', 'css', 'gif', 'hbs', '
 
 console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
-const isTypeModule = EXT_ESM === '.js';
-const EXT_OTHER = isTypeModule ? EXT_CJS : EXT_ESM;
 const IGNORE_IMPORTS = [
   // node
   'crypto', 'fs', 'path', 'process', 'readline', 'util',
@@ -75,11 +81,11 @@ function relativePath (value) {
 function createMapEntry (rootDir, jsPath, noTypes) {
   jsPath = relativePath(jsPath);
 
-  const otherPath = jsPath.replace('.js', EXT_OTHER);
+  const otherPath = jsPath.replace(EXT_ONE, EXT_TWO);
   const hasOther = fs.existsSync(path.join(rootDir, otherPath));
-  const typesPath = jsPath.replace('.js', '.d.ts');
-  const hasTypes = !noTypes && jsPath.endsWith('.js') && fs.existsSync(path.join(rootDir, typesPath));
-  const otherReq = isTypeModule ? 'require' : 'import';
+  const typesPath = jsPath.replace(EXT_ONE, EXT_TS);
+  const hasTypes = !noTypes && jsPath.endsWith(EXT_ONE) && fs.existsSync(path.join(rootDir, typesPath));
+  const otherReq = EXT_ONE === EXT_ESM ? 'require' : 'import';
   const field = otherPath !== jsPath && hasOther
     ? {
       ...(
@@ -99,11 +105,11 @@ function createMapEntry (rootDir, jsPath, noTypes) {
       }
       : jsPath;
 
-  if (jsPath.endsWith('.js')) {
-    if (jsPath.endsWith('/index.js')) {
-      return [jsPath.replace('/index.js', ''), field];
+  if (jsPath.endsWith(EXT_ONE)) {
+    if (jsPath.endsWith(`/index${EXT_ONE}`)) {
+      return [jsPath.replace(`/index${EXT_ONE}`, ''), field];
     } else {
-      return [jsPath.replace('.js', ''), field];
+      return [jsPath.replace(EXT_ONE, ''), field];
     }
   }
 
@@ -121,18 +127,18 @@ function findFiles (buildDir, extra = '', exclude = []) {
       const thisPath = path.join(buildDir, jsPath);
       const toDelete = thisPath.includes('/test/') || // no test paths
         ['.manual.', '.spec.', '.test.'].some((t) => jsName.includes(t)) || // no tests
-        ['.d.js', '.d.cjs', '.d.mjs'].some((e) => jsName.endsWith(e)) || // no .d.ts compiled outputs
-        ['mod.js', 'mod.cjs', 'mod.mjs'].some((e) => jsName === e) || // no deno compiles
+        ['.d.js', '.d.cjs', '.d.mjs', '.d.cjs.js', '.d.esm.js'].some((e) => jsName.endsWith(e)) || // no .d.ts compiled outputs
+        ['mod.js', 'mod.cjs', 'mod.mjs', 'mod.cjs.js', 'mod.esm.js'].some((e) => jsName === e) || // no deno compiles
         (
-          jsName.endsWith('.d.ts') && // .d.ts without .js as an output
-          !fs.existsSync(path.join(buildDir, jsPath.replace('.d.ts', '.js')))
+          jsName.endsWith(EXT_TS) && // .d.ts without .js as an output
+          !fs.existsSync(path.join(buildDir, jsPath.replace(EXT_TS, EXT_ONE)))
         );
 
       if (fs.statSync(thisPath).isDirectory()) {
         findFiles(buildDir, jsPath).forEach((entry) => all.push(entry));
       } else if (toDelete) {
         fs.unlinkSync(thisPath);
-      } else if (!jsName.endsWith(EXT_OTHER) || !fs.existsSync(path.join(buildDir, jsPath.replace(EXT_OTHER, '.js')))) {
+      } else if (!jsName.endsWith(EXT_TWO) || !fs.existsSync(path.join(buildDir, jsPath.replace(EXT_TWO, EXT_ONE)))) {
         if (!exclude.some((e) => jsName === e)) {
           // this is not mapped to a compiled .js file (where we have dual esm/cjs mappings)
           all.push(createMapEntry(buildDir, jsPath));
@@ -150,8 +156,8 @@ function tweakPackageInfo (buildDir) {
   const esmDirname = "(import.meta && import.meta.url) ? new URL('.', import.meta.url).pathname : 'auto'";
   const cjsDirname = "typeof __dirname === 'string' ? __dirname : 'auto'";
 
-  ['js', 'cjs'].forEach((ext) => {
-    const fileName = path.join(buildDir, `packageInfo.${ext}`);
+  ['esm', 'cjs'].forEach((type) => {
+    const fileName = path.join(buildDir, `packageInfo.${type}.js`);
 
     fs.writeFileSync(
       fileName,
@@ -159,17 +165,17 @@ function tweakPackageInfo (buildDir) {
         .readFileSync(fileName, 'utf8')
         .replace(
           "type: 'auto'",
-          `type: '${ext === 'cjs' ? 'cjs' : 'esm'}'`
+          `type: '${type === 'cjs' ? 'cjs' : 'esm'}'`
         )
         .replace(
           "path: 'auto'",
-          `path: ${ext === 'cjs' ? cjsDirname : esmDirname}`
+          `path: ${type === 'cjs' ? cjsDirname : esmDirname}`
         )
     );
   });
 
-  ['js', 'cjs'].forEach((ext) => {
-    const fileName = path.join(buildDir, `detectOther.${ext}`);
+  ['esm', 'cjs'].forEach((type) => {
+    const fileName = path.join(buildDir, `detectOther.${type}.js`);
 
     if (fs.existsSync(fileName)) {
       fs.writeFileSync(
@@ -178,11 +184,11 @@ function tweakPackageInfo (buildDir) {
           .readFileSync(fileName, 'utf8')
           .replace(
             /\/packageInfo'/g,
-            `/packageInfo.${ext}'`
+            `/packageInfo.${type}.js'`
           )
           .replace(
             /\/packageInfo"/g,
-            `/packageInfo.${ext}"`
+            `/packageInfo.${type}.js"`
           )
       );
     }
@@ -211,7 +217,7 @@ function buildExports () {
   tweakPackageInfo(buildDir);
 
   if (!list.some(([key]) => key === '.')) {
-    const indexDef = relativePath(pkg.main).replace('.js', '.d.ts');
+    const indexDef = relativePath(pkg.main).replace('.js', EXT_TS);
 
     // for the env-specifics, add a root key (if not available)
     list.push(['.', {
@@ -234,21 +240,19 @@ function buildExports () {
   if (pkg.main) {
     const main = pkg.main;
 
-    pkg.main = main.replace('.js', isTypeModule ? '.cjs' : '.js');
-    pkg.module = main.replace('.js', isTypeModule ? '.js' : '.mjs');
-    pkg.types = main.replace('.js', '.d.ts');
+    pkg.main = main.replace('.js', EXT_CJS);
+    pkg.module = main.replace('.js', EXT_ESM);
+    pkg.types = main.replace('.js', EXT_TS);
   }
 
   // Ensure the top-level entries always points to the CJS version
   ['browser', 'react-native'].forEach((k) => {
     if (typeof pkg[k] === 'string') {
-      pkg[k] = pkg[k].replace('.js', isTypeModule ? '.cjs' : '.js');
+      pkg[k] = pkg[k].replace('.js', EXT_CJS);
     }
   });
 
-  pkg.type = isTypeModule
-    ? 'module'
-    : 'commonjs';
+  pkg.type = EXT_ONE === EXT_ESM ? 'module' : 'commonjs';
 
   pkg.exports = list
     .filter(([path, config]) =>
@@ -263,7 +267,7 @@ function buildExports () {
       ...all,
       ...(
         path === './packageInfo'
-          ? { './packageInfo.cjs': './packageInfo.cjs', './packageInfo.js': './packageInfo.js' }
+          ? { './packageInfo.cjs.js': './packageInfo.cjs.js', './packageInfo.esm.js': './packageInfo.esm.js' }
           : {}
       ),
       [path]: typeof config === 'string'
@@ -384,7 +388,7 @@ function loopFiles (exts, dir, sub, fn) {
 
 function lintOutput (dir) {
   throwOnErrors(
-    loopFiles(['.d.ts', '.js', '.cjs'], dir, 'build', (full, l, n) => {
+    loopFiles(['.d.ts', '.js', '.cjs', '.mjs'], dir, 'build', (full, l, n) => {
       if (l.startsWith('import ') && l.includes(" from '") && l.includes('/src/')) {
         // we are not allowed to import from /src/
         return createError(full, l, n, 'Invalid import from /src/');
