@@ -241,7 +241,7 @@ function buildExports () {
 
   // Ensure the top-level entries always points to the CJS version
   ['browser', 'react-native'].forEach((k) => {
-    if (pkg[k]) {
+    if (typeof pkg[k] === 'string') {
       pkg[k] = pkg[k].replace('.js', isTypeModule ? '.cjs' : '.js');
     }
   });
