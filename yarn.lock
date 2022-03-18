@@ -1917,7 +1917,7 @@ __metadata:
     "@types/jest": ^27.4.1
     "@types/node": ^17.0.21
     "@types/react": ^17.0.40
-    "@types/yargs": ^17.0.9
+    "@types/yargs": ^17.0.10
     "@typescript-eslint/eslint-plugin": 5.15.0
     "@typescript-eslint/parser": 5.15.0
     "@vue/component-compiler-utils": ^3.3.0
@@ -2315,12 +2315,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/yargs@npm:^17.0.9":
-  version: 17.0.9
-  resolution: "@types/yargs@npm:17.0.9"
+"@types/yargs@npm:^17.0.10":
+  version: 17.0.10
+  resolution: "@types/yargs@npm:17.0.10"
   dependencies:
     "@types/yargs-parser": "*"
-  checksum: 333621b33785622974bd10269201d999d48729d5ffa619930fcf1f85e2d0b4785cff3f7b08c8e0ee2e8f75b2ead846bb0acc90ec4d5a652f1a95388e51f84037
+  checksum: f0673cbfc08e17239dc58952a88350d6c4db04a027a28a06fbad27d87b670e909f9cd9e66f9c64cebdd5071d1096261e33454a55868395f125297e5c50992ca8
   languageName: node
   linkType: hard
 
