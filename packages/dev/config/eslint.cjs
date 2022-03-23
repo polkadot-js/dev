@@ -75,6 +75,8 @@ module.exports = {
     '@typescript-eslint/no-non-null-assertion': 'error',
     '@typescript-eslint/type-annotation-spacing': 'error',
     'arrow-parens': ['error', 'always'],
+    'brace-style': ['error', '1tbs'],
+    curly: ['error', 'all'],
     'default-param-last': [0], // conflicts with TS version (this one doesn't allow TS ?)
     'header/header': [2, 'line', [
       { pattern: ' Copyright 20(17|18|19|20|21|22)(-2022)? @polkadot/' },

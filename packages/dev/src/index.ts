@@ -18,7 +18,9 @@ const A: BlahType = 123;
 let count = 0;
 
 function doCallback (fn: (a: string) => string): void {
-  fn('test');
+  if (fn) {
+    fn('test');
+  }
 }
 
 /**
