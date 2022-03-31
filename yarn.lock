@@ -1932,7 +1932,7 @@ __metadata:
     eslint-import-resolver-node: ^0.3.6
     eslint-plugin-header: ^3.1.1
     eslint-plugin-import: ^2.25.4
-    eslint-plugin-import-newlines: ^1.2.1
+    eslint-plugin-import-newlines: ^1.2.2
     eslint-plugin-node: ^11.1.0
     eslint-plugin-promise: ^6.0.0
     eslint-plugin-react: ^7.29.4
@@ -1953,7 +1953,7 @@ __metadata:
     minimatch: ^5.0.1
     mkdirp: ^1.0.4
     prettier: ^2.6.1
-    react: ^17.0.2
+    react: ^18.0.0
     rimraf: ^3.0.2
     rollup: ^2.70.1
     rollup-plugin-cleanup: ^3.2.1
@@ -4234,14 +4234,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-import-newlines@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "eslint-plugin-import-newlines@npm:1.2.1"
+"eslint-plugin-import-newlines@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "eslint-plugin-import-newlines@npm:1.2.2"
   peerDependencies:
     eslint: ">=6.0.0"
   bin:
     import-linter: lib/index.js
-  checksum: c2eb87241f73d1a968a46a10c0529ea17ac00ef534571e0755bf6b3ed07b6ea2fa2152f19700fd9bfc91c32936cd65b69dc66c0cc23a752169b3409a176ddb7f
+  checksum: 3bb35817357aa47e2ec45b82e085605351f8f6050a0766b4f3ccd287ba81c7db72c33ac4c4ccea6cf90d66868ae141692897d6c84e08532d740672daeebcb789
   languageName: node
   linkType: hard
 
@@ -7964,13 +7964,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:^17.0.2":
-  version: 17.0.2
-  resolution: "react@npm:17.0.2"
+"react@npm:^18.0.0":
+  version: 18.0.0
+  resolution: "react@npm:18.0.0"
   dependencies:
     loose-envify: ^1.1.0
-    object-assign: ^4.1.1
-  checksum: b254cc17ce3011788330f7bbf383ab653c6848902d7936a87b09d835d091e3f295f7e9dd1597c6daac5dc80f90e778c8230218ba8ad599f74adcc11e33b9d61b
+  checksum: 293020b96536b3c7113ee57ca5c990a3f25649d1751b1c7a3aabd16dff0691fe9f1eed1206616d0906d05933536052037340a0c8d0941ff870b0eb469a2f975b
   languageName: node
   linkType: hard
 
