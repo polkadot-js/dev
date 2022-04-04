@@ -179,11 +179,11 @@ function tweakPackageInfo (buildDir) {
           .readFileSync(detectFile, 'utf8')
           .replace(
             /\/packageInfo'/g,
-            `${extra}packageInfo.js'`
+            `${extra}packageInfo${type === 'esm' ? '.js' : ''}`
           )
           .replace(
             /\/packageInfo"/g,
-            `${extra}packageInfo.js"`
+            `${extra}packageInfo${type === 'esm' ? '.js' : ''}"`
           )
       );
     }
@@ -250,28 +250,40 @@ function buildExports () {
     if (typeof pkg[k] === 'string') {
       const entry = pkg[k].startsWith('./')
         ? pkg[k]
-        : `./${pkg.main}`;
+        : `./${pkg[k]}`;
 
       pkg[k] = entry.replace(/^\.\//, './cjs/');
     }
   });
 
+  if (pkg.sideEffects) {
+    pkg.sideEffects = pkg.sideEffects.map((s) =>
+      s.endsWith('.cjs')
+        ? s.replace(/^\.\//, './cjs/').replace('.cjs', '.js')
+        : s
+    );
+  }
+
   pkg.type = 'module';
 
   pkg.exports = listRoot
     .filter(([path, config]) =>
-      typeof config === 'object' ||
-      !listRoot.some(([, c]) =>
-        typeof c === 'object' &&
-        Object.values(c).some((v) => v === path)
+      // we handle the CJS path at the root below
+      path !== './cjs/package.json' && (
+        typeof config === 'object' ||
+        !listRoot.some(([, c]) =>
+          typeof c === 'object' &&
+          Object.values(c).some((v) => v === path)
+        )
       )
     )
     .sort((a, b) => a[0].localeCompare(b[0]))
     .reduce((all, [path, config]) => ({
       ...all,
       ...(
-        path === './packageInfo'
-          ? { './cjs/packageInfo.js': './cjs/packageInfo.js', './packageInfo.js': './packageInfo.js' }
+        path === '.'
+          // eslint-disable-next-line sort-keys
+          ? { './cjs/package.json': './cjs/package.json', './cjs/*': './cjs/*.js' }
           : {}
       ),
       [path]: typeof config === 'string'
