@@ -129,7 +129,10 @@ function findFiles (buildDir, extra = '', exclude = []) {
       if (fs.statSync(thisPath).isDirectory()) {
         findFiles(buildDir, jsPath).forEach((entry) => all.push(entry));
       } else if (toDelete) {
+        const cjsPath = path.join(`${buildDir}-cjs`, jsPath);
+
         fs.unlinkSync(thisPath);
+        fs.existsSync(cjsPath) && fs.unlinkSync(cjsPath);
       } else {
         if (!exclude.some((e) => jsName === e)) {
           // this is not mapped to a compiled .js file (where we have dual esm/cjs mappings)
@@ -283,7 +286,7 @@ function buildExports () {
 
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
 
-  // copt from build-cjs to build/cjs
+  // copy from build-cjs to build/cjs
   [
     './build-cjs/**/*.js'
   ].forEach((s) => copySync(s, 'build/cjs'));
