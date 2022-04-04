@@ -4,6 +4,7 @@
 
 import babel from '@babel/cli/lib/babel/dir.js';
 import fs from 'fs';
+import mkdirp from 'mkdirp';
 import path from 'path';
 import rimraf from 'rimraf';
 
@@ -21,8 +22,6 @@ const CPX = ['patch', 'js', 'cjs', 'mjs', 'json', 'd.ts', 'css', 'gif', 'hbs', '
 
 console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
-const isTypeModule = EXT_ESM === '.js';
-const EXT_OTHER = isTypeModule ? EXT_CJS : EXT_ESM;
 const IGNORE_IMPORTS = [
   // node
   'crypto', 'fs', 'path', 'process', 'readline', 'util',
@@ -40,7 +39,7 @@ function buildWebpack () {
 // compile via babel, either via supplied config or default
 async function buildBabel (dir, type) {
   const configs = BL_CONFIGS.map((c) => path.join(process.cwd(), `../../${c}`));
-  const outDir = path.join(process.cwd(), 'build');
+  const outDir = path.join(process.cwd(), `build${type === 'esm' ? '' : '-cjs'}`);
 
   await babel.default({
     babelOptions: {
@@ -75,19 +74,18 @@ function relativePath (value) {
 function createMapEntry (rootDir, jsPath, noTypes) {
   jsPath = relativePath(jsPath);
 
-  const otherPath = jsPath.replace('.js', EXT_OTHER);
-  const hasOther = fs.existsSync(path.join(rootDir, otherPath));
+  const otherPath = jsPath.replace('./', './cjs/');
+  const hasOther = fs.existsSync(path.join(`${rootDir}-cjs`, jsPath));
   const typesPath = jsPath.replace('.js', '.d.ts');
   const hasTypes = !noTypes && jsPath.endsWith('.js') && fs.existsSync(path.join(rootDir, typesPath));
-  const otherReq = isTypeModule ? 'require' : 'import';
-  const field = otherPath !== jsPath && hasOther
+  const field = hasOther
     ? {
       ...(
         hasTypes
           ? { types: typesPath }
           : {}
       ),
-      [otherReq]: otherPath,
+      require: otherPath,
       // eslint-disable-next-line sort-keys
       default: jsPath
     }
@@ -132,7 +130,7 @@ function findFiles (buildDir, extra = '', exclude = []) {
         findFiles(buildDir, jsPath).forEach((entry) => all.push(entry));
       } else if (toDelete) {
         fs.unlinkSync(thisPath);
-      } else if (!jsName.endsWith(EXT_OTHER) || !fs.existsSync(path.join(buildDir, jsPath.replace(EXT_OTHER, '.js')))) {
+      } else {
         if (!exclude.some((e) => jsName === e)) {
           // this is not mapped to a compiled .js file (where we have dual esm/cjs mappings)
           all.push(createMapEntry(buildDir, jsPath));
@@ -150,39 +148,39 @@ function tweakPackageInfo (buildDir) {
   const esmDirname = "(import.meta && import.meta.url) ? new URL(import.meta.url).pathname.substring(0, new URL(import.meta.url).pathname.lastIndexOf('/') + 1) : 'auto'";
   const cjsDirname = "typeof __dirname === 'string' ? __dirname : 'auto'";
 
-  ['js', 'cjs'].forEach((ext) => {
-    const fileName = path.join(buildDir, `packageInfo.${ext}`);
+  ['esm', 'cjs'].forEach((type) => {
+    const inputPath = `${buildDir}${type === 'esm' ? '' : '-cjs'}`;
+    const infoFile = path.join(inputPath, 'packageInfo.js');
 
     fs.writeFileSync(
-      fileName,
+      infoFile,
       fs
-        .readFileSync(fileName, 'utf8')
+        .readFileSync(infoFile, 'utf8')
         .replace(
           "type: 'auto'",
-          `type: '${ext === 'cjs' ? 'cjs' : 'esm'}'`
+          `type: '${type === 'cjs' ? 'cjs' : 'esm'}'`
         )
         .replace(
           "path: 'auto'",
-          `path: ${ext === 'cjs' ? cjsDirname : esmDirname}`
+          `path: ${type === 'cjs' ? cjsDirname : esmDirname}`
         )
     );
-  });
 
-  ['js', 'cjs'].forEach((ext) => {
-    const fileName = path.join(buildDir, `detectOther.${ext}`);
+    const extra = type === 'esm' ? '/' : '/cjs/';
+    const detectFile = path.join(inputPath, 'detectOther.js');
 
-    if (fs.existsSync(fileName)) {
+    if (fs.existsSync(detectFile)) {
       fs.writeFileSync(
-        fileName,
+        detectFile,
         fs
-          .readFileSync(fileName, 'utf8')
+          .readFileSync(detectFile, 'utf8')
           .replace(
             /\/packageInfo'/g,
-            `/packageInfo.${ext}'`
+            `${extra}packageInfo.js'`
           )
           .replace(
             /\/packageInfo"/g,
-            `/packageInfo.${ext}"`
+            `${extra}packageInfo.js"`
           )
       );
     }
@@ -204,17 +202,20 @@ function moveFields (pkg, fields) {
 // iterate through all the files that have been built, creating an exports map
 function buildExports () {
   const buildDir = path.join(process.cwd(), 'build');
-  const pkgPath = path.join(buildDir, 'package.json');
-  const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
-  const list = findFiles(buildDir, '', ['README.md', 'LICENSE']);
 
+  mkdirp.sync(path.join(buildDir, 'cjs'));
+  fs.writeFileSync(path.join(buildDir, 'cjs/package.json'), JSON.stringify({ type: 'commonjs' }));
   tweakPackageInfo(buildDir);
 
-  if (!list.some(([key]) => key === '.')) {
+  const pkgPath = path.join(buildDir, 'package.json');
+  const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
+  const listRoot = findFiles(buildDir, '', ['README.md', 'LICENSE']);
+
+  if (!listRoot.some(([key]) => key === '.')) {
     const indexDef = relativePath(pkg.main).replace('.js', '.d.ts');
 
     // for the env-specifics, add a root key (if not available)
-    list.push(['.', {
+    listRoot.push(['.', {
       types: indexDef,
       // eslint-disable-next-line sort-keys
       'react-native': createMapEntry(buildDir, pkg['react-native'], true)[1],
@@ -232,28 +233,32 @@ function buildExports () {
   }
 
   if (pkg.main) {
-    const main = pkg.main;
+    const main = pkg.main.startsWith('./')
+      ? pkg.main
+      : `./${pkg.main}`;
 
-    pkg.main = main.replace('.js', isTypeModule ? '.cjs' : '.js');
-    pkg.module = main.replace('.js', isTypeModule ? '.js' : '.mjs');
+    pkg.main = main.replace(/^\.\//, './cjs/');
+    pkg.module = main;
     pkg.types = main.replace('.js', '.d.ts');
   }
 
   // Ensure the top-level entries always points to the CJS version
   ['browser', 'react-native'].forEach((k) => {
     if (typeof pkg[k] === 'string') {
-      pkg[k] = pkg[k].replace('.js', isTypeModule ? '.cjs' : '.js');
+      const entry = pkg[k].startsWith('./')
+        ? pkg[k]
+        : `./${pkg.main}`;
+
+      pkg[k] = entry.replace(/^\.\//, './cjs/');
     }
   });
 
-  pkg.type = isTypeModule
-    ? 'module'
-    : 'commonjs';
+  pkg.type = 'module';
 
-  pkg.exports = list
+  pkg.exports = listRoot
     .filter(([path, config]) =>
       typeof config === 'object' ||
-      !list.some(([, c]) =>
+      !listRoot.some(([, c]) =>
         typeof c === 'object' &&
         Object.values(c).some((v) => v === path)
       )
@@ -263,7 +268,7 @@ function buildExports () {
       ...all,
       ...(
         path === './packageInfo'
-          ? { './packageInfo.cjs': './packageInfo.cjs', './packageInfo.js': './packageInfo.js' }
+          ? { './cjs/packageInfo.js': './cjs/packageInfo.js', './packageInfo.js': './packageInfo.js' }
           : {}
       ),
       [path]: typeof config === 'string'
@@ -277,6 +282,11 @@ function buildExports () {
   moveFields(pkg, ['main', 'module', 'browser', 'deno', 'react-native', 'types', 'exports', 'dependencies', 'optionalDependencies', 'peerDependencies']);
 
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
+
+  // copt from build-cjs to build/cjs
+  [
+    './build-cjs/**/*.js'
+  ].forEach((s) => copySync(s, 'build/cjs'));
 }
 
 function sortJson (json) {
