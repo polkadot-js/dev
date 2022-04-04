@@ -179,7 +179,7 @@ function tweakPackageInfo (buildDir) {
           .readFileSync(detectFile, 'utf8')
           .replace(
             /\/packageInfo'/g,
-            `${extra}packageInfo${type === 'esm' ? '.js' : ''}`
+            `${extra}packageInfo${type === 'esm' ? '.js' : ''}'`
           )
           .replace(
             /\/packageInfo"/g,
