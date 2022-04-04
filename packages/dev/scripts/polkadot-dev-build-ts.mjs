@@ -278,21 +278,27 @@ function buildExports () {
       )
     )
     .sort((a, b) => a[0].localeCompare(b[0]))
-    .reduce((all, [path, config]) => ({
-      ...all,
-      ...(
-        path === '.'
-          // eslint-disable-next-line sort-keys
-          ? { './cjs/package.json': './cjs/package.json', './cjs/*': './cjs/*.js' }
-          : {}
-      ),
-      [path]: typeof config === 'string'
+    .reduce((all, [path, config]) => {
+      const entry = typeof config === 'string'
         ? config
         : {
           ...((pkg.exports && pkg.exports[path]) || {}),
           ...config
-        }
-    }), {});
+        };
+
+      return {
+        ...all,
+        ...(
+          path === '.'
+            // eslint-disable-next-line sort-keys
+            ? { './cjs/package.json': './cjs/package.json', './cjs/*': './cjs/*.js' }
+            : path === './packageInfo'
+              ? { './packageInfo.js': entry }
+              : {}
+        ),
+        [path]: entry
+      };
+    }, {});
 
   moveFields(pkg, ['main', 'module', 'browser', 'deno', 'react-native', 'types', 'exports', 'dependencies', 'optionalDependencies', 'peerDependencies']);
 
