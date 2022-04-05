@@ -256,7 +256,7 @@ function buildExports () {
     }
   });
 
-  if (pkg.sideEffects) {
+  if (Array.isArray(pkg.sideEffects)) {
     pkg.sideEffects = pkg.sideEffects.map((s) =>
       s.endsWith('.cjs')
         ? s.replace(/^\.\//, './cjs/').replace('.cjs', '.js')
