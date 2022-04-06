@@ -144,6 +144,34 @@ function findFiles (buildDir, extra = '', exclude = []) {
     }, []);
 }
 
+function tweakRequire (type, inputPath, strategy) {
+  const [ext, pre] = type === 'esm'
+    ? ['.js', '/']
+    : ['', '/cjs/'];
+
+  Object
+    .entries(strategy)
+    .forEach(([fileName, replace]) => {
+      const detectFile = path.join(inputPath, `${fileName}.js`);
+
+      if (fs.existsSync(detectFile)) {
+        fs.writeFileSync(
+          detectFile,
+          fs
+            .readFileSync(detectFile, 'utf8')
+            .replace(
+              new RegExp(`/${replace}'`, 'g'),
+              `${pre}${replace}${ext}'`
+            )
+            .replace(
+              new RegExp(`/${replace}"`, 'g'),
+              `${pre}${replace}${ext}"`
+            )
+        );
+      }
+    });
+}
+
 function tweakPackageInfo (buildDir) {
   // Hack around some bundler issues, in this case Vite which has import.meta.url
   // as undefined in production contexts (and subsequently makes URL fail)
@@ -169,24 +197,12 @@ function tweakPackageInfo (buildDir) {
         )
     );
 
-    const extra = type === 'esm' ? '/' : '/cjs/';
-    const detectFile = path.join(inputPath, 'detectOther.js');
-
-    if (fs.existsSync(detectFile)) {
-      fs.writeFileSync(
-        detectFile,
-        fs
-          .readFileSync(detectFile, 'utf8')
-          .replace(
-            /\/packageInfo'/g,
-            `${extra}packageInfo${type === 'esm' ? '.js' : ''}'`
-          )
-          .replace(
-            /\/packageInfo"/g,
-            `${extra}packageInfo${type === 'esm' ? '.js' : ''}"`
-          )
-      );
-    }
+    tweakRequire(type, inputPath, {
+      // HACK for @polkadot/util-crypto
+      bundleInit: 'shim',
+      // Use cjs imports for detectOther
+      detectOther: 'packageInfo'
+    });
   });
 }
 
@@ -207,7 +223,7 @@ function buildExports () {
   const buildDir = path.join(process.cwd(), 'build');
 
   mkdirp.sync(path.join(buildDir, 'cjs'));
-  fs.writeFileSync(path.join(buildDir, 'cjs/package.json'), JSON.stringify({ type: 'commonjs' }));
+  fs.writeFileSync(path.join(buildDir, 'cjs/package.json'), JSON.stringify({ type: 'commonjs' }, null, 2));
   tweakPackageInfo(buildDir);
 
   const pkgPath = path.join(buildDir, 'package.json');
@@ -292,8 +308,8 @@ function buildExports () {
           path === '.'
             // eslint-disable-next-line sort-keys
             ? { './cjs/package.json': './cjs/package.json', './cjs/*': './cjs/*.js' }
-            : path === './packageInfo'
-              ? { './packageInfo.js': entry }
+            : ['./packageInfo', './shim'].includes(path)
+              ? { [`${path}.js`]: entry }
               : {}
         ),
         [path]: entry
