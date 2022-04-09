@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.66.1
+
+- Output commonjs into `cjs/*`
+
 ## 0.65.1
 
 - 2022
