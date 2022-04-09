@@ -144,31 +144,25 @@ function findFiles (buildDir, extra = '', exclude = []) {
     }, []);
 }
 
-function tweakRequire (type, inputPath, strategy) {
-  const [ext, pre] = type === 'esm'
-    ? ['.js', '/']
-    : ['', '/cjs/'];
+function tweakCjsPaths (buildDir) {
+  const cjsDir = `${buildDir}-cjs`;
 
-  Object
-    .entries(strategy)
-    .forEach(([fileName, replace]) => {
-      const detectFile = path.join(inputPath, `${fileName}.js`);
+  fs
+    .readdirSync(cjsDir)
+    .filter((n) => n.endsWith('.js'))
+    .forEach((jsName) => {
+      const thisPath = path.join(cjsDir, jsName);
 
-      if (fs.existsSync(detectFile)) {
-        fs.writeFileSync(
-          detectFile,
-          fs
-            .readFileSync(detectFile, 'utf8')
-            .replace(
-              new RegExp(`/${replace}'`, 'g'),
-              `${pre}${replace}${ext}'`
-            )
-            .replace(
-              new RegExp(`/${replace}"`, 'g'),
-              `${pre}${replace}${ext}"`
-            )
-        );
-      }
+      fs.writeFileSync(
+        thisPath,
+        fs
+          .readFileSync(thisPath, 'utf8')
+          .replace(
+            // require("@polkadot/$1/$2")
+            /require\("@polkadot\/([a-z-]*)\/(.*)"\)/g,
+            'require("@polkadot/$1/cjs/$2")'
+          )
+      );
     });
 }
 
@@ -196,13 +190,6 @@ function tweakPackageInfo (buildDir) {
           `path: ${type === 'cjs' ? cjsDirname : esmDirname}`
         )
     );
-
-    tweakRequire(type, inputPath, {
-      // HACK for @polkadot/util-crypto
-      bundleInit: 'shim',
-      // Use cjs imports for detectOther
-      detectOther: 'packageInfo'
-    });
   });
 }
 
@@ -225,6 +212,7 @@ function buildExports () {
   mkdirp.sync(path.join(buildDir, 'cjs'));
   fs.writeFileSync(path.join(buildDir, 'cjs/package.json'), JSON.stringify({ type: 'commonjs' }, null, 2));
   tweakPackageInfo(buildDir);
+  tweakCjsPaths(buildDir);
 
   const pkgPath = path.join(buildDir, 'package.json');
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
