@@ -115,7 +115,9 @@ module.exports = {
       maximum: 1,
       when: 'always'
     }],
+    'react/jsx-newline': [2, { prevent: true }],
     'react/jsx-no-bind': 2,
+    'react/jsx-props-no-multi-spaces': 2,
     'react/jsx-sort-props': [1, {
       noSortAlphabetically: false
     }],
