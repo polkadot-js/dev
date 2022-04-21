@@ -294,8 +294,7 @@ function buildExports () {
         ...all,
         ...(
           path === '.'
-            // eslint-disable-next-line sort-keys
-            ? { './cjs/package.json': './cjs/package.json', './cjs/*': './cjs/*.js' }
+            ? { './cjs/*': './cjs/*' }
             : ['./packageInfo', './shim'].includes(path)
               ? { [`${path}.js`]: entry }
               : {}
