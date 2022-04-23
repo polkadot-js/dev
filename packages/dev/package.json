@@ -77,7 +77,6 @@
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-import-newlines": "^1.2.2",
     "eslint-plugin-n": "^15.1.0",
-    "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.0.0",
     "eslint-plugin-react": "^7.29.4",
     "eslint-plugin-react-hooks": "^4.4.0",
