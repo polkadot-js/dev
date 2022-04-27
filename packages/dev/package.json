@@ -90,6 +90,7 @@
     "jest": "^28.0.1",
     "jest-cli": "^28.0.1",
     "jest-config": "^28.0.1",
+    "jest-environment-jsdom": "^28.0.1",
     "jest-haste-map": "^28.0.1",
     "jest-resolve": "^28.0.1",
     "madge": "^5.0.1",
