@@ -1,4 +1,4 @@
-     912	Jaco                          	Bump TS & Jest (#663)
+     913	Jaco                          	Bump babel (#664)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
        1	Amaury Martiny                	Allow .spec.ts files (#143)
