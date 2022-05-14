@@ -439,7 +439,11 @@ function lintInput (dir) {
     loopFiles(['.ts'], dir, 'src', (full, l, n) => {
       // Sadly, we have people copying and just changing all the headers without giving attribution -
       // we certainly like forks, contributions, building on stuff, but doing this rebrand is not cool
-      if (n === 0 && (!/\/\/ Copyright .* @polkadot\//.test(l) && !/\/\/ Auto-generated via `/.test(l))) {
+      if (n === 0 && (
+        !/\/\/ Copyright .* @polkadot\//.test(l) &&
+        !/\/\/ Auto-generated via `/.test(l) &&
+        !/#!\/usr\/bin\/env node/.test(l)
+      )) {
         return createError(full, l, n, 'Invalid header definition');
       }
 
