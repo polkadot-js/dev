@@ -383,14 +383,14 @@ function throwOnErrors (errors) {
   }
 }
 
-function loopFiles (exts, dir, sub, fn) {
+function loopFiles (exts, dir, sub, fn, allowComments = false) {
   return fs
     .readdirSync(sub)
     .reduce((errors, inner) => {
       const full = path.join(sub, inner);
 
       if (fs.statSync(full).isDirectory()) {
-        return errors.concat(loopFiles(exts, dir, full, fn));
+        return errors.concat(loopFiles(exts, dir, full, fn, allowComments));
       } else if (exts.some((e) => full.endsWith(e))) {
         return errors.concat(
           fs
@@ -405,7 +405,7 @@ function loopFiles (exts, dir, sub, fn) {
                 // anything between /* ... */
                 .replace(/\/\*.*\*\//g, '')
                 // single line comments with // ...
-                .replace(/\/\/.*/, '');
+                .replace(allowComments ? /--------------------/ : /\/\/.*/, '');
 
               return fn(`${dir}/${full}`, t, n);
             })
@@ -426,11 +426,25 @@ function lintOutput (dir) {
       // eslint-disable-next-line no-useless-escape
       } else if (/[\+\-\*\/\=\<\>\|\&\%\^\(\)\{\}\[\] ][0-9]{1,}n/.test(l)) {
         // we don't want untamed BigInt literals
-        return createError(full, l, n, 'Prefer BigInt(<digits>) to <dignits>n');
+        return createError(full, l, n, 'Prefer BigInt(<digits>) to <digits>n');
       }
 
       return null;
     })
+  );
+}
+
+function lintInput (dir) {
+  throwOnErrors(
+    loopFiles(['.ts'], dir, 'src', (full, l, n) => {
+      // Sadly, we have people copying and just changing all the headers without giving attribution -
+      // we certainly like forks, contributions, building on stuff, but doing this rebrand is not cool
+      if (n === 0 && (!/\/\/ Copyright .* @polkadot\//.test(l) && !/\/\/ Auto-generated via `/.test(l))) {
+        return createError(full, l, n, 'Invalid header definition');
+      }
+
+      return null;
+    }, true)
   );
 }
 
@@ -542,6 +556,8 @@ async function buildJs (repoPath, dir, locals) {
   if (!json.name.startsWith('@polkadot/')) {
     return;
   }
+
+  lintInput(dir);
 
   console.log(`*** ${name} ${version}`);
 
