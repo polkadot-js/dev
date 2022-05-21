@@ -285,10 +285,24 @@ function buildExports () {
     .reduce((all, [path, config]) => {
       const entry = typeof config === 'string'
         ? config
-        : {
-          ...((pkg.exports && pkg.exports[path]) || {}),
-          ...config
-        };
+        // We need to force the types entry to the top,
+        // so we merge, sort and re-assemble
+        : Object
+          .entries({
+            ...((pkg.exports && pkg.exports[path]) || {}),
+            ...config
+          })
+          .sort(([a], [b]) =>
+            a === 'types'
+              ? -1
+              : b === 'types'
+                ? 1
+                : 0
+          )
+          .reduce((all, [key, value]) => ({
+            ...all,
+            [key]: value
+          }), {});
 
       return {
         ...all,
