@@ -2004,7 +2004,7 @@ __metadata:
     prettier: ^2.6.2
     react: ^18.1.0
     rimraf: ^3.0.2
-    rollup: ^2.75.0
+    rollup: ^2.75.3
     rollup-plugin-cleanup: ^3.2.1
     typescript: ^4.7.2
     yargs: ^17.5.1
@@ -8525,9 +8525,9 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"rollup@npm:^2.75.0":
-  version: 2.75.0
-  resolution: "rollup@npm:2.75.0"
+"rollup@npm:^2.75.3":
+  version: 2.75.3
+  resolution: "rollup@npm:2.75.3"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -8535,7 +8535,7 @@ resolve@^2.0.0-next.3:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: a99b63691bb63ebed81eabdff8f9c3234f3e9fe1e0be22526f036ab530f77881a93ea5ad86c1c7c161c6fb8615552e46df93792ffe212c1197b2244231715bff
+  checksum: ac33a2336df049f21dea64e4c9faee2551bddf2920944ea6214b2ed214f3861c9a4e1a8b7a32d2af6632f649a25a2bf4da8fad9f84f5093f2bf4d7e77933756b
   languageName: node
   linkType: hard
 
