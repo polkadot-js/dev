@@ -104,9 +104,9 @@
     "yargs": "^17.5.1"
   },
   "devDependencies": {
-    "@types/jest": "^28.1.0",
-    "@types/node": "^17.0.39",
-    "@types/react": "^18.0.11",
+    "@types/jest": "^28.1.1",
+    "@types/node": "^17.0.40",
+    "@types/react": "^18.0.12",
     "@types/yargs": "^17.0.10",
     "react": "^18.1.0"
   }
