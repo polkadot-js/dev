@@ -14,7 +14,7 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.66.37",
+  "version": "0.67.0",
   "bin": {
     "polkadot-ci-ghact-build": "./scripts/polkadot-ci-ghact-build.mjs",
     "polkadot-ci-ghact-docs": "./scripts/polkadot-ci-ghact-docs.mjs",
