@@ -106,15 +106,13 @@ function npmPublish () {
 }
 
 function denoPublish () {
+  if (fs.existsSync('.skip-deno') || !fs.existsSync('build-deno')) {
+    return;
+  }
+
   const { name, version } = npmGetJson();
 
   if (version.includes('-')) {
-    console.log(`Not publishing a beta version of ${name} to ${DENO_REPO}`);
-
-    return;
-  } else if (!fs.lstatSync('build-deno')) {
-    console.log(`No deno outputs found for ${name}, skipping`);
-
     return;
   }
 
@@ -130,6 +128,24 @@ function denoPublish () {
   copySync('build-deno/**/*', denoPath);
 
   process.chdir('deno.land');
+
+  const newInfo = `## master\n\n- ${name} ${version}\n`;
+
+  if (!fs.existsSync('CHANGELOG.md')) {
+    fs.writeFileSync(
+      'CHANGELOG.md',
+      `# CHANGELOG\n\n${newInfo}`
+    );
+  } else {
+    const md = fs.readFileSync('CHANGELOG.md', 'utf-8');
+
+    fs.writeFileSync(
+      'CHANGELOG.md',
+      md.includes('## master\n\n')
+        ? md.replace('## master\n\n', newInfo)
+        : md.replace('# CHANGELOG\n\n', `# CHANGELOG\n\n${newInfo}\n`)
+    );
+  }
 
   gitSetup();
   execSync('git add --all .');
