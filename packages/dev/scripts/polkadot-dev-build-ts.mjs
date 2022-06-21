@@ -66,6 +66,74 @@ async function buildBabel (dir, type) {
   }
 }
 
+function adjustDenoPath (dir, f) {
+  if (f.startsWith('@polkadot')) {
+    const prefix = 'https://deno.land/x';
+    const parts = f.split('/');
+    const thisPkg = parts.slice(0, 2).join('/');
+
+    // this needs to align with build-ts
+    const denoPkg = thisPkg.replace('@polkadot/', 'polkadot-').replace(/-/g, '_');
+    const subPath = parts.slice(2).join('/');
+
+    if (parts.length === 2) {
+      // if we only have 2 parts, we add deno/mod.ts
+      return `${prefix}/${denoPkg}/mod.ts`;
+    }
+
+    // first we check in packages/* to see if we have this one
+    const localPath = path.join(process.cwd(), '..', parts[1]);
+
+    if (fs.existsSync(localPath)) {
+      // aha, this is a package in the same repo
+      const checkPath = path.join(localPath, subPath);
+
+      if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
+        // this is a directory, append index.ts
+        return `${prefix}/${denoPkg}/${subPath}/index.ts`;
+      }
+
+      return `${prefix}/${denoPkg}/${subPath}.ts`;
+    }
+
+    // now we check node_modules
+    const nodePath = path.join(process.cwd(), '../../node_modules', thisPkg);
+
+    if (fs.existsSync(nodePath)) {
+      // aha, this is a package in the same repo
+      const checkPath = path.join(nodePath, subPath);
+
+      if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
+        // this is a directory, append index.ts
+        return `${prefix}/${denoPkg}/${subPath}/index.ts`;
+      }
+
+      return `${prefix}/${denoPkg}/${subPath}.ts`;
+    }
+
+    // we don't know what to do here :(
+    throw new Error(`Unable to find ${f}`);
+  } else if (f.startsWith('.')) {
+    if (f.endsWith('.ts') || f.endsWith('.tsx') || f.endsWith('.js') || f.endsWith('.json')) {
+      // ignore, these are already fully-specified
+      return null;
+    }
+
+    const checkPath = path.join(process.cwd(), dir, f);
+
+    if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
+      // this is a directory, append index.ts
+      return `${f}/index.ts`;
+    }
+
+    // local file
+    return `${f}.ts`;
+  }
+
+  // skypack
+  return `https://cdn.skypack.dev/${f}`;
+}
+
 function rewriteDenoPaths (pkgName, rootDir, dir) {
   fs
     .readdirSync(dir)
@@ -81,72 +149,21 @@ function rewriteDenoPaths (pkgName, rootDir, dir) {
           thisPath,
           fs
             .readFileSync(thisPath, 'utf8')
+            // handle import/export
             .replace(/(import|export) (.*) from '(.*)'/g, (o, t, a, f) => {
-              if (f.startsWith('@polkadot')) {
-                const prefix = 'https://deno.land/x';
-                const parts = f.split('/');
-                const thisPkg = parts.slice(0, 2).join('/');
+              const adjusted = adjustDenoPath(dir, f);
 
-                // this needs to align with build-ts
-                const denoPkg = thisPkg.replace('@polkadot/', 'polkadot-').replace(/-/g, '_');
-                const subPath = parts.slice(2).join('/');
+              return adjusted
+                ? `${t} ${a} from '${adjusted}'`
+                : o;
+            })
+            // handle augmented inputs
+            .replace(/import '(.*)'/g, (o, f) => {
+              const adjusted = adjustDenoPath(dir, f);
 
-                if (parts.length === 2) {
-                  // if we only have 2 parts, we add deno/mod.ts
-                  return `${t} ${a} from '${prefix}/${denoPkg}/mod.ts'`;
-                }
-
-                // first we check in packages/* to see if we have this one
-                const localPath = path.join(process.cwd(), '..', parts[1]);
-
-                if (fs.existsSync(localPath)) {
-                  // aha, this is a package in the same repo
-                  const checkPath = path.join(localPath, subPath);
-
-                  if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
-                    // this is a directory, append index.ts
-                    return `${t} ${a} from '${prefix}/${denoPkg}/${subPath}/index.ts'`;
-                  }
-
-                  return `${t} ${a} from '${prefix}/${denoPkg}/${subPath}.ts'`;
-                }
-
-                // now we check node_modules
-                const nodePath = path.join(process.cwd(), '../../node_modules', thisPkg);
-
-                if (fs.existsSync(nodePath)) {
-                  // aha, this is a package in the same repo
-                  const checkPath = path.join(nodePath, subPath);
-
-                  if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
-                    // this is a directory, append index.ts
-                    return `${t} ${a} from '${prefix}/${denoPkg}/${subPath}/index.ts'`;
-                  }
-
-                  return `${t} ${a} from '${prefix}/${denoPkg}/${subPath}.ts'`;
-                }
-
-                // we don't know what to do here :(
-                throw new Error(`Unable to find ${f}`);
-              } else if (f.startsWith('.')) {
-                if (f.endsWith('.ts') || f.endsWith('.tsx') || f.endsWith('.js') || f.endsWith('.json')) {
-                  // ignore, these are already fully-specified
-                  return o;
-                }
-
-                const checkPath = path.join(process.cwd(), dir, f);
-
-                if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
-                  // this is a directory, append index.ts
-                  return `${t} ${a} from '${f}/index.ts'`;
-                }
-
-                // local file
-                return `${t} ${a} from '${f}.ts'`;
-              }
-
-              // skypack
-              return `${t} ${a} from 'https://cdn.skypack.dev/${f}'`;
+              return adjusted
+                ? `import '${adjusted}'`
+                : o;
             })
         );
       }
