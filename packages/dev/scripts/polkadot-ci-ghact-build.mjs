@@ -15,7 +15,7 @@ import gitSetup from './gitSetup.mjs';
 
 console.log('$ polkadot-ci-ghact-build', process.argv.slice(2).join(' '));
 
-const DENO_REPO = 'polkadot-js/deno.land';
+const DENO_REPO = 'polkadot-js/build-deno';
 const repo = `https://${process.env.GH_PAT}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
 const denoRepo = `https://${process.env.GH_PAT}@github.com/${DENO_REPO}.git`;
 
@@ -118,16 +118,17 @@ function denoPublish () {
 
   // this needs to align with build-ts
   const denoName = name.replace('@polkadot/', 'polkadot-').replace(/-/g, '_');
-  const denoPath = `deno.land/${denoName}`;
+  const denoClone = 'build-deno-clone';
+  const denoPath = `${denoClone}/${denoName}`;
 
-  execSync(`git clone ${denoRepo}`, true);
+  execSync(`git clone ${denoRepo} ${denoClone}`, true);
 
   rimraf.sync(denoPath);
   mkdirp.sync(denoPath);
 
   copySync('build-deno/**/*', denoPath);
 
-  process.chdir('deno.land');
+  process.chdir(denoClone);
 
   const newInfo = `## master\n\n- ${name} ${version}\n`;
 
