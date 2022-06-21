@@ -67,8 +67,6 @@ async function buildBabel (dir, type) {
 }
 
 function rewriteDenoPaths (dir) {
-  console.error(dir);
-
   fs
     .readdirSync(dir)
     .forEach((p) => {
@@ -104,8 +102,8 @@ function rewriteDenoPaths (dir) {
 
                 return `${t} ${a} from 'https://cdn.skypack.dev/${name}'`;
               } else if (f.startsWith('.')) {
-                if (f.endsWith('.ts') || f.endsWith('.js') || f.endsWith('.json')) {
-                  // ignore, these are fully-specified
+                if (f.endsWith('.ts') || f.endsWith('.tsx') || f.endsWith('.js') || f.endsWith('.json')) {
+                  // ignore, these are already fully-specified
                   return o;
                 } else if (fs.existsSync(path.join(process.cwd(), dir, f)) && fs.statSync(path.join(process.cwd(), dir, f)).isDirectory()) {
                   // this is a directory, append index.ts
