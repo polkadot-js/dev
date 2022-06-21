@@ -315,7 +315,7 @@ function tweakPackageInfo (buildDir) {
 
   const denoFile = path.join(`${buildDir}-deno`, 'packageInfo.ts');
 
-  if (fs.lstatSync(denoFile)) {
+  if (fs.existsSync(denoFile)) {
     fs.writeFileSync(
       denoFile,
       fs
