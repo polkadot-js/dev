@@ -362,7 +362,7 @@ function orderPackageJson (repoPath, dir, json) {
   });
 
   // move the different entry points to the (almost) end
-  ['browser', 'electron', 'main', 'module', 'react-native'].forEach((d) => {
+  ['browser', 'deno', 'electron', 'main', 'module', 'react-native'].forEach((d) => {
     delete sorted[d];
 
     if (json[d]) {
