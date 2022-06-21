@@ -730,7 +730,7 @@ async function buildJs (repoPath, dir, locals) {
       await buildBabel(dir, 'cjs');
       await buildBabel(dir, 'esm');
 
-      buildDeno(name, dir);
+      buildDeno(name);
 
       timeIt('Successfully built exports', () => buildExports());
       timeIt('Successfully linted configs', () => {
