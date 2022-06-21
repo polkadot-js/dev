@@ -66,14 +66,77 @@ async function buildBabel (dir, type) {
   }
 }
 
+function rewriteDenoPaths (dir) {
+  console.error(dir);
+
+  fs
+    .readdirSync(dir)
+    .forEach((p) => {
+      const thisPath = path.join(process.cwd(), dir, p);
+
+      if (fs.statSync(thisPath).isDirectory()) {
+        rewriteDenoPaths(`${dir}/${p}`);
+      } else if (thisPath.endsWith('.ts') || thisPath.endsWith('.tsx')) {
+        fs.writeFileSync(
+          thisPath,
+          fs
+            .readFileSync(thisPath, 'utf8')
+            .replace(/(import|export) (.*) from '(.*)'/g, (o, t, a, f) => {
+              if (f.startsWith('@polkadot')) {
+                const parts = f.split('/');
+
+                if (parts.length === 2) {
+                  // if we only have 2 parts, we add deno/mod.ts
+                  return `${t} ${a} from 'https://cdn.skypack.dev/${name}/deno/mod.ts'`;
+                }
+
+                // FIXME Check the actual paths in node_modules, i.e. we would like
+                // to add stuff like the extensions as well in here (and directories)
+                const name = parts.reduce((r, p, i) => {
+                  if (i === 2) {
+                    r.push('deno');
+                  }
+
+                  r.push(p);
+
+                  return r;
+                }, []).join('/');
+
+                return `${t} ${a} from 'https://cdn.skypack.dev/${name}'`;
+              } else if (f.startsWith('.')) {
+                if (f.endsWith('.ts') || f.endsWith('.js') || f.endsWith('.json')) {
+                  // ignore, these are fully-specified
+                  return o;
+                } else if (fs.existsSync(path.join(process.cwd(), dir, f)) && fs.statSync(path.join(process.cwd(), dir, f)).isDirectory()) {
+                  // this is a directory, append index.ts
+                  return `${t} ${a} from '${f}/index.ts'`;
+                }
+
+                // local file
+                return `${t} ${a} from '${f}.ts'`;
+              }
+
+              // skypack
+              return `${t} ${a} from 'https://cdn.skypack.dev/${f}'`;
+            })
+        );
+      }
+    });
+}
+
 function buildDeno () {
+  if (!fs.existsSync(path.join(process.cwd(), 'src/mod.ts'))) {
+    return;
+  }
+
   // copy the sources as-is
   copySync('src/**/*', 'build-deno');
 
   // remove the CJS directories
   rimraf.sync('build-deno/cjs');
 
-  // TODO Adjust the import paths
+  // adjust the import paths
+  rewriteDenoPaths('build-deno');
 }
 
 function relativePath (value) {
@@ -180,7 +243,8 @@ function tweakPackageInfo (buildDir) {
   // Hack around some bundler issues, in this case Vite which has import.meta.url
   // as undefined in production contexts (and subsequently makes URL fail)
   // See https://github.com/vitejs/vite/issues/5558
-  const esmDirname = "(import.meta && import.meta.url) ? new URL(import.meta.url).pathname.substring(0, new URL(import.meta.url).pathname.lastIndexOf('/') + 1) : 'auto'";
+  const esmPathname = 'new URL(import.meta.url).pathname';
+  const esmDirname = `(import.meta && import.meta.url) ? ${esmPathname}.substring(0, ${esmPathname}.lastIndexOf('/') + 1) : 'auto'`;
   const cjsDirname = "typeof __dirname === 'string' ? __dirname : 'auto'";
 
   ['esm', 'cjs'].forEach((type) => {
@@ -201,6 +265,24 @@ function tweakPackageInfo (buildDir) {
         )
     );
   });
+
+  const denoFile = path.join(`${buildDir}-deno`, 'packageInfo.ts');
+
+  if (fs.lstatSync(denoFile)) {
+    fs.writeFileSync(
+      denoFile,
+      fs
+        .readFileSync(denoFile, 'utf8')
+        .replace(
+          "type: 'auto'",
+          "type: 'deno'"
+        )
+        .replace(
+          "path: 'auto'",
+          `path: ${esmPathname}`
+        )
+    );
+  }
 }
 
 function moveFields (pkg, fields) {
@@ -460,7 +542,7 @@ function lintOutput (dir) {
 
 function lintInput (dir) {
   throwOnErrors(
-    loopFiles(['.ts'], dir, 'src', (full, l, n) => {
+    loopFiles(['.ts', '.tsx'], dir, 'src', (full, l, n) => {
       // Sadly, we have people copying and just changing all the headers without giving attribution -
       // we certainly like forks, contributions, building on stuff, but doing this rebrand is not cool
       if (n === 0 && (
