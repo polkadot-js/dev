@@ -66,7 +66,7 @@ async function buildBabel (dir, type) {
   }
 }
 
-function adjustDenoPath (dir, f) {
+function adjustDenoPath (pkgJson, dir, f) {
   if (f.startsWith('@polkadot')) {
     const prefix = 'https://deno.land/x';
     const parts = f.split('/');
@@ -130,18 +130,44 @@ function adjustDenoPath (dir, f) {
     return `${f}.ts`;
   }
 
+  const depParts = f.split('/');
+  const depName = depParts.slice(0, 2).join('/');
+  let depPath = depParts.length > 2
+    ? '/' + depParts.slice(2).join('/')
+    : null;
+
+  if (depPath) {
+    depPath += '.js';
+  }
+
+  let version = pkgJson.dependencies && pkgJson.dependencies[depName] && pkgJson.dependencies[depName] !== '*'
+    ? pkgJson.dependencies[depName]
+    : pkgJson.peerDependencies && pkgJson.peerDependencies[depName]
+      ? pkgJson.peerDependencies[depName]
+      : pkgJson.optionalDependencies && pkgJson.optionalDependencies[depName]
+        ? pkgJson.optionalDependencies[depName]
+        : pkgJson.devDependencies
+          ? pkgJson.devDependencies[depName]
+          : null;
+
+  if (version) {
+    version = '@' + version.replace('^', '').replace('~', '');
+  } else {
+    console.warn(`warning: Replacing unknown versioned package '${f}' inside ${pkgJson.name}, possibly missing an alias`);
+  }
+
   // skypack
-  return `https://cdn.skypack.dev/${f}`;
+  return `https://cdn.skypack.dev/${depName}${version || ''}${depPath || ''}`;
 }
 
-function rewriteDenoPaths (pkgName, rootDir, dir) {
+function rewriteDenoPaths (pkgJson, rootDir, dir) {
   fs
     .readdirSync(dir)
     .forEach((p) => {
       const thisPath = path.join(process.cwd(), dir, p);
 
       if (fs.statSync(thisPath).isDirectory()) {
-        rewriteDenoPaths(pkgName, rootDir, `${dir}/${p}`);
+        rewriteDenoPaths(pkgJson, rootDir, `${dir}/${p}`);
       } else if (thisPath.endsWith('.ts') || thisPath.endsWith('.tsx')) {
         // TODO This only handles import/export and doesn't do any
         // augmentation at this point - should be added for the API
@@ -151,7 +177,7 @@ function rewriteDenoPaths (pkgName, rootDir, dir) {
             .readFileSync(thisPath, 'utf8')
             // handle import/export
             .replace(/(import|export) (.*) from '(.*)'/g, (o, t, a, f) => {
-              const adjusted = adjustDenoPath(dir, f);
+              const adjusted = adjustDenoPath(pkgJson, dir, f);
 
               return adjusted
                 ? `${t} ${a} from '${adjusted}'`
@@ -159,7 +185,7 @@ function rewriteDenoPaths (pkgName, rootDir, dir) {
             })
             // handle augmented inputs
             .replace(/import '(.*)'/g, (o, f) => {
-              const adjusted = adjustDenoPath(dir, f);
+              const adjusted = adjustDenoPath(pkgJson, dir, f);
 
               return adjusted
                 ? `import '${adjusted}'`
@@ -170,7 +196,7 @@ function rewriteDenoPaths (pkgName, rootDir, dir) {
     });
 }
 
-function buildDeno (pkgName) {
+function buildDeno (pkgJson) {
   if (!fs.existsSync(path.join(process.cwd(), 'src/mod.ts'))) {
     return;
   }
@@ -178,12 +204,13 @@ function buildDeno (pkgName) {
   // copy the sources as-is
   ['src/**/*', '../../CHANGELOG.md', '../../CONTRIBUTORS', 'LICENSE', 'README.md'].forEach((s) => copySync(s, 'build-deno'));
 
-  // remove the CJS directories
+  // remove unneeded directories
   rimraf.sync('build-deno/cjs');
+  rimraf.sync('build-deno/**/*.spec.ts');
   rimraf.sync('build-deno/**/*.rs');
 
   // adjust the import paths
-  rewriteDenoPaths(pkgName, 'build-deno', 'build-deno');
+  rewriteDenoPaths(pkgJson, 'build-deno', 'build-deno');
 }
 
 function relativePath (value) {
@@ -707,10 +734,10 @@ function timeIt (label, fn) {
 }
 
 async function buildJs (repoPath, dir, locals) {
-  const json = JSON.parse(fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf-8'));
-  const { name, version } = json;
+  const pkgJson = JSON.parse(fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf-8'));
+  const { name, version } = pkgJson;
 
-  if (!json.name.startsWith('@polkadot/')) {
+  if (!name.startsWith('@polkadot/')) {
     return;
   }
 
@@ -718,7 +745,7 @@ async function buildJs (repoPath, dir, locals) {
 
   console.log(`*** ${name} ${version}`);
 
-  orderPackageJson(repoPath, dir, json);
+  orderPackageJson(repoPath, dir, pkgJson);
 
   if (!fs.existsSync(path.join(process.cwd(), '.skip-build'))) {
     const srcHeader = `// Copyright 2017-${new Date().getFullYear()} ${name} authors & contributors\n// SPDX-License-Identifier: Apache-2.0\n`;
@@ -750,7 +777,7 @@ async function buildJs (repoPath, dir, locals) {
       await buildBabel(dir, 'cjs');
       await buildBabel(dir, 'esm');
 
-      buildDeno(name);
+      buildDeno(pkgJson);
 
       timeIt('Successfully built exports', () => buildExports());
       timeIt('Successfully linted configs', () => {
