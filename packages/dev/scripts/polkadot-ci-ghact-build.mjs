@@ -106,15 +106,13 @@ function npmPublish () {
 }
 
 function denoPublish () {
+  if (fs.existsSync('.skip-deno') || !fs.lstatSync('build-deno')) {
+    return;
+  }
+
   const { name, version } = npmGetJson();
 
   if (version.includes('-')) {
-    console.log(`Not publishing a beta version of ${name} to ${DENO_REPO}`);
-
-    return;
-  } else if (!fs.lstatSync('build-deno')) {
-    console.log(`No deno outputs found for ${name}, skipping`);
-
     return;
   }
 
