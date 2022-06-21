@@ -118,6 +118,8 @@ function bundlePublish () {
     return;
   }
 
+  console.log(`\n *** bundle ${name}`);
+
   const bundClone = 'build-bundle-clone';
   const bundPath = `${bundClone}/${bundName}`;
 
@@ -150,7 +152,7 @@ function bundlePublish () {
   gitSetup();
   execSync('git add --all .');
   execSync(`git commit --no-status --quiet -m "${name} ${version}"`);
-  execSync(`git push ${denoRepo}`, true);
+  execSync(`git push ${bundRepo}`, true);
 
   process.chdir('..');
 }
@@ -165,6 +167,8 @@ function denoPublish () {
   if (version.includes('-') || (argv['skip-beta'] && !version.endsWith('.1'))) {
     return;
   }
+
+  console.log(`\n *** deno ${name}`);
 
   // this needs to align with build-ts
   const denoName = name.replace('@polkadot/', 'polkadot-').replace(/-/g, '_');
