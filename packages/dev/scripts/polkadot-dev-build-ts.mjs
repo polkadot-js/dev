@@ -159,7 +159,7 @@ function buildDeno (pkgName) {
   }
 
   // copy the sources as-is
-  ['src/**/*', 'LICENSE', 'README.md'].forEach((s) => copySync(s, 'build-deno'));
+  ['src/**/*', 'CHANGELOG.md', 'CONTRIBUTORS', 'LICENSE', 'README.md'].forEach((s) => copySync(s, 'build-deno'));
 
   // remove the CJS directories
   rimraf.sync('build-deno/cjs');
