@@ -112,7 +112,7 @@ function denoPublish () {
 
   const { name, version } = npmGetJson();
 
-  if (version.includes('-')) {
+  if (version.includes('-') || (argv['skip-beta'] && !version.endsWith('.1'))) {
     return;
   }
 
