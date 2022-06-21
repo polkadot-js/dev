@@ -114,8 +114,16 @@ function adjustDenoPath (pkgJson, dir, f) {
     // we don't know what to do here :(
     throw new Error(`Unable to find ${f}`);
   } else if (f.startsWith('.')) {
-    if (f.endsWith('.ts') || f.endsWith('.tsx') || f.endsWith('.js') || f.endsWith('.json')) {
+    if (f.endsWith('.ts') || f.endsWith('.tsx') || f.endsWith('.json')) {
       // ignore, these are already fully-specified
+      return null;
+    } else if (f.endsWith('.js')) {
+      if (f.includes('./cjs/')) {
+        // import from cjs/, change it to deno
+        return f.replace('/cjs/', '/deno/');
+      }
+
+      // leave the other paths as-is
       return null;
     }
 
