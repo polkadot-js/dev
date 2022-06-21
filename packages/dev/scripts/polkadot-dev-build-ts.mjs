@@ -83,15 +83,15 @@ function rewriteDenoPaths (pkgName, rootDir, dir) {
             .readFileSync(thisPath, 'utf8')
             .replace(/(import|export) (.*) from '(.*)'/g, (o, t, a, f) => {
               if (f.startsWith('@polkadot')) {
-                const prefix = 'https://cdn.skypack.dev';
-                const split = 'deno';
+                const prefix = 'https://deno.land/x';
                 const parts = f.split('/');
                 const thisPkg = parts.slice(0, 2).join('/');
+                const denoPkg = thisPkg.replace('@polkadot/', 'polkadot-js-');
                 const subPath = parts.slice(2).join('/');
 
                 if (parts.length === 2) {
                   // if we only have 2 parts, we add deno/mod.ts
-                  return `${t} ${a} from '${prefix}/${thisPkg}/${split}/mod.ts'`;
+                  return `${t} ${a} from '${prefix}/${denoPkg}/mod.ts'`;
                 }
 
                 // first we check in packages/* to see if we have this one
@@ -103,10 +103,10 @@ function rewriteDenoPaths (pkgName, rootDir, dir) {
 
                   if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
                     // this is a directory, append index.ts
-                    return `${t} ${a} from '${prefix}/${thisPkg}/${split}/${subPath}/index.ts'`;
+                    return `${t} ${a} from '${prefix}/${denoPkg}/${subPath}/index.ts'`;
                   }
 
-                  return `${t} ${a} from '${prefix}/${thisPkg}/${split}/${subPath}.ts'`;
+                  return `${t} ${a} from '${prefix}/${denoPkg}/${subPath}.ts'`;
                 }
 
                 // now we check node_modules
@@ -118,10 +118,10 @@ function rewriteDenoPaths (pkgName, rootDir, dir) {
 
                   if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
                     // this is a directory, append index.ts
-                    return `${t} ${a} from '${prefix}/${thisPkg}/${split}/${subPath}/index.ts'`;
+                    return `${t} ${a} from '${prefix}/${denoPkg}/${subPath}/index.ts'`;
                   }
 
-                  return `${t} ${a} from '${prefix}/${thisPkg}/${split}/${subPath}.ts'`;
+                  return `${t} ${a} from '${prefix}/${denoPkg}/${subPath}.ts'`;
                 }
 
                 // we don't know what to do here :(
