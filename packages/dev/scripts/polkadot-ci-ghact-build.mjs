@@ -3,8 +3,10 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import fs from 'fs';
+import mkdirp from 'mkdirp';
 import os from 'os';
 import path from 'path';
+import rimraf from 'rimraf';
 import yargs from 'yargs';
 
 import copySync from './copySync.mjs';
@@ -13,7 +15,9 @@ import gitSetup from './gitSetup.mjs';
 
 console.log('$ polkadot-ci-ghact-build', process.argv.slice(2).join(' '));
 
+const DENO_REPO = 'polkadot-js/deno.land';
 const repo = `https://${process.env.GH_PAT}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
+const denoRepo = `https://${process.env.GH_PAT}@github.com/${DENO_REPO}.git`;
 
 const argv = yargs(process.argv.slice(2))
   .options({
@@ -51,6 +55,12 @@ function npmGetVersion () {
   return JSON.parse(
     fs.readFileSync(path.resolve(process.cwd(), 'package.json'), 'utf8')
   ).version;
+}
+
+function npmGetJson () {
+  return JSON.parse(
+    fs.readFileSync(path.resolve(process.cwd(), 'package.json'), 'utf8')
+  );
 }
 
 function npmSetup () {
@@ -91,6 +101,39 @@ function npmPublish () {
       }
     }
   }
+
+  process.chdir('..');
+}
+
+function denoPublish () {
+  const { name, version } = npmGetJson();
+
+  if (version.includes('-')) {
+    console.log(`Not publishing a beta version of ${name} to ${DENO_REPO}`);
+
+    return;
+  } else if (!fs.lstatSync('build-deno')) {
+    console.log(`No deno outputs found for ${name}, skipping`);
+
+    return;
+  }
+
+  // this needs to align with build-ts
+  const denoName = name.replace('@polkadot/', 'polkadot-').replace(/-/g, '_');
+  const denoPath = `deno.land/${denoName}`;
+
+  execSync(`git clone ${denoRepo}`, true);
+
+  rimraf.sync(denoPath);
+  mkdirp.sync(denoPath);
+
+  copySync('build-deno/**/*', denoPath);
+
+  process.chdir('deno.land');
+
+  execSync('git add -A');
+  execSync(`git commit -am "${name} ${version}"`);
+  execSync(`git push ${denoRepo}`, true);
 
   process.chdir('..');
 }
@@ -189,3 +232,4 @@ runBuild();
 
 gitPush();
 loopFunc(npmPublish);
+loopFunc(denoPublish);
