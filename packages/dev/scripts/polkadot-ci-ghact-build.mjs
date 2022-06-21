@@ -131,8 +131,9 @@ function denoPublish () {
 
   process.chdir('deno.land');
 
-  execSync('git add -A');
-  execSync(`git commit -am "${name} ${version}"`);
+  gitSetup();
+  execSync('git add --all .');
+  execSync(`git commit --no-status --quiet -m "${name} ${version}"`);
   execSync(`git push ${denoRepo}`, true);
 
   process.chdir('..');
