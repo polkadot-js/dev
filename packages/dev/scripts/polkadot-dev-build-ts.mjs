@@ -86,6 +86,8 @@ function rewriteDenoPaths (pkgName, rootDir, dir) {
                 const prefix = 'https://deno.land/x';
                 const parts = f.split('/');
                 const thisPkg = parts.slice(0, 2).join('/');
+
+                // this needs to align with build-ts
                 const denoPkg = thisPkg.replace('@polkadot/', 'polkadot-').replace(/-/g, '_');
                 const subPath = parts.slice(2).join('/');
 
