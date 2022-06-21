@@ -106,7 +106,7 @@ function npmPublish () {
 }
 
 function denoPublish () {
-  if (fs.existsSync('.skip-deno') || !fs.lstatSync('build-deno')) {
+  if (fs.existsSync('.skip-deno') || !fs.existsSync('build-deno')) {
     return;
   }
 
