@@ -66,6 +66,107 @@ async function buildBabel (dir, type) {
   }
 }
 
+function rewriteDenoPaths (pkgName, rootDir, dir) {
+  fs
+    .readdirSync(dir)
+    .forEach((p) => {
+      const thisPath = path.join(process.cwd(), dir, p);
+
+      if (fs.statSync(thisPath).isDirectory()) {
+        rewriteDenoPaths(pkgName, rootDir, `${dir}/${p}`);
+      } else if (thisPath.endsWith('.ts') || thisPath.endsWith('.tsx')) {
+        // TODO This only handles import/export and doesn't do any
+        // augmentation at this point - should be added for the API
+        fs.writeFileSync(
+          thisPath,
+          fs
+            .readFileSync(thisPath, 'utf8')
+            .replace(/(import|export) (.*) from '(.*)'/g, (o, t, a, f) => {
+              if (f.startsWith('@polkadot')) {
+                const prefix = 'https://deno.land/x';
+                const parts = f.split('/');
+                const thisPkg = parts.slice(0, 2).join('/');
+                const denoPkg = thisPkg.replace('@polkadot/', 'polkadot-').replace(/-/g, '_');
+                const subPath = parts.slice(2).join('/');
+
+                if (parts.length === 2) {
+                  // if we only have 2 parts, we add deno/mod.ts
+                  return `${t} ${a} from '${prefix}/${denoPkg}/mod.ts'`;
+                }
+
+                // first we check in packages/* to see if we have this one
+                const localPath = path.join(process.cwd(), '..', parts[1]);
+
+                if (fs.existsSync(localPath)) {
+                  // aha, this is a package in the same repo
+                  const checkPath = path.join(localPath, subPath);
+
+                  if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
+                    // this is a directory, append index.ts
+                    return `${t} ${a} from '${prefix}/${denoPkg}/${subPath}/index.ts'`;
+                  }
+
+                  return `${t} ${a} from '${prefix}/${denoPkg}/${subPath}.ts'`;
+                }
+
+                // now we check node_modules
+                const nodePath = path.join(process.cwd(), '../../node_modules', thisPkg);
+
+                if (fs.existsSync(nodePath)) {
+                  // aha, this is a package in the same repo
+                  const checkPath = path.join(nodePath, subPath);
+
+                  if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
+                    // this is a directory, append index.ts
+                    return `${t} ${a} from '${prefix}/${denoPkg}/${subPath}/index.ts'`;
+                  }
+
+                  return `${t} ${a} from '${prefix}/${denoPkg}/${subPath}.ts'`;
+                }
+
+                // we don't know what to do here :(
+                throw new Error(`Unable to find ${f}`);
+              } else if (f.startsWith('.')) {
+                if (f.endsWith('.ts') || f.endsWith('.tsx') || f.endsWith('.js') || f.endsWith('.json')) {
+                  // ignore, these are already fully-specified
+                  return o;
+                }
+
+                const checkPath = path.join(process.cwd(), dir, f);
+
+                if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
+                  // this is a directory, append index.ts
+                  return `${t} ${a} from '${f}/index.ts'`;
+                }
+
+                // local file
+                return `${t} ${a} from '${f}.ts'`;
+              }
+
+              // skypack
+              return `${t} ${a} from 'https://cdn.skypack.dev/${f}'`;
+            })
+        );
+      }
+    });
+}
+
+function buildDeno (pkgName) {
+  if (!fs.existsSync(path.join(process.cwd(), 'src/mod.ts'))) {
+    return;
+  }
+
+  // copy the sources as-is
+  ['src/**/*', 'LICENSE', 'README.md'].forEach((s) => copySync(s, 'build-deno'));
+
+  // remove the CJS directories
+  rimraf.sync('build-deno/cjs');
+  rimraf.sync('build-deno/**/*.rs');
+
+  // adjust the import paths
+  rewriteDenoPaths(pkgName, 'build-deno', 'build-deno');
+}
+
 function relativePath (value) {
   return `${value.startsWith('.') ? value : './'}${value}`.replace(/\/\//g, '/');
 }
@@ -170,7 +271,8 @@ function tweakPackageInfo (buildDir) {
   // Hack around some bundler issues, in this case Vite which has import.meta.url
   // as undefined in production contexts (and subsequently makes URL fail)
   // See https://github.com/vitejs/vite/issues/5558
-  const esmDirname = "(import.meta && import.meta.url) ? new URL(import.meta.url).pathname.substring(0, new URL(import.meta.url).pathname.lastIndexOf('/') + 1) : 'auto'";
+  const esmPathname = 'new URL(import.meta.url).pathname';
+  const esmDirname = `(import.meta && import.meta.url) ? ${esmPathname}.substring(0, ${esmPathname}.lastIndexOf('/') + 1) : 'auto'`;
   const cjsDirname = "typeof __dirname === 'string' ? __dirname : 'auto'";
 
   ['esm', 'cjs'].forEach((type) => {
@@ -191,6 +293,24 @@ function tweakPackageInfo (buildDir) {
         )
     );
   });
+
+  const denoFile = path.join(`${buildDir}-deno`, 'packageInfo.ts');
+
+  if (fs.lstatSync(denoFile)) {
+    fs.writeFileSync(
+      denoFile,
+      fs
+        .readFileSync(denoFile, 'utf8')
+        .replace(
+          "type: 'auto'",
+          "type: 'deno'"
+        )
+        .replace(
+          "path: 'auto'",
+          `path: ${esmPathname}`
+        )
+    );
+  }
 }
 
 function moveFields (pkg, fields) {
@@ -450,7 +570,7 @@ function lintOutput (dir) {
 
 function lintInput (dir) {
   throwOnErrors(
-    loopFiles(['.ts'], dir, 'src', (full, l, n) => {
+    loopFiles(['.ts', '.tsx'], dir, 'src', (full, l, n) => {
       // Sadly, we have people copying and just changing all the headers without giving attribution -
       // we certainly like forks, contributions, building on stuff, but doing this rebrand is not cool
       if (n === 0 && (
@@ -610,6 +730,8 @@ async function buildJs (repoPath, dir, locals) {
     } else {
       await buildBabel(dir, 'cjs');
       await buildBabel(dir, 'esm');
+
+      buildDeno(name);
 
       timeIt('Successfully built exports', () => buildExports());
       timeIt('Successfully linted configs', () => {

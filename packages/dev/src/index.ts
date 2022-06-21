@@ -6,6 +6,7 @@ import type { EchoString } from './types';
 
 import { foo } from './test1/foo';
 import { adder, blah } from './test1';
+import * as bob from './test1';
 import { addThree } from './util';
 
 const SOMETHING = {
@@ -53,5 +54,5 @@ export function tester (): void {
 
   assert(adder(2, 4) === 6);
   assert(addThree(1, 2, 3) === 6);
-  assert(foo() === 'foobar');
+  assert(foo() === 'foobar' && !!bob.blah);
 }
