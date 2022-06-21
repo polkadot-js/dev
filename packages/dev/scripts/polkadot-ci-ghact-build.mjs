@@ -129,6 +129,24 @@ function denoPublish () {
 
   process.chdir('deno.land');
 
+  const newInfo = `## master\n\n- ${name} ${version}\n`;
+
+  if (!fs.existsSync('CHANGELOG.md')) {
+    fs.writeFileSync(
+      'CHANGELOG.md',
+      `# CHANGELOG\n\n${newInfo}`
+    );
+  } else {
+    const md = fs.readFileSync('CHANGELOG.md', 'utf-8');
+
+    fs.writeFileSync(
+      'CHANGELOG.md',
+      md.includes('## master\n\n')
+        ? md.replace('## master\n\n', newInfo)
+        : md.replace('# CHANGELOG\n\n', `# CHANGELOG\n\n${newInfo}\n`)
+    );
+  }
+
   gitSetup();
   execSync('git add --all .');
   execSync(`git commit --no-status --quiet -m "${name} ${version}"`);
