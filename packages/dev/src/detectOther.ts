@@ -4,5 +4,6 @@
 // samples...
 // var _packageInfo = require("@polkadot/networks/packageInfo");
 // import { packageInfo as netInfo } from '@polkadot/networks/packageInfo';
+// import { packageInfo as utilInfo } from '@polkadot/util';
 
 export default [];
