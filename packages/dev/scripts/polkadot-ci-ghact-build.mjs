@@ -16,8 +16,11 @@ import gitSetup from './gitSetup.mjs';
 console.log('$ polkadot-ci-ghact-build', process.argv.slice(2).join(' '));
 
 const DENO_REPO = 'polkadot-js/build-deno';
+const BUND_REPO = 'polkadot-js/build-bundle';
+
 const repo = `https://${process.env.GH_PAT}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
 const denoRepo = `https://${process.env.GH_PAT}@github.com/${DENO_REPO}.git`;
+const bundRepo = `https://${process.env.GH_PAT}@github.com/${BUND_REPO}.git`;
 
 const argv = yargs(process.argv.slice(2))
   .options({
@@ -101,6 +104,53 @@ function npmPublish () {
       }
     }
   }
+
+  process.chdir('..');
+}
+
+function bundlePublish () {
+  const { name, version } = npmGetJson();
+  const bundName = `bundle-polkadot-${name.split('/')[1]}.js`;
+
+  if (!fs.existsSync(`build/${bundName}`)) {
+    return;
+  } else if (version.includes('-') || (argv['skip-beta'] && !version.endsWith('.1'))) {
+    return;
+  }
+
+  const bundClone = 'build-bundle-clone';
+  const bundPath = `${bundClone}/${bundName}`;
+
+  execSync(`git clone ${bundRepo} ${bundClone}`, true);
+
+  rimraf.sync(bundPath);
+
+  copySync(`build/${bundName}`, bundClone);
+
+  process.chdir(bundClone);
+
+  const newInfo = `## master\n\n- ${name} ${version}\n`;
+
+  if (!fs.existsSync('CHANGELOG.md')) {
+    fs.writeFileSync(
+      'CHANGELOG.md',
+      `# CHANGELOG\n\n${newInfo}`
+    );
+  } else {
+    const md = fs.readFileSync('CHANGELOG.md', 'utf-8');
+
+    fs.writeFileSync(
+      'CHANGELOG.md',
+      md.includes('## master\n\n')
+        ? md.replace('## master\n\n', newInfo)
+        : md.replace('# CHANGELOG\n\n', `# CHANGELOG\n\n${newInfo}\n`)
+    );
+  }
+
+  gitSetup();
+  execSync('git add --all .');
+  execSync(`git commit --no-status --quiet -m "${name} ${version}"`);
+  execSync(`git push ${denoRepo}`, true);
 
   process.chdir('..');
 }
@@ -251,3 +301,4 @@ runBuild();
 gitPush();
 loopFunc(npmPublish);
 loopFunc(denoPublish);
+loopFunc(bundlePublish);
