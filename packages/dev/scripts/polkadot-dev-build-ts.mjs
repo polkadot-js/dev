@@ -66,6 +66,16 @@ async function buildBabel (dir, type) {
   }
 }
 
+function buildDeno () {
+  // copy the sources as-is
+  copySync('src/**/*', 'build-deno');
+
+  // remove the CJS directories
+  rimraf.sync('build-deno/cjs');
+
+  // TODO Adjust the import paths
+}
+
 function relativePath (value) {
   return `${value.startsWith('.') ? value : './'}${value}`.replace(/\/\//g, '/');
 }
@@ -610,6 +620,8 @@ async function buildJs (repoPath, dir, locals) {
     } else {
       await buildBabel(dir, 'cjs');
       await buildBabel(dir, 'esm');
+
+      buildDeno(dir);
 
       timeIt('Successfully built exports', () => buildExports());
       timeIt('Successfully linted configs', () => {
