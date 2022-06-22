@@ -366,10 +366,6 @@ function tweakPackageInfo (buildDir) {
           "path: 'auto'",
           `path: ${esmPathname}`
         )
-        .replace(
-          /version: '.*'/,
-          "version: 'DENOPUBVER'"
-        )
     );
   }
 }
