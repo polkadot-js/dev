@@ -26,7 +26,7 @@ const bundClone = 'build-bundle-clone';
 const denoClone = 'build-deno-clone';
 
 let withDeno = false;
-let withBundle = false;
+let withBund = false;
 const shouldDeno = [];
 const shouldBund = [];
 
@@ -117,9 +117,8 @@ function npmPublish () {
 }
 
 function addChangelog (version, ...names) {
-  const entry = `@polkadot/${names.length === 1 ? names[0] : `{${names.join(', ')}`} ${version}`;
-
-  const newInfo = `## master\n\n- ${entry}\n`;
+  const name = `@polkadot/${names.length === 1 ? names[0] : `{${names.join(', ')}}`}`;
+  const newInfo = '## master\n\n- `' + name + '` ' + version + '\n';
 
   if (!fs.existsSync('CHANGELOG.md')) {
     fs.writeFileSync('CHANGELOG.md', `# CHANGELOG\n\n${newInfo}`);
@@ -132,7 +131,7 @@ function addChangelog (version, ...names) {
     );
   }
 
-  return entry;
+  return `${name} ${version}`;
 }
 
 function commitClone (repo, clone, names) {
@@ -158,7 +157,7 @@ function bundlePublishPkg () {
 
   if (!fs.existsSync(fullPath)) {
     return;
-  } else if (!withBundle && (version.includes('-') || (argv['skip-beta'] && !version.endsWith('.1')))) {
+  } else if (!withBund && (version.includes('-') || (argv['skip-beta'] && !version.endsWith('.1')))) {
     return;
   }
 
@@ -171,7 +170,7 @@ function bundlePublishPkg () {
   shouldBund.push(dirName);
 
   rimraf.sync(`../../${bundClone}/${bundName}`);
-  copySync(fullPath, bundClone);
+  copySync(fullPath, `../../${bundClone}`);
 }
 
 function bundlePublish () {
@@ -262,7 +261,7 @@ function gitPush () {
 
   if (fs.existsSync('.123bundle')) {
     rimraf.sync('.123bundle');
-    withBundle = true;
+    withBund = true;
   }
 
   execSync('git add --all .');
