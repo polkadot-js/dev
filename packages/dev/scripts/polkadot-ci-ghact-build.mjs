@@ -251,7 +251,7 @@ function gitPush () {
   }
 
   if (fs.existsSync('.123deno')) {
-    rimraf('.123deno');
+    rimraf.sync('.123deno');
     withDeno = true;
   }
 
