@@ -164,10 +164,12 @@ function adjustDenoPath (pkgJson, dir, f) {
     console.warn(`warning: Replacing unknown versioned package '${f}' inside ${pkgJson.name}, possibly missing an alias`);
   }
 
-  const denoDep = pkgJson.denoDependencies && pkgJson.denoDependencies[depName];
+  const [denoDep, denoPath = '/mod.ts'] = pkgJson.denoDependencies && pkgJson.denoDependencies[depName]
+    ? pkgJson.denoDependencies[depName].split('/')
+    : [null];
 
   return denoDep
-    ? `${denoIntPrefix}/${denoDep}${version || ''}${depPath || ''}`
+    ? `${denoIntPrefix}/${denoDep}${version || ''}${depPath || denoPath || ''}`
     : `${denoExtPrefix}/${depName}${version || ''}${depPath || ''}`;
 }
 
