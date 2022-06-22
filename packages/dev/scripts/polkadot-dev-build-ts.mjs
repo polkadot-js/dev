@@ -10,7 +10,7 @@ import rimraf from 'rimraf';
 
 import { EXT_CJS, EXT_ESM } from '../config/babel-extensions.cjs';
 import copySync from './copySync.mjs';
-import { denoCreateName, denoPrefix } from './deno.mjs';
+import { denoCreateName, denoExtPrefix, denoIntPrefix } from './deno.mjs';
 import { __dirname } from './dirname.mjs';
 import execSync from './execSync.mjs';
 
@@ -78,7 +78,7 @@ function adjustDenoPath (pkgJson, dir, f) {
 
     if (parts.length === 2) {
       // if we only have 2 parts, we add deno/mod.ts
-      return `${denoPrefix}/${denoPkg}/mod.ts`;
+      return `${denoIntPrefix}/${denoPkg}/mod.ts`;
     }
 
     // first we check in packages/* to see if we have this one
@@ -90,10 +90,10 @@ function adjustDenoPath (pkgJson, dir, f) {
 
       if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
         // this is a directory, append index.ts
-        return `${denoPrefix}/${denoPkg}/${subPath}/index.ts`;
+        return `${denoIntPrefix}/${denoPkg}/${subPath}/index.ts`;
       }
 
-      return `${denoPrefix}/${denoPkg}/${subPath}.ts`;
+      return `${denoIntPrefix}/${denoPkg}/${subPath}.ts`;
     }
 
     // now we check node_modules
@@ -105,10 +105,10 @@ function adjustDenoPath (pkgJson, dir, f) {
 
       if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
         // this is a directory, append index.ts
-        return `${denoPrefix}/${denoPkg}/${subPath}/index.ts`;
+        return `${denoIntPrefix}/${denoPkg}/${subPath}/index.ts`;
       }
 
-      return `${denoPrefix}/${denoPkg}/${subPath}.ts`;
+      return `${denoIntPrefix}/${denoPkg}/${subPath}.ts`;
     }
 
     // we don't know what to do here :(
@@ -164,8 +164,11 @@ function adjustDenoPath (pkgJson, dir, f) {
     console.warn(`warning: Replacing unknown versioned package '${f}' inside ${pkgJson.name}, possibly missing an alias`);
   }
 
-  // skypack
-  return `https://cdn.skypack.dev/${depName}${version || ''}${depPath || ''}`;
+  const denoDep = pkgJson.denoDependencies && pkgJson.denoDependencies[depName];
+
+  return denoDep
+    ? `${denoIntPrefix}/${denoDep}${version || ''}${depPath || ''}`
+    : `${denoExtPrefix}/${depName}${version || ''}${depPath || ''}`;
 }
 
 function rewriteDenoPaths (pkgJson, rootDir, dir) {
@@ -492,7 +495,7 @@ function buildExports () {
       };
     }, {});
 
-  moveFields(pkg, ['main', 'module', 'browser', 'deno', 'react-native', 'types', 'exports', 'dependencies', 'optionalDependencies', 'peerDependencies']);
+  moveFields(pkg, ['main', 'module', 'browser', 'deno', 'react-native', 'types', 'exports', 'dependencies', 'optionalDependencies', 'peerDependencies', 'denoDependencies']);
 
   fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
 
@@ -547,7 +550,7 @@ function orderPackageJson (repoPath, dir, json) {
   // move bin, scripts & dependencies to the end
   [
     ['bin', 'scripts'],
-    ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies', 'resolutions']
+    ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies', 'denoDependencies', 'resolutions']
   ].forEach((a) =>
     a.forEach((d) => {
       delete sorted[d];
