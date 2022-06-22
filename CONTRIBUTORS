@@ -1,4 +1,4 @@
-     958	Jaco                          	Use rimraf.sync (#708)
+     959	Jaco                          	Use a single push for bundle creation (#709)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
        1	Amaury Martiny                	Allow .spec.ts files (#143)
