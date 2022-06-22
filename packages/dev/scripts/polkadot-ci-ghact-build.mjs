@@ -135,6 +135,21 @@ function addChangelog (version, ...names) {
   return entry;
 }
 
+function commitClone (repo, clone, names) {
+  if (names.length) {
+    process.chdir(clone);
+
+    const entry = addChangelog(...names);
+
+    gitSetup();
+    execSync('git add --all .');
+    execSync(`git commit --no-status --quiet -m "${entry}"`);
+    execSync(`git push ${repo}`, true);
+
+    process.chdir('..');
+  }
+}
+
 function bundlePublishPkg () {
   const { name, version } = npmGetJson();
   const dirName = name.split('/')[1];
@@ -147,13 +162,13 @@ function bundlePublishPkg () {
     return;
   }
 
+  console.log(`\n *** bundle ${name}`);
+
   if (shouldBund.length === 0) {
     shouldBund.push(version);
   }
 
   shouldBund.push(dirName);
-
-  console.log(`\n *** bundle ${name}`);
 
   rimraf.sync(`../../${bundClone}/${bundName}`);
   copySync(fullPath, bundClone);
@@ -164,18 +179,7 @@ function bundlePublish () {
 
   loopFunc(bundlePublishPkg);
 
-  if (shouldBund.length) {
-    process.chdir(bundClone);
-
-    const entry = addChangelog(...shouldBund);
-
-    gitSetup();
-    execSync('git add --all .');
-    execSync(`git commit --no-status --quiet -m "${entry}"`);
-    execSync(`git push ${bundRepo}`, true);
-
-    process.chdir('..');
-  }
+  commitClone(bundRepo, bundClone, shouldBund);
 }
 
 function denoPublishPkg () {
@@ -187,16 +191,16 @@ function denoPublishPkg () {
     return;
   }
 
+  console.log(`\n *** deno ${name}`);
+
+  const dirName = denoCreateDir(name);
+  const denoPath = `../../${denoClone}/${dirName}`;
+
   if (shouldDeno.length === 0) {
     shouldDeno.push(version);
   }
 
   shouldDeno.push(dirName);
-
-  console.log(`\n *** deno ${name}`);
-
-  const dirName = denoCreateDir(name);
-  const denoPath = `../../${denoClone}/${dirName}`;
 
   rimraf.sync(denoPath);
   mkdirp.sync(denoPath);
@@ -209,18 +213,7 @@ function denoPublish () {
 
   loopFunc(denoPublishPkg);
 
-  if (shouldDeno.length) {
-    process.chdir(denoClone);
-
-    const entry = addChangelog(...shouldDeno);
-
-    gitSetup();
-    execSync('git add --all .');
-    execSync(`git commit --no-status --quiet -m "${entry}"`);
-    execSync(`git push ${denoRepo}`, true);
-
-    process.chdir('..');
-  }
+  commitClone(denoRepo, denoClone, shouldDeno);
 }
 
 function gitBump () {
