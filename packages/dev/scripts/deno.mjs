@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 export const denoIntPrefix = 'https://deno.land/x';
-export const denoExtPrefix = 'https://cdn.skypack.dev';
+export const denoExtPrefix = 'https://esm.sh';
 
 export function denoCreateName (name) {
   return name.replace('@polkadot/', 'polkadot/');
