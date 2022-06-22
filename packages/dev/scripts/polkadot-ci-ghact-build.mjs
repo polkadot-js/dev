@@ -117,7 +117,7 @@ function npmPublish () {
 }
 
 function addChangelog (version, ...names) {
-  const entry = `@polkadot/${names.length === 1 ? names[0] : `{${names.join(', ')}`} ${version}`;
+  const entry = `@polkadot/${names.length === 1 ? names[0] : `{${names.join(', ')}}`} ${version}`;
 
   const newInfo = `## master\n\n- ${entry}\n`;
 
