@@ -10,6 +10,7 @@ import rimraf from 'rimraf';
 
 import { EXT_CJS, EXT_ESM } from '../config/babel-extensions.cjs';
 import copySync from './copySync.mjs';
+import { denoCreateName, denoPrefix } from './deno.mjs';
 import { __dirname } from './dirname.mjs';
 import execSync from './execSync.mjs';
 
@@ -68,17 +69,16 @@ async function buildBabel (dir, type) {
 
 function adjustDenoPath (pkgJson, dir, f) {
   if (f.startsWith('@polkadot')) {
-    const prefix = 'https://deno.land/x';
     const parts = f.split('/');
     const thisPkg = parts.slice(0, 2).join('/');
 
     // this needs to align with build-ts
-    const denoPkg = thisPkg.replace('@polkadot/', 'polkadot-').replace(/-/g, '_');
+    const denoPkg = denoCreateName(thisPkg);
     const subPath = parts.slice(2).join('/');
 
     if (parts.length === 2) {
       // if we only have 2 parts, we add deno/mod.ts
-      return `${prefix}/${denoPkg}/mod.ts`;
+      return `${denoPrefix}/${denoPkg}/mod.ts`;
     }
 
     // first we check in packages/* to see if we have this one
@@ -90,10 +90,10 @@ function adjustDenoPath (pkgJson, dir, f) {
 
       if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
         // this is a directory, append index.ts
-        return `${prefix}/${denoPkg}/${subPath}/index.ts`;
+        return `${denoPrefix}/${denoPkg}/${subPath}/index.ts`;
       }
 
-      return `${prefix}/${denoPkg}/${subPath}.ts`;
+      return `${denoPrefix}/${denoPkg}/${subPath}.ts`;
     }
 
     // now we check node_modules
@@ -105,10 +105,10 @@ function adjustDenoPath (pkgJson, dir, f) {
 
       if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
         // this is a directory, append index.ts
-        return `${prefix}/${denoPkg}/${subPath}/index.ts`;
+        return `${denoPrefix}/${denoPkg}/${subPath}/index.ts`;
       }
 
-      return `${prefix}/${denoPkg}/${subPath}.ts`;
+      return `${denoPrefix}/${denoPkg}/${subPath}.ts`;
     }
 
     // we don't know what to do here :(
