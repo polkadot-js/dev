@@ -22,8 +22,13 @@ const BUND_REPO = 'polkadot-js/build-bundle';
 const repo = `https://${process.env.GH_PAT}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
 const denoRepo = `https://${process.env.GH_PAT}@github.com/${DENO_REPO}.git`;
 const bundRepo = `https://${process.env.GH_PAT}@github.com/${BUND_REPO}.git`;
+const bundClone = 'build-bundle-clone';
+const denoClone = 'build-deno-clone';
 
 let withDeno = false;
+let withBundle = false;
+let shouldDeno = false;
+let shouldBund = false;
 
 const argv = yargs(process.argv.slice(2))
   .options({
@@ -111,104 +116,105 @@ function npmPublish () {
   process.chdir('..');
 }
 
-function bundlePublish () {
-  const { name, version } = npmGetJson();
-  const bundName = `bundle-polkadot-${name.split('/')[1]}.js`;
-
-  if (!fs.existsSync(`build/${bundName}`)) {
-    return;
-  } else if (version.includes('-') || (argv['skip-beta'] && !version.endsWith('.1'))) {
-    return;
-  }
-
-  console.log(`\n *** bundle ${name}`);
-
-  const bundClone = 'build-bundle-clone';
-  const bundPath = `${bundClone}/${bundName}`;
-
-  execSync(`git clone ${bundRepo} ${bundClone}`, true);
-
-  rimraf.sync(bundPath);
-
-  copySync(`build/${bundName}`, bundClone);
-
-  process.chdir(bundClone);
-
+function addChangelog (name, version) {
   const newInfo = `## master\n\n- ${name} ${version}\n`;
 
   if (!fs.existsSync('CHANGELOG.md')) {
-    fs.writeFileSync(
-      'CHANGELOG.md',
-      `# CHANGELOG\n\n${newInfo}`
-    );
+    fs.writeFileSync('CHANGELOG.md', `# CHANGELOG\n\n${newInfo}`);
   } else {
     const md = fs.readFileSync('CHANGELOG.md', 'utf-8');
 
-    fs.writeFileSync(
-      'CHANGELOG.md',
-      md.includes('## master\n\n')
-        ? md.replace('## master\n\n', newInfo)
-        : md.replace('# CHANGELOG\n\n', `# CHANGELOG\n\n${newInfo}\n`)
+    fs.writeFileSync('CHANGELOG.md', md.includes('## master\n\n')
+      ? md.replace('## master\n\n', newInfo)
+      : md.replace('# CHANGELOG\n\n', `# CHANGELOG\n\n${newInfo}\n`)
     );
   }
-
-  gitSetup();
-  execSync('git add --all .');
-  execSync(`git commit --no-status --quiet -m "${name} ${version}"`);
-  execSync(`git push ${bundRepo}`, true);
-
-  process.chdir('..');
 }
 
-function denoPublish () {
-  if (fs.existsSync('.skip-deno') || !fs.existsSync('build-deno')) {
+function bundlePublishPkg () {
+  const { name, version } = npmGetJson();
+  const dirName = name.split('/')[1];
+  const bundName = `bundle-polkadot-${dirName}.js`;
+  const fullPath = `build/${bundName}`;
+
+  if (!fs.existsSync(fullPath)) {
+    return;
+  } else if (!withBundle && (version.includes('-') || (argv['skip-beta'] && !version.endsWith('.1')))) {
     return;
   }
 
+  shouldBund = true;
+
+  console.log(`\n *** bundle ${name}`);
+
+  rimraf.sync(`../../${bundClone}/${bundName}`);
+  copySync(fullPath, bundClone);
+
+  process.chdir(`../../${bundClone}`);
+  addChangelog(name, version);
+  execSync('git add --all .');
+  execSync(`git commit --no-status --quiet -m "${name} ${version}"`);
+  process.chdir(`../packages/${dirName}`);
+}
+
+function bundlePublish () {
+  execSync(`git clone ${bundRepo} ${bundClone}`, true);
+
+  process.chdir(bundClone);
+  gitSetup();
+  process.chdir('..');
+
+  loopFunc(bundlePublishPkg);
+
+  if (shouldBund) {
+    process.chdir(bundClone);
+    execSync(`git push ${bundRepo}`, true);
+    process.chdir('..');
+  }
+}
+
+function denoPublishPkg () {
   const { name, version } = npmGetJson();
 
-  if (!withDeno && (version.includes('-') || (argv['skip-beta'] && !version.endsWith('.1')))) {
+  if (fs.existsSync('.skip-deno') || !fs.existsSync('build-deno')) {
+    return;
+  } else if (!withDeno && (version.includes('-') || (argv['skip-beta'] && !version.endsWith('.1')))) {
     return;
   }
+
+  shouldDeno = true;
 
   console.log(`\n *** deno ${name}`);
 
-  const denoClone = 'build-deno-clone';
-  const denoPath = `${denoClone}/${denoCreateDir(name)}`;
-
-  execSync(`git clone ${denoRepo} ${denoClone}`, true);
+  const dirName = denoCreateDir(name);
+  const denoPath = `../../${denoClone}/${dirName}`;
 
   rimraf.sync(denoPath);
   mkdirp.sync(denoPath);
 
   copySync('build-deno/**/*', denoPath);
 
-  process.chdir(denoClone);
-
-  const newInfo = `## master\n\n- ${name} ${version}\n`;
-
-  if (!fs.existsSync('CHANGELOG.md')) {
-    fs.writeFileSync(
-      'CHANGELOG.md',
-      `# CHANGELOG\n\n${newInfo}`
-    );
-  } else {
-    const md = fs.readFileSync('CHANGELOG.md', 'utf-8');
-
-    fs.writeFileSync(
-      'CHANGELOG.md',
-      md.includes('## master\n\n')
-        ? md.replace('## master\n\n', newInfo)
-        : md.replace('# CHANGELOG\n\n', `# CHANGELOG\n\n${newInfo}\n`)
-    );
-  }
-
-  gitSetup();
+  process.chdir(`../../${denoClone}`);
+  addChangelog(name, version);
   execSync('git add --all .');
   execSync(`git commit --no-status --quiet -m "${name} ${version}"`);
-  execSync(`git push ${denoRepo}`, true);
+  process.chdir(`../packages/${dirName}`);
+}
 
+function denoPublish () {
+  execSync(`git clone ${denoRepo} ${denoClone}`, true);
+
+  process.chdir(denoClone);
+  gitSetup();
   process.chdir('..');
+
+  loopFunc(denoPublishPkg);
+
+  if (shouldDeno) {
+    process.chdir(denoClone);
+    execSync(`git push ${denoRepo}`, true);
+    process.chdir('..');
+  }
 }
 
 function gitBump () {
@@ -253,6 +259,11 @@ function gitPush () {
   if (fs.existsSync('.123deno')) {
     rimraf.sync('.123deno');
     withDeno = true;
+  }
+
+  if (fs.existsSync('.123bundle')) {
+    rimraf.sync('.123bundle');
+    withBundle = true;
   }
 
   execSync('git add --all .');
@@ -309,6 +320,8 @@ runTest();
 runBuild();
 
 gitPush();
+
+denoPublish();
+bundlePublish();
+
 loopFunc(npmPublish);
-loopFunc(denoPublish);
-loopFunc(bundlePublish);
