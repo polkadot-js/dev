@@ -117,8 +117,8 @@ function npmPublish () {
 }
 
 function addChangelog (version, ...names) {
-  const name = `@polkadot/${names.length === 1 ? names[0] : `{${names.join(', ')}}`}`;
-  const newInfo = '## master\n\n- `' + name + '` ' + version + '\n';
+  const entry = `${names.join(', ')} ${version}`;
+  const newInfo = `## master\n\n- ${entry}\n`;
 
   if (!fs.existsSync('CHANGELOG.md')) {
     fs.writeFileSync('CHANGELOG.md', `# CHANGELOG\n\n${newInfo}`);
@@ -131,7 +131,7 @@ function addChangelog (version, ...names) {
     );
   }
 
-  return `${name} ${version}`;
+  return entry;
 }
 
 function commitClone (repo, clone, names) {
