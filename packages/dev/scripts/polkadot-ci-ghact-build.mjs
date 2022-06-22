@@ -10,17 +10,20 @@ import rimraf from 'rimraf';
 import yargs from 'yargs';
 
 import copySync from './copySync.mjs';
+import { denoCreateDir } from './deno.mjs';
 import execSync from './execSync.mjs';
 import gitSetup from './gitSetup.mjs';
 
 console.log('$ polkadot-ci-ghact-build', process.argv.slice(2).join(' '));
 
-const DENO_REPO = 'polkadot-js/build-deno';
+const DENO_REPO = 'polkadot-js/build-deno.land';
 const BUND_REPO = 'polkadot-js/build-bundle';
 
 const repo = `https://${process.env.GH_PAT}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
 const denoRepo = `https://${process.env.GH_PAT}@github.com/${DENO_REPO}.git`;
 const bundRepo = `https://${process.env.GH_PAT}@github.com/${BUND_REPO}.git`;
+
+let withDeno = false;
 
 const argv = yargs(process.argv.slice(2))
   .options({
@@ -164,16 +167,14 @@ function denoPublish () {
 
   const { name, version } = npmGetJson();
 
-  if (version.includes('-') || (argv['skip-beta'] && !version.endsWith('.1'))) {
+  if (!withDeno && (version.includes('-') || (argv['skip-beta'] && !version.endsWith('.1')))) {
     return;
   }
 
   console.log(`\n *** deno ${name}`);
 
-  // this needs to align with build-ts
-  const denoName = name.replace('@polkadot/', 'polkadot-').replace(/-/g, '_');
   const denoClone = 'build-deno-clone';
-  const denoPath = `${denoClone}/${denoName}`;
+  const denoPath = `${denoClone}/${denoCreateDir(name)}`;
 
   execSync(`git clone ${denoRepo} ${denoClone}`, true);
 
@@ -247,6 +248,11 @@ function gitPush () {
     } else if (version.endsWith('.1')) {
       throw new Error(`Unable to release, no CHANGELOG entry for ${version}`);
     }
+  }
+
+  if (fs.existsSync('.123deno')) {
+    rimraf('.123deno');
+    withDeno = true;
   }
 
   execSync('git add --all .');
