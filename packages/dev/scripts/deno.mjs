@@ -1,7 +1,8 @@
 // Copyright 2017-2022 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-export const denoPrefix = 'https://deno.land/x';
+export const denoIntPrefix = 'https://deno.land/x';
+export const denoExtPrefix = 'https://cdn.skypack.dev';
 
 export function denoCreateName (name) {
   return name.replace('@polkadot/', 'polkadot/');
