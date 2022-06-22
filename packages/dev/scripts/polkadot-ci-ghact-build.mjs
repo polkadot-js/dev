@@ -27,8 +27,8 @@ const denoClone = 'build-deno-clone';
 
 let withDeno = false;
 let withBundle = false;
-let shouldDeno = false;
-let shouldBund = false;
+const shouldDeno = [];
+const shouldBund = [];
 
 const argv = yargs(process.argv.slice(2))
   .options({
@@ -116,8 +116,10 @@ function npmPublish () {
   process.chdir('..');
 }
 
-function addChangelog (name, version) {
-  const newInfo = `## master\n\n- ${name} ${version}\n`;
+function addChangelog (version, ...names) {
+  const entry = `@polkadot/${names.length === 1 ? names[0] : `{${names.join(', ')}`} ${version}`;
+
+  const newInfo = `## master\n\n- ${entry}\n`;
 
   if (!fs.existsSync('CHANGELOG.md')) {
     fs.writeFileSync('CHANGELOG.md', `# CHANGELOG\n\n${newInfo}`);
@@ -128,6 +130,23 @@ function addChangelog (name, version) {
       ? md.replace('## master\n\n', newInfo)
       : md.replace('# CHANGELOG\n\n', `# CHANGELOG\n\n${newInfo}\n`)
     );
+  }
+
+  return entry;
+}
+
+function commitClone (repo, clone, names) {
+  if (names.length) {
+    process.chdir(clone);
+
+    const entry = addChangelog(...names);
+
+    gitSetup();
+    execSync('git add --all .');
+    execSync(`git commit --no-status --quiet -m "${entry}"`);
+    execSync(`git push ${repo}`, true);
+
+    process.chdir('..');
   }
 }
 
@@ -143,34 +162,24 @@ function bundlePublishPkg () {
     return;
   }
 
-  shouldBund = true;
-
   console.log(`\n *** bundle ${name}`);
+
+  if (shouldBund.length === 0) {
+    shouldBund.push(version);
+  }
+
+  shouldBund.push(dirName);
 
   rimraf.sync(`../../${bundClone}/${bundName}`);
   copySync(fullPath, bundClone);
-
-  process.chdir(`../../${bundClone}`);
-  addChangelog(name, version);
-  execSync('git add --all .');
-  execSync(`git commit --no-status --quiet -m "${name} ${version}"`);
-  process.chdir(`../packages/${dirName}`);
 }
 
 function bundlePublish () {
   execSync(`git clone ${bundRepo} ${bundClone}`, true);
 
-  process.chdir(bundClone);
-  gitSetup();
-  process.chdir('..');
-
   loopFunc(bundlePublishPkg);
 
-  if (shouldBund) {
-    process.chdir(bundClone);
-    execSync(`git push ${bundRepo}`, true);
-    process.chdir('..');
-  }
+  commitClone(bundRepo, bundClone, shouldBund);
 }
 
 function denoPublishPkg () {
@@ -182,39 +191,29 @@ function denoPublishPkg () {
     return;
   }
 
-  shouldDeno = true;
-
   console.log(`\n *** deno ${name}`);
 
   const dirName = denoCreateDir(name);
   const denoPath = `../../${denoClone}/${dirName}`;
 
+  if (shouldDeno.length === 0) {
+    shouldDeno.push(version);
+  }
+
+  shouldDeno.push(dirName);
+
   rimraf.sync(denoPath);
   mkdirp.sync(denoPath);
 
   copySync('build-deno/**/*', denoPath);
-
-  process.chdir(`../../${denoClone}`);
-  addChangelog(name, version);
-  execSync('git add --all .');
-  execSync(`git commit --no-status --quiet -m "${name} ${version}"`);
-  process.chdir(`../packages/${dirName}`);
 }
 
 function denoPublish () {
   execSync(`git clone ${denoRepo} ${denoClone}`, true);
 
-  process.chdir(denoClone);
-  gitSetup();
-  process.chdir('..');
-
   loopFunc(denoPublishPkg);
 
-  if (shouldDeno) {
-    process.chdir(denoClone);
-    execSync(`git push ${denoRepo}`, true);
-    process.chdir('..');
-  }
+  commitClone(denoRepo, denoClone, shouldDeno);
 }
 
 function gitBump () {
