@@ -71,8 +71,6 @@ function adjustDenoPath (pkgJson, dir, f) {
   if (f.startsWith('@polkadot')) {
     const parts = f.split('/');
     const thisPkg = parts.slice(0, 2).join('/');
-
-    // this needs to align with build-ts
     const denoPkg = denoCreateName(thisPkg);
     const subPath = parts.slice(2).join('/');
 
@@ -367,6 +365,10 @@ function tweakPackageInfo (buildDir) {
         .replace(
           "path: 'auto'",
           `path: ${esmPathname}`
+        )
+        .replace(
+          /version: '.*'/,
+          "version: 'DENOPUBVER'"
         )
     );
   }
