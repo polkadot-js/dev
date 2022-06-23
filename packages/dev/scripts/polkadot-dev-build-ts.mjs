@@ -67,7 +67,7 @@ async function buildBabel (dir, type) {
   }
 }
 
-function adjustDenoPath (pkgJson, dir, f) {
+function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
   if (f.startsWith('@polkadot')) {
     const parts = f.split('/');
     const thisPkg = parts.slice(0, 2).join('/');
@@ -80,22 +80,26 @@ function adjustDenoPath (pkgJson, dir, f) {
     }
 
     // first we check in packages/* to see if we have this one
-    const localPath = path.join(process.cwd(), '..', parts[1]);
+    const pkgPath = path.join(pkgCwd, '..', parts[1]);
 
-    if (fs.existsSync(localPath)) {
+    if (fs.existsSync(pkgPath)) {
+      console.error('packages', pkgPath, subPath);
+
       // aha, this is a package in the same repo
-      const checkPath = path.join(localPath, subPath);
+      const checkPath = path.join(pkgPath, 'src', subPath);
 
       if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
         // this is a directory, append index.ts
         return `${denoIntPrefix}/${denoPkg}/${subPath}/index.ts`;
+      } else if (!fs.existsSync(`${checkPath}.ts`)) {
+        throw new Error(`Unable to find ${checkPath}.ts`);
       }
 
       return `${denoIntPrefix}/${denoPkg}/${subPath}.ts`;
     }
 
     // now we check node_modules
-    const nodePath = path.join(process.cwd(), '../../node_modules', thisPkg);
+    const nodePath = path.join(pkgCwd, '../../node_modules', thisPkg);
 
     if (fs.existsSync(nodePath)) {
       // aha, this is a package in the same repo
@@ -104,6 +108,8 @@ function adjustDenoPath (pkgJson, dir, f) {
       if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
         // this is a directory, append index.ts
         return `${denoIntPrefix}/${denoPkg}/${subPath}/index.ts`;
+      } else if (!fs.existsSync(`${checkPath}.js`)) {
+        throw new Error(`Unable to find ${checkPath}.js`);
       }
 
       return `${denoIntPrefix}/${denoPkg}/${subPath}.ts`;
@@ -158,6 +164,8 @@ function adjustDenoPath (pkgJson, dir, f) {
 
   if (version) {
     version = '@' + version.replace('^', '').replace('~', '');
+  } else if (isDeclare) {
+    return f;
   } else {
     console.warn(`warning: Replacing unknown versioned package '${f}' inside ${pkgJson.name}, possibly missing an alias`);
   }
@@ -171,14 +179,14 @@ function adjustDenoPath (pkgJson, dir, f) {
     : `${denoExtPrefix}/${depName}${version || ''}${depPath || ''}`;
 }
 
-function rewriteDenoPaths (pkgJson, rootDir, dir) {
+function rewriteDenoPaths (pkgCwd, pkgJson, rootDir, dir) {
   fs
     .readdirSync(dir)
     .forEach((p) => {
       const thisPath = path.join(process.cwd(), dir, p);
 
       if (fs.statSync(thisPath).isDirectory()) {
-        rewriteDenoPaths(pkgJson, rootDir, `${dir}/${p}`);
+        rewriteDenoPaths(pkgCwd, pkgJson, rootDir, `${dir}/${p}`);
       } else if (thisPath.endsWith('.ts') || thisPath.endsWith('.tsx') || thisPath.endsWith('.md')) {
         fs.writeFileSync(
           thisPath,
@@ -186,7 +194,7 @@ function rewriteDenoPaths (pkgJson, rootDir, dir) {
             .readFileSync(thisPath, 'utf8')
             // handle import/export
             .replace(/(import|export) (.*) from '(.*)'/g, (o, t, a, f) => {
-              const adjusted = adjustDenoPath(pkgJson, dir, f);
+              const adjusted = adjustDenoPath(pkgCwd, pkgJson, dir, f);
 
               return adjusted
                 ? `${t} ${a} from '${adjusted}'`
@@ -194,7 +202,7 @@ function rewriteDenoPaths (pkgJson, rootDir, dir) {
             })
             // handle augmented inputs
             .replace(/(import|declare module) '(.*)'/g, (o, t, f) => {
-              const adjusted = adjustDenoPath(pkgJson, dir, f);
+              const adjusted = adjustDenoPath(pkgCwd, pkgJson, dir, f, t !== 'import');
 
               return adjusted
                 ? `${t} '${adjusted}'`
@@ -206,7 +214,9 @@ function rewriteDenoPaths (pkgJson, rootDir, dir) {
 }
 
 function buildDeno (pkgJson) {
-  if (!fs.existsSync(path.join(process.cwd(), 'src/mod.ts'))) {
+  const pkgCwd = process.cwd();
+
+  if (!fs.existsSync(path.join(pkgCwd, 'src/mod.ts'))) {
     return;
   }
 
@@ -219,7 +229,7 @@ function buildDeno (pkgJson) {
   rimraf.sync('build-deno/**/*.rs');
 
   // adjust the import paths
-  rewriteDenoPaths(pkgJson, 'build-deno', 'build-deno');
+  rewriteDenoPaths(pkgCwd, pkgJson, 'build-deno', 'build-deno');
 }
 
 function relativePath (value) {
