@@ -86,9 +86,14 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
       // aha, this is a package in the same repo, search src
       const checkPath = path.join(pkgPath, 'src', subPath);
 
-      if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
-        // this is a directory, append index.ts
-        return `${denoIntPrefix}/${denoPkg}/${subPath}/index.ts`;
+      if (fs.existsSync(checkPath)) {
+        if (fs.statSync(checkPath).isDirectory()) {
+          // this is a directory, append index.ts
+          return `${denoIntPrefix}/${denoPkg}/${subPath}/index.ts`;
+        }
+
+        // as-is, the path exists
+        return `${denoIntPrefix}/${denoPkg}/${subPath}`;
       } else if (!fs.existsSync(`${checkPath}.ts`)) {
         throw new Error(`Unable to find ${checkPath}.ts`);
       }
@@ -103,9 +108,14 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
       // aha, this is a package in the same repo
       const checkPath = path.join(nodePath, subPath);
 
-      if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
-        // this is a directory, append index.ts
-        return `${denoIntPrefix}/${denoPkg}/${subPath}/index.ts`;
+      if (fs.existsSync(checkPath)) {
+        if (fs.statSync(checkPath).isDirectory()) {
+          // this is a directory, append index.ts
+          return `${denoIntPrefix}/${denoPkg}/${subPath}/index.ts`;
+        }
+
+        // as-is, it exists
+        return `${denoIntPrefix}/${denoPkg}/${subPath}`;
       } else if (!fs.existsSync(`${checkPath}.js`)) {
         throw new Error(`Unable to find ${checkPath}.js`);
       }
