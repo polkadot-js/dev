@@ -11,7 +11,7 @@
   },
   "sideEffects": false,
   "type": "commonjs",
-  "version": "0.67.32",
+  "version": "0.67.33",
   "workspaces": [
     "packages/*"
   ],
