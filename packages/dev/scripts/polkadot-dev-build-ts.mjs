@@ -179,7 +179,7 @@ function rewriteDenoPaths (pkgJson, rootDir, dir) {
 
       if (fs.statSync(thisPath).isDirectory()) {
         rewriteDenoPaths(pkgJson, rootDir, `${dir}/${p}`);
-      } else if (thisPath.endsWith('.ts') || thisPath.endsWith('.tsx')) {
+      } else if (thisPath.endsWith('.ts') || thisPath.endsWith('.tsx') || thisPath.endsWith('.md')) {
         fs.writeFileSync(
           thisPath,
           fs
