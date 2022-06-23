@@ -27,6 +27,7 @@ const denoClone = 'build-deno-clone';
 
 let withDeno = false;
 let withBund = false;
+let withNpm = false;
 const shouldDeno = [];
 const shouldBund = [];
 
@@ -81,7 +82,7 @@ function npmSetup () {
 }
 
 function npmPublish () {
-  if (fs.existsSync('.skip-npm')) {
+  if (fs.existsSync('.skip-npm') || !withNpm) {
     return;
   }
 
@@ -223,6 +224,7 @@ function gitBump () {
   if (argv['skip-beta'] || patch === '0') {
     // don't allow beta versions
     execSync('yarn polkadot-dev-version patch');
+    withNpm = true;
   } else {
     const triggerPath = path.join(process.cwd(), '.123trigger');
     const available = fs.readFileSync(triggerPath, 'utf-8').split('\n');
@@ -230,9 +232,12 @@ function gitBump () {
     if (tag || patch === '1' || available.includes(currentVersion)) {
       // if we have a beta version, just continue the stream of betas
       execSync('yarn polkadot-dev-version pre');
+      // we don't manually tweak withNpm, it is only based on the .123npm file
+      // withNpm = true;
     } else {
       // manual setting of version, make some changes so we can commit
       fs.appendFileSync(triggerPath, `\n${currentVersion}`);
+      withNpm = true;
     }
   }
 
@@ -262,6 +267,11 @@ function gitPush () {
   if (fs.existsSync('.123bundle')) {
     rimraf.sync('.123bundle');
     withBund = true;
+  }
+
+  if (fs.existsSync('.123npm')) {
+    rimraf.sync('.123npm');
+    withNpm = true;
   }
 
   execSync('git add --all .');
