@@ -75,6 +75,13 @@ function npmGetJson () {
   );
 }
 
+function npmAddVersionX () {
+  const json = npmGetJson();
+
+  json.version = json.version + '-x';
+  fs.writeFileSync(path.resolve(process.cwd(), 'package.json'), JSON.stringify(json, null, 2));
+}
+
 function npmSetup () {
   const registry = 'registry.npmjs.org';
 
@@ -230,16 +237,23 @@ function gitBump () {
     const available = fs.readFileSync(triggerPath, 'utf-8').split('\n');
 
     if (tag || patch === '1' || available.includes(currentVersion)) {
+      // if we don't want to publish, add an X before passing
+      if (!withNpm) {
+        npmAddVersionX();
+      }
+
       // if we have a beta version, just continue the stream of betas
       execSync('yarn polkadot-dev-version pre');
       // we don't manually tweak withNpm, it is only based on the .123npm file
       // withNpm = true;
     } else {
-      // manual setting of version, make some changes so we can commit
-      fs.appendFileSync(triggerPath, `\n${currentVersion}`);
+      // manual setting of version
       withNpm = true;
     }
   }
+
+  // always ensure we have made some changes, so we can commit
+  fs.writeFileSync('.version', npmGetVersion());
 
   execSync('yarn polkadot-dev-contrib');
   execSync('git add --all .');
@@ -281,7 +295,7 @@ function gitPush () {
   }
 
   // add the skip checks for GitHub ...
-  execSync(`git commit --no-status --quiet -m "[CI Skip] release/${version.includes('-') ? 'beta' : 'stable'} ${version}
+  execSync(`git commit --no-status --quiet -m "[CI Skip] ${version.includes('-x') ? 'bump' : 'release'}/${version.includes('-') ? 'beta' : 'stable'} ${version}
 
 
 skip-checks: true"`);

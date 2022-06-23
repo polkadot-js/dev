@@ -57,7 +57,9 @@ function extractVersion (dir) {
 
   const { name, version } = parsePackage(dir);
 
-  versions[name] = `^${version}`;
+  if (!version.endsWith('-x')) {
+    versions[name] = `^${version}`;
+  }
 }
 
 function findPackages (dir) {
