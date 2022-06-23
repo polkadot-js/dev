@@ -84,6 +84,15 @@ function npmAddVersionX () {
   }
 }
 
+function npmDelVersionX () {
+  const json = npmGetJson();
+
+  if (json.version.endsWith('-x')) {
+    json.version = json.version.replace('-x', '');
+    fs.writeFileSync(path.resolve(process.cwd(), 'package.json'), JSON.stringify(json, null, 2));
+  }
+}
+
 function npmSetup () {
   const registry = 'registry.npmjs.org';
 
@@ -242,6 +251,8 @@ function gitBump () {
       // if we don't want to publish, add an X before passing
       if (!withNpm) {
         npmAddVersionX();
+      } else {
+        npmDelVersionX();
       }
 
       // if we have a beta version, just continue the stream of betas
