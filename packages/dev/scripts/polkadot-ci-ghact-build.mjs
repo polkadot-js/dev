@@ -78,8 +78,10 @@ function npmGetJson () {
 function npmAddVersionX () {
   const json = npmGetJson();
 
-  json.version = json.version + '-x';
-  fs.writeFileSync(path.resolve(process.cwd(), 'package.json'), JSON.stringify(json, null, 2));
+  if (!json.version.endsWith('-x')) {
+    json.version = json.version + '-x';
+    fs.writeFileSync(path.resolve(process.cwd(), 'package.json'), JSON.stringify(json, null, 2));
+  }
 }
 
 function npmSetup () {
