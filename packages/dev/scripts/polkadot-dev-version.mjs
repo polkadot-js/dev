@@ -80,7 +80,7 @@ const isX = removeX();
 
 execSync(`yarn version ${type === 'pre' ? 'prerelease' : type}`);
 
-if (isX) {
+if (isX && type === 'pre') {
   addX();
 }
 
