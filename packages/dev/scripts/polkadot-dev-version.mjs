@@ -61,17 +61,27 @@ function updatePackage (version, others, pkgPath, json) {
 function removeX () {
   const [rootPath, json] = readRootPkgJson();
 
-  if (json.version.endsWith('-x')) {
-    json.version = json.version.replace('-x', '');
-    writePkgJson(rootPath, json);
+  if (!json.version.endsWith('-x')) {
+    return false;
   }
+
+  json.version = json.version.replace('-x', '');
+  writePkgJson(rootPath, json);
+
+  return true;
 }
 
 function addX () {
   const [rootPath, json] = readRootPkgJson();
 
+  if (json.version.endsWith('-x')) {
+    return false;
+  }
+
   json.version = json.version + '-x';
   fs.writeFileSync(rootPath, JSON.stringify(json, null, 2));
+
+  return true;
 }
 
 console.log('$ polkadot-dev-version', process.argv.slice(2).join(' '));
