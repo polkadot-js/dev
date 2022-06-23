@@ -250,12 +250,13 @@ function gitBump () {
       // withNpm = true;
     } else {
       // manual setting of version
+      fs.appendFileSync(triggerPath, `\n${currentVersion}`);
       withNpm = true;
     }
   }
 
   // always ensure we have made some changes, so we can commit
-  fs.writeFileSync('.123current', npmGetVersion());
+  fs.writeFileSync(path.join(process.cwd(), '.123current'), npmGetVersion());
 
   execSync('yarn polkadot-dev-contrib');
   execSync('git add --all .');
