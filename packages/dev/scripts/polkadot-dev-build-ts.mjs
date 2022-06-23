@@ -180,8 +180,6 @@ function rewriteDenoPaths (pkgJson, rootDir, dir) {
       if (fs.statSync(thisPath).isDirectory()) {
         rewriteDenoPaths(pkgJson, rootDir, `${dir}/${p}`);
       } else if (thisPath.endsWith('.ts') || thisPath.endsWith('.tsx')) {
-        // TODO This only handles import/export and doesn't do any
-        // augmentation at this point - should be added for the API
         fs.writeFileSync(
           thisPath,
           fs
@@ -195,11 +193,11 @@ function rewriteDenoPaths (pkgJson, rootDir, dir) {
                 : o;
             })
             // handle augmented inputs
-            .replace(/import '(.*)'/g, (o, f) => {
+            .replace(/(import|declare module) '(.*)'/g, (o, t, f) => {
               const adjusted = adjustDenoPath(pkgJson, dir, f);
 
               return adjusted
-                ? `import '${adjusted}'`
+                ? `${t} '${adjusted}'`
                 : o;
             })
         );
