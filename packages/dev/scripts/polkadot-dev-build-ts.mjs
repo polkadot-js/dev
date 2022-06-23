@@ -83,9 +83,7 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
     const pkgPath = path.join(pkgCwd, '..', parts[1]);
 
     if (fs.existsSync(pkgPath)) {
-      console.error('packages', pkgPath, subPath);
-
-      // aha, this is a package in the same repo
+      // aha, this is a package in the same repo, search src
       const checkPath = path.join(pkgPath, 'src', subPath);
 
       if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
