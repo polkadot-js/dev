@@ -31,6 +31,17 @@ function updateDependencies (dependencies, others, version) {
     }, {});
 }
 
+function readRootPkgJson () {
+  const rootPath = path.join(process.cwd(), 'package.json');
+  const rootJson = JSON.parse(fs.readFileSync(rootPath, 'utf8'));
+
+  return [rootPath, rootJson];
+}
+
+function writePkgJson (path, json) {
+  fs.writeFileSync(path, `${JSON.stringify(json, null, 2)}\n`);
+}
+
 function updatePackage (version, others, pkgPath, json) {
   const updated = Object.keys(json).reduce((result, key) => {
     if (key === 'version') {
@@ -44,15 +55,46 @@ function updatePackage (version, others, pkgPath, json) {
     return result;
   }, {});
 
-  fs.writeFileSync(pkgPath, `${JSON.stringify(updated, null, 2)}\n`);
+  writePkgJson(pkgPath, updated);
+}
+
+function removeX () {
+  const [rootPath, json] = readRootPkgJson();
+
+  if (!json.version.endsWith('-x')) {
+    return false;
+  }
+
+  json.version = json.version.replace('-x', '');
+  writePkgJson(rootPath, json);
+
+  return true;
+}
+
+function addX () {
+  const [rootPath, json] = readRootPkgJson();
+
+  if (json.version.endsWith('-x')) {
+    return false;
+  }
+
+  json.version = json.version + '-x';
+  fs.writeFileSync(rootPath, JSON.stringify(json, null, 2));
+
+  return true;
 }
 
 console.log('$ polkadot-dev-version', process.argv.slice(2).join(' '));
 
+const isX = removeX();
+
 execSync(`yarn version ${type === 'pre' ? 'prerelease' : type}`);
 
-const rootPath = path.join(process.cwd(), 'package.json');
-const rootJson = JSON.parse(fs.readFileSync(rootPath, 'utf8'));
+if (isX && type === 'pre') {
+  addX();
+}
+
+const [rootPath, rootJson] = readRootPkgJson();
 
 updatePackage(rootJson.version, [], rootPath, rootJson);
 
