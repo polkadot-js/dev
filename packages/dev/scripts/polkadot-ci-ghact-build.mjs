@@ -234,7 +234,24 @@ function denoPublish () {
   commitClone(denoRepo, denoClone, shouldDeno);
 }
 
-function gitBump () {
+function getFlags () {
+  if (fs.existsSync('.123deno')) {
+    rimraf.sync('.123deno');
+    withDeno = true;
+  }
+
+  if (fs.existsSync('.123bundle')) {
+    rimraf.sync('.123bundle');
+    withBund = true;
+  }
+
+  if (fs.existsSync('.123npm')) {
+    rimraf.sync('.123npm');
+    withNpm = true;
+  }
+}
+
+function verBump () {
   const currentVersion = npmGetVersion();
   const [version, tag] = currentVersion.split('-');
   const [,, patch] = version.split('.');
@@ -287,21 +304,6 @@ function gitPush () {
     }
   }
 
-  if (fs.existsSync('.123deno')) {
-    rimraf.sync('.123deno');
-    withDeno = true;
-  }
-
-  if (fs.existsSync('.123bundle')) {
-    rimraf.sync('.123bundle');
-    withBund = true;
-  }
-
-  if (fs.existsSync('.123npm')) {
-    rimraf.sync('.123npm');
-    withNpm = true;
-  }
-
   execSync('git add --all .');
 
   if (fs.existsSync('docs/README.md')) {
@@ -346,18 +348,24 @@ function loopFunc (fn) {
   }
 }
 
+// first do infrastructure setup
 gitSetup();
-gitBump();
 npmSetup();
 
+// get flags immediate, then adjust
+getFlags();
+verBump();
+
+// perform the actual CI ops
 runClean();
 runCheck();
 runTest();
 runBuild();
 
+// publish to all GH repos
 gitPush();
-
 denoPublish();
 bundlePublish();
 
+// publish to npm
 loopFunc(npmPublish);
