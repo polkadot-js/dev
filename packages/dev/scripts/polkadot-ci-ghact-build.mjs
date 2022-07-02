@@ -136,7 +136,44 @@ function npmPublish () {
 }
 
 function addChangelog (version, ...names) {
-  const entry = `${names.join(', ')} ${version}`;
+  const mapped = Object
+    .entries(
+      names
+        .sort()
+        .map((n) => n.split('-'))
+        .map((n) =>
+          n.length === 1
+            ? n[0]
+            : [`${n[0]}-`, n.slice(1).join('-')]
+        )
+        .reduce((r, v) => {
+          if (Array.isArray(v)) {
+            const [n, e] = v;
+
+            if (!r[n]) {
+              r[n] = [e];
+            } else {
+              r[n].push(e);
+            }
+          } else {
+            r[v] = [];
+          }
+
+          return r;
+        }, {})
+    )
+    .map((n, o) => {
+      if (o.length === 0) {
+        return n;
+      } else if (n.length === 1) {
+        return `${n}${o[0]}`;
+      } else {
+        return `${n}{${o.join(', ')}}`;
+      }
+    })
+    .join(', ');
+
+  const entry = `${mapped} ${version}`;
   const newInfo = `## master\n\n- ${entry}\n`;
 
   if (!fs.existsSync('CHANGELOG.md')) {
