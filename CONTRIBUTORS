@@ -1,4 +1,4 @@
-     983	Jaco                          	Swap Babel preset Node version to 14 (#729)
+     984	Jaco                          	Adjust bundle/deno CHANGELOG generation (#730)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
        1	Amaury Martiny                	Allow .spec.ts files (#143)
