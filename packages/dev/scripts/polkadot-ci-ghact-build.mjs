@@ -135,45 +135,63 @@ function npmPublish () {
   process.chdir('..');
 }
 
-function addChangelog (version, ...names) {
-  const mapped = Object
-    .entries(
-      names
-        .sort()
-        .map((n) => n.split('-'))
-        .map((n) =>
-          n.length === 1
-            ? n[0]
-            : [`${n[0]}-`, n.slice(1).join('-')]
-        )
-        .reduce((r, v) => {
-          if (Array.isArray(v)) {
-            const [n, e] = v;
+function createChangelogMap (parts, result = {}) {
+  for (let i = 0; i < parts.length; i++) {
+    const [n, ...e] = parts[i];
 
-            if (!r[n]) {
-              r[n] = [e];
-            } else {
-              r[n].push(e);
-            }
-          } else {
-            r[v] = [];
-          }
-
-          return r;
-        }, {})
-    )
-    .map((n, o) => {
-      if (o.length === 0) {
-        return n;
-      } else if (n.length === 1) {
-        return `${n}${o[0]}`;
+    if (!result[n]) {
+      if (e.length) {
+        result[n] = createChangelogMap([e]);
       } else {
-        return `${n}{${o.join(', ')}}`;
+        result[n] = { '': {} };
       }
-    })
-    .join(', ');
+    } else {
+      if (e.length) {
+        createChangelogMap([e], result[n]);
+      } else {
+        result[n][''] = {};
+      }
+    }
+  }
 
-  const entry = `${mapped} ${version}`;
+  return result;
+}
+
+function createChangelogArr (map) {
+  const result = [];
+  const entries = Object.entries(map);
+
+  for (let i = 0; i < entries.length; i++) {
+    const [name, imap] = entries[i];
+
+    if (name) {
+      if (imap['']) {
+        result.push(name);
+      }
+
+      const inner = createChangelogArr(imap);
+
+      if (inner.length === 1) {
+        result.push(`${name}-${inner[0]}`);
+      } else if (inner.length) {
+        result.push(`${name}-{${inner.join(', ')}}`);
+      }
+    }
+  }
+
+  return result;
+}
+
+function addChangelog (version, ...names) {
+  const entry = `${
+    createChangelogArr(
+      createChangelogMap(
+        names
+          .sort()
+          .map((n) => n.split('-'))
+      )
+    ).join(', ')
+  } ${version}`;
   const newInfo = `## master\n\n- ${entry}\n`;
 
   if (!fs.existsSync('CHANGELOG.md')) {
