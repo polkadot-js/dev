@@ -19,7 +19,7 @@ const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
 const RL_CONFIGS = ['js', 'mjs', 'cjs'].map((e) => `rollup.config.${e}`);
 const CPX = ['patch', 'js', 'cjs', 'mjs', 'json', 'd.ts', 'css', 'gif', 'hbs', 'jpg', 'png', 'svg']
   .map((e) => `src/**/*.${e}`)
-  .concat(['package.json', 'README.md', 'LICENSE', 'src/**/mod.ts']);
+  .concat(['package.json', 'README.md', 'LICENSE']);
 
 console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
