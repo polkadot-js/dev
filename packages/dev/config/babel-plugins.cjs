@@ -22,6 +22,7 @@ module.exports = function (isEsm, withExt) {
     ['@babel/plugin-transform-runtime', { useESModules: isEsm }],
     '@babel/plugin-syntax-bigint',
     '@babel/plugin-syntax-dynamic-import',
+    '@babel/plugin-syntax-import-assertions',
     '@babel/plugin-syntax-import-meta',
     '@babel/plugin-syntax-top-level-await',
     'babel-plugin-styled-components',
