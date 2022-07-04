@@ -291,14 +291,21 @@ function findFiles (buildDir, extra = '', exclude = []) {
     .reduce((all, jsName) => {
       const jsPath = `${extra}/${jsName}`;
       const thisPath = path.join(buildDir, jsPath);
-      const toDelete = thisPath.includes('/test/') || // no test paths
-        ['.manual.', '.spec.', '.test.'].some((t) => jsName.includes(t)) || // no tests
-        ['.d.js', '.d.cjs', '.d.mjs'].some((e) => jsName.endsWith(e)) || // no .d.ts compiled outputs
-        ['mod.js', 'mod.cjs', 'mod.mjs'].some((e) => jsName === e) || // no deno compiles
+      const toDelete = (
+        // no test paths
+        thisPath.includes('/test/') ||
+        // // no tests
+        ['.manual.', '.spec.', '.test.'].some((t) => jsName.includes(t)) ||
+        // no .d.ts compiled outputs
+        ['.d.js', '.d.cjs', '.d.mjs'].some((e) => jsName.endsWith(e)) ||
+        // no deno mod.ts compiles
+        ['mod.js', 'mod.d.ts'].some((e) => jsName === e) ||
         (
-          jsName.endsWith('.d.ts') && // .d.ts without .js as an output
+          // .d.ts without .js as an output
+          jsName.endsWith('.d.ts') &&
           !fs.existsSync(path.join(buildDir, jsPath.replace('.d.ts', '.js')))
-        );
+        )
+      );
 
       if (fs.statSync(thisPath).isDirectory()) {
         findFiles(buildDir, jsPath).forEach((entry) => all.push(entry));
