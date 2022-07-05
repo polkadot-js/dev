@@ -231,8 +231,6 @@ function bundlePublishPkg () {
 
   if (!fs.existsSync(fullPath)) {
     return;
-  } else if (!withBund && (version.includes('-') || (argv['skip-beta'] && !version.endsWith('.1')))) {
-    return;
   }
 
   console.log(`\n *** bundle ${name}`);
@@ -248,6 +246,12 @@ function bundlePublishPkg () {
 }
 
 function bundlePublish () {
+  const { version } = npmGetJson();
+
+  if (!withBund && version.includes('-')) {
+    return;
+  }
+
   execSync(`git clone ${bundRepo} ${bundClone}`, true);
 
   loopFunc(bundlePublishPkg);
@@ -259,8 +263,6 @@ function denoPublishPkg () {
   const { name, version } = npmGetJson();
 
   if (fs.existsSync('.skip-deno') || !fs.existsSync('build-deno')) {
-    return;
-  } else if (!withDeno && (version.includes('-') || (argv['skip-beta'] && !version.endsWith('.1')))) {
     return;
   }
 
@@ -282,6 +284,12 @@ function denoPublishPkg () {
 }
 
 function denoPublish () {
+  const { version } = npmGetJson();
+
+  if (!withDeno && version.includes('-')) {
+    return;
+  }
+
   execSync(`git clone ${denoRepo} ${denoClone}`, true);
 
   loopFunc(denoPublishPkg);
