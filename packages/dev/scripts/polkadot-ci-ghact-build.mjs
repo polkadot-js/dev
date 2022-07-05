@@ -231,7 +231,7 @@ function bundlePublishPkg () {
 
   if (!fs.existsSync(fullPath)) {
     return;
-  } else if (!withBund && (version.includes('-') || (argv['skip-beta'] && !version.endsWith('.1')))) {
+  } else if (!withBund && version.includes('-')) {
     return;
   }
 
@@ -260,7 +260,7 @@ function denoPublishPkg () {
 
   if (fs.existsSync('.skip-deno') || !fs.existsSync('build-deno')) {
     return;
-  } else if (!withDeno && (version.includes('-') || (argv['skip-beta'] && !version.endsWith('.1')))) {
+  } else if (!withDeno && version.includes('-')) {
     return;
   }
 
