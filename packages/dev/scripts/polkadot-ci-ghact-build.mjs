@@ -328,7 +328,7 @@ function verBump () {
     let available = fs.readFileSync(triggerPath, 'utf-8').split('\n').map((n) => n.trim());
 
     // remove all empty lines at the end
-    while (!available[available.length - 1]) {
+    while (available.length && !available[available.length - 1]) {
       available = available.slice(-1);
     }
 
