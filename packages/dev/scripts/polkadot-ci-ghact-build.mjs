@@ -325,7 +325,12 @@ function verBump () {
     withNpm = true;
   } else {
     const triggerPath = path.join(process.cwd(), '.123trigger');
-    const available = fs.readFileSync(triggerPath, 'utf-8').split('\n');
+    let available = fs.readFileSync(triggerPath, 'utf-8').split('\n').map((n) => n.trim());
+
+    // remove all empty lines at the end
+    while (!available[available.length - 1]) {
+      available = available.slice(-1);
+    }
 
     if (tag || patch === '1' || available.includes(currentVersion)) {
       // if we don't want to publish, add an X before passing
@@ -341,13 +346,13 @@ function verBump () {
       // withNpm = true;
     } else {
       // manual setting of version
-      fs.appendFileSync(triggerPath, `\n${currentVersion}`);
+      fs.appendFileSync(triggerPath, `\n${currentVersion}\n`);
       withNpm = true;
     }
   }
 
   // always ensure we have made some changes, so we can commit
-  fs.writeFileSync(path.join(process.cwd(), '.123current'), npmGetVersion());
+  fs.writeFileSync(path.join(process.cwd(), '.123current'), `${npmGetVersion()}\n`);
 
   execSync('yarn polkadot-dev-contrib');
   execSync('git add --all .');
