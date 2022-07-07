@@ -1,0 +1,5 @@
+{
+  "imports": {
+    "https://deno.land/x/polkadot/dev/": "../packages/dev/build-deno/"
+  }
+}

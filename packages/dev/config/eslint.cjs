@@ -20,6 +20,7 @@ module.exports = {
     '**/build-asmjs/*',
     '**/build-wasm/*',
     '**/coverage/*',
+    '**/deno/*.ts',
     '**/node_modules/*',
     '.eslintrc.cjs',
     '.eslintrc.js',
