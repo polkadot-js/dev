@@ -346,7 +346,7 @@ function verBump () {
       // withNpm = true;
     } else {
       // manual setting of version
-      fs.appendFileSync(triggerPath, `\n${currentVersion}\n`);
+      fs.writeFileSync(triggerPath, `${available.join('\n')}\n${currentVersion}\n`);
       withNpm = true;
     }
   }
