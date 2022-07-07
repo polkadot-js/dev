@@ -329,7 +329,7 @@ function verBump () {
 
     // remove all empty lines at the end
     while (available.length && !available[available.length - 1]) {
-      available = available.slice(-1);
+      available = available.slice(0, -1);
     }
 
     if (tag || patch === '1' || available.includes(currentVersion)) {
