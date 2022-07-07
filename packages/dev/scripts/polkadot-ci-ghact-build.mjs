@@ -325,14 +325,12 @@ function verBump () {
     withNpm = true;
   } else {
     const triggerPath = path.join(process.cwd(), '.123trigger');
-    let available = fs.readFileSync(triggerPath, 'utf-8').split('\n').map((n) => n.trim());
+    const filtered = fs.readFileSync(triggerPath, 'utf-8')
+      .split('\n')
+      .map((n) => n.trim())
+      .filter((n) => !!n);
 
-    // remove all empty lines at the end
-    while (available.length && !available[available.length - 1]) {
-      available = available.slice(0, -1);
-    }
-
-    if (tag || patch === '1' || available.includes(currentVersion)) {
+    if (tag || patch === '1' || filtered.includes(currentVersion)) {
       // if we don't want to publish, add an X before passing
       if (!withNpm) {
         npmAddVersionX();
@@ -345,8 +343,34 @@ function verBump () {
       // we don't manually tweak withNpm, it is only based on the .123npm file
       // withNpm = true;
     } else {
-      // manual setting of version
-      fs.writeFileSync(triggerPath, `${available.join('\n')}\n${currentVersion}\n`);
+      let prev = '';
+      const output = [];
+
+      // insert empty lines as required
+      for (let i = 0; i < filtered.length; i++) {
+        const val = filtered[i];
+        const [major] = val.split('.');
+
+        if (i !== 0) {
+          if (major !== prev) {
+            output.push('');
+          }
+        }
+
+        prev = major;
+        output.push(filtered);
+      }
+
+      const [major] = currentVersion.split('.');
+
+      if (prev !== major) {
+        output.push('');
+      }
+
+      output.push(currentVersion);
+
+      // rewrite for future usage
+      fs.writeFileSync(triggerPath, `${output.join('\n')}\n`);
       withNpm = true;
     }
   }
