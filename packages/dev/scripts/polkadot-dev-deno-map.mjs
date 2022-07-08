@@ -19,7 +19,7 @@ if (!fs.existsSync('mod.ts')) {
   fs.writeFileSync('mod.ts', `// Copyright 2017-${new Date().getFullYear()} @polkadot/dev authors & contributors\n// SPDX-License-Identifier: Apache-2.0\n\n// auto-generated via polkadot-dev-deno-map, do not edit\n\n${e.join('\n')}\n`);
 }
 
-if (fs.existsSync('import_map.add.json')) {
+if (fs.existsSync('import_map.in.json')) {
   const o = JSON.parse(fs.readFileSync('import_map.in.json', 'utf-8'));
 
   Object
