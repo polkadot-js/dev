@@ -10,7 +10,7 @@ const [e, i] = fs
   .sort()
   .reduce(([e, i], p) => {
     e.push(`export * as ${p.replace(/-/g, '_')} from 'https://deno.land/x/polkadot/${p}/mod.ts';`);
-    i[`https://deno.land/x/polkadot/${p}/`] = `packages/${p}/build-deno/`;
+    i[`https://deno.land/x/polkadot/${p}/`] = `./packages/${p}/build-deno/`;
 
     return [e, i];
   }, [[], {}]);
