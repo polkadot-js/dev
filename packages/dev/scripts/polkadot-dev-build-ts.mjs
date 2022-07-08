@@ -8,7 +8,6 @@ import mkdirp from 'mkdirp';
 import path from 'path';
 import rimraf from 'rimraf';
 
-import { EXT_CJS, EXT_ESM } from '../config/babel-extensions.cjs';
 import copySync from './copySync.mjs';
 import { denoCreateName, denoExtPrefix, denoIntPrefix } from './deno.mjs';
 import { __dirname } from './dirname.mjs';
@@ -53,7 +52,7 @@ async function buildBabel (dir, type) {
       filenames: ['src'],
       ignore: '**/*.d.ts',
       outDir,
-      outFileExtension: type === 'esm' ? EXT_ESM : EXT_CJS
+      outFileExtension: '.js'
     }
   });
 

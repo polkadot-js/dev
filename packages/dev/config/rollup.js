@@ -1,8 +1,6 @@
 // Copyright 2017-2022 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
 import pluginAlias from '@rollup/plugin-alias';
 import pluginCommonjs from '@rollup/plugin-commonjs';
 import pluginInject from '@rollup/plugin-inject';
