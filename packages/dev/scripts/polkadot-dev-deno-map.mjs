@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import fs from 'fs';
+import mkdirp from 'mkdirp';
 
 const [e, i] = fs
   .readdirSync('packages')
@@ -11,6 +12,9 @@ const [e, i] = fs
   .reduce(([e, i], p) => {
     e.push(`export * as ${p.replace('-', '_')} from 'https://deno.land/x/polkadot/${p}/mod.ts';`);
     i[`https://deno.land/x/polkadot/${p}/`] = `packages/${p}/build-deno/`;
+  .reduce(([exports, imports], p) => {
+    exports.push(`export * as ${p.replace(/-/g, '_')} from 'https://deno.land/x/polkadot/${p}/mod.ts';`);
+    imports[`https://deno.land/x/polkadot/${p}/`] = `../packages/${p}/build-deno/`;
 
     return [e, i];
   }, [[], {}]);
