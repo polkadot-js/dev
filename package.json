@@ -10,7 +10,7 @@
     "url": "https://github.com/polkadot-js/dev.git"
   },
   "sideEffects": false,
-  "type": "commonjs",
+  "type": "module",
   "version": "0.67.63",
   "workspaces": [
     "packages/*"
@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "@polkadot/dev": "workspace:packages/dev",
-    "@polkadot/networks": "^9.7.2",
+    "@polkadot/networks": "^10.0.1",
     "copyfiles": "^2.4.1"
   },
   "resolutions": {
