@@ -20,7 +20,7 @@ if (!fs.existsSync('mod.ts')) {
 }
 
 if (fs.existsSync('import_map.add.json')) {
-  const o = JSON.parse(fs.readFileSync('import_map.add.json', 'utf-8'));
+  const o = JSON.parse(fs.readFileSync('import_map.in.json', 'utf-8'));
 
   Object
     .entries(o.imports)
