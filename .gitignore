@@ -9,6 +9,8 @@
 !.yarn/releases
 !.yarn/plugins
 !.yarn/sdks
+/mod.ts
+/import_map.json
 build/
 build-cjs/
 build-esm/

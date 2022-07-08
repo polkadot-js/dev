@@ -4,16 +4,29 @@
 
 import fs from 'fs';
 
-const [exports, imports] = fs
+const [e, i] = fs
   .readdirSync('packages')
   .filter((p) => fs.existsSync(`packages/${p}/src/mod.ts`))
-  .reduce(([exports, imports], p) => {
-    exports.push(`export * as ${p.replace('-', '_')} from 'https://deno.land/x/polkadot/${p}/mod.ts';`);
-    imports[`https://deno.land/x/polkadot/${p}/`] = `../packages/${p}/build-deno/`;
+  .sort()
+  .reduce(([e, i], p) => {
+    e.push(`export * as ${p.replace('-', '_')} from 'https://deno.land/x/polkadot/${p}/mod.ts';`);
+    i[`https://deno.land/x/polkadot/${p}/`] = `packages/${p}/build-deno/`;
 
-    return [exports, imports];
+    return [e, i];
   }, [[], {}]);
 
-fs.writeFileSync('deno/mod.ts', `// Copyright 2017-${new Date().getFullYear()} @polkadot/dev authors & contributors\n// SPDX-License-Identifier: Apache-2.0\n\n// auto-generated via polkadot-dev-deno-map, do not edit\n\n${exports.sort().join('\n')}\n`);
+if (!fs.existsSync('mod.ts')) {
+  fs.writeFileSync('mod.ts', `// Copyright 2017-${new Date().getFullYear()} @polkadot/dev authors & contributors\n// SPDX-License-Identifier: Apache-2.0\n\n// auto-generated via polkadot-dev-deno-map, do not edit\n\n${e.join('\n')}\n`);
+}
 
-fs.writeFileSync('deno/import_map.json', JSON.stringify({ imports }, null, 2));
+if (fs.existsSync('import_map.add.json')) {
+  const o = JSON.parse(fs.readFileSync('import_map.add.json', 'utf-8'));
+
+  Object
+    .entries(o.imports)
+    .forEach(([k, v]) => {
+      i[k] = v;
+    });
+}
+
+fs.writeFileSync('import_map.json', JSON.stringify({ imports: i }, null, 2));
