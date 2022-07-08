@@ -11,7 +11,7 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.67.64",
+  "version": "0.67.65",
   "workspaces": [
     "packages/*"
   ],
