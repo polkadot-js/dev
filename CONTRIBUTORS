@@ -1,4 +1,4 @@
-    1003	Jaco                          	Convert all scripts to ESM-only (#748)
+    1004	Jaco                          	Fix .123trigger update (#749)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
        1	Amaury Martiny                	Allow .spec.ts files (#143)
