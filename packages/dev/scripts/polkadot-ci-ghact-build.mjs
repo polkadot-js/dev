@@ -358,7 +358,7 @@ function verBump () {
         }
 
         prev = major;
-        output.push(filtered);
+        output.push(val);
       }
 
       const [major] = currentVersion.split('.');
