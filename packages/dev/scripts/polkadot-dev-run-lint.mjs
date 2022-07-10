@@ -5,7 +5,7 @@
 import yargs from 'yargs';
 
 import { __dirname } from './dirname.mjs';
-import execSync from './execSync.mjs';
+import { execSync } from './execute.mjs';
 
 console.log('$ polkadot-dev-run-lint', process.argv.slice(2).join(' '));
 

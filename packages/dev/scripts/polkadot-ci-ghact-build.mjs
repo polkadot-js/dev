@@ -9,9 +9,9 @@ import path from 'path';
 import rimraf from 'rimraf';
 import yargs from 'yargs';
 
-import copySync from './copySync.mjs';
+import { copySync } from './copy.mjs';
 import { denoCreateDir } from './deno.mjs';
-import execSync from './execSync.mjs';
+import { execSync } from './execute.mjs';
 import gitSetup from './gitSetup.mjs';
 
 console.log('$ polkadot-ci-ghact-build', process.argv.slice(2).join(' '));

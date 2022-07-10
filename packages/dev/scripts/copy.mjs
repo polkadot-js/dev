@@ -22,7 +22,7 @@ function normalizePath (originalPath) {
     : normalizedPath || '.';
 }
 
-export default function copySync (src, dst) {
+export function copySync (src, dst) {
   const normalizedSource = normalizePath(src);
   const normalizedOutputDir = normalizePath(dst);
   const baseDir = normalizePath(glob2base({ minimatch: new minimatch.Minimatch(normalizedSource) }));

@@ -2,7 +2,7 @@
 // Copyright 2017-2022 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import execSync from './execSync.mjs';
+import { execSync } from './execute.mjs';
 import gitSetup from './gitSetup.mjs';
 
 const repo = `https://${process.env.GH_PAT}@github.com/${process.env.GITHUB_REPOSITORY}.git`;

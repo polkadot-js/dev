@@ -8,10 +8,10 @@ import mkdirp from 'mkdirp';
 import path from 'path';
 import rimraf from 'rimraf';
 
-import copySync from './copySync.mjs';
+import { copySync } from './copy.mjs';
 import { denoCreateName, denoExtPrefix, denoIntPrefix } from './deno.mjs';
 import { __dirname } from './dirname.mjs';
-import execSync from './execSync.mjs';
+import { execSync } from './execute.mjs';
 
 const BL_CONFIGS = ['js', 'cjs'].map((e) => `babel.config.${e}`);
 const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);

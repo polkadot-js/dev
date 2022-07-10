@@ -1,7 +1,7 @@
 // Copyright 2017-2022 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import execSync from './execSync.mjs';
+import { execSync } from './execute.mjs';
 
 const USER = 'github-actions[bot]';
 const MAIL = '41898282+github-actions[bot]@users.noreply.github.com';
