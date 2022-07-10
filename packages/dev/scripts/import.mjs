@@ -12,9 +12,17 @@ export function importDirect (bin, req, fn = noop) {
 
   return import(req)
     .then(fn)
-    .catch(() => process.exit(1));
+    .catch((error) => {
+      console.error(`Error importing ${req}`);
+      console.error(error);
+      process.exit(1);
+    });
 }
 
 export function importRelative (bin, req, fn) {
-  return importDirect(bin, path.join(process.cwd(), 'node_modules', req), fn);
+  return importDirect(bin, importPath(req), fn);
+}
+
+export function importPath (req) {
+  return path.join(process.cwd(), 'node_modules', req);
 }
