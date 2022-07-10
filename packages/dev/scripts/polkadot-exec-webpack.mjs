@@ -2,7 +2,7 @@
 // Copyright 2017-2022 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import execSync from './execSync.mjs';
+import { execSync } from './execute.mjs';
 
 const args = process.argv.slice(2).join(' ');
 

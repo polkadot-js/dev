@@ -5,7 +5,7 @@
 import fs from 'fs';
 import mkdirp from 'mkdirp';
 
-import execSync from './execSync.mjs';
+import { execSync } from './execute.mjs';
 
 const tmpDir = 'packages/build';
 const tmpFile = `${tmpDir}/CONTRIBUTORS`;

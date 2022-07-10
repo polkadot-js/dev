@@ -3,7 +3,7 @@
 
 import cp from 'child_process';
 
-export default function execute (cmd, noLog) {
+export function execSync (cmd, noLog) {
   !noLog && console.log(`$ ${cmd}`);
 
   cp.execSync(cmd, { stdio: 'inherit' });
