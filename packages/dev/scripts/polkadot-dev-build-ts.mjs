@@ -66,6 +66,10 @@ async function buildBabel (dir, type) {
   }
 }
 
+function witeJson (path, json) {
+  fs.writeFileSync(path, `${JSON.stringify(json, null, 2)}\n`);
+}
+
 function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
   if (f.startsWith('@polkadot')) {
     const parts = f.split('/');
@@ -409,7 +413,8 @@ function buildExports () {
   const buildDir = path.join(process.cwd(), 'build');
 
   mkdirp.sync(path.join(buildDir, 'cjs'));
-  fs.writeFileSync(path.join(buildDir, 'cjs/package.json'), JSON.stringify({ type: 'commonjs' }, null, 2));
+
+  witeJson(path.join(buildDir, 'cjs/package.json'), { type: 'commonjs' });
   tweakPackageInfo(buildDir);
   tweakCjsPaths(buildDir);
 
@@ -518,8 +523,7 @@ function buildExports () {
     }, {});
 
   moveFields(pkg, ['main', 'module', 'browser', 'deno', 'react-native', 'types', 'exports', 'dependencies', 'optionalDependencies', 'peerDependencies', 'denoDependencies']);
-
-  fs.writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
+  witeJson(pkgPath, pkg);
 
   // copy from build-cjs to build/cjs
   [
@@ -583,7 +587,7 @@ function orderPackageJson (repoPath, dir, json) {
     })
   );
 
-  fs.writeFileSync(path.join(process.cwd(), 'package.json'), `${JSON.stringify(sorted, null, 2)}\n`);
+  witeJson(path.join(process.cwd(), 'package.json'), sorted);
 }
 
 function createError (full, line, lineNumber, error) {

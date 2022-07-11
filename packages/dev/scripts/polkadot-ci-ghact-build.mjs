@@ -63,16 +63,22 @@ function runBuild () {
   execSync('yarn build');
 }
 
-function npmGetVersion () {
-  return JSON.parse(
-    fs.readFileSync(path.resolve(process.cwd(), 'package.json'), 'utf8')
-  ).version;
+function npmGetJsonPath () {
+  return path.resolve(process.cwd(), 'package.json');
 }
 
 function npmGetJson () {
   return JSON.parse(
-    fs.readFileSync(path.resolve(process.cwd(), 'package.json'), 'utf8')
+    fs.readFileSync(npmGetJsonPath(), 'utf8')
   );
+}
+
+function npmSetJson (json) {
+  fs.writeFileSync(npmGetJsonPath(), `${JSON.stringify(json, null, 2)}\n`);
+}
+
+function npmGetVersion () {
+  return npmGetJson().version;
 }
 
 function npmAddVersionX () {
@@ -80,7 +86,7 @@ function npmAddVersionX () {
 
   if (!json.version.endsWith('-x')) {
     json.version = json.version + '-x';
-    fs.writeFileSync(path.resolve(process.cwd(), 'package.json'), JSON.stringify(json, null, 2));
+    npmSetJson(json);
   }
 }
 
@@ -89,7 +95,7 @@ function npmDelVersionX () {
 
   if (json.version.endsWith('-x')) {
     json.version = json.version.replace('-x', '');
-    fs.writeFileSync(path.resolve(process.cwd(), 'package.json'), JSON.stringify(json, null, 2));
+    npmSetJson(json);
   }
 }
 
@@ -102,7 +108,7 @@ function npmSetVersionFields () {
     json.versionNpm = json.version;
   }
 
-  fs.writeFileSync(path.resolve(process.cwd(), 'package.json'), JSON.stringify(json, null, 2));
+  npmSetJson(json);
 
   if (fs.existsSync('.123current')) {
     rimraf.sync('.123current');
@@ -331,7 +337,7 @@ function getFlags () {
 }
 
 function verBump () {
-  const currentVersion = npmGetVersion();
+  const { version: currentVersion, versionNpm } = npmGetJson();
   const [version, tag] = currentVersion.split('-');
   const [,, patch] = version.split('.');
 
@@ -339,6 +345,16 @@ function verBump () {
     // don't allow beta versions
     execSync('yarn polkadot-dev-version patch');
     withNpm = true;
+  } else if (tag || patch === '1' || currentVersion === versionNpm) {
+    // if we don't want to publish, add an X before passing
+    if (!withNpm) {
+      npmAddVersionX();
+    } else {
+      npmDelVersionX();
+    }
+
+    // if we have a beta version, just continue the stream of betas
+    execSync('yarn polkadot-dev-version pre');
   } else {
     const triggerPath = path.join(process.cwd(), '.123trigger');
     const filtered = fs.readFileSync(triggerPath, 'utf-8')
@@ -346,49 +362,35 @@ function verBump () {
       .map((n) => n.trim())
       .filter((n) => !!n);
 
-    if (tag || patch === '1' || filtered.includes(currentVersion)) {
-      // if we don't want to publish, add an X before passing
-      if (!withNpm) {
-        npmAddVersionX();
-      } else {
-        npmDelVersionX();
-      }
+    let prev = '';
+    const output = [];
 
-      // if we have a beta version, just continue the stream of betas
-      execSync('yarn polkadot-dev-version pre');
-      // we don't manually tweak withNpm, it is only based on the .123npm file
-      // withNpm = true;
-    } else {
-      let prev = '';
-      const output = [];
+    // insert empty lines as required
+    for (let i = 0; i < filtered.length; i++) {
+      const val = filtered[i];
+      const [major] = val.split('.');
 
-      // insert empty lines as required
-      for (let i = 0; i < filtered.length; i++) {
-        const val = filtered[i];
-        const [major] = val.split('.');
-
-        if (i !== 0) {
-          if (major !== prev) {
-            output.push('');
-          }
+      if (i !== 0) {
+        if (major !== prev) {
+          output.push('');
         }
-
-        prev = major;
-        output.push(val);
       }
 
-      const [major] = currentVersion.split('.');
-
-      if (prev !== major) {
-        output.push('');
-      }
-
-      output.push(currentVersion);
-
-      // rewrite for future usage
-      fs.writeFileSync(triggerPath, `${output.join('\n')}\n`);
-      withNpm = true;
+      prev = major;
+      output.push(val);
     }
+
+    const [major] = currentVersion.split('.');
+
+    if (prev !== major) {
+      output.push('');
+    }
+
+    output.push(currentVersion);
+
+    // rewrite for future usage
+    fs.writeFileSync(triggerPath, `${output.join('\n')}\n`);
+    withNpm = true;
   }
 
   // always ensure we have made some changes, so we can commit
