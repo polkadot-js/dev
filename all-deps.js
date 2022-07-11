@@ -55,7 +55,7 @@ function updatePackage (dir) {
   const json = parsePackage(dir);
 
   writePackage(dir, Object
-    .values(json)
+    .entries(json)
     .reduce((result, [key, value]) => {
       result[key] = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies', 'resolutions'].includes(key)
         ? updateDependencies(dir, value)
