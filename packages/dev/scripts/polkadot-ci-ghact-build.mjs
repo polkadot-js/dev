@@ -93,6 +93,22 @@ function npmDelVersionX () {
   }
 }
 
+function npmSetVersionFields () {
+  const json = npmGetJson();
+
+  json.versionGit = json.version;
+
+  if (!json.version.endsWith('-x')) {
+    json.versionNpm = json.version;
+  }
+
+  fs.writeFileSync(path.resolve(process.cwd(), 'package.json'), JSON.stringify(json, null, 2));
+
+  if (fs.existsSync('.123current')) {
+    rimraf.sync('.123current');
+  }
+}
+
 function npmSetup () {
   const registry = 'registry.npmjs.org';
 
@@ -376,7 +392,7 @@ function verBump () {
   }
 
   // always ensure we have made some changes, so we can commit
-  fs.writeFileSync(path.join(process.cwd(), '.123current'), `${npmGetVersion()}\n`);
+  npmSetVersionFields();
 
   execSync('yarn polkadot-dev-contrib');
   execSync('git add --all .');
