@@ -14,24 +14,21 @@ module.exports = {
   },
   ignorePatterns: [
     '**/build/*',
-    '**/build-cjs/*',
-    '**/build-esm/*',
-    '**/build-deno/*',
-    '**/build-asmjs/*',
-    '**/build-wasm/*',
+    '**/build-*/*',
     '**/coverage/*',
     '**/node_modules/*',
-    '.eslintrc.cjs',
-    '.eslintrc.js',
-    '.eslintrc.mjs',
-    '.github/**',
-    '.prettierrc.cjs',
-    '.vscode/**',
-    '.yarn/**',
-    'babel.config.cjs',
-    'jest.config.cjs',
-    'rollup.config.js',
-    'rollup.config.mjs'
+    '/.eslintrc.cjs',
+    '/.eslintrc.js',
+    '/.eslintrc.mjs',
+    '/.github/**',
+    '/.prettierrc.cjs',
+    '/.vscode/**',
+    '/.yarn/**',
+    '/babel.config.cjs',
+    '/jest.config.cjs',
+    '/mod.ts',
+    '/rollup.config.js',
+    '/rollup.config.mjs'
   ],
   extends: [
     'eslint:recommended',
@@ -83,7 +80,7 @@ module.exports = {
     curly: ['error', 'all'],
     'default-param-last': [0], // conflicts with TS version (this one doesn't allow TS ?)
     'header/header': [2, 'line', [
-      { pattern: ' Copyright 20(17|18|19|20|21|22)(-2022)? @polkadot/' },
+      { pattern: ` Copyright 20(17|18|19|20|21|22)(-${new Date().getFullYear()})? @polkadot/` },
       ' SPDX-License-Identifier: Apache-2.0'
     ], 2],
     'import-newlines/enforce': ['error', 2048],

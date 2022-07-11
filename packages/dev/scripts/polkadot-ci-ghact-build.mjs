@@ -63,6 +63,16 @@ function runBuild () {
   execSync('yarn build');
 }
 
+function rmFile (file) {
+  if (fs.existsSync(file)) {
+    rimraf.sync(file);
+
+    return true;
+  }
+
+  return false;
+}
+
 function npmGetJsonPath () {
   return path.resolve(process.cwd(), 'package.json');
 }
@@ -123,10 +133,7 @@ function npmSetVersionFields () {
   }
 
   npmSetJson(json);
-
-  if (fs.existsSync('.123current')) {
-    rimraf.sync('.123current');
-  }
+  rmFile('.123current');
 }
 
 function npmSetup () {
@@ -334,20 +341,9 @@ function denoPublish () {
 }
 
 function getFlags () {
-  if (fs.existsSync('.123deno')) {
-    rimraf.sync('.123deno');
-    withDeno = true;
-  }
-
-  if (fs.existsSync('.123bundle')) {
-    rimraf.sync('.123bundle');
-    withBund = true;
-  }
-
-  if (fs.existsSync('.123npm')) {
-    rimraf.sync('.123npm');
-    withNpm = true;
-  }
+  withDeno = rmFile('.123deno');
+  withBund = rmFile('.123bundle');
+  withNpm = rmFile('.123npm');
 }
 
 function verBump () {
@@ -370,48 +366,16 @@ function verBump () {
       npmDelVersionX();
     }
 
-    // if we have a beta version, just continue the stream of betas
+    // beta version, just continue the stream of betas
     execSync('yarn polkadot-dev-version pre');
   } else {
-    const triggerPath = path.join(process.cwd(), '.123trigger');
-    const filtered = fs.readFileSync(triggerPath, 'utf-8')
-      .split('\n')
-      .map((n) => n.trim())
-      .filter((n) => !!n);
-
-    let prev = '';
-    const output = [];
-
-    // insert empty lines as required
-    for (let i = 0; i < filtered.length; i++) {
-      const val = filtered[i];
-      const [major] = val.split('.');
-
-      if (i !== 0) {
-        if (major !== prev) {
-          output.push('');
-        }
-      }
-
-      prev = major;
-      output.push(val);
-    }
-
-    const [major] = currentVersion.split('.');
-
-    if (prev !== major) {
-      output.push('');
-    }
-
-    output.push(currentVersion);
-
-    // rewrite for future usage
-    fs.writeFileSync(triggerPath, `${output.join('\n')}\n`);
+    // manually set, got for publish
     withNpm = true;
   }
 
   // always ensure we have made some changes, so we can commit
   npmSetVersionFields();
+  rmFile('.123trigger');
 
   execSync('yarn polkadot-dev-contrib');
   execSync('git add --all .');
