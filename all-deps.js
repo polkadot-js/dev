@@ -82,7 +82,10 @@ function findPackages (dir) {
     return;
   }
 
-  const { versionNpm } = parsePackage(dir);
+  const { versionNpm, versions } = parsePackage(dir);
+  const lastVersion = versions
+    ? versions.npm
+    : versionNpm;
 
   fs
     .readdirSync(pkgsDir)
@@ -97,7 +100,7 @@ function findPackages (dir) {
       const full = path.join(pkgsDir, dir);
 
       paths.push(full);
-      extractVersion(full, versionNpm);
+      extractVersion(full, lastVersion);
     });
 }
 

@@ -102,10 +102,24 @@ function npmDelVersionX () {
 function npmSetVersionFields () {
   const json = npmGetJson();
 
-  json.versionGit = json.version;
+  if (!json.versions) {
+    json.versions = {};
+  }
+
+  if (json.versionGit) {
+    json.versions.git = json.versionGit;
+    delete json.versionGit;
+  }
+
+  if (json.versionNpm) {
+    json.versions.npm = json.versionNpm;
+    delete json.versionNpm;
+  }
+
+  json.versions.git = json.version;
 
   if (!json.version.endsWith('-x')) {
-    json.versionNpm = json.version;
+    json.versions.npm = json.version;
   }
 
   npmSetJson(json);
@@ -337,15 +351,18 @@ function getFlags () {
 }
 
 function verBump () {
-  const { version: currentVersion, versionNpm } = npmGetJson();
+  const { version: currentVersion, versionNpm, versions } = npmGetJson();
   const [version, tag] = currentVersion.split('-');
   const [,, patch] = version.split('.');
+  const lastVersion = versions
+    ? versions.npm
+    : versionNpm;
 
   if (argv['skip-beta'] || patch === '0') {
     // don't allow beta versions
     execSync('yarn polkadot-dev-version patch');
     withNpm = true;
-  } else if (tag || patch === '1' || currentVersion === versionNpm) {
+  } else if (tag || currentVersion === lastVersion) {
     // if we don't want to publish, add an X before passing
     if (!withNpm) {
       npmAddVersionX();
