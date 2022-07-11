@@ -79,7 +79,7 @@ function addX () {
   }
 
   json.version = json.version + '-x';
-  fs.writeFileSync(rootPath, JSON.stringify(json, null, 2));
+  writePkgJson(rootPath, json);
 
   return true;
 }

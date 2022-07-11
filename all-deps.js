@@ -7,59 +7,69 @@ import path from 'path';
 
 const versions = {};
 const paths = [];
+let updated = 0;
 
 function packageJson (dir) {
   return path.join(dir, 'package.json');
 }
 
-function updateDependencies (dependencies) {
-  return Object.keys(dependencies).sort().reduce((result, name) => {
-    const current = dependencies[name];
-    const version = current[0] !== '^'
-      ? current
-      : versions[name] || current;
+function updateDependencies (dir, dependencies) {
+  let hasLogged = false;
 
-    if (version !== current) {
-      console.log('\t\t', name, '->', version);
-    }
+  return Object
+    .keys(dependencies)
+    .sort()
+    .reduce((result, name) => {
+      const current = dependencies[name];
+      const version = current[0] !== '^' || current.endsWith('-x')
+        ? current
+        : versions[name] || current;
 
-    result[name] = version;
+      if (version !== current) {
+        if (!hasLogged) {
+          console.log('\t', dir);
+          hasLogged = true;
+        }
 
-    return result;
-  }, {});
+        console.log('\t\t', name, '->', version);
+        updated++;
+      }
+
+      result[name] = version;
+
+      return result;
+    }, {});
 }
 
 function parsePackage (dir) {
   return JSON.parse(
-    fs.readFileSync(packageJson(dir)).toString('utf-8')
+    fs.readFileSync(packageJson(dir), 'utf-8')
   );
 }
 
-function updatePackage (dir) {
-  console.log('\t', dir);
-
-  const json = parsePackage(dir);
-  const result = Object.keys(json).reduce((result, key) => {
-    if (!['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies', 'resolutions'].includes(key)) {
-      result[key] = json[key];
-    } else {
-      result[key] = updateDependencies(json[key]);
-    }
-
-    return result;
-  }, {});
-
-  fs.writeFileSync(packageJson(dir), `${JSON.stringify(result, null, 2)}\n`);
+function writePackage (dir, json) {
+  fs.writeFileSync(packageJson(dir), `${JSON.stringify(json, null, 2)}\n`);
 }
 
-function extractVersion (dir) {
-  console.log('\t', dir);
+function updatePackage (dir) {
+  const json = parsePackage(dir);
 
-  const { name, version } = parsePackage(dir);
+  writePackage(dir, Object
+    .values(json)
+    .reduce((result, [key, value]) => {
+      result[key] = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies', 'resolutions'].includes(key)
+        ? updateDependencies(dir, value)
+        : value;
 
-  if (!version.endsWith('-x')) {
-    versions[name] = `^${version}`;
-  }
+      return result;
+    }, {})
+  );
+}
+
+function extractVersion (dir, versionNpm) {
+  const { name } = parsePackage(dir);
+
+  versions[name] = `^${versionNpm}`;
 }
 
 function findPackages (dir) {
@@ -71,6 +81,8 @@ function findPackages (dir) {
   if (!fs.existsSync(pkgsDir)) {
     return;
   }
+
+  const { versionNpm } = parsePackage(dir);
 
   fs
     .readdirSync(pkgsDir)
@@ -85,11 +97,12 @@ function findPackages (dir) {
       const full = path.join(pkgsDir, dir);
 
       paths.push(full);
-      extractVersion(full);
+      extractVersion(full, versionNpm);
     });
 }
 
-console.log('Extracting');
+console.log('Extracting ...');
+
 fs
   .readdirSync('.')
   .filter((name) => {
@@ -98,7 +111,10 @@ fs
   .sort()
   .forEach(findPackages);
 
-console.log('Updating');
+console.log('\t', Object.keys(versions).length, 'packages found');
+
+console.log('Updating ...');
+
 paths.forEach(updatePackage);
 
-// console.log(versions);
+console.log('\t', updated, 'versions adjusted');
