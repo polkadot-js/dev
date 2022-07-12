@@ -296,7 +296,7 @@ function findFiles (buildDir, extra = '', exclude = []) {
       const thisPath = path.join(buildDir, jsPath);
       const toDelete = (
         // no test paths
-        thisPath.includes('/test/') ||
+        jsPath.includes('/test/') ||
         // // no tests
         ['.manual.', '.spec.', '.test.'].some((t) => jsName.includes(t)) ||
         // no .d.ts compiled outputs
