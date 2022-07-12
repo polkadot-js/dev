@@ -293,7 +293,7 @@ function findFiles (buildDir, extra = '', exclude = []) {
     .readdirSync(currDir)
     .reduce((all, jsName) => {
       const jsPath = `${extra}/${jsName}`;
-      const thisPath = path.join(buildDir, jsPath);
+      const fullPathEsm = path.join(buildDir, jsPath);
       const toDelete = (
         // no test paths
         jsPath.includes('/test/') ||
@@ -310,13 +310,13 @@ function findFiles (buildDir, extra = '', exclude = []) {
         )
       );
 
-      if (fs.statSync(thisPath).isDirectory()) {
+      if (fs.statSync(fullPathEsm).isDirectory()) {
         findFiles(buildDir, jsPath).forEach((entry) => all.push(entry));
       } else if (toDelete) {
-        const cjsPath = path.join(`${buildDir}-cjs`, jsPath);
+        const fullPathCjs = path.join(`${buildDir}-cjs`, jsPath);
 
-        fs.unlinkSync(thisPath);
-        fs.existsSync(cjsPath) && fs.unlinkSync(cjsPath);
+        fs.unlinkSync(fullPathEsm);
+        fs.existsSync(fullPathCjs) && fs.unlinkSync(fullPathCjs);
       } else {
         if (!exclude.some((e) => jsName === e)) {
           // this is not mapped to a compiled .js file (where we have dual esm/cjs mappings)
