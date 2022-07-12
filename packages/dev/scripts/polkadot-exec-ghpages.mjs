@@ -2,8 +2,10 @@
 // Copyright 2017-2022 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { requireRelative } from './import.mjs';
+import { importRelative } from './import.mjs';
 
-requireRelative('gh-pages', 'gh-pages/bin/gh-pages.js')(process.argv);
+const ghp = await importRelative('gh-pages', 'gh-pages/bin/gh-pages.js');
 
-process.stdout.write('Published\n');
+await ghp.default(process.argv);
+
+console.log('Published');
