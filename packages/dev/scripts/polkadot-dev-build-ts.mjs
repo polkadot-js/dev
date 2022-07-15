@@ -77,7 +77,10 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
     const denoPkg = denoCreateName(thisPkg);
     const subPath = parts.slice(2).join('/');
 
-    if (parts.length === 2) {
+    if (subPath.includes("' assert { type:")) {
+      // these are for type asserts, we keep the assert
+      return `${denoIntPrefix}/${denoPkg}/${subPath}`;
+    } else if (parts.length === 2) {
       // if we only have 2 parts, we add deno/mod.ts
       return `${denoIntPrefix}/${denoPkg}/mod.ts`;
     }
