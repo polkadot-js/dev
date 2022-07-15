@@ -222,6 +222,14 @@ function rewriteDenoPaths (pkgCwd, pkgJson, rootDir, dir) {
                 ? `${t} '${adjusted}'`
                 : o;
             })
+            // handle dynamic imports
+            .replace(/ import\('(.*)'\)/g, (o, f) => {
+              const adjusted = adjustDenoPath(pkgCwd, pkgJson, dir, f);
+
+              return adjusted
+                ? ` import('${adjusted}')`
+                : o;
+            })
         );
       }
     });
