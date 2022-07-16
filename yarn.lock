@@ -1968,8 +1968,8 @@ __metadata:
     "@rollup/plugin-json": ^4.1.0
     "@rollup/plugin-node-resolve": ^13.3.0
     "@rushstack/eslint-patch": ^1.1.4
-    "@types/jest": ^28.1.5
-    "@types/node": ^18.0.4
+    "@types/jest": ^28.1.6
+    "@types/node": ^18.0.5
     "@types/react": ^18.0.15
     "@types/yargs": ^17.0.10
     "@typescript-eslint/eslint-plugin": 5.30.6
@@ -2010,7 +2010,7 @@ __metadata:
     prettier: ^2.7.1
     react: ^18.2.0
     rimraf: ^3.0.2
-    rollup: ^2.76.0
+    rollup: ^2.77.0
     rollup-plugin-cleanup: ^3.2.1
     typescript: ^4.7.4
     yargs: ^17.5.1
@@ -2346,13 +2346,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/jest@npm:^28.1.5":
-  version: 28.1.5
-  resolution: "@types/jest@npm:28.1.5"
+"@types/jest@npm:^28.1.6":
+  version: 28.1.6
+  resolution: "@types/jest@npm:28.1.6"
   dependencies:
     jest-matcher-utils: ^28.0.0
     pretty-format: ^28.0.0
-  checksum: 994bfc25a5e767ec1506a2a7d94e60a7a5645b2e4e8444c56ae902f3a3e27ae54e821e41c1b4e7c8d7f5022bf5abfdd0460ead223ba6f2d0a194e5b2bed1ad76
+  checksum: f2ba5fbefc8f44d1c16ee19d8d2811bca75754a2846e222287f2788d96062801c568215e6b81eb532a48e8cb2a7282729da1d4f6fb496831da8269c5abaad4c5
   languageName: node
   linkType: hard
 
@@ -2390,10 +2390,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:>= 8, @types/node@npm:^18.0.4":
-  version: 18.0.4
-  resolution: "@types/node@npm:18.0.4"
-  checksum: 981284fd57941f233f0e77038087c122f56e3c2b4fc4e090dfc7f0a93abfc526d5ccdd59eb3ef551d713245cf3943e37c7b957f12ba699209341a447c39fab59
+"@types/node@npm:*, @types/node@npm:>= 8, @types/node@npm:^18.0.5":
+  version: 18.0.5
+  resolution: "@types/node@npm:18.0.5"
+  checksum: cc9c67d0074252f798d226dd95a22e0e8851cf7fc623ef4a603d9ad2c2b46650f930147062ea33719008b1de67f08f499ad693307d02f8396e6f1fead8144329
   languageName: node
   linkType: hard
 
@@ -8573,9 +8573,9 @@ resolve@^2.0.0-next.3:
   languageName: node
   linkType: hard
 
-"rollup@npm:^2.76.0":
-  version: 2.76.0
-  resolution: "rollup@npm:2.76.0"
+"rollup@npm:^2.77.0":
+  version: 2.77.0
+  resolution: "rollup@npm:2.77.0"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -8583,7 +8583,7 @@ resolve@^2.0.0-next.3:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 58293e1c63c11d4afcfcf619601d5c5136dd3d0c9d3bd6a0b6141fede32027edc1eb53873bbb9a9c1e95e86c67f6ad66185720031b6eadf325972174d1d8fbcb
+  checksum: 74ccc98429709984a89af636250833e7502d87f1d9c6d96ebfe4b52030ebf94b9f6b84b8ab476670329a61d54b681d35eecdc601bac5b5396b099b1ea69970ef
   languageName: node
   linkType: hard
 
