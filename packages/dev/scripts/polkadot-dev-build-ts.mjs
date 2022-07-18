@@ -9,7 +9,7 @@ import path from 'path';
 import rimraf from 'rimraf';
 
 import { copySync } from './copy.mjs';
-import { denoCreateName, denoExtPrefix, denoIntPrefix } from './deno.mjs';
+import { denoCreateName, denoExtPrefix, denoIntPrefix, denoLndPrefix } from './deno.mjs';
 import { __dirname } from './dirname.mjs';
 import { execSync } from './execute.mjs';
 
@@ -180,16 +180,18 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
     version = '@' + version.replace('^', '').replace('~', '');
   } else if (isDeclare) {
     return f;
-  } else {
-    console.warn(`warning: Replacing unknown versioned package '${f}' inside ${pkgJson.name}, possibly missing an alias`);
   }
 
-  const [denoDep, denoPath = 'mod.ts'] = pkgJson.denoDependencies && pkgJson.denoDependencies[depName]
+  const [denoDep, ...denoPath] = pkgJson.denoDependencies && pkgJson.denoDependencies[depName]
     ? pkgJson.denoDependencies[depName].split('/')
     : [null];
 
+  if (!denoDep && !version) {
+    console.warn(`warning: Replacing unknown versioned package '${f}' inside ${pkgJson.name}, possibly missing an alias`);
+  }
+
   return denoDep
-    ? `${denoIntPrefix}/${denoDep}${version || ''}${depPath || (denoPath && `/${denoPath}`) || ''}`
+    ? `${denoLndPrefix}/${denoDep}${depPath || (denoPath.length ? `/${denoPath.join('/')}` : '') || ''}`
     : `${denoExtPrefix}/${depName}${version || ''}${depPath || ''}`;
 }
 
