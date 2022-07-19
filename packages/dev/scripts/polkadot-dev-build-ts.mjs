@@ -182,16 +182,23 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
     return f;
   }
 
-  const [denoDep, ...denoPath] = pkgJson.denoDependencies && pkgJson.denoDependencies[depName]
+  let [denoDep, ...denoPath] = pkgJson.denoDependencies && pkgJson.denoDependencies[depName]
     ? pkgJson.denoDependencies[depName].split('/')
     : [null];
 
   if (!denoDep && !version) {
     console.warn(`warning: Replacing unknown versioned package '${f}' inside ${pkgJson.name}, possibly missing an alias`);
+  } else if (denoDep === 'x') {
+    denoDep = `x/${denoPath[0]}`;
+    denoPath = denoPath.slice(1);
+
+    if (!denoDep.includes('@')) {
+      denoDep += version;
+    }
   }
 
   return denoDep
-    ? `${denoLndPrefix}/${denoDep}${depPath || (denoPath.length ? `/${denoPath.join('/')}` : '') || ''}`
+    ? `${denoLndPrefix}/${denoDep}${depPath || `/${denoPath.length ? denoPath.join('/') : 'mod.ts'}`}`
     : `${denoExtPrefix}/${depName}${version || ''}${depPath || ''}`;
 }
 
