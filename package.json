@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@polkadot/dev": "workspace:packages/dev",
-    "@polkadot/networks": "^10.1.1",
+    "@polkadot/networks": "^10.1.2",
     "copyfiles": "^2.4.1"
   },
   "resolutions": {
