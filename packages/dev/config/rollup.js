@@ -38,7 +38,7 @@ export function createInput (pkg, _index) {
 export function createOutput (_pkg, external, globals) {
   const pkg = sanitizePkg(_pkg);
 
-  return {
+  let settings = {
     file: `packages/${pkg}/build/bundle-polkadot-${pkg}.js`,
     format: 'umd',
     globals: external.reduce((all, pkg) => ({
@@ -48,7 +48,13 @@ export function createOutput (_pkg, external, globals) {
     intro: 'const global = window;',
     name: createName(_pkg),
     preferConst: true
-  };
+  }
+
+  if (pkg === 'rpc-provider') {
+    settings = {...settings, inlineDynamicImports: true}
+  }
+
+  return settings;
 }
 
 export function createBundle ({ entries = {}, external, globals = {}, index, inject = {}, pkg }) {
