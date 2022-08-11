@@ -38,23 +38,19 @@ export function createInput (pkg, _index) {
 export function createOutput (_pkg, external, globals) {
   const pkg = sanitizePkg(_pkg);
 
-  let settings = {
+  // inlineDynamicImports is used for multi-chunk builds as it creates a single bundle when dynamic imports are used
+  return {
     file: `packages/${pkg}/build/bundle-polkadot-${pkg}.js`,
     format: 'umd',
     globals: external.reduce((all, pkg) => ({
       [pkg]: createName(pkg),
       ...all
     }), { ...globals }),
+    inlineDynamicImports: true,
     intro: 'const global = window;',
     name: createName(_pkg),
     preferConst: true
   };
-
-  if (pkg === 'rpc-provider') {
-    settings = { ...settings, inlineDynamicImports: true };
-  }
-
-  return settings;
 }
 
 export function createBundle ({ entries = {}, external, globals = {}, index, inject = {}, pkg }) {
