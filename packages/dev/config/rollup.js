@@ -48,10 +48,10 @@ export function createOutput (_pkg, external, globals) {
     intro: 'const global = window;',
     name: createName(_pkg),
     preferConst: true
-  }
+  };
 
   if (pkg === 'rpc-provider') {
-    settings = {...settings, inlineDynamicImports: true}
+    settings = { ...settings, inlineDynamicImports: true };
   }
 
   return settings;
