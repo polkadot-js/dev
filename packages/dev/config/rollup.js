@@ -48,7 +48,7 @@ export function createOutput (_pkg, external, globals) {
     // combine multi-chunk builds with dynamic imports
     inlineDynamicImports: true,
     // this is a mini x-global, determine where our context lies
-    intro: 'const global = globalThis || self || window;',
+    intro: 'const global = typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : window;',
     name: createName(_pkg),
     preferConst: true
   };
