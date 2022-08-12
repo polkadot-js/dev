@@ -38,7 +38,6 @@ export function createInput (pkg, _index) {
 export function createOutput (_pkg, external, globals) {
   const pkg = sanitizePkg(_pkg);
 
-  // inlineDynamicImports is used for multi-chunk builds as it creates a single bundle when dynamic imports are used
   return {
     file: `packages/${pkg}/build/bundle-polkadot-${pkg}.js`,
     format: 'umd',
@@ -46,8 +45,10 @@ export function createOutput (_pkg, external, globals) {
       [pkg]: createName(pkg),
       ...all
     }), { ...globals }),
+    // combine multi-chunk builds with dynamic imports
     inlineDynamicImports: true,
-    intro: 'const global = window;',
+    // this is a mini x-global, determine where our context lies
+    intro: 'const global = globalThis || self || window;',
     name: createName(_pkg),
     preferConst: true
   };
@@ -55,6 +56,8 @@ export function createOutput (_pkg, external, globals) {
 
 export function createBundle ({ entries = {}, external, globals = {}, index, inject = {}, pkg }) {
   return {
+    // specify this (we define global in the output intro as globalThis || self || window)
+    context: 'global',
     external,
     input: createInput(pkg, index),
     output: createOutput(pkg, external, globals),
