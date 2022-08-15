@@ -1982,7 +1982,7 @@ __metadata:
     "@rollup/plugin-node-resolve": ^13.3.0
     "@rushstack/eslint-patch": ^1.1.4
     "@types/jest": ^28.1.6
-    "@types/node": ^18.7.3
+    "@types/node": ^18.7.4
     "@types/react": ^18.0.17
     "@types/yargs": ^17.0.11
     "@typescript-eslint/eslint-plugin": 5.33.0
@@ -2403,10 +2403,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:>= 8, @types/node@npm:^18.7.3":
-  version: 18.7.3
-  resolution: "@types/node@npm:18.7.3"
-  checksum: f51ed436a112235ac068d739b4823090a37b869cc186b64dd5c250dd285139c286990fcbeff2fb3ecba5d605fa885de4275247d332e5b96eafdfbb1da62e3ced
+"@types/node@npm:*, @types/node@npm:>= 8, @types/node@npm:^18.7.4":
+  version: 18.7.4
+  resolution: "@types/node@npm:18.7.4"
+  checksum: 051d2147e4d8129fceb63ee9384259b2f224dbc4e4b0c46d96a6b61cbaad4e3fe4060950e7f4fc3d5692b1e6ea47e68ad03b61155754bfa169593747cfe3f8f4
   languageName: node
   linkType: hard
 

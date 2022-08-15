@@ -145,15 +145,19 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
       return null;
     }
 
-    const checkPath = path.join(process.cwd(), dir, f);
+    const dirPath = path.join(process.cwd(), dir, f);
+    const tsPath = path.join(process.cwd(), dir, `${f}.ts`);
 
-    if (fs.existsSync(checkPath) && fs.statSync(checkPath).isDirectory()) {
+    if (fs.existsSync(dirPath) && fs.statSync(dirPath).isDirectory()) {
       // this is a directory, append index.ts
       return `${f}/index.ts`;
+    } else if (fs.existsSync(tsPath)) {
+      // local source file
+      return `${f}.ts`;
     }
 
-    // local file
-    return `${f}.ts`;
+    // fully-specified file, keep it as-is (linting picks up invalids)
+    return f;
   }
 
   const depParts = f.split('/');
