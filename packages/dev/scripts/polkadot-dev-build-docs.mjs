@@ -3,17 +3,19 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import fs from 'fs';
-import fse from 'fs-extra';
+import mkdirp from 'mkdirp';
 import path from 'path';
 import rimraf from 'rimraf';
 
 console.log('$ polkadot-dev-build-docs', process.argv.slice(2).join(' '));
 
-let docRoot = path.join(process.cwd(), 'docs');
+const srcRoot = path.join(process.cwd(), 'docs');
 
-if (fs.existsSync(docRoot)) {
-  docRoot = path.join(process.cwd(), 'build-docs');
+if (fs.existsSync(srcRoot)) {
+  const destRoot = path.join(process.cwd(), 'build-docs');
 
-  rimraf.sync(docRoot);
-  fse.copySync(path.join(process.cwd(), 'docs'), docRoot);
+  rimraf.sync(destRoot);
+  mkdirp.sync(destRoot);
+
+  fs.copyFileSync(srcRoot, destRoot);
 }

@@ -6,10 +6,11 @@
 //
 // This only uses the sync copy needed and removed unneeded dependencies (such as ancient chokidar)
 
-import fs from 'fs-extra';
+import fs from 'fs';
 import glob from 'glob';
 import glob2base from 'glob2base';
 import minimatch from 'minimatch';
+import mkdirp from 'mkdirp';
 import path from 'path';
 
 function normalizePath (originalPath) {
@@ -26,29 +27,29 @@ export function copySync (src, dst) {
   const normalizedSource = normalizePath(src);
   const normalizedOutputDir = normalizePath(dst);
   const baseDir = normalizePath(glob2base({ minimatch: new minimatch.Minimatch(normalizedSource) }));
+  const all = glob.sync(normalizedSource, {
+    follow: false,
+    nodir: true,
+    silent: true
+  });
 
-  glob
-    .sync(normalizedSource, {
-      follow: false,
-      nodir: true,
-      silent: true
-    })
-    .forEach((src) => {
-      const dst = baseDir === '.'
-        ? path.join(normalizedOutputDir, src)
-        : src.replace(baseDir, normalizedOutputDir);
+  for (let i = 0; i < all.length; i++) {
+    const src = all[i];
+    const dst = baseDir === '.'
+      ? path.join(normalizedOutputDir, src)
+      : src.replace(baseDir, normalizedOutputDir);
 
-      if (dst !== src) {
-        const stat = fs.statSync(src);
+    if (dst !== src) {
+      const stat = fs.statSync(src);
 
-        if (stat.isDirectory()) {
-          fs.ensureDirSync(dst);
-        } else {
-          fs.ensureDirSync(path.dirname(dst));
-          fs.copySync(src, dst);
-        }
-
-        fs.chmodSync(dst, stat.mode);
+      if (stat.isDirectory()) {
+        mkdirp.sync(dst);
+      } else {
+        mkdirp.sync(path.dirname(dst));
+        fs.copyFileSync(src, dst);
       }
-    });
+
+      fs.chmodSync(dst, stat.mode);
+    }
+  }
 }
