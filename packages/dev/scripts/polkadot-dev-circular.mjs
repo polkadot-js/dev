@@ -19,12 +19,12 @@ if (circular.length) {
 circular.forEach((path, idx) => {
   process.stdout.write(`${(idx + 1).toString().padStart(4)}: `);
 
-  path.forEach((module, idx) => {
+  path.forEach((mod, idx) => {
     if (idx) {
       process.stdout.write(' > ');
     }
 
-    process.stdout.write(module);
+    process.stdout.write(mod);
   });
 
   process.stdout.write('\n');
