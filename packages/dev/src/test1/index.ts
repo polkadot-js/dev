@@ -1,8 +1,8 @@
 // Copyright 2017-2022 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-export { circ1 } from './circ1.js';
-export { circ2 } from './circ2.js';
+export { circ1 } from './circ1';
+export { circ2 } from './circ2';
 
 /**
  * Some first test link
