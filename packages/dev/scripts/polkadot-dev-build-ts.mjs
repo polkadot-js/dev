@@ -141,19 +141,38 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
         return f.replace('/cjs/', '/deno/');
       }
 
+      const tsFile = f.replace('.js', '.ts');
+      const tsxFile = f.replace('.js', '.tsx');
+
+      if (fs.existsSync(path.join(process.cwd(), dir, tsFile))) {
+        // we have a .ts file for this one, rename
+        return tsFile;
+      } else if (fs.existsSync(path.join(process.cwd(), dir, tsxFile))) {
+        // we have a .tsx file for this one, rename
+        return tsxFile;
+      }
+
       // leave the other paths as-is
       return null;
     }
 
     const dirPath = path.join(process.cwd(), dir, f);
-    const tsPath = path.join(process.cwd(), dir, `${f}.ts`);
+    const tsFile = `${f}.ts`;
+    const tsxFile = `${f}.tsx`;
+    const tsPath = path.join(process.cwd(), dir, tsFile);
+    const tsxPath = path.join(process.cwd(), dir, tsxFile);
 
     if (fs.existsSync(dirPath) && fs.statSync(dirPath).isDirectory()) {
       // this is a directory, append index.ts
-      return `${f}/index.ts`;
+      return fs.existsSync(path.join(dirPath, 'index.tsx'))
+        ? `${f}/index.tsx`
+        : `${f}/index.ts`;
     } else if (fs.existsSync(tsPath)) {
       // local source file
-      return `${f}.ts`;
+      return tsFile;
+    } else if (fs.existsSync(tsxPath)) {
+      // local source file
+      return tsxFile;
     }
 
     // fully-specified file, keep it as-is (linting picks up invalids)
