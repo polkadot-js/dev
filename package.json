@@ -23,6 +23,9 @@
     "build": "polkadot-dev-build-ts",
     "build:extra": "(cd packages/dev && copyfiles config/* scripts/* build)",
     "build:release": "polkadot-ci-ghact-build --skip-beta",
+    "build:swc": "yarn build:swc:cjs && yarn build:swc:esm",
+    "build:swc:cjs": "swc --delete-dir-on-start --config-file .swcrc-cjs --out-dir packages/dev/build-swc-cjs packages/dev/src",
+    "build:swc:esm": "swc --delete-dir-on-start --config-file .swcrc-esm --out-dir packages/dev/build-swc-esm packages/dev/src",
     "clean": "polkadot-dev-clean-build",
     "docs": "polkadot-dev-build-docs",
     "lint": "polkadot-dev-run-lint",
@@ -34,6 +37,9 @@
   "devDependencies": {
     "@polkadot/dev": "workspace:packages/dev",
     "@polkadot/networks": "^10.1.4",
+    "@swc/cli": "^0.1.57",
+    "@swc/core": "^1.2.233",
+    "@swc/helpers": "^0.4.6",
     "copyfiles": "^2.4.1"
   },
   "resolutions": {

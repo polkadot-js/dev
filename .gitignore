@@ -15,6 +15,8 @@ build/
 build-cjs/
 build-esm/
 build-deno/
+build-swc-cjs/
+build-swc-esm/
 cc-test-reporter
 coverage/
 node_modules/
