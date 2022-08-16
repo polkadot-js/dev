@@ -1,14 +1,14 @@
 // Copyright 2017-2022 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import './augmented';
+import './augmented.js';
 
 import type { BlahType } from '@polkadot/dev/types';
-import type { EchoString } from './types';
+import type { EchoString } from './types.js';
 
-import { foo } from './test1/foo';
-import { adder, blah } from './test1';
-import * as bob from './test1';
+import { foo } from './test1/foo.js';
+import { adder, blah } from './test1/index.js';
+import * as bob from './test1/index.js';
 import { addThree } from './util.js';
 
 const SOMETHING = {
