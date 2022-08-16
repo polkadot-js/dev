@@ -3,7 +3,7 @@
 
 import * as React from 'react';
 
-import Component from './Component';
+import Component from './Component.js';
 
 interface Props {
   children: React.ReactNode;
