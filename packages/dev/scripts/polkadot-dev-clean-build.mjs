@@ -7,15 +7,20 @@ import path from 'path';
 import rimraf from 'rimraf';
 
 const PKGS = path.join(process.cwd(), 'packages');
+const DIRS = [
+  'build',
+  ...['cjs', 'esm', 'deno', 'docs', 'swc-cjs', 'swc-esm'].map((d) => `build-${d}`),
+  ...['tsbuildinfo', '*.tsbuildinfo'].map((d) => `tsconfig.${d}`)
+];
 
 console.log('$ polkadot-dev-clean-build', process.argv.slice(2).join(' '));
 
 function getPaths (dir) {
-  return ['build', 'build-cjs', 'build-esm', 'build-deno', 'build-docs', 'tsconfig.tsbuildinfo', 'tsconfig.*.tsbuildinfo'].map((p) => path.join(dir, p));
+  return DIRS.map((p) => path.join(dir, p));
 }
 
 function cleanDirs (dirs) {
-  dirs.forEach((dir) => rimraf.sync(dir));
+  dirs.forEach((d) => rimraf.sync(d));
 }
 
 cleanDirs(getPaths(process.cwd()));
@@ -25,8 +30,8 @@ if (fs.existsSync(PKGS)) {
   cleanDirs(
     fs
       .readdirSync(PKGS)
-      .map((file) => path.join(PKGS, file))
-      .filter((file) => fs.statSync(file).isDirectory())
-      .reduce((arr, dir) => arr.concat(getPaths(dir)), [])
+      .map((f) => path.join(PKGS, f))
+      .filter((f) => fs.statSync(f).isDirectory())
+      .reduce((res, d) => res.concat(getPaths(d)), [])
   );
 }

@@ -12,11 +12,7 @@
 /mod.ts
 /import_map.json
 build/
-build-cjs/
-build-esm/
-build-deno/
-build-swc-cjs/
-build-swc-esm/
+build-*/
 cc-test-reporter
 coverage/
 node_modules/
