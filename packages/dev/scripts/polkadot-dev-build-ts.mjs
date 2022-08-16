@@ -141,6 +141,14 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
         return f.replace('/cjs/', '/deno/');
       }
 
+      const tsFile = f.replace('.js', '.ts');
+      const tsPath = path.join(process.cwd(), dir, tsFile);
+
+      if (fs.existsSync(tsPath)) {
+        // we have a .ts file for this one, rename
+        return tsFile;
+      }
+
       // leave the other paths as-is
       return null;
     }
