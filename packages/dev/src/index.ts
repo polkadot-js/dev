@@ -9,7 +9,7 @@ import type { EchoString } from './types';
 import { foo } from './test1/foo';
 import { adder, blah } from './test1';
 import * as bob from './test1';
-import { addThree } from './util';
+import { addThree } from './util.js';
 
 const SOMETHING = {
   a: 1,
