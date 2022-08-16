@@ -2,7 +2,6 @@
   "extends": "@polkadot/dev/config/tsconfig.json",
   "compilerOptions": {
     "composite": true,
-    "moduleResolution": "nodenext",
     "paths": {
       "@polkadot/dev/types": ["dev/src/types.ts"],
       "@polkadot/dev/*": ["dev/src/*"]

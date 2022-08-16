@@ -3,5 +3,5 @@
 
 export const something = 'this is for deno';
 
-export * from './packageInfo.js';
-export * from './index.js';
+export * from './packageInfo';
+export * from '.';
