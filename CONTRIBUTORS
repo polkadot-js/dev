@@ -1,4 +1,4 @@
-    1039	Jaco                          	Revert nodenext experiment (#783)
+    1040	Jaco                          	Move swc config to dev/config (#784)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
        1	Amaury Martiny                	Allow .spec.ts files (#143)
