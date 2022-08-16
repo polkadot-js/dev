@@ -6,10 +6,10 @@ import './augmented';
 import type { BlahType } from '@polkadot/dev/types';
 import type { EchoString } from './types';
 
-import { foo } from './test1/foo.js';
+import { foo } from './test1/foo';
 import { adder, blah } from './test1';
 import * as bob from './test1';
-import { addThree } from './util.js';
+import { addThree } from './util';
 
 const SOMETHING = {
   a: 1,
