@@ -267,30 +267,35 @@ function rewriteEsmImports (pkgCwd, pkgJson, dir, replacer) {
           thisPath,
           fs
             .readFileSync(thisPath, 'utf8')
-            // handle import/export
-            .replace(/(import|export) (.*) from '(.*)'/g, (o, t, a, f) => {
-              const adjusted = replacer(pkgCwd, pkgJson, dir, f);
+            .split('\n')
+            .map((line) =>
+              line
+                // handle import/export
+                .replace(/(import|export) (.*) from '(.*)'/g, (o, t, a, f) => {
+                  const adjusted = replacer(pkgCwd, pkgJson, dir, f);
 
-              return adjusted
-                ? `${t} ${a} from '${adjusted}'`
-                : o;
-            })
-            // handle augmented inputs
-            .replace(/(import|declare module) '(.*)'/g, (o, t, f) => {
-              const adjusted = replacer(pkgCwd, pkgJson, dir, f, t !== 'import');
+                  return adjusted
+                    ? `${t} ${a} from '${adjusted}'`
+                    : o;
+                })
+                // handle augmented inputs
+                .replace(/(import|declare module) '(.*)'/g, (o, t, f) => {
+                  const adjusted = replacer(pkgCwd, pkgJson, dir, f, t !== 'import');
 
-              return adjusted
-                ? `${t} '${adjusted}'`
-                : o;
-            })
-            // handle dynamic imports
-            .replace(/ import\('(.*)'\)/g, (o, f) => {
-              const adjusted = replacer(pkgCwd, pkgJson, dir, f);
+                  return adjusted
+                    ? `${t} '${adjusted}'`
+                    : o;
+                })
+                // handle dynamic imports
+                .replace(/( import|^import)\('(.*)'\)/g, (o, t, f) => {
+                  const adjusted = replacer(pkgCwd, pkgJson, dir, f);
 
-              return adjusted
-                ? ` import('${adjusted}')`
-                : o;
-            })
+                  return adjusted
+                    ? `${t}('${adjusted}')`
+                    : o;
+                })
+            )
+            .join('\n')
         );
       }
     });
