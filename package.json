@@ -21,7 +21,8 @@
   ],
   "scripts": {
     "build": "polkadot-dev-build-ts",
-    "build:extra": "(cd packages/dev && copyfiles config/* scripts/* build)",
+    "build:extra": "yarn build:extra:copy && yarn build:swc",
+    "build:extra:copy": "(cd packages/dev && copyfiles config/* scripts/* build)",
     "build:release": "polkadot-ci-ghact-build --skip-beta",
     "build:swc": "yarn build:swc:cjs && yarn build:swc:esm",
     "build:swc:cjs": "cd packages/dev && swc --delete-dir-on-start --config-file ../../node_modules/@polkadot/dev/config/swcrc-cjs --out-dir build-swc-cjs src",
@@ -38,7 +39,7 @@
     "@polkadot/dev": "workspace:packages/dev",
     "@polkadot/networks": "^10.1.4",
     "@swc/cli": "^0.1.57",
-    "@swc/core": "^1.2.233",
+    "@swc/core": "^1.2.235",
     "@swc/helpers": "^0.4.6",
     "copyfiles": "^2.4.1"
   },

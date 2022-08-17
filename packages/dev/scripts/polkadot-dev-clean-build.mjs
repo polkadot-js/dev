@@ -9,7 +9,7 @@ import rimraf from 'rimraf';
 const PKGS = path.join(process.cwd(), 'packages');
 const DIRS = [
   'build',
-  ...['cjs', 'esm', 'deno', 'docs', 'swc-cjs', 'swc-esm'].map((d) => `build-${d}`),
+  ...['cjs', 'esm', 'deno', 'docs', 'swc', 'swc-cjs', 'swc-esm'].map((d) => `build-${d}`),
   ...['tsbuildinfo', '*.tsbuildinfo'].map((d) => `tsconfig.${d}`)
 ];
 

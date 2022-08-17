@@ -21,7 +21,6 @@
     "targets": {
       "node": "14"
     },
-    "mode": "entry",
-    "coreJs": "3.22"
+    "mode": "entry"
   }
 }
