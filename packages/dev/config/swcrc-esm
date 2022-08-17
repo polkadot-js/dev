@@ -15,6 +15,7 @@
     "loose": false,
     "externalHelpers": true
   },
+  "exclude": [".spec.ts", "mod.ts", ".d.ts"],
   "env": {
     "targets": {
       "node": "14"
