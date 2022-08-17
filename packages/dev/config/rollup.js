@@ -3,6 +3,7 @@
 
 import pluginAlias from '@rollup/plugin-alias';
 import pluginCommonjs from '@rollup/plugin-commonjs';
+import pluginDynamicImportVars from '@rollup/plugin-dynamic-import-vars';
 import pluginInject from '@rollup/plugin-inject';
 import pluginJson from '@rollup/plugin-json';
 import { nodeResolve as pluginResolve } from '@rollup/plugin-node-resolve';
@@ -65,6 +66,7 @@ export function createBundle ({ entries = {}, external, globals = {}, index, inj
       pluginAlias({ entries }),
       pluginJson(),
       pluginCommonjs(),
+      pluginDynamicImportVars(),
       pluginInject(inject),
       pluginResolve({ browser: true }),
       pluginCleanup()

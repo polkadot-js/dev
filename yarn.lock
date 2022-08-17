@@ -1977,6 +1977,7 @@ __metadata:
     "@babel/runtime": ^7.18.9
     "@rollup/plugin-alias": ^3.1.9
     "@rollup/plugin-commonjs": ^22.0.2
+    "@rollup/plugin-dynamic-import-vars": ^1.4.4
     "@rollup/plugin-inject": ^4.0.4
     "@rollup/plugin-json": ^4.1.0
     "@rollup/plugin-node-resolve": ^13.3.0
@@ -2146,6 +2147,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@rollup/plugin-dynamic-import-vars@npm:^1.4.4":
+  version: 1.4.4
+  resolution: "@rollup/plugin-dynamic-import-vars@npm:1.4.4"
+  dependencies:
+    "@rollup/pluginutils": ^4.1.2
+    estree-walker: ^2.0.1
+    fast-glob: ^3.2.7
+    magic-string: ^0.25.7
+  peerDependencies:
+    rollup: ^1.20.0||^2.0.0
+  checksum: 4f58fbadafe4c0c5c7c235fc2b215f277541d78d791e662979e0cfcc12cf0f79b5893259663d4ed577d7f8fc3eb7511c877fb00964c23c03790cf75e9b89cae0
+  languageName: node
+  linkType: hard
+
 "@rollup/plugin-inject@npm:^4.0.4":
   version: 4.0.4
   resolution: "@rollup/plugin-inject@npm:4.0.4"
@@ -2196,6 +2211,16 @@ __metadata:
   peerDependencies:
     rollup: ^1.20.0||^2.0.0
   checksum: 8be16e27863c219edbb25a4e6ec2fe0e1e451d9e917b6a43cf2ae5bc025a6b8faaa40f82a6e53b66d0de37b58ff472c6c3d57a83037ae635041f8df959d6d9aa
+  languageName: node
+  linkType: hard
+
+"@rollup/pluginutils@npm:^4.1.2":
+  version: 4.2.1
+  resolution: "@rollup/pluginutils@npm:4.2.1"
+  dependencies:
+    estree-walker: ^2.0.1
+    picomatch: ^2.2.2
+  checksum: 6bc41f22b1a0f1efec3043899e4d3b6b1497b3dea4d94292d8f83b4cf07a1073ecbaedd562a22d11913ff7659f459677b01b09e9598a98936e746780ecc93a12
   languageName: node
   linkType: hard
 
@@ -5013,7 +5038,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"fast-glob@npm:^3.2.5, fast-glob@npm:^3.2.9":
+"fast-glob@npm:^3.2.5, fast-glob@npm:^3.2.7, fast-glob@npm:^3.2.9":
   version: 3.2.11
   resolution: "fast-glob@npm:3.2.11"
   dependencies:
