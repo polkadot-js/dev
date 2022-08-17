@@ -3,6 +3,7 @@
   "jsc": {
     "parser": {
       "syntax": "typescript",
+      "dynamicImport": false,
       "tsx": true
     },
     "transform": {
@@ -15,7 +16,8 @@
     "externalHelpers": true
   },
   "module": {
-    "type": "commonjs"
+    "type": "commonjs",
+    "ignoreDynamic": true
   },
   "env": {
     "targets": {

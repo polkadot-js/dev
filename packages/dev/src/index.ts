@@ -19,6 +19,15 @@ const SOMETHING = {
 
 const A: BlahType = 123;
 let count = 0;
+let testFn: null | (() => void) = null;
+
+import('./testRoot')
+  .then(({ test }): void => {
+    testFn = test;
+  })
+  .catch(console.error);
+
+const somePromise = import('./testRoot').catch(() => null);
 
 function doCallback (fn: (a: string) => string): void {
   if (fn) {
@@ -57,4 +66,7 @@ export function tester (): void {
   assert(adder(2, 4) === 6);
   assert(addThree(1, 2, 3) === 6);
   assert(foo() === 'foobar' && !!bob.blah);
+
+  testFn && testFn();
+  console.log(somePromise);
 }
