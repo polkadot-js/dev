@@ -28,6 +28,7 @@
     "polkadot-dev-deno-map": "./scripts/polkadot-dev-deno-map.mjs",
     "polkadot-dev-run-lint": "./scripts/polkadot-dev-run-lint.mjs",
     "polkadot-dev-run-prettier": "./scripts/polkadot-dev-run-prettier.mjs",
+    "polkadot-dev-run-swc": "./scripts/polkadot-dev-run-swc.mjs",
     "polkadot-dev-run-test": "./scripts/polkadot-dev-run-test.mjs",
     "polkadot-dev-version": "./scripts/polkadot-dev-version.mjs",
     "polkadot-dev-yarn-only": "./scripts/polkadot-dev-yarn-only.mjs",
@@ -36,6 +37,7 @@
     "polkadot-exec-ghrelease": "./scripts/polkadot-exec-ghrelease.mjs",
     "polkadot-exec-prettier": "./scripts/polkadot-exec-prettier.mjs",
     "polkadot-exec-rollup": "./scripts/polkadot-exec-rollup.mjs",
+    "polkadot-exec-swc": "./scripts/polkadot-exec-swc.mjs",
     "polkadot-exec-tsc": "./scripts/polkadot-exec-tsc.mjs",
     "polkadot-exec-webpack": "./scripts/polkadot-exec-webpack.mjs"
   },
