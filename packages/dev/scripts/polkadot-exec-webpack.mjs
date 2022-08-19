@@ -2,8 +2,6 @@
 // Copyright 2017-2022 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { execSync } from './execute.mjs';
+import { importDirect } from './import.mjs';
 
-const args = process.argv.slice(2).join(' ');
-
-execSync(`yarn webpack ${args}`);
+await importDirect('webpack', 'webpack-cli/bin/cli.js');
