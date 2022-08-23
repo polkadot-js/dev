@@ -37,7 +37,7 @@
   },
   "devDependencies": {
     "@polkadot/dev": "workspace:packages/dev",
-    "@polkadot/networks": "^10.1.4",
+    "@polkadot/networks": "^10.1.5",
     "@swc/cli": "^0.1.57",
     "@swc/core": "^1.2.241",
     "@swc/helpers": "^0.4.7",
