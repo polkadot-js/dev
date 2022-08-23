@@ -43,7 +43,7 @@
   },
   "dependencies": {
     "@babel/cli": "^7.18.10",
-    "@babel/core": "^7.18.10",
+    "@babel/core": "^7.18.13",
     "@babel/plugin-proposal-nullish-coalescing-operator": "^7.18.6",
     "@babel/plugin-proposal-numeric-separator": "^7.18.6",
     "@babel/plugin-proposal-optional-chaining": "^7.18.9",
@@ -66,8 +66,8 @@
     "@rollup/plugin-json": "^4.1.0",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@rushstack/eslint-patch": "^1.1.4",
-    "@typescript-eslint/eslint-plugin": "5.33.1",
-    "@typescript-eslint/parser": "5.33.1",
+    "@typescript-eslint/eslint-plugin": "5.34.0",
+    "@typescript-eslint/parser": "5.34.0",
     "@vue/component-compiler-utils": "^3.3.0",
     "babel-jest": "^28.1.3",
     "babel-plugin-module-extension-resolver": "^1.0.0-rc.2",
@@ -115,7 +115,7 @@
   },
   "devDependencies": {
     "@types/jest": "^28.1.7",
-    "@types/node": "^18.7.9",
+    "@types/node": "^18.7.11",
     "@types/react": "^18.0.17",
     "@types/yargs": "^17.0.11",
     "react": "^18.2.0"

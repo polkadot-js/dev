@@ -39,8 +39,8 @@
     "@polkadot/dev": "workspace:packages/dev",
     "@polkadot/networks": "^10.1.5",
     "@swc/cli": "^0.1.57",
-    "@swc/core": "^1.2.241",
-    "@swc/helpers": "^0.4.7",
+    "@swc/core": "^1.2.242",
+    "@swc/helpers": "^0.4.9",
     "copyfiles": "^2.4.1"
   },
   "resolutions": {
