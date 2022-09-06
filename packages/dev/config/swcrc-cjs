@@ -19,7 +19,13 @@
     "type": "commonjs",
     "ignoreDynamic": true
   },
-  "exclude": [".spec.ts", "mod.ts", ".d.ts"],
+  "exclude": [
+    ".d.ts",
+    ".manual.ts",
+    ".spec.ts",
+    ".test.ts",
+    "mod.ts"
+  ],
   "env": {
     "targets": {
       "node": "14"
