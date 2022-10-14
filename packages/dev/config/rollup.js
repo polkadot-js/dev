@@ -42,6 +42,9 @@ export function createOutput (_pkg, external, globals) {
   return {
     file: `packages/${pkg}/build/bundle-polkadot-${pkg}.js`,
     format: 'umd',
+    generatedCode: {
+      constBindings: true
+    },
     globals: external.reduce((all, pkg) => ({
       [pkg]: createName(pkg),
       ...all
@@ -50,8 +53,7 @@ export function createOutput (_pkg, external, globals) {
     inlineDynamicImports: true,
     // this is a mini x-global, determine where our context lies
     intro: 'const global = typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : window;',
-    name: createName(_pkg),
-    preferConst: true
+    name: createName(_pkg)
   };
 }
 
