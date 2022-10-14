@@ -66,9 +66,7 @@ export function createBundle ({ entries = {}, external, globals = {}, index, inj
       pluginAlias({ entries }),
       pluginJson(),
       pluginCommonjs(),
-      // the export in this plugin is broken as of 1.4.4
-      // (default is named, not an actual default export)
-      pluginDynamicImportVars.default(),
+      pluginDynamicImportVars(),
       pluginInject(inject),
       pluginResolve({ browser: true }),
       pluginCleanup()
