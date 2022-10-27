@@ -115,8 +115,8 @@
   },
   "devDependencies": {
     "@types/jest": "^29.2.0",
-    "@types/node": "^18.11.5",
-    "@types/react": "^18.0.22",
+    "@types/node": "^18.11.7",
+    "@types/react": "^18.0.23",
     "@types/yargs": "^17.0.13",
     "react": "^18.2.0"
   }
