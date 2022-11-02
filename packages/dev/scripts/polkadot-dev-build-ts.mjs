@@ -249,7 +249,7 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
 
   return denoDep
     ? `${denoLndPrefix}/${denoDep}${depPath || `/${denoPath.length ? denoPath.join('/') : 'mod.ts'}`}`
-    : `${denoExtPrefix}/${depName}${version || ''}${depPath || ''}`;
+    : `${denoExtPrefix}/${depName}${version ? `@${version}` : ''}${depPath || ''}`;
 }
 
 function rewriteEsmImports (pkgCwd, pkgJson, dir, replacer) {
