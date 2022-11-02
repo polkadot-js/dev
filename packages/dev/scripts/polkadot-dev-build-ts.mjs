@@ -225,7 +225,7 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
           : null;
 
   if (version) {
-    version = '@' + version.replace('^', '').replace('~', '');
+    version = version.replace('^', '').replace('~', '');
   } else if (isDeclare) {
     return f;
   }
@@ -241,7 +241,9 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
     denoPath = denoPath.slice(1);
 
     if (!denoDep.includes('@')) {
-      denoDep += version;
+      denoDep = `${denoDep}@${version}`;
+    } else if (denoDep.includes('{{VERSION}}')) {
+      denoDep = denoDep.replace('{{VERSION}}', version);
     }
   }
 
