@@ -66,8 +66,8 @@
     "@rollup/plugin-json": "^5.0.1",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rushstack/eslint-patch": "^1.2.0",
-    "@typescript-eslint/eslint-plugin": "^5.42.1",
-    "@typescript-eslint/parser": "^5.42.1",
+    "@typescript-eslint/eslint-plugin": "^5.43.0",
+    "@typescript-eslint/parser": "^5.43.0",
     "@vue/component-compiler-utils": "^3.3.0",
     "babel-jest": "^29.3.1",
     "babel-plugin-module-extension-resolver": "^1.0.0-rc.2",
@@ -114,7 +114,7 @@
     "yargs": "^17.6.2"
   },
   "devDependencies": {
-    "@types/jest": "^29.2.2",
+    "@types/jest": "^29.2.3",
     "@types/node": "^18.11.9",
     "@types/react": "^18.0.25",
     "@types/yargs": "^17.0.13",
