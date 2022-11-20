@@ -2082,71 +2082,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@polkadot/networks@npm:^10.1.13":
-  version: 10.1.13
-  resolution: "@polkadot/networks@npm:10.1.13"
-  dependencies:
-    "@babel/runtime": ^7.20.1
-    "@polkadot/util": 10.1.13
-    "@substrate/ss58-registry": ^1.34.0
-  checksum: 401d25ec03d32ae0c860361019bf8119deb7125f3957f18869cf7413ec8af30be490a941207f4c12dbe733ba33ba8e292f343831833385ca1867477d8d86da6f
-  languageName: node
-  linkType: hard
-
-"@polkadot/util@npm:10.1.13":
-  version: 10.1.13
-  resolution: "@polkadot/util@npm:10.1.13"
-  dependencies:
-    "@babel/runtime": ^7.20.1
-    "@polkadot/x-bigint": 10.1.13
-    "@polkadot/x-global": 10.1.13
-    "@polkadot/x-textdecoder": 10.1.13
-    "@polkadot/x-textencoder": 10.1.13
-    "@types/bn.js": ^5.1.1
-    bn.js: ^5.2.1
-  checksum: fe5cfe7fccda5c30813c82ba330a831786ff6e9a62172ff89599ee71c7111ab57842de526ec23a4fbeb650cbd8aa7c5e771b670dce56682f0c3723696bca4656
-  languageName: node
-  linkType: hard
-
-"@polkadot/x-bigint@npm:10.1.13":
-  version: 10.1.13
-  resolution: "@polkadot/x-bigint@npm:10.1.13"
-  dependencies:
-    "@babel/runtime": ^7.20.1
-    "@polkadot/x-global": 10.1.13
-  checksum: 403d5ebfdf420b403bb52bc5a332b74aed14ed84611479a1a4ecbd53083c273e1c4b0d02c5b41f44950891436b857c504fb39a924be70e0c73a23c042ae7ab4b
-  languageName: node
-  linkType: hard
-
-"@polkadot/x-global@npm:10.1.13":
-  version: 10.1.13
-  resolution: "@polkadot/x-global@npm:10.1.13"
-  dependencies:
-    "@babel/runtime": ^7.20.1
-  checksum: f079ca9c68b3515219ac57d477ef177072e44e6c7a73d1a0b0f1961db8c78d859d258f7535d42786c0926e1e46eee7bfbc95ff9feb847f090e9fd2089dc066e8
-  languageName: node
-  linkType: hard
-
-"@polkadot/x-textdecoder@npm:10.1.13":
-  version: 10.1.13
-  resolution: "@polkadot/x-textdecoder@npm:10.1.13"
-  dependencies:
-    "@babel/runtime": ^7.20.1
-    "@polkadot/x-global": 10.1.13
-  checksum: 50ce56d3eb79f732f6e05d7c37195e633b122ae9551d814c9b4ccf5d2051afa39adeaa4c8f5bae9fe9088dc4bf432e57a0277298be8cf4418826107644b2645b
-  languageName: node
-  linkType: hard
-
-"@polkadot/x-textencoder@npm:10.1.13":
-  version: 10.1.13
-  resolution: "@polkadot/x-textencoder@npm:10.1.13"
-  dependencies:
-    "@babel/runtime": ^7.20.1
-    "@polkadot/x-global": 10.1.13
-  checksum: a06924f1763f3a8722bb1e7186a9fadba09ee7d7f4294e405e01af642afd2ea311fcd93ba4b0736084580ef20b14c9b2ebe88580bd9b38cb2aae4227c7b12e9f
-  languageName: node
-  linkType: hard
-
 "@rollup/plugin-alias@npm:^4.0.2":
   version: 4.0.2
   resolution: "@rollup/plugin-alias@npm:4.0.2"
@@ -2298,13 +2233,6 @@ __metadata:
   dependencies:
     "@sinonjs/commons": ^1.7.0
   checksum: 7d3aef54e17c1073101cb64d953157c19d62a40e261a30923fa1ee337b049c5f29cc47b1f0c477880f42b5659848ba9ab897607ac8ea4acd5c30ddcfac57fca6
-  languageName: node
-  linkType: hard
-
-"@substrate/ss58-registry@npm:^1.34.0":
-  version: 1.34.0
-  resolution: "@substrate/ss58-registry@npm:1.34.0"
-  checksum: 43578e68c386738307550c196908a2320462b80d3a0c55f70bcfd3f81ce5d3e891c44b93746ad36ba291247ab963a1ec426e45b54a43d5dbdc31bb24e1cc347f
   languageName: node
   linkType: hard
 
@@ -2503,15 +2431,6 @@ __metadata:
   dependencies:
     "@babel/types": ^7.3.0
   checksum: 4e86b3d0ee9fe19bd7e1b523b71ed7cbef0f0fe37158970ef1e6c22da218fef05f79e79b07f2c10dc9bbe3ea9fb7e69dfce9761aff16fb10e891d14cac6d66d4
-  languageName: node
-  linkType: hard
-
-"@types/bn.js@npm:^5.1.1":
-  version: 5.1.1
-  resolution: "@types/bn.js@npm:5.1.1"
-  dependencies:
-    "@types/node": "*"
-  checksum: e50ed2dd3abe997e047caf90e0352c71e54fc388679735217978b4ceb7e336e51477791b715f49fd77195ac26dd296c7bad08a3be9750e235f9b2e1edb1b51c2
   languageName: node
   linkType: hard
 
@@ -3878,13 +3797,6 @@ __metadata:
   version: 3.7.2
   resolution: "bluebird@npm:3.7.2"
   checksum: 869417503c722e7dc54ca46715f70e15f4d9c602a423a02c825570862d12935be59ed9c7ba34a9b31f186c017c23cac6b54e35446f8353059c101da73eac22ef
-  languageName: node
-  linkType: hard
-
-"bn.js@npm:^5.2.1":
-  version: 5.2.1
-  resolution: "bn.js@npm:5.2.1"
-  checksum: 3dd8c8d38055fedfa95c1d5fc3c99f8dd547b36287b37768db0abab3c239711f88ff58d18d155dd8ad902b0b0cee973747b7ae20ea12a09473272b0201c9edd3
   languageName: node
   linkType: hard
 
@@ -10071,7 +9983,6 @@ resolve@^2.0.0-next.3:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@polkadot/dev": "workspace:packages/dev"
-    "@polkadot/networks": ^10.1.13
     "@swc/cli": ^0.1.57
     "@swc/core": ^1.3.19
     "@swc/helpers": ^0.4.14
