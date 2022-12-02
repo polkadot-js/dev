@@ -140,7 +140,10 @@ module.exports = {
         ['^\\.\\.(?!/?$)', '^\\.\\./?$', '^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'] // local (. last)
       ]
     }],
-    'sort-keys': 'error'
+    'sort-keys': 'error',
+    'spaced-comment': ['error', 'always', {
+      exceptions: ['#__PURE__']
+    }]
   },
   settings: {
     'import/extensions': ['.js', '.ts', '.tsx'],
