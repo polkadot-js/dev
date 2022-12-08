@@ -60,7 +60,7 @@
     "@babel/register": "^7.18.9",
     "@babel/runtime": "^7.20.6",
     "@rollup/plugin-alias": "^4.0.2",
-    "@rollup/plugin-commonjs": "^23.0.3",
+    "@rollup/plugin-commonjs": "^23.0.4",
     "@rollup/plugin-dynamic-import-vars": "^2.0.1",
     "@rollup/plugin-inject": "^5.0.2",
     "@rollup/plugin-json": "^5.0.2",
@@ -101,11 +101,11 @@
     "madge": "^5.0.1",
     "minimatch": "^5.1.1",
     "mkdirp": "^1.0.4",
-    "prettier": "^2.8.0",
+    "prettier": "^2.8.1",
     "rimraf": "^3.0.2",
-    "rollup": "^3.6.0",
+    "rollup": "^3.7.0",
     "rollup-plugin-cleanup": "^3.2.1",
-    "typescript": "^4.9.3",
+    "typescript": "^4.9.4",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.11.1",
@@ -117,7 +117,7 @@
     "@types/jest": "^29.2.4",
     "@types/node": "^18.11.11",
     "@types/react": "^18.0.26",
-    "@types/yargs": "^17.0.16",
+    "@types/yargs": "^17.0.17",
     "react": "^18.2.0"
   }
 }
