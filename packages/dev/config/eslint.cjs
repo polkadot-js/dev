@@ -57,6 +57,7 @@ module.exports = {
   },
   plugins: [
     '@typescript-eslint',
+    'deprecation',
     'header',
     'import',
     'import-newlines',
@@ -65,6 +66,7 @@ module.exports = {
     'sort-destructure-keys'
   ],
   rules: {
+    'deprecation/deprecation': 'error',
     // required as 'off' since typescript-eslint has own versions
     indent: 'off',
     'no-use-before-define': 'off',
