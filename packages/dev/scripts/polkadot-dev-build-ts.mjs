@@ -8,6 +8,7 @@ import mkdirp from 'mkdirp';
 import path from 'path';
 import rimraf from 'rimraf';
 
+import { PATHS_BUILD } from './constants.mjs';
 import { copySync } from './copy.mjs';
 import { denoCreateName, denoExtPrefix, denoIntPrefix, denoLndPrefix } from './deno.mjs';
 import { __dirname } from './dirname.mjs';
@@ -19,7 +20,6 @@ const RL_CONFIGS = ['js', 'mjs', 'cjs'].map((e) => `rollup.config.${e}`);
 const CPX = ['patch', 'js', 'cjs', 'mjs', 'json', 'd.ts', 'css', 'gif', 'hbs', 'jpg', 'png', 'rs', 'svg']
   .map((e) => `src/**/*.${e}`)
   .concat(['package.json', 'README.md', 'LICENSE']);
-const PATHS_BUILD = ['', '-cjs', '-deno', '-swc-cjs', '-swc-esm'];
 
 console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
