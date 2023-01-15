@@ -6,17 +6,27 @@ import fs from 'fs';
 import path from 'path';
 import rimraf from 'rimraf';
 
+import { PATHS_BUILD } from './constants.mjs';
+
 const PKGS = path.join(process.cwd(), 'packages');
-const DIRS = [
-  'build',
-  ...['cjs', 'esm', 'deno', 'docs', 'swc', 'swc-cjs', 'swc-esm'].map((d) => `build-${d}`),
-  ...['tsbuildinfo', '*.tsbuildinfo'].map((d) => `tsconfig.${d}`)
-];
+const DIRS = PATHS_BUILD.map((d) => `build${d}`);
 
 console.log('$ polkadot-dev-clean-build', process.argv.slice(2).join(' '));
 
 function getPaths (dir) {
-  return DIRS.map((p) => path.join(dir, p));
+  if (!fs.existsSync(dir)) {
+    return [];
+  }
+
+  return fs
+    .readdirSync(dir)
+    .reduce((all, p) => {
+      if (p.startsWith('tsconfig.') && p.endsWith('.tsbuildinfo')) {
+        all.push(path.join(dir, p));
+      }
+
+      return all;
+    }, DIRS.map((p) => path.join(dir, p)));
 }
 
 function cleanDirs (dirs) {
