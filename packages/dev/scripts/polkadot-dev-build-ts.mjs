@@ -16,9 +16,10 @@ import { execSync } from './execute.mjs';
 const BL_CONFIGS = ['js', 'cjs'].map((e) => `babel.config.${e}`);
 const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
 const RL_CONFIGS = ['js', 'mjs', 'cjs'].map((e) => `rollup.config.${e}`);
-const CPX = ['patch', 'js', 'cjs', 'mjs', 'json', 'd.ts', 'css', 'gif', 'hbs', 'jpg', 'png', 'svg']
+const CPX = ['patch', 'js', 'cjs', 'mjs', 'json', 'd.ts', 'css', 'gif', 'hbs', 'jpg', 'png', 'rs', 'svg']
   .map((e) => `src/**/*.${e}`)
   .concat(['package.json', 'README.md', 'LICENSE']);
+const PATHS_BUILD = ['', '-cjs', '-deno', '-swc-cjs', '-swc-esm'];
 
 console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
@@ -315,8 +316,6 @@ function buildDeno () {
 
   // remove unneeded directories
   rimraf.sync('build-deno/cjs');
-  rimraf.sync('build-deno/**/*.spec.ts');
-  rimraf.sync('build-deno/**/*.rs');
 }
 
 function relativePath (value) {
@@ -363,7 +362,9 @@ function createMapEntry (rootDir, jsPath, noTypes) {
 
 // find the names of all the files in a certain directory
 function findFiles (buildDir, extra = '', exclude = []) {
-  const currDir = extra ? path.join(buildDir, extra) : buildDir;
+  const currDir = extra
+    ? path.join(buildDir, extra)
+    : buildDir;
 
   return fs
     .readdirSync(currDir)
@@ -373,6 +374,8 @@ function findFiles (buildDir, extra = '', exclude = []) {
       const toDelete = (
         // no test paths
         jsPath.includes('/test/') ||
+        // no rust files
+        ['.rs'].some((e) => jsName.endsWith(e)) ||
         // // no tests
         ['.manual.', '.spec.', '.test.'].some((t) => jsName.includes(t)) ||
         // no .d.ts compiled outputs
@@ -387,12 +390,25 @@ function findFiles (buildDir, extra = '', exclude = []) {
       );
 
       if (fs.statSync(fullPathEsm).isDirectory()) {
-        findFiles(buildDir, jsPath).forEach((entry) => all.push(entry));
-      } else if (toDelete) {
-        const fullPathCjs = path.join(`${buildDir}-cjs`, jsPath);
+        findFiles(buildDir, jsPath).forEach((e) => all.push(e));
 
-        fs.unlinkSync(fullPathEsm);
-        fs.existsSync(fullPathCjs) && fs.unlinkSync(fullPathCjs);
+        PATHS_BUILD.forEach((b) => {
+          // remove all empty directories
+          const otherPath = path.join(`${buildDir}${b}`, jsPath);
+
+          if (fs.existsSync(otherPath) && fs.readdirSync(otherPath).length === 0) {
+            rimraf.sync(otherPath);
+          }
+        });
+      } else if (toDelete) {
+        PATHS_BUILD.forEach((b) => {
+          // check in the other build outputs and remove
+          // (for deno we also want the spec copies)
+          const otherPath = path.join(`${buildDir}${b}`, jsPath);
+          const otherTs = otherPath.replace(/.spec.js$/, '.spec.ts');
+
+          [otherPath, otherTs].forEach((f) => rimraf.sync(f));
+        });
       } else {
         if (!exclude.some((e) => jsName === e)) {
           // this is not mapped to a compiled .js file (where we have dual esm/cjs mappings)
