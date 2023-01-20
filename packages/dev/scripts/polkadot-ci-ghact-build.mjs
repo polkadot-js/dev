@@ -9,7 +9,7 @@ import path from 'path';
 import rimraf from 'rimraf';
 import yargs from 'yargs';
 
-import { copySync } from './copy.mjs';
+import { copyDirSync, copyFileSync } from './copy.mjs';
 import { denoCreateDir } from './deno.mjs';
 import { execSync } from './execute.mjs';
 import gitSetup from './gitSetup.mjs';
@@ -149,7 +149,7 @@ function npmPublish () {
 
   ['LICENSE', 'package.json']
     .filter((file) => !fs.existsSync(path.join(process.cwd(), 'build', file)))
-    .forEach((file) => copySync(file, 'build'));
+    .forEach((file) => copyFileSync(file, 'build'));
 
   process.chdir('build');
 
@@ -270,9 +270,10 @@ function bundlePublishPkg () {
   const { name, version } = npmGetJson();
   const dirName = name.split('/')[1];
   const bundName = `bundle-polkadot-${dirName}.js`;
-  const fullPath = `build/${bundName}`;
+  const srcPath = path.join('build', bundName);
+  const dstDir = path.join('../..', bundClone);
 
-  if (!fs.existsSync(fullPath)) {
+  if (!fs.existsSync(srcPath)) {
     return;
   }
 
@@ -284,8 +285,8 @@ function bundlePublishPkg () {
 
   shouldBund.push(dirName);
 
-  rimraf.sync(`../../${bundClone}/${bundName}`);
-  copySync(fullPath, `../../${bundClone}`);
+  rimraf.sync(path.join(dstDir, bundName));
+  copyFileSync(srcPath, dstDir);
 }
 
 function bundlePublish () {
@@ -323,7 +324,7 @@ function denoPublishPkg () {
   rimraf.sync(denoPath);
   mkdirp.sync(denoPath);
 
-  copySync('build-deno/**/*', denoPath);
+  copyDirSync('build-deno', denoPath);
 }
 
 function denoPublish () {

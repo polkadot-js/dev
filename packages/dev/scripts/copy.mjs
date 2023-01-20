@@ -1,54 +1,38 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// adapted from the unmaintained https://github.com/mysticatea/cpx implementation
-// Copyright (c) 2015 Toru Nagashima under MIT
-//
-// This only uses the sync copy needed and removed unneeded dependencies (such as ancient chokidar)
-
-import fs from 'fs-extra';
-import glob from 'glob';
-import glob2base from 'glob2base';
-import minimatch from 'minimatch';
+import fs from 'fs';
+import mkdirp from 'mkdirp';
 import path from 'path';
 
-function normalizePath (originalPath) {
-  const normalizedPath = path
-    .relative(process.cwd(), path.resolve(originalPath))
-    .replace(/\\/g, '/');
-
-  return /\/$/.test(normalizedPath)
-    ? normalizedPath.slice(0, -1)
-    : normalizedPath || '.';
+export function copyFileSync (src, destDir) {
+  if (Array.isArray(src)) {
+    src.forEach((s) => copyFileSync(s, destDir));
+  } else {
+    fs.copyFileSync(src, path.join(destDir, path.basename(src)));
+  }
 }
 
-export function copySync (src, dst) {
-  const normalizedSource = normalizePath(src);
-  const normalizedOutputDir = normalizePath(dst);
-  const baseDir = normalizePath(glob2base({ minimatch: new minimatch.Minimatch(normalizedSource) }));
+export function copyDirSync (src, dest, extensions) {
+  if (Array.isArray(src)) {
+    src.forEach((s) => copyDirSync(s, dest, extensions));
+  } else if (!fs.existsSync(src)) {
+    // it doesn't exist, so we have nothing to copy
+  } else if (!fs.statSync(src).isDirectory()) {
+    throw new Error(`Source ${src} should be a directory`);
+  } else {
+    mkdirp.sync(dest);
 
-  glob
-    .sync(normalizedSource, {
-      follow: false,
-      nodir: true,
-      silent: true
-    })
-    .forEach((src) => {
-      const dst = baseDir === '.'
-        ? path.join(normalizedOutputDir, src)
-        : src.replace(baseDir, normalizedOutputDir);
+    fs
+      .readdirSync(src)
+      .forEach((file) => {
+        const srcPath = path.join(src, file);
 
-      if (dst !== src) {
-        const stat = fs.statSync(src);
-
-        if (stat.isDirectory()) {
-          fs.ensureDirSync(dst);
-        } else {
-          fs.ensureDirSync(path.dirname(dst));
-          fs.copySync(src, dst);
+        if (fs.statSync(srcPath).isDirectory()) {
+          copyDirSync(srcPath, path.join(dest, file), extensions);
+        } else if (!extensions || extensions.some((e) => file.endsWith(e))) {
+          copyFileSync(srcPath, dest);
         }
-
-        fs.chmodSync(dst, stat.mode);
-      }
-    });
+      });
+  }
 }

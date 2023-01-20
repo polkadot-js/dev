@@ -9,7 +9,7 @@ import path from 'path';
 import rimraf from 'rimraf';
 
 import { PATHS_BUILD } from './constants.mjs';
-import { copySync } from './copy.mjs';
+import { copyDirSync, copyFileSync } from './copy.mjs';
 import { denoCreateName, denoExtPrefix, denoIntPrefix, denoLndPrefix } from './deno.mjs';
 import { __dirname } from './dirname.mjs';
 import { execSync } from './execute.mjs';
@@ -17,9 +17,6 @@ import { execSync } from './execute.mjs';
 const BL_CONFIGS = ['js', 'cjs'].map((e) => `babel.config.${e}`);
 const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
 const RL_CONFIGS = ['js', 'mjs', 'cjs'].map((e) => `rollup.config.${e}`);
-const CPX = ['patch', 'js', 'cjs', 'mjs', 'json', 'd.ts', 'css', 'gif', 'hbs', 'jpg', 'png', 'rs', 'svg']
-  .map((e) => `src/**/*.${e}`)
-  .concat(['package.json', 'README.md', 'LICENSE']);
 
 console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
@@ -59,11 +56,14 @@ async function buildBabel (dir, type) {
 
   // rewrite a skeleton package.json with a type=module
   if (type !== 'esm') {
-    [
-      ...CPX,
-      `../../build/${dir}/src/**/*.d.ts`,
-      `../../build/packages/${dir}/src/**/*.d.ts`
-    ].forEach((s) => copySync(s, 'build'));
+    // copy package info stuff
+    copyFileSync(['package.json', 'README.md', 'LICENSE'], 'build');
+
+    // copy interesting files
+    copyDirSync('src', 'build', ['.patch', '.js', '.cjs', '.mjs', '.json', '.d.ts', '.css', '.gif', '.hbs', '.jpg', '.png', '.rs', '.svg']);
+
+    // copy all *.d.ts files
+    copyDirSync([path.join('../../build', dir, 'src'), path.join('../../build/packages', dir, 'src')], 'build', ['.d.ts']);
   }
 }
 
@@ -312,7 +312,8 @@ function buildDeno () {
   }
 
   // copy the sources as-is
-  ['src/**/*', 'README.md'].forEach((s) => copySync(s, 'build-deno'));
+  copyDirSync('src', 'build-deno');
+  copyFileSync('README.md', 'build-deno');
 
   // remove unneeded directories
   rimraf.sync('build-deno/cjs');
@@ -617,10 +618,8 @@ function buildExports () {
   moveFields(pkg, ['main', 'module', 'browser', 'deno', 'react-native', 'types', 'exports', 'dependencies', 'optionalDependencies', 'peerDependencies', 'denoDependencies']);
   witeJson(pkgPath, pkg);
 
-  // copy from build-cjs to build/cjs
-  [
-    './build-cjs/**/*.js'
-  ].forEach((s) => copySync(s, 'build/cjs'));
+  // copy from build-cjs/**/*.js */ to build/cjs
+  copyDirSync('build-cjs', 'build/cjs', ['.js']);
 }
 
 function sortJson (json) {

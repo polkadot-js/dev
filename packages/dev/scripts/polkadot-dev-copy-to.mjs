@@ -7,7 +7,7 @@ import mkdirp from 'mkdirp';
 import path from 'path';
 import rimraf from 'rimraf';
 
-import { copySync } from './copy.mjs';
+import { copyDirSync } from './copy.mjs';
 import { execSync } from './execute.mjs';
 
 const args = process.argv.slice(2);
@@ -49,10 +49,10 @@ fs
     mkdirp.sync(outDest);
 
     // copy the build output
-    copySync(`${pkgPath}/build/**/*`, outDest);
+    copyDirSync(path.join(pkgPath, 'build'), outDest);
 
     // copy node_modules, as available
     if (fs.existsSync(`${pkgPath}/node_modules`)) {
-      copySync(`${pkgPath}/node_modules/**/*`, `${outDest}/node_modules`);
+      copyDirSync(path.join(pkgPath, 'node_modules'), path.join(outDest, 'node_modules'));
     }
   });
