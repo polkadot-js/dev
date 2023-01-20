@@ -22,7 +22,7 @@
   "scripts": {
     "build": "polkadot-dev-build-ts",
     "build:extra": "yarn build:extra:copy && yarn build:swc",
-    "build:extra:copy": "polkadot-dev-copy-dir packages/dev/config packages/dev/scripts packages/dev/build",
+    "build:extra:copy": "(cd packages/dev && polkadot-dev-copy-dir config build/config && polkadot-dev-copy-dir scripts build/scripts)",
     "build:release": "polkadot-ci-ghact-build --skip-beta",
     "build:swc": "yarn build:swc:cjs && yarn build:swc:esm",
     "build:swc:cjs": "cd packages/dev && yarn polkadot-dev-run-swc --type cjs",
