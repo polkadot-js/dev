@@ -10,6 +10,7 @@ import fs from 'fs-extra';
 import glob from 'glob';
 import glob2base from 'glob2base';
 import minimatch from 'minimatch';
+import mkdirp from 'mkdirp';
 import path from 'path';
 
 function normalizePath (originalPath) {
@@ -49,6 +50,33 @@ export function copySync (src, dst) {
         }
 
         fs.chmodSync(dst, stat.mode);
+      }
+    });
+}
+
+export function copyFileSync (srcFile, destFile) {
+  fs.copyFileSync(srcFile, destFile);
+}
+
+export function copyDirSync (src, dest) {
+  if (!fs.existsSync(src)) {
+    throw new Error(`Source ${src} directory does not exist`);
+  } else if (!fs.fstatSync(src).isDirectory) {
+    throw new Error(`Source ${src} should be a directory`);
+  }
+
+  mkdirp.sync(dest);
+
+  fs
+    .readdirSync(src)
+    .forEach((file) => {
+      const srcPath = path.join(src, file);
+      const dstPath = path.join(dest, file);
+
+      if (fs.fstatSync(srcPath).isDirectory) {
+        copyDirSync(srcPath, dstPath);
+      } else {
+        copyFileSync(srcPath, dstPath);
       }
     });
 }

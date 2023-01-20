@@ -25,6 +25,7 @@
     "polkadot-dev-clean-build": "./scripts/polkadot-dev-clean-build.mjs",
     "polkadot-dev-contrib": "./scripts/polkadot-dev-contrib.mjs",
     "polkadot-dev-copy-to": "./scripts/polkadot-dev-copy-to.mjs",
+    "polkadot-dev-copy-dir": "./scripts/polkadot-dev-copy-dir.mjs",
     "polkadot-dev-deno-map": "./scripts/polkadot-dev-deno-map.mjs",
     "polkadot-dev-run-lint": "./scripts/polkadot-dev-run-lint.mjs",
     "polkadot-dev-run-prettier": "./scripts/polkadot-dev-run-prettier.mjs",
