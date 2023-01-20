@@ -57,14 +57,13 @@ async function buildBabel (dir, type) {
   // rewrite a skeleton package.json with a type=module
   if (type !== 'esm') {
     // copy package info stuff
-    ['package.json', 'README.md', 'LICENSE'].forEach((f) => copyFileSync(f, 'build'));
+    copyFileSync(['package.json', 'README.md', 'LICENSE'], 'build');
 
     // copy interesting files
     copyDirSync('src', 'build', ['.patch', '.js', '.cjs', '.mjs', '.json', '.d.ts', '.css', '.gif', '.hbs', '.jpg', '.png', '.rs', '.svg']);
 
     // copy all *.d.ts files
-    copyDirSync(path.join('../../build', dir, 'src'), 'build', ['.d.ts']);
-    copyDirSync(path.join('../../build/packages', dir, 'src'), 'build', ['.d.ts']);
+    copyDirSync([path.join('../../build', dir, 'src'), path.join('../../build/packages', dir, 'src')], 'build', ['.d.ts']);
   }
 }
 
