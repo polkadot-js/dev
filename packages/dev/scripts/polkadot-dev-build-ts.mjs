@@ -57,7 +57,8 @@ async function buildBabel (dir, type) {
   // rewrite a skeleton package.json with a type=module
   if (type !== 'esm') {
     // copy package info stuff
-    copyFileSync(['package.json', 'README.md', 'LICENSE'], 'build');
+    copyFileSync(['package.json', 'README.md'], 'build');
+    copyFileSync('../../LICENSE', 'build');
 
     // copy interesting files
     copyDirSync('src', 'build', ['.patch', '.js', '.cjs', '.mjs', '.json', '.d.ts', '.css', '.gif', '.hbs', '.jpg', '.png', '.rs', '.svg']);
