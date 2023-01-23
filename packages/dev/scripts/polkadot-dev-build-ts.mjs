@@ -37,7 +37,8 @@ function buildWebpack () {
 // compile via babel, either via supplied config or default
 async function buildBabel (dir, type) {
   const configs = BL_CONFIGS.map((c) => path.join(process.cwd(), `../../${c}`));
-  const outDir = path.join(process.cwd(), `build${type === 'esm' ? '' : '-cjs'}`);
+  const buildDir = `build${type === 'esm' ? '' : '-cjs'}`;
+  const outDir = path.join(process.cwd(), buildDir);
 
   await babel.default({
     babelOptions: {
@@ -55,7 +56,7 @@ async function buildBabel (dir, type) {
   });
 
   // rewrite a skeleton package.json with a type=module
-  if (type !== 'esm') {
+  if (buildDir === 'build') {
     // copy package info stuff
     copyFileSync(['package.json', 'README.md'], 'build');
     copyFileSync('../../LICENSE', 'build');
