@@ -97,13 +97,14 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
     const parts = f.split('/');
     const thisPkg = parts.slice(0, 2).join('/');
     const subPath = parts.slice(2).join('/');
+    const pjsPath = `${DENO_POL_PRE}/${thisPkg.replace('@polkadot/', '')}`;
 
     if (subPath.includes("' assert { type:")) {
       // these are for type asserts, we keep the assert
-      return `${DENO_POL_PRE}/${subPath}`;
+      return `${pjsPath}/${subPath}`;
     } else if (parts.length === 2) {
       // if we only have 2 parts, we add deno/mod.ts
-      return `${DENO_POL_PRE}/mod.ts`;
+      return `${pjsPath}/mod.ts`;
     }
 
     // first we check in packages/* to see if we have this one
@@ -116,7 +117,7 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
       if (fs.existsSync(checkPath)) {
         if (fs.statSync(checkPath).isDirectory()) {
           // this is a directory, append index.ts
-          return `${DENO_POL_PRE}/${subPath}/index.ts`;
+          return `${pjsPath}/${subPath}/index.ts`;
         }
 
         // as-is, the path exists
@@ -125,7 +126,7 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
         throw new Error(`Unable to find ${checkPath}.ts`);
       }
 
-      return `${DENO_POL_PRE}/${subPath}.ts`;
+      return `${pjsPath}/${subPath}.ts`;
     }
 
     // now we check node_modules
@@ -138,16 +139,16 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
       if (fs.existsSync(checkPath)) {
         if (fs.statSync(checkPath).isDirectory()) {
           // this is a directory, append index.ts
-          return `${DENO_POL_PRE}/${subPath}/index.ts`;
+          return `${pjsPath}/${subPath}/index.ts`;
         }
 
         // as-is, it exists
-        return `${DENO_POL_PRE}/${subPath}`;
+        return `${pjsPath}/${subPath}`;
       } else if (!fs.existsSync(`${checkPath}.js`)) {
         throw new Error(`Unable to find ${checkPath}.js`);
       }
 
-      return `${DENO_POL_PRE}/${subPath}.ts`;
+      return `${pjsPath}/${subPath}.ts`;
     }
 
     // we don't know what to do here :(
