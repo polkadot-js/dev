@@ -4,13 +4,10 @@
 import cp from 'child_process';
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
-
-/** CJS/ESM compatible __filename */
-export const __filename = fileURLToPath(import.meta.url);
+import url from 'url';
 
 /** CJS/ESM compatible __dirname */
-export const __dirname = path.dirname(__filename);
+export const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 
 /** Deno prefix for externals */
 export const DENO_EXT_PRE = 'https://esm.sh';
