@@ -5,8 +5,7 @@
 import path from 'path';
 import yargs from 'yargs';
 
-import { __dirname } from './dirname.mjs';
-import { execSync } from './execute.mjs';
+import { __dirname, execSync } from './util.mjs';
 
 console.log('$ polkadot-dev-run-swc', process.argv.slice(2).join(' '));
 

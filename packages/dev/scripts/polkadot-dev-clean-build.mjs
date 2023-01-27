@@ -4,9 +4,8 @@
 
 import fs from 'fs';
 import path from 'path';
-import rimraf from 'rimraf';
 
-import { PATHS_BUILD } from './constants.mjs';
+import { PATHS_BUILD, rimrafSync } from './util.mjs';
 
 const PKGS = path.join(process.cwd(), 'packages');
 const DIRS = PATHS_BUILD.map((d) => `build${d}`);
@@ -30,7 +29,7 @@ function getPaths (dir) {
 }
 
 function cleanDirs (dirs) {
-  dirs.forEach((d) => rimraf.sync(d));
+  dirs.forEach((d) => rimrafSync(d));
 }
 
 cleanDirs(getPaths(process.cwd()));

@@ -3,16 +3,11 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import fs from 'fs';
-import mkdirp from 'mkdirp';
 import os from 'os';
 import path from 'path';
-import rimraf from 'rimraf';
 import yargs from 'yargs';
 
-import { copyDirSync, copyFileSync } from './copy.mjs';
-import { denoCreateDir } from './deno.mjs';
-import { execSync } from './execute.mjs';
-import gitSetup from './gitSetup.mjs';
+import { copyDirSync, copyFileSync, denoCreateDir, execSync, gitSetup, mkdirpSync, rimrafSync } from './util.mjs';
 
 console.log('$ polkadot-ci-ghact-build', process.argv.slice(2).join(' '));
 
@@ -65,7 +60,7 @@ function runBuild () {
 
 function rmFile (file) {
   if (fs.existsSync(file)) {
-    rimraf.sync(file);
+    rimrafSync(file);
 
     return true;
   }
@@ -285,7 +280,7 @@ function bundlePublishPkg () {
 
   shouldBund.push(dirName);
 
-  rimraf.sync(path.join(dstDir, bundName));
+  rimrafSync(path.join(dstDir, bundName));
   copyFileSync(srcPath, dstDir);
 }
 
@@ -321,8 +316,8 @@ function denoPublishPkg () {
 
   shouldDeno.push(dirName);
 
-  rimraf.sync(denoPath);
-  mkdirp.sync(denoPath);
+  rimrafSync(denoPath);
+  mkdirpSync(denoPath);
 
   copyDirSync('build-deno', denoPath);
 }
