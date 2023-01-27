@@ -6,7 +6,7 @@ import babel from '@babel/cli/lib/babel/dir.js';
 import fs from 'fs';
 import path from 'path';
 
-import { __dirname, copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_INT_PRE, DENO_LND_PRE, denoCreateName, execSync, mkdirpSync, PATHS_BUILD, rimrafSync } from './util.mjs';
+import { __dirname, copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_LND_PRE, DENO_POL_PRE, execSync, mkdirpSync, PATHS_BUILD, rimrafSync } from './util.mjs';
 
 const BL_CONFIGS = ['js', 'cjs'].map((e) => `babel.config.${e}`);
 const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
@@ -96,15 +96,14 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
   if (f.startsWith('@polkadot')) {
     const parts = f.split('/');
     const thisPkg = parts.slice(0, 2).join('/');
-    const denoPkg = denoCreateName(thisPkg);
     const subPath = parts.slice(2).join('/');
 
     if (subPath.includes("' assert { type:")) {
       // these are for type asserts, we keep the assert
-      return `${DENO_INT_PRE}/${denoPkg}/${subPath}`;
+      return `${DENO_POL_PRE}/${subPath}`;
     } else if (parts.length === 2) {
       // if we only have 2 parts, we add deno/mod.ts
-      return `${DENO_INT_PRE}/${denoPkg}/mod.ts`;
+      return `${DENO_POL_PRE}/mod.ts`;
     }
 
     // first we check in packages/* to see if we have this one
@@ -117,16 +116,16 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
       if (fs.existsSync(checkPath)) {
         if (fs.statSync(checkPath).isDirectory()) {
           // this is a directory, append index.ts
-          return `${DENO_INT_PRE}/${denoPkg}/${subPath}/index.ts`;
+          return `${DENO_POL_PRE}/${subPath}/index.ts`;
         }
 
         // as-is, the path exists
-        return `${DENO_INT_PRE}/${denoPkg}/${subPath}`;
+        return `${DENO_POL_PRE}/${subPath}`;
       } else if (!fs.existsSync(`${checkPath}.ts`)) {
         throw new Error(`Unable to find ${checkPath}.ts`);
       }
 
-      return `${DENO_INT_PRE}/${denoPkg}/${subPath}.ts`;
+      return `${DENO_POL_PRE}/${subPath}.ts`;
     }
 
     // now we check node_modules
@@ -139,16 +138,16 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
       if (fs.existsSync(checkPath)) {
         if (fs.statSync(checkPath).isDirectory()) {
           // this is a directory, append index.ts
-          return `${DENO_INT_PRE}/${denoPkg}/${subPath}/index.ts`;
+          return `${DENO_POL_PRE}/${subPath}/index.ts`;
         }
 
         // as-is, it exists
-        return `${DENO_INT_PRE}/${denoPkg}/${subPath}`;
+        return `${DENO_POL_PRE}/${subPath}`;
       } else if (!fs.existsSync(`${checkPath}.js`)) {
         throw new Error(`Unable to find ${checkPath}.js`);
       }
 
-      return `${DENO_INT_PRE}/${denoPkg}/${subPath}.ts`;
+      return `${DENO_POL_PRE}/${subPath}.ts`;
     }
 
     // we don't know what to do here :(

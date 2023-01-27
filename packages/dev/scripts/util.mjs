@@ -13,14 +13,14 @@ export const __filename = fileURLToPath(import.meta.url);
 /** CJS/ESM compatible __dirname */
 export const __dirname = path.dirname(__filename);
 
-/** Deno prefix for x/* */
-export const DENO_INT_PRE = 'https://deno.land/x';
-
 /** Deno prefix for externals */
 export const DENO_EXT_PRE = 'https://esm.sh';
 
 /** Deno prefix for built-ins */
 export const DENO_LND_PRE = 'https://deno.land';
+
+/** Deno prefix for the polkadot package */
+export const DENO_POL_PRE = `${DENO_LND_PRE}/x/polkadot`;
 
 /** The GH user that we use for actions */
 export const GITHUB_USER = 'github-actions[bot]';
@@ -63,11 +63,6 @@ export function copyDirSync (src, dest, extensions) {
         }
       });
   }
-}
-
-/** Creates a deno name on x/* */
-export function denoCreateName (name) {
-  return `${name.replace('@polkadot/', 'polkadot/')}`;
 }
 
 /** Creates a deno directory name */
