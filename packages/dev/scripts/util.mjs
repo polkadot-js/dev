@@ -4,7 +4,6 @@
 import cp from 'child_process';
 import fs from 'fs';
 import path from 'path';
-import rimraf from 'rimraf';
 import { fileURLToPath } from 'url';
 
 /** CJS/ESM compatible __filename */
@@ -126,10 +125,12 @@ export function importRelative (bin, req) {
 
 /** Do a mkdirp (no global support, native) */
 export function mkdirpSync (dir) {
-  fs.mkdirpSync(dir, { recursive: true });
+  fs.mkdirSync(dir, { recursive: true });
 }
 
 /** Delete the ful path (no glob support) */
 export function rimrafSync (dir) {
-  rimraf.sync(dir);
+  if (fs.existsSync(dir)) {
+    fs.rmSync(dir, { force: true, recursive: true });
+  }
 }
