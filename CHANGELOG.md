@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.68.1
+
+- 2023
+- Cleanup internally used script dependencies
+
+
 ## 0.67.1
 
 - Default to `esModuleInterop: false`
