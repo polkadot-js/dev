@@ -260,6 +260,8 @@ function rewriteEsmImports (pkgCwd, pkgJson, dir, replacer) {
 
       if (fs.statSync(thisPath).isDirectory()) {
         rewriteEsmImports(pkgCwd, pkgJson, `${dir}/${p}`, replacer);
+      } else if (thisPath.endsWith('.spec.js') || thisPath.endsWith('.spec.ts')) {
+        // we leave specs as-is
       } else if (thisPath.endsWith('.js') || thisPath.endsWith('.ts') || thisPath.endsWith('.tsx') || thisPath.endsWith('.md')) {
         fs.writeFileSync(
           thisPath,
