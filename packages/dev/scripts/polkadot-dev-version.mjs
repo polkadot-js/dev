@@ -6,7 +6,7 @@ import fs from 'fs';
 import path from 'path';
 import yargs from 'yargs';
 
-import { execSync } from './execute.mjs';
+import { execSync } from './util.mjs';
 
 const TYPES = ['major', 'minor', 'patch', 'pre'];
 

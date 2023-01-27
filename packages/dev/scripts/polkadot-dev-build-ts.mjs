@@ -4,15 +4,9 @@
 
 import babel from '@babel/cli/lib/babel/dir.js';
 import fs from 'fs';
-import mkdirp from 'mkdirp';
 import path from 'path';
-import rimraf from 'rimraf';
 
-import { PATHS_BUILD } from './constants.mjs';
-import { copyDirSync, copyFileSync } from './copy.mjs';
-import { denoCreateName, denoExtPrefix, denoIntPrefix, denoLndPrefix } from './deno.mjs';
-import { __dirname } from './dirname.mjs';
-import { execSync } from './execute.mjs';
+import { __dirname, copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_INT_PRE, DENO_LND_PRE, denoCreateName, execSync, mkdirpSync, PATHS_BUILD, rimrafSync } from './util.mjs';
 
 const BL_CONFIGS = ['js', 'cjs'].map((e) => `babel.config.${e}`);
 const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
@@ -107,10 +101,10 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
 
     if (subPath.includes("' assert { type:")) {
       // these are for type asserts, we keep the assert
-      return `${denoIntPrefix}/${denoPkg}/${subPath}`;
+      return `${DENO_INT_PRE}/${denoPkg}/${subPath}`;
     } else if (parts.length === 2) {
       // if we only have 2 parts, we add deno/mod.ts
-      return `${denoIntPrefix}/${denoPkg}/mod.ts`;
+      return `${DENO_INT_PRE}/${denoPkg}/mod.ts`;
     }
 
     // first we check in packages/* to see if we have this one
@@ -123,16 +117,16 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
       if (fs.existsSync(checkPath)) {
         if (fs.statSync(checkPath).isDirectory()) {
           // this is a directory, append index.ts
-          return `${denoIntPrefix}/${denoPkg}/${subPath}/index.ts`;
+          return `${DENO_INT_PRE}/${denoPkg}/${subPath}/index.ts`;
         }
 
         // as-is, the path exists
-        return `${denoIntPrefix}/${denoPkg}/${subPath}`;
+        return `${DENO_INT_PRE}/${denoPkg}/${subPath}`;
       } else if (!fs.existsSync(`${checkPath}.ts`)) {
         throw new Error(`Unable to find ${checkPath}.ts`);
       }
 
-      return `${denoIntPrefix}/${denoPkg}/${subPath}.ts`;
+      return `${DENO_INT_PRE}/${denoPkg}/${subPath}.ts`;
     }
 
     // now we check node_modules
@@ -145,16 +139,16 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
       if (fs.existsSync(checkPath)) {
         if (fs.statSync(checkPath).isDirectory()) {
           // this is a directory, append index.ts
-          return `${denoIntPrefix}/${denoPkg}/${subPath}/index.ts`;
+          return `${DENO_INT_PRE}/${denoPkg}/${subPath}/index.ts`;
         }
 
         // as-is, it exists
-        return `${denoIntPrefix}/${denoPkg}/${subPath}`;
+        return `${DENO_INT_PRE}/${denoPkg}/${subPath}`;
       } else if (!fs.existsSync(`${checkPath}.js`)) {
         throw new Error(`Unable to find ${checkPath}.js`);
       }
 
-      return `${denoIntPrefix}/${denoPkg}/${subPath}.ts`;
+      return `${DENO_INT_PRE}/${denoPkg}/${subPath}.ts`;
     }
 
     // we don't know what to do here :(
@@ -251,8 +245,8 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
   }
 
   return denoDep
-    ? `${denoLndPrefix}/${denoDep}${depPath || `/${denoPath.length ? denoPath.join('/') : 'mod.ts'}`}`
-    : `${denoExtPrefix}/${depName}${version ? `@${version}` : ''}${depPath || ''}`;
+    ? `${DENO_LND_PRE}/${denoDep}${depPath || `/${denoPath.length ? denoPath.join('/') : 'mod.ts'}`}`
+    : `${DENO_EXT_PRE}/${depName}${version ? `@${version}` : ''}${depPath || ''}`;
 }
 
 function rewriteEsmImports (pkgCwd, pkgJson, dir, replacer) {
@@ -318,7 +312,7 @@ function buildDeno () {
   copyFileSync('README.md', 'build-deno');
 
   // remove unneeded directories
-  rimraf.sync('build-deno/cjs');
+  rimrafSync('build-deno/cjs');
 }
 
 function relativePath (value) {
@@ -400,7 +394,7 @@ function findFiles (buildDir, extra = '', exclude = []) {
           const otherPath = path.join(`${buildDir}${b}`, jsPath);
 
           if (fs.existsSync(otherPath) && fs.readdirSync(otherPath).length === 0) {
-            rimraf.sync(otherPath);
+            rimrafSync(otherPath);
           }
         });
       } else if (toDelete) {
@@ -410,7 +404,7 @@ function findFiles (buildDir, extra = '', exclude = []) {
           const otherPath = path.join(`${buildDir}${b}`, jsPath);
           const otherTs = otherPath.replace(/.spec.js$/, '.spec.ts');
 
-          [otherPath, otherTs].forEach((f) => rimraf.sync(f));
+          [otherPath, otherTs].forEach((f) => rimrafSync(f));
         });
       } else {
         if (!exclude.some((e) => jsName === e)) {
@@ -507,7 +501,7 @@ function moveFields (pkg, fields) {
 function buildExports () {
   const buildDir = path.join(process.cwd(), 'build');
 
-  mkdirp.sync(path.join(buildDir, 'cjs'));
+  mkdirpSync(path.join(buildDir, 'cjs'));
 
   witeJson(path.join(buildDir, 'cjs/package.json'), { type: 'commonjs' });
   tweakPackageInfo(buildDir);
@@ -897,7 +891,7 @@ async function buildJs (repoPath, dir, locals) {
       const cjsRoot = path.join(process.cwd(), 'src/cjs');
 
       if (fs.existsSync(path.join(cjsRoot, 'dirname.d.ts'))) {
-        rimraf.sync(cjsRoot);
+        rimrafSync(cjsRoot);
       }
     }
 

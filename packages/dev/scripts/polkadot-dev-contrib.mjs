@@ -3,16 +3,15 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import fs from 'fs';
-import mkdirp from 'mkdirp';
 
-import { execSync } from './execute.mjs';
+import { execSync, mkdirpSync } from './util.mjs';
 
 const tmpDir = 'packages/build';
 const tmpFile = `${tmpDir}/CONTRIBUTORS`;
 
 console.log('$ polkadot-dev-contrib', process.argv.slice(2).join(' '));
 
-mkdirp.sync(tmpDir);
+mkdirpSync(tmpDir);
 execSync(`git shortlog master -e -n -s > ${tmpFile}`);
 
 fs.writeFileSync(

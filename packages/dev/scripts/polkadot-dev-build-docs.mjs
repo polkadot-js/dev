@@ -4,9 +4,8 @@
 
 import fs from 'fs';
 import path from 'path';
-import rimraf from 'rimraf';
 
-import { copyDirSync } from './copy.mjs';
+import { copyDirSync, rimrafSync } from './util.mjs';
 
 console.log('$ polkadot-dev-build-docs', process.argv.slice(2).join(' '));
 
@@ -15,6 +14,6 @@ let docRoot = path.join(process.cwd(), 'docs');
 if (fs.existsSync(docRoot)) {
   docRoot = path.join(process.cwd(), 'build-docs');
 
-  rimraf.sync(docRoot);
+  rimrafSync(docRoot);
   copyDirSync(path.join(process.cwd(), 'docs'), docRoot);
 }

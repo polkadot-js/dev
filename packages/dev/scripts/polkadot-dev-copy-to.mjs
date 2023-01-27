@@ -3,12 +3,9 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import fs from 'fs';
-import mkdirp from 'mkdirp';
 import path from 'path';
-import rimraf from 'rimraf';
 
-import { copyDirSync } from './copy.mjs';
-import { execSync } from './execute.mjs';
+import { copyDirSync, execSync, mkdirpSync, rimrafSync } from './util.mjs';
 
 const args = process.argv.slice(2);
 
@@ -43,10 +40,10 @@ fs
     const outDest = path.join(dest, name);
 
     // remove the destination
-    rimraf.sync(outDest);
+    rimrafSync(outDest);
 
     // create the root
-    mkdirp.sync(outDest);
+    mkdirpSync(outDest);
 
     // copy the build output
     copyDirSync(path.join(pkgPath, 'build'), outDest);

@@ -2,7 +2,7 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { copyDirSync } from './copy.mjs';
+import { copyDirSync } from './util.mjs';
 
 const args = process.argv.slice(2);
 const sources = args.slice(0, args.length - 1);

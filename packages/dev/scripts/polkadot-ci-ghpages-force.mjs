@@ -4,7 +4,7 @@
 
 import fs from 'fs';
 
-import { execSync } from './execute.mjs';
+import { execSync } from './util.mjs';
 
 console.log('$ polkadot-ci-ghpages-force', process.argv.slice(2).join(' '));
 
