@@ -7,29 +7,18 @@ import madge from 'madge';
 console.log('$ polkadot-dev-circular', process.argv.slice(2).join(' '));
 
 const res = await madge('./', { fileExtensions: ['ts', 'tsx'] });
-
 const circular = res.circular();
 
-if (circular.length) {
-  process.stdout.write(`Found ${circular.length} circular dependencies\n`);
-} else {
+if (!circular.length) {
   process.stdout.write('No circular dependency found!\n');
+  process.exit(0);
 }
 
-circular.forEach((path, idx) => {
-  process.stdout.write(`${(idx + 1).toString().padStart(4)}: `);
+const err = `Failed with ${circular.length} circular dependencies`;
+const all = circular
+  .map((files, idx) => `${(idx + 1).toString().padStart(4)}: ${files.join(' > ')}`)
+  .join('\n');
 
-  path.forEach((module, idx) => {
-    if (idx) {
-      process.stdout.write(' > ');
-    }
+process.stdout.write(`\n${err}:\n\n${all}\n\n`);
 
-    process.stdout.write(module);
-  });
-
-  process.stdout.write('\n');
-});
-
-if (circular.length) {
-  throw new Error('failed');
-}
+throw new Error(err);
