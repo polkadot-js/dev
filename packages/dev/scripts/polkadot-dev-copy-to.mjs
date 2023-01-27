@@ -49,7 +49,5 @@ fs
     copyDirSync(path.join(pkgPath, 'build'), outDest);
 
     // copy node_modules, as available
-    if (fs.existsSync(`${pkgPath}/node_modules`)) {
-      copyDirSync(path.join(pkgPath, 'node_modules'), path.join(outDest, 'node_modules'));
-    }
+    copyDirSync(path.join(pkgPath, 'node_modules'), path.join(outDest, 'node_modules'));
   });
