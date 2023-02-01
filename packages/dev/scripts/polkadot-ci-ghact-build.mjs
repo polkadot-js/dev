@@ -153,7 +153,7 @@ function npmPublish () {
 
   while (true) {
     try {
-      execSync(`npm publish --access public ${tag}`);
+      execSync(`npm publish --quiet --access public ${tag}`);
 
       break;
     } catch (error) {
