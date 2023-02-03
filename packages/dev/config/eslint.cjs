@@ -24,6 +24,7 @@ module.exports = {
     '/.prettierrc.cjs',
     '/.vscode/**',
     '/.yarn/**',
+    '/ava.config.js',
     '/babel.config.cjs',
     '/jest.config.cjs',
     '/mod.ts',

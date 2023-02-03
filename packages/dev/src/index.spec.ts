@@ -1,19 +1,23 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import test from 'ava';
+
 import { adder, blah } from './test1';
 import { echo } from '.';
 
-describe('index', () => {
-  it('runs the echo function', () => {
-    blah();
+test('runs the echo function', (t) => {
+  blah();
 
-    expect(
-      echo('something')
-    ).toEqual('1: 123: something');
-  });
+  t.is(
+    echo('something'),
+    '1: 123: something'
+  );
+});
 
-  it('runs the adder function', () => {
-    expect(adder(1, 2)).toBe(3);
-  });
+test('runs the adder function', (t) => {
+  t.is(
+    adder(1, 2),
+    3
+  );
 });
