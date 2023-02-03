@@ -1,6 +1,9 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import assert from 'node:assert';
+import { describe, it } from 'node:test';
+
 import { adder, blah } from './test1';
 import { echo } from '.';
 
@@ -8,12 +11,16 @@ describe('index', () => {
   it('runs the echo function', () => {
     blah();
 
-    expect(
-      echo('something')
-    ).toEqual('1: 123: something');
+    assert.strictEqual(
+      echo('something'),
+      '1: 123: something'
+    );
   });
 
   it('runs the adder function', () => {
-    expect(adder(1, 2)).toBe(3);
+    assert.strictEqual(
+      adder(1, 2),
+      3
+    );
   });
 });

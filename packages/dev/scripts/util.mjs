@@ -131,3 +131,24 @@ export function rimrafSync (dir) {
     fs.rmSync(dir, { force: true, recursive: true });
   }
 }
+
+/** Recursively reads a directory, making a list of the matched extensions */
+export function readDirSync (src, extensions, files = []) {
+  if (!fs.statSync(src).isDirectory()) {
+    throw new Error(`Source ${src} should be a directory`);
+  }
+
+  fs
+    .readdirSync(src)
+    .forEach((file) => {
+      const srcPath = path.join(src, file);
+
+      if (fs.statSync(srcPath).isDirectory()) {
+        readDirSync(srcPath, extensions, files);
+      } else if (extensions.some((e) => file.endsWith(e))) {
+        files.push(srcPath);
+      }
+    });
+
+  return files;
+}

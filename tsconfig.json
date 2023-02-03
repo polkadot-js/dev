@@ -2,7 +2,8 @@
   "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": "./packages",
-    "composite": false
+    "composite": false,
+    "resolveJsonModule": true
   },
   "include": [
     "packages/**/src/**/*"

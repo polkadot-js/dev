@@ -16,7 +16,7 @@ console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
 const IGNORE_IMPORTS = [
   // node
-  'crypto', 'fs', 'path', 'process', 'readline', 'util',
+  'crypto', 'fs', 'node:assert', 'node:test', 'path', 'process', 'readline', 'util',
   // other
   '@jest/globals', 'react', 'react-native'
 ];
