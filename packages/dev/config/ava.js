@@ -1,6 +1,8 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import { importPath } from './util/mjs';
+
 export default {
   extensions: {
     cjs: true,
@@ -27,6 +29,6 @@ export default {
     //
     // ExperimentalWarning: --experimental-loader is an experimental feature.
     // This feature could change at any time
-    '--loader=ts-node/esm'
+    `--loader=${importPath('@swc/register')}` // ts-node/esm
   ]
 };

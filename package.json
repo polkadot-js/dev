@@ -11,10 +11,10 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.68.4",
+  "version": "0.68.5",
   "versions": {
-    "git": "0.68.4",
-    "npm": "0.68.4"
+    "git": "0.68.5",
+    "npm": "0.68.5"
   },
   "workspaces": [
     "packages/*"
@@ -37,10 +37,7 @@
     "test:esm": "node ./tester.cjs && node ./tester.mjs"
   },
   "devDependencies": {
-    "@polkadot/dev": "workspace:packages/dev",
-    "@swc/cli": "^0.1.61",
-    "@swc/core": "^1.3.32",
-    "@swc/helpers": "^0.4.14"
+    "@polkadot/dev": "workspace:packages/dev"
   },
   "resolutions": {
     "typescript": "^4.9.5"

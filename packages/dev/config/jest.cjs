@@ -25,6 +25,6 @@ module.exports = {
     '**/?(*.)+(spec|test).[jt]s?(x)'
   ],
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': require.resolve('babel-jest')
+    '^.+\\.(js|jsx|ts|tsx)$': require.resolve('@swc/jest')
   }
 };
