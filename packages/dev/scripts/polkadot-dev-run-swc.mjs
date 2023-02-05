@@ -23,4 +23,4 @@ const type = argv.type === 'cjs'
   ? 'cjs'
   : 'esm';
 
-execSync(`yarn polkadot-exec-swc --delete-dir-on-start --copy-files --config-file ${path.join(__dirname, `../config/swcrc-${type}`)} --out-dir build-swc-${type} src`);
+execSync(`yarn polkadot-exec-swc --delete-dir-on-start --copy-files --config-file ${path.join(__dirname, `../config/swcrc-${type}.json`)} --out-dir build-swc-${type} src`);
