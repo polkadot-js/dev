@@ -731,8 +731,12 @@ function lintOutput (dir) {
         return createError(full, l, n, 'Invalid import from /src/');
       // eslint-disable-next-line no-useless-escape
       } else if (/[\+\-\*\/\=\<\>\|\&\%\^\(\)\{\}\[\] ][0-9]{1,}n/.test(l)) {
-        // we don't want untamed BigInt literals
-        return createError(full, l, n, 'Prefer BigInt(<digits>) to <digits>n');
+        if (l.includes(';base64,')) {
+          // ignore base64 encoding, e.g. data uris
+        } else {
+          // we don't want untamed BigInt literals
+          return createError(full, l, n, 'Prefer BigInt(<digits>) to <digits>n');
+        }
       }
 
       return null;
