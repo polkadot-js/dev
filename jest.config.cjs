@@ -4,5 +4,6 @@
 const config = require('@polkadot/dev/config/jest.cjs');
 
 module.exports = {
-  ...config
+  ...config,
+  testEnvironment: 'jsdom'
 };
