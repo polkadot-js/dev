@@ -2,9 +2,9 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import fs from 'fs';
-import os from 'os';
-import path from 'path';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
 import yargs from 'yargs';
 
 import { copyDirSync, copyFileSync, denoCreateDir, execSync, gitSetup, mkdirpSync, rimrafSync } from './util.mjs';

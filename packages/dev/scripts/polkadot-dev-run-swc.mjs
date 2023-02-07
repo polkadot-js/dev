@@ -2,7 +2,7 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import path from 'path';
+import path from 'node:path';
 import yargs from 'yargs';
 
 import { __dirname, execSync } from './util.mjs';

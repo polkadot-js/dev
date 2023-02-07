@@ -16,7 +16,9 @@ console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
 const IGNORE_IMPORTS = [
   // node
-  'crypto', 'fs', 'path', 'process', 'readline', 'util',
+  'crypto', 'fs', 'os', 'path', 'process', 'readline', 'util',
+  // node (new-style)
+  'node:assert', 'node:crypto', 'node:fs', 'node:os', 'node:path', 'node:process', 'node:test', 'node:util',
   // other
   '@jest/globals', 'react', 'react-native'
 ];
@@ -269,6 +271,7 @@ function rewriteEsmImports (pkgCwd, pkgJson, dir, replacer) {
           fs
             .readFileSync(thisPath, 'utf8')
             .split('\n')
+            .filter((line) => !line.startsWith('//'))
             .map((line) =>
               line
                 // handle import/export
