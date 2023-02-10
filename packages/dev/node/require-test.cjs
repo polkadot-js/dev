@@ -9,7 +9,7 @@
 
 const { JSDOM } = require('jsdom');
 const assert = require('node:assert/strict');
-const { after, afterEach, before, beforeEach, describe, it, test } = require('node:test');
+const { after, afterEach, before, beforeEach, describe, it } = require('node:test');
 
 // just enough browser functionality for testing-library
 const dom = new JSDOM();
@@ -26,18 +26,23 @@ Object
     globalThis[globalName] = fn;
   });
 
-// map describe/it/test behavior to node:test
+// map describe/it behavior to node:test
 Object
-  .entries({ describe, it, test })
+  .entries({ describe, it })
   .forEach(([globalName, fn]) => {
-    const wrap = (name, ...args) => fn(name, ...args);
-    const flag = (options) => (name, ...args) => fn(name, options, ...args);
+    const wrap = (opts) => (name, ...args) => fn(name, opts, ...args);
+    const each = (opts) => (arr) => (name, exec) => arr.forEach((v) => fn(name?.replace('%s', v.toString()), opts, exec?.(v)));
+    const globalFn = wrap({});
 
-    wrap.only = flag({ only: true });
-    wrap.skip = flag({ skip: true });
-    wrap.todo = flag({ todo: true });
+    globalFn.each = each({});
 
-    globalThis[globalName] = wrap;
+    ['only', 'skip', 'todo']
+      .forEach((key) => {
+        globalFn[key] = wrap({ [key]: true });
+        globalFn.each[key] = each({ [key]: true });
+      });
+
+    globalThis[globalName] = globalFn;
   });
 
 // a poor-man's version of expect (ease of migration)
