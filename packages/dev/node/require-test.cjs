@@ -7,24 +7,47 @@
 // NOTE: node -r only works with commonjs files, hence using it here
 
 const { JSDOM } = require('jsdom');
-const { describe, test } = require('node:test');
+const { strict } = require('node:assert');
+const { describe, it, test } = require('node:test');
 
-function create (fn) {
-  const wrap = (name, ...args) => fn(name, ...args);
-  const flag = (flag) => (name, ...args) => fn(name, flag, ...args);
-
-  wrap.only = flag({ only: true });
-  wrap.skip = flag({ skip: true });
-  wrap.todo = flag({ todo: true });
-
-  return wrap;
-}
-
-globalThis.describe = create(describe);
-globalThis.it = globalThis.test = create(test);
-
+// just enough browser functionality for testing-library
 const dom = new JSDOM();
 
-globalThis.document = dom.window.document;
-globalThis.navigator = dom.window.navigator;
 globalThis.window = dom.window;
+
+['document', 'navigator']
+  .forEach((globalName) => {
+    globalThis[globalName] = dom.window[globalName];
+  });
+
+// map describe/it/test behavior to node:test
+Object
+  .entries({ describe, it, test })
+  .forEach(([globalName, fn]) => {
+    const wrap = (name, ...args) => fn(name, ...args);
+    const flag = (options) => (name, ...args) => fn(name, options, ...args);
+
+    wrap.only = flag({ only: true });
+    wrap.skip = flag({ skip: true });
+    wrap.todo = flag({ todo: true });
+
+    globalThis[globalName] = wrap;
+  });
+
+// a poor-man's version of expect (ease of migration)
+globalThis.expect = (value) => ({
+  not: {
+    toBe: (other) => strict.notEqual(value, other),
+    toBeDefined: () => strict.equal(value, undefined),
+    toBeFalsy: () => strict.ok(value),
+    toBeTruthy: () => strict.ok(!value),
+    toEqual: (other) => strict.notDeepEqual(value, other),
+    toThrow: (message) => strict.doesNotThrow(value, { message })
+  },
+  toBe: (other) => strict.equal(value, other),
+  toBeDefined: () => strict.notEqual(value, undefined),
+  toBeFalsy: () => strict.ok(!value),
+  toBeTruthy: () => strict.ok(value),
+  toEqual: (other) => strict.deepEqual(value, other),
+  toThrow: (message) => strict.throws(value, { message })
+});
