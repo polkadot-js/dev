@@ -2,15 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { strict as assert } from 'node:assert';
-import { describe, it } from 'node:test';
 
 import { adder, blah } from './test1';
 import { echo } from '.';
 
 describe('index', () => {
   it('runs the echo function', () => {
-    blah();
-
+    assert.equal(blah(), undefined);
     assert.strictEqual(echo('something'), '1: 123: something');
   });
 
@@ -20,5 +18,6 @@ describe('index', () => {
 
   it.skip('some skipped test', () => {
     // nothing to see here, move along
+    assert.ok(true);
   });
 });
