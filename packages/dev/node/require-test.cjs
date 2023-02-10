@@ -9,16 +9,21 @@
 
 const { JSDOM } = require('jsdom');
 const { strict: assert } = require('node:assert');
-const { describe, it, test } = require('node:test');
+const { after: afterAll, afterEach, before: beforeAll, beforeEach, describe, it, test } = require('node:test');
 
 // just enough browser functionality for testing-library
 const dom = new JSDOM();
 
-globalThis.window = dom.window;
-
-['document', 'navigator']
-  .forEach((globalName) => {
-    globalThis[globalName] = dom.window[globalName];
+// pin-point globals, i.e. available functions
+Object
+  .entries(({
+    // browser environment via JSDOM
+    ...{ document: dom.window.document, navigator: dom.window.navigator, window: dom.window },
+    // testing environment via node:test
+    ...{ afterAll, afterEach, beforeAll, beforeEach }
+  }))
+  .forEach(([globalName, fn]) => {
+    globalThis[globalName] = fn;
   });
 
 // map describe/it/test behavior to node:test
@@ -43,6 +48,7 @@ globalThis.expect = (value) => ({
     toBeFalsy: () => assert.ok(value),
     toBeTruthy: () => assert.ok(!value),
     toEqual: (other) => assert.notDeepEqual(value, other),
+    toHaveLength: (length) => assert.notEqual(value.length, length),
     toThrow: (message) => assert.doesNotThrow(value, { message })
   },
   toBe: (other) => assert.equal(value, other),
@@ -50,5 +56,6 @@ globalThis.expect = (value) => ({
   toBeFalsy: () => assert.ok(!value),
   toBeTruthy: () => assert.ok(value),
   toEqual: (other) => assert.deepEqual(value, other),
+  toHaveLength: (length) => assert.equal(value.length, length),
   toThrow: (message) => assert.throws(value, { message })
 });
