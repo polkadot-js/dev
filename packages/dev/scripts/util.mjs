@@ -77,19 +77,7 @@ export function execSync (cmd, noLog) {
 
 /** Node execution with ts support */
 export function execNodeSync (cmd, noLog) {
-  const node = [
-    // path to Node
-    process.execPath,
-    // Disable the experimental warning that follow
-    //
-    // ExperimentalWarning: --experimental-loader is an experimental feature.
-    // This feature could change at any time
-    '--no-warnings',
-    `--loader ${importPath('@polkadot/dev/scripts/swc-loader.mjs')}`,
-    cmd
-  ].join(' ');
-
-  execSync(node, noLog);
+  execSync(`${process.execPath} --no-warnings --loader @polkadot/dev/node/loader-ts.mjs ${cmd}`, noLog);
 }
 
 /** Node binary execution */

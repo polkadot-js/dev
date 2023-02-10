@@ -234,7 +234,9 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
     : [null];
 
   if (!denoDep && !version) {
-    console.warn(`warning: Replacing unknown versioned package '${f}' inside ${pkgJson.name}, possibly missing an alias`);
+    if (!f.startsWith('node:')) {
+      console.warn(`warning: Replacing unknown versioned package '${f}' inside ${pkgJson.name}, possibly missing an alias`);
+    }
   } else if (denoDep === 'x') {
     denoDep = `x/${denoPath[0]}`;
     denoPath = denoPath.slice(1);
@@ -612,7 +614,12 @@ function buildExports () {
               ? { [`${path}.js`]: entry }
               : {}
         ),
-        [path]: entry
+        [path]: entry,
+        ...(
+          path.endsWith('.mjs') || path.endsWith('.cjs')
+            ? { [path.replace(/\.[cm]js$/, '')]: entry }
+            : {}
+        )
       };
     }, {});
 

@@ -18,4 +18,4 @@ if (files.length === 0) {
   throw new Error('No *.spec.{ts, tsx} files found');
 }
 
-execNodeSync(`--test ${cmd} ${files.join(' ')}`);
+execNodeSync(`-r @polkadot/dev/node/require-test.cjs --test ${cmd} ${files.join(' ')}`);
