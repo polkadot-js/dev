@@ -93,7 +93,7 @@ export function execNodeSync (cmd, noLog) {
 }
 
 /** Node binary execution */
-export function execNode (name, cmd) {
+export function execViaNode (name, cmd) {
   const args = process.argv.slice(2).join(' ');
 
   console.log(`$ ${name}${args ? ` ${args}` : ''}`);

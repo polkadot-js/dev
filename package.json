@@ -33,7 +33,8 @@
     "postinstall": "./packages/dev/scripts/polkadot-dev-yarn-only.mjs",
     "prettier": "./packages/dev/scripts/polkadot-dev-run-prettier.mjs",
     "test": "yarn build && yarn test:esm && polkadot-dev-run-test --coverage",
-    "test:esm": "node ./tester.cjs && node ./tester.mjs"
+    "test:esm": "node ./tester.cjs && node ./tester.mjs",
+    "test:node": "polkadot-dev-run-node-test"
   },
   "devDependencies": {
     "@polkadot/dev": "workspace:packages/dev"

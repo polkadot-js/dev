@@ -1,21 +1,26 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import '@testing-library/jest-dom';
+// For Node environments, we need to pass and extra flag: -r browser-env/register
+// (or alternatively require('browser-env')() at file top)
 
 import { fireEvent, render, screen } from '@testing-library/react';
+import { strict as assert } from 'node:assert';
+// import { describe, it } from 'node:test';
 import React from 'react';
 
 import Hidden from './Hidden';
 
-test('shows the children when the checkbox is checked', () => {
-  const testMessage = 'Test Message';
+describe('react testing', () => {
+  it('shows the children when the checkbox is checked', () => {
+    const testMessage = 'Test Message';
 
-  render(<Hidden>{testMessage}</Hidden>);
+    render(<Hidden>{testMessage}</Hidden>);
 
-  expect(screen.queryByText(testMessage)).toBeNull();
+    assert.equal(screen.queryByText(testMessage), null);
 
-  fireEvent.click(screen.getByLabelText(/show/i));
+    fireEvent.click(screen.getByLabelText(/show/i));
 
-  expect(screen.getByText(testMessage)).toBeInTheDocument();
+    assert.notEqual(screen.getByText(testMessage), null);
+  });
 });
