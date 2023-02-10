@@ -6,7 +6,6 @@
 
 import { fireEvent, render, screen } from '@testing-library/react';
 import { strict as assert } from 'node:assert';
-// import { describe, it } from 'node:test';
 import React from 'react';
 
 import Hidden from './Hidden';
