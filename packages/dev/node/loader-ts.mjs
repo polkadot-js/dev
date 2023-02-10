@@ -3,7 +3,7 @@
 
 // Adapted from: https://nodejs.org/api/esm.html#esm_transpiler_loader
 
-import { transformSync } from '@swc/core';
+import { transform } from '@swc/core';
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
@@ -62,15 +62,24 @@ export function resolve (specifier, context, nextResolve) {
 
 export async function load (url, context, nextLoad) {
   if (extensionsRegex.test(url)) {
+    // used the chained loaders to retrieve
     const { source } = await nextLoad(url, { ...context, format: 'module' });
-    const output = transformSync(source.toString(), {
+
+    // compile - we can also use transformSync
+    const { code } = await transform(source.toString(), {
       filename: fileURLToPath(url),
+      jsc: {
+        experimental: {
+          keepImportAssertions: true
+        },
+        target: 'es2020'
+      },
       sourceMaps: 'inline'
     });
 
     return {
       format: 'module',
-      source: output.code
+      source: code
     };
   }
 

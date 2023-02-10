@@ -2,7 +2,7 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { execNodeSync, readdirSync } from './util.mjs';
+import { execNodeTsSync, readdirSync } from './util.mjs';
 
 const cmd = process.argv.slice(2).join(' ');
 
@@ -18,4 +18,4 @@ if (files.length === 0) {
   throw new Error('No *.spec.{ts, tsx} files found');
 }
 
-execNodeSync(`-r @polkadot/dev/node/require-test.cjs --test ${cmd} ${files.join(' ')}`);
+execNodeTsSync(`--require @polkadot/dev/node/require-test.cjs --test ${cmd} ${files.join(' ')}`);

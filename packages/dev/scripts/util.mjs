@@ -70,13 +70,13 @@ export function denoCreateDir (name) {
 
 /** Process execution */
 export function execSync (cmd, noLog) {
-  !noLog && console.log(`$ ${cmd}`);
+  !noLog && console.log(`$ ${cmd.replaceAll('  ', ' ')}`);
 
   cp.execSync(cmd, { stdio: 'inherit' });
 }
 
 /** Node execution with ts support */
-export function execNodeSync (cmd, noLog) {
+export function execNodeTsSync (cmd, noLog) {
   execSync(`${process.execPath} --no-warnings --loader @polkadot/dev/node/loader-ts.mjs ${cmd}`, noLog);
 }
 

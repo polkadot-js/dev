@@ -4,19 +4,62 @@
 // This allows for compatibility with Jest environments using
 // describe, it, test ...
 //
-// NOT: node -r only works with commonjs files, hence using it here
+// NOTE: node --require only works with commonjs files, hence using it here
+// NOTE: --import was added in Node 19 that would simplify, but too early
 
-const n = require('node:test');
+const { JSDOM } = require('jsdom');
+const assert = require('node:assert/strict');
+const { after, afterEach, before, beforeEach, describe, it } = require('node:test');
 
-const describe = (name, ...args) => n.describe(name, ...args);
-const it = (name, ...args) => n.it(name, ...args);
+// just enough browser functionality for testing-library
+const dom = new JSDOM();
 
-describe.only = (name, ...args) => describe(name, { only: true }, ...args);
-it.only = (name, ...args) => it(name, { only: true }, ...args);
+// pin-point globals, i.e. available functions
+Object
+  .entries(({
+    // browser environment via JSDOM
+    ...{ document: dom.window.document, navigator: dom.window.navigator, window: dom.window },
+    // testing environment via node:test
+    ...{ afterAll: after, afterEach, beforeAll: before, beforeEach }
+  }))
+  .forEach(([globalName, fn]) => {
+    globalThis[globalName] = fn;
+  });
 
-describe.skip = () => undefined;
-it.skip = () => undefined;
+// map describe/it behavior to node:test
+Object
+  .entries({ describe, it })
+  .forEach(([globalName, fn]) => {
+    const wrap = (opts) => (name, ...args) => fn(name, opts, ...args);
+    const each = (opts) => (arr) => (name, exec) => arr.forEach((v) => fn(name?.replace('%s', v.toString()), opts, exec?.(v)));
+    const globalFn = wrap({});
 
-globalThis.describe = describe;
-globalThis.it = globalThis.test = it;
-globalThis.test = it;
+    globalFn.each = each({});
+
+    ['only', 'skip', 'todo'].forEach((key) => {
+      globalFn[key] = wrap({ [key]: true });
+      globalFn.each[key] = each({ [key]: true });
+    });
+
+    globalThis[globalName] = globalFn;
+  });
+
+// a poor-man's version of expect (ease of migration)
+globalThis.expect = (value) => ({
+  not: {
+    toBe: (other) => assert.notStrictEqual(value, other),
+    toBeDefined: () => assert.equal(value, undefined),
+    toBeFalsy: () => assert.ok(value),
+    toBeTruthy: () => assert.ok(!value),
+    toEqual: (other) => assert.notDeepEqual(value, other),
+    toHaveLength: (length) => assert.notEqual(value.length, length),
+    toThrow: (message) => assert.doesNotThrow(value, { message })
+  },
+  toBe: (other) => assert.strictEqual(value, other),
+  toBeDefined: () => assert.notEqual(value, undefined),
+  toBeFalsy: () => assert.ok(!value),
+  toBeTruthy: () => assert.ok(value),
+  toEqual: (other) => assert.deepEqual(value, other),
+  toHaveLength: (length) => assert.equal(value.length, length),
+  toThrow: (message) => assert.throws(value, { message })
+});
