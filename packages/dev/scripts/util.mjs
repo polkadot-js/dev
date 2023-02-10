@@ -70,7 +70,7 @@ export function denoCreateDir (name) {
 
 /** Process execution */
 export function execSync (cmd, noLog) {
-  !noLog && console.log(`$ ${cmd}`);
+  !noLog && console.log(`$ ${cmd.replaceAll('  ', ' ').split('--').join('\n\t--')}`);
 
   cp.execSync(cmd, { stdio: 'inherit' });
 }

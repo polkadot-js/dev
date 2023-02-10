@@ -4,10 +4,11 @@
 // This allows for compatibility with Jest environments using
 // describe, it, test ...
 //
-// NOTE: node -r only works with commonjs files, hence using it here
+// NOTE: node --require only works with commonjs files, hence using it here
+// NOTE: --import was added in Node 19 that would simplify, but too early
 
 const { JSDOM } = require('jsdom');
-const { strict } = require('node:assert');
+const { strict: assert } = require('node:assert');
 const { describe, it, test } = require('node:test');
 
 // just enough browser functionality for testing-library
@@ -37,17 +38,17 @@ Object
 // a poor-man's version of expect (ease of migration)
 globalThis.expect = (value) => ({
   not: {
-    toBe: (other) => strict.notEqual(value, other),
-    toBeDefined: () => strict.equal(value, undefined),
-    toBeFalsy: () => strict.ok(value),
-    toBeTruthy: () => strict.ok(!value),
-    toEqual: (other) => strict.notDeepEqual(value, other),
-    toThrow: (message) => strict.doesNotThrow(value, { message })
+    toBe: (other) => assert.notEqual(value, other),
+    toBeDefined: () => assert.equal(value, undefined),
+    toBeFalsy: () => assert.ok(value),
+    toBeTruthy: () => assert.ok(!value),
+    toEqual: (other) => assert.notDeepEqual(value, other),
+    toThrow: (message) => assert.doesNotThrow(value, { message })
   },
-  toBe: (other) => strict.equal(value, other),
-  toBeDefined: () => strict.notEqual(value, undefined),
-  toBeFalsy: () => strict.ok(!value),
-  toBeTruthy: () => strict.ok(value),
-  toEqual: (other) => strict.deepEqual(value, other),
-  toThrow: (message) => strict.throws(value, { message })
+  toBe: (other) => assert.equal(value, other),
+  toBeDefined: () => assert.notEqual(value, undefined),
+  toBeFalsy: () => assert.ok(!value),
+  toBeTruthy: () => assert.ok(value),
+  toEqual: (other) => assert.deepEqual(value, other),
+  toThrow: (message) => assert.throws(value, { message })
 });
