@@ -47,7 +47,7 @@ Object
 // a poor-man's version of expect (ease of migration)
 globalThis.expect = (value) => ({
   not: {
-    toBe: (other) => assert.notEqual(value, other),
+    toBe: (other) => assert.notStrictEqual(value, other),
     toBeDefined: () => assert.equal(value, undefined),
     toBeFalsy: () => assert.ok(value),
     toBeTruthy: () => assert.ok(!value),
@@ -55,7 +55,7 @@ globalThis.expect = (value) => ({
     toHaveLength: (length) => assert.notEqual(value.length, length),
     toThrow: (message) => assert.doesNotThrow(value, { message })
   },
-  toBe: (other) => assert.equal(value, other),
+  toBe: (other) => assert.strictEqual(value, other),
   toBeDefined: () => assert.notEqual(value, undefined),
   toBeFalsy: () => assert.ok(!value),
   toBeTruthy: () => assert.ok(value),
