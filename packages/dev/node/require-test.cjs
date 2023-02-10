@@ -36,11 +36,10 @@ Object
 
     globalFn.each = each({});
 
-    ['only', 'skip', 'todo']
-      .forEach((key) => {
-        globalFn[key] = wrap({ [key]: true });
-        globalFn.each[key] = each({ [key]: true });
-      });
+    ['only', 'skip', 'todo'].forEach((key) => {
+      globalFn[key] = wrap({ [key]: true });
+      globalFn.each[key] = each({ [key]: true });
+    });
 
     globalThis[globalName] = globalFn;
   });
