@@ -4,19 +4,27 @@
 // This allows for compatibility with Jest environments using
 // describe, it, test ...
 //
-// NOT: node -r only works with commonjs files, hence using it here
+// NOTE: node -r only works with commonjs files, hence using it here
 
-const n = require('node:test');
+const { JSDOM } = require('jsdom');
+const { describe, test } = require('node:test');
 
-const describe = (name, ...args) => n.describe(name, ...args);
-const it = (name, ...args) => n.it(name, ...args);
+function create (fn) {
+  const wrap = (name, ...args) => fn(name, ...args);
+  const flag = (flag) => (name, ...args) => fn(name, flag, ...args);
 
-describe.only = (name, ...args) => describe(name, { only: true }, ...args);
-it.only = (name, ...args) => it(name, { only: true }, ...args);
+  wrap.only = flag({ only: true });
+  wrap.skip = flag({ skip: true });
+  wrap.todo = flag({ todo: true });
 
-describe.skip = () => undefined;
-it.skip = () => undefined;
+  return wrap;
+}
 
-globalThis.describe = describe;
-globalThis.it = globalThis.test = it;
-globalThis.test = it;
+globalThis.describe = create(describe);
+globalThis.it = globalThis.test = create(test);
+
+const dom = new JSDOM();
+
+globalThis.document = dom.window.document;
+globalThis.navigator = dom.window.navigator;
+globalThis.window = dom.window;

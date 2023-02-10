@@ -76,7 +76,7 @@ export function execSync (cmd, noLog) {
 }
 
 /** Node execution with ts support */
-export function execNodeSync (cmd, noLog) {
+export function execNodeTsSync (cmd, noLog) {
   execSync(`${process.execPath} --no-warnings --loader @polkadot/dev/node/loader-ts.mjs ${cmd}`, noLog);
 }
 
