@@ -8,8 +8,8 @@
 // NOTE: --import was added in Node 19 that would simplify, but too early
 
 const { JSDOM } = require('jsdom');
-const { strict: assert } = require('node:assert');
-const { after: afterAll, afterEach, before: beforeAll, beforeEach, describe, it, test } = require('node:test');
+const assert = require('node:assert/strict');
+const { after, afterEach, before, beforeEach, describe, it, test } = require('node:test');
 
 // just enough browser functionality for testing-library
 const dom = new JSDOM();
@@ -20,7 +20,7 @@ Object
     // browser environment via JSDOM
     ...{ document: dom.window.document, navigator: dom.window.navigator, window: dom.window },
     // testing environment via node:test
-    ...{ afterAll, afterEach, beforeAll, beforeEach }
+    ...{ afterAll: after, afterEach, beforeAll: before, beforeEach }
   }))
   .forEach(([globalName, fn]) => {
     globalThis[globalName] = fn;
