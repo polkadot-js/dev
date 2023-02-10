@@ -75,6 +75,23 @@ export function execSync (cmd, noLog) {
   cp.execSync(cmd, { stdio: 'inherit' });
 }
 
+/** Node execution with ts support */
+export function execNodeSync (cmd, noLog) {
+  const node = [
+    // path to Node
+    process.execPath,
+    // Disable the experimental warning that follow
+    //
+    // ExperimentalWarning: --experimental-loader is an experimental feature.
+    // This feature could change at any time
+    '--no-warnings',
+    `--loader ${importPath('@polkadot/dev/scripts/swc-loader.mjs')}`,
+    cmd
+  ].join(' ');
+
+  execSync(node, noLog);
+}
+
 /** Node binary execution */
 export function execNode (name, cmd) {
   const args = process.argv.slice(2).join(' ');
@@ -130,4 +147,25 @@ export function rimrafSync (dir) {
   if (fs.existsSync(dir)) {
     fs.rmSync(dir, { force: true, recursive: true });
   }
+}
+
+/** Recursively reads a directory, making a list of the matched extensions */
+export function readdirSync (src, extensions, files = []) {
+  if (!fs.statSync(src).isDirectory()) {
+    throw new Error(`Source ${src} should be a directory`);
+  }
+
+  fs
+    .readdirSync(src)
+    .forEach((file) => {
+      const srcPath = path.join(src, file);
+
+      if (fs.statSync(srcPath).isDirectory()) {
+        readdirSync(srcPath, extensions, files);
+      } else if (extensions.some((e) => file.endsWith(e))) {
+        files.push(srcPath);
+      }
+    });
+
+  return files;
 }

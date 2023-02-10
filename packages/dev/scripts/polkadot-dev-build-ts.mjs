@@ -18,7 +18,7 @@ const IGNORE_IMPORTS = [
   // node
   'crypto', 'fs', 'os', 'path', 'process', 'readline', 'util',
   // node (new-style)
-  'node:assert', 'node:crypto', 'node:fs', 'node:os', 'node:path', 'node:process', 'node:test', 'node:util',
+  'node:assert', 'node:crypto', 'node:fs', 'node:os', 'node:path', 'node:process', 'node:test', 'node:url', 'node:util',
   // other
   '@jest/globals', 'react', 'react-native'
 ];

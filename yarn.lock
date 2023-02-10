@@ -2112,6 +2112,8 @@ __metadata:
     polkadot-dev-copy-to: ./scripts/polkadot-dev-copy-to.mjs
     polkadot-dev-deno-map: ./scripts/polkadot-dev-deno-map.mjs
     polkadot-dev-run-lint: ./scripts/polkadot-dev-run-lint.mjs
+    polkadot-dev-run-node-test: ./scripts/polkadot-dev-run-node-test.mjs
+    polkadot-dev-run-node-ts: ./scripts/polkadot-dev-run-node-ts.mjs
     polkadot-dev-run-prettier: ./scripts/polkadot-dev-run-prettier.mjs
     polkadot-dev-run-swc: ./scripts/polkadot-dev-run-swc.mjs
     polkadot-dev-run-test: ./scripts/polkadot-dev-run-test.mjs
