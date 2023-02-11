@@ -21,11 +21,15 @@ function unimplemented (name, key, post) {
 /** @internal just enough browser functionality for testing-library */
 function createBrowser () {
   const dom = new JSDOM();
-
-  return ['crypto', 'document', 'navigator'].reduce((env, key) => ({
+  const expose = (window) => ['crypto', 'document', 'navigator'].reduce((env, key) => ({
     ...env,
-    [key]: dom.window[key]
-  }), { window: dom.window });
+    [key]: window[key]
+  }), {});
+
+  return {
+    ...expose(dom.window),
+    windo: dom.window
+  };
 }
 
 /** @internal adjust dewscribe/it to make it jest-like */
