@@ -29,9 +29,20 @@ function emptyExpect (pre) {
 Object
   .entries(({
     // browser environment via JSDOM
-    ...{ document: dom.window.document, navigator: dom.window.navigator, window: dom.window },
+    ...{
+      ...['crypto', 'document', 'navigator'].reduce((env, k) => ({
+        ...env,
+        [k]: dom.window[k]
+      }), {}),
+      window: dom.window
+    },
     // testing environment via node:test
-    ...{ afterAll: after, afterEach, beforeAll: before, beforeEach }
+    ...{
+      afterAll: after,
+      afterEach,
+      beforeAll: before,
+      beforeEach
+    }
   }))
   .forEach(([globalName, fn]) => {
     globalThis[globalName] = fn;
