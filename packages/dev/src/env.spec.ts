@@ -3,8 +3,6 @@
 
 import assert from 'node:assert';
 
-console.log(JSON.stringify(Object.keys(jest).sort()));
-
 describe('testing environment', (): void => {
   it('works with node:assert', (): void => {
     assert.ok(true);
