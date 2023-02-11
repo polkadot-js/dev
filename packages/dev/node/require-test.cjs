@@ -14,6 +14,15 @@ const { after, afterEach, before, beforeEach, describe, it } = require('node:tes
 // just enough browser functionality for testing-library
 const dom = new JSDOM();
 
+// empty jest matcher (just allows us to indicate where we have gaps)
+function emptyExpect (pre) {
+  // logged via Object.keys(expect(0)).sort() (with 'not' dropped)
+  ['lastCalledWith', 'lastReturnedWith', 'nthCalledWith', 'nthReturnedWith', 'rejects', 'resolves', 'toBe', 'toBeCalled', 'toBeCalledTimes', 'toBeCalledWith', 'toBeCloseTo', 'toBeDefined', 'toBeFalsy', 'toBeGreaterThan', 'toBeGreaterThanOrEqual', 'toBeInstanceOf', 'toBeLessThan', 'toBeLessThanOrEqual', 'toBeNaN', 'toBeNull', 'toBeTruthy', 'toBeUndefined', 'toContain', 'toContainEqual', 'toEqual', 'toHaveBeenCalled', 'toHaveBeenCalledTimes', 'toHaveBeenCalledWith', 'toHaveBeenLastCalledWith', 'toHaveBeenNthCalledWith', 'toHaveLastReturnedWith', 'toHaveLength', 'toHaveNthReturnedWith', 'toHaveProperty', 'toHaveReturned', 'toHaveReturnedTimes', 'toHaveReturnedWith', 'toMatch', 'toMatchInlineSnapshot', 'toMatchObject', 'toMatchSnapshot', 'toReturn', 'toReturnTimes', 'toReturnWith', 'toStrictEqual', 'toThrow', 'toThrowError', 'toThrowErrorMatchingInlineSnapshot', 'toThrowErrorMatchingSnapshot'].reduce((all, key) => ({
+    ...all,
+    key: () => { throw new Error(`expect(...)${pre ? `.${pre}` : ''}.${key}(...) not implemented`) }
+  }), {})
+}
+
 // pin-point globals, i.e. available functions
 Object
   .entries(({
@@ -46,7 +55,9 @@ Object
 
 // a poor-man's version of expect (ease of migration)
 globalThis.expect = (value) => ({
+  ...emptyExpect(),
   not: {
+    ...emptyExpect('not'),
     toBe: (other) => assert.notStrictEqual(value, other),
     toBeDefined: () => assert.equal(value, undefined),
     toBeFalsy: () => assert.ok(value),
