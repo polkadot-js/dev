@@ -1,0 +1,40 @@
+// Copyright 2017-2023 @polkadot/dev authors & contributors
+// SPDX-License-Identifier: Apache-2.0
+
+import assert from 'node:assert';
+
+console.log(JSON.stringify(Object.keys(jest).sort()));
+
+describe('testing environment', (): void => {
+  it('works with node:assert', (): void => {
+    assert.ok(true);
+  });
+
+  describe('expect', (): void => {
+    describe('.toThrow', (): void => {
+      const thrower = () => {
+        throw new Error('some error');
+      };
+
+      it('matches error with empty throw', (): void => {
+        expect(thrower).toThrow();
+      });
+
+      it('matches error with exact message', (): void => {
+        expect(thrower).toThrow('some error');
+      });
+
+      it('matches error with regex message', (): void => {
+        expect(thrower).toThrow(/me er/);
+      });
+
+      it('handles .not correctly (empty message)', (): void => {
+        expect(() => undefined).not.toThrow();
+      });
+
+      it('handles .not correctly (regex match)', (): void => {
+        expect(() => undefined).not.toThrow(/me er/);
+      });
+    });
+  });
+});
