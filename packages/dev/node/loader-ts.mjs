@@ -9,55 +9,110 @@ import path from 'node:path';
 import process from 'node:process';
 import { fileURLToPath, pathToFileURL, URL } from 'node:url';
 
-const baseURL = pathToFileURL(`${process.cwd()}/`).href;
+const cwdPath = process.cwd();
+const cwdURL = pathToFileURL(cwdPath).href;
 const extensionsRegex = /\.ts$|\.tsx$/;
 const extensions = ['.ts', '.tsx'];
+const tsConfig = getTsConfig();
 
-export function resolve (specifier, context, nextResolve) {
-  const { parentURL = baseURL } = context;
+// TODO We need to read, extend tsconfig.json and fill this in
+function getTsConfig () {
+  const config = {
+    basePath: './packages',
+    entries: [],
+    paths: {}
+  };
 
+  config.entries = Object
+    .entries(config.paths)
+    .map(([key, value]) => {
+      const filter = key.split(/[\\/]/);
+      const isStar = filter[filter.length - 1] === '*';
+
+      return {
+        filter,
+        isStar,
+        key,
+        path: isStar
+          ? path.join(config.basePath, ...filter.slice(0, -1))
+          : path.join(config.basePath, value)
+      };
+    });
+
+  return config;
+}
+
+function resolveRegex (specifier, parentURL) {
+  // handle .ts extensions directly
   if (extensionsRegex.test(specifier)) {
-    // handle .ts extensions directly
     return {
       format: 'module',
       shortCircuit: true,
       url: new URL(specifier, parentURL).href
     };
   }
+}
 
-  // magic extension resolves
-  const dir = path.dirname(fileURLToPath(parentURL));
-  const file = (
-    (
-      // handle . imports for directories
-      specifier === '.' &&
-      extensions
-        .map((e) => `index${e}`)
-        .find((f) => fs.existsSync(path.join(dir, f)))
-    ) ||
-    (
-      // tests to see if this is a file (without extension)
-      extensions
-        .map((e) => `${specifier}${e}`)
-        .find((f) => fs.existsSync(path.join(dir, f)))
-    ) ||
-    (
-      // test to see if this is a directory
-      extensions
-        .map((e) => `${specifier}/index${e}`)
-        .find((f) => fs.existsSync(path.join(dir, f)))
-    )
-  );
+function resolveRelative (specifier, parentURL) {
+  // handle ./<extensionLess>
+  if (specifier.startsWith('.')) {
+    const dir = path.dirname(fileURLToPath(parentURL));
+    const file = (
+      (
+        // handle . imports for directories
+        specifier === '.' &&
+        extensions
+          .map((e) => `index${e}`)
+          .find((f) => fs.existsSync(path.join(dir, f)))
+      ) ||
+      (
+        // tests to see if this is a file (without extension)
+        extensions
+          .map((e) => `${specifier}${e}`)
+          .find((f) => fs.existsSync(path.join(dir, f)))
+      ) ||
+      (
+        // test to see if this is a directory
+        extensions
+          .map((e) => `${specifier}/index${e}`)
+          .find((f) => fs.existsSync(path.join(dir, f)))
+      )
+    );
 
-  if (file) {
-    return {
-      format: 'module',
-      shortCircuit: true,
-      url: new URL(file, parentURL).href
-    };
+    if (file) {
+      return {
+        format: 'module',
+        shortCircuit: true,
+        url: new URL(file, parentURL).href
+      };
+    }
   }
+}
 
-  return nextResolve(specifier, context);
+function resolvePackages (specifier) {
+  const parts = specifier.split(/[\\/]/);
+  const direct = tsConfig.entries
+    .filter(({ isStar }) => !isStar)
+    .find(({ filter }) =>
+      parts.length === filter.length &&
+      parts.every((p, i) => p === filter[i])
+    );
+
+  if (direct) {
+    // this is a fully-specified path
+    return resolveRelative('.', pathToFileURL(path.join(cwdPath, direct.path)).href);
+  }
+}
+
+export function resolve (specifier, context, nextResolve) {
+  const { parentURL = cwdURL } = context;
+
+  return (
+    resolveRegex(specifier, parentURL) ||
+    resolveRelative(specifier, parentURL) ||
+    resolvePackages(specifier, parentURL) ||
+    nextResolve(specifier, context)
+  );
 }
 
 export async function load (url, context, nextLoad) {
@@ -65,23 +120,27 @@ export async function load (url, context, nextLoad) {
     // used the chained loaders to retrieve
     const { source } = await nextLoad(url, { ...context, format: 'module' });
 
-    // compile - we can also use transformSync
-    const { code } = await transform(source.toString(), {
-      filename: fileURLToPath(url),
-      jsc: {
-        experimental: {
-          keepImportAssertions: true
-        },
-        target: 'es2020'
-      },
-      sourceMaps: 'inline'
-    });
-
     return {
       format: 'module',
-      source: code
+      source: await compile(url, source)
     };
   }
 
   return nextLoad(url, context);
+}
+
+async function compile (url, source) {
+  // compile - we can also use transformSync
+  const result = await transform(source.toString(), {
+    filename: fileURLToPath(url),
+    jsc: {
+      experimental: {
+        keepImportAssertions: true
+      },
+      target: 'es2020'
+    },
+    sourceMaps: 'inline'
+  });
+
+  return result.code;
 }
