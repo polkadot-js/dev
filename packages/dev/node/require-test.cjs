@@ -30,8 +30,8 @@ Object
 Object
   .entries({ describe, it })
   .forEach(([globalName, fn]) => {
-    const wrap = (opts) => (name, exec) => fn(name, opts, exec);
-    const each = (opts) => (arr) => (name, exec) => arr.forEach((v, i) => fn(name?.replace('%s', v.toString()).replace('%i', i.toString()), opts, exec?.(v, i)));
+    const wrap = (opts) => (text, exec) => fn(text, opts, exec);
+    const each = (opts) => (arr) => (text, exec) => arr.forEach((v, i) => fn(text?.replace('%s', v.toString()).replace('%i', i.toString()), opts, exec?.(v, i)));
     const globalFn = wrap({});
 
     globalFn.each = each({});
