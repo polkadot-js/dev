@@ -37,7 +37,11 @@
     "test:node": "polkadot-dev-run-node-test"
   },
   "devDependencies": {
-    "@polkadot/dev": "workspace:packages/dev"
+    "@polkadot/dev": "workspace:packages/dev",
+    "@types/jest": "^29.4.0",
+    "@types/node": "^18.13.0",
+    "@types/react": "^18.0.28",
+    "@types/yargs": "^17.0.22"
   },
   "resolutions": {
     "typescript": "^4.9.5"

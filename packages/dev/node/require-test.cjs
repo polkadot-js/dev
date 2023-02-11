@@ -14,11 +14,22 @@ const { after, afterEach, before, beforeEach, describe, it } = require('node:tes
 // just enough browser functionality for testing-library
 const dom = new JSDOM();
 
+// empty jest matcher (just allows us to indicate where we have gaps)
+function emptyExpect (pre) {
+  // logged via Object.keys(expect(0)).sort() (with 'not' dropped)
+  ['lastCalledWith', 'lastReturnedWith', 'nthCalledWith', 'nthReturnedWith', 'rejects', 'resolves', 'toBe', 'toBeCalled', 'toBeCalledTimes', 'toBeCalledWith', 'toBeCloseTo', 'toBeDefined', 'toBeFalsy', 'toBeGreaterThan', 'toBeGreaterThanOrEqual', 'toBeInstanceOf', 'toBeLessThan', 'toBeLessThanOrEqual', 'toBeNaN', 'toBeNull', 'toBeTruthy', 'toBeUndefined', 'toContain', 'toContainEqual', 'toEqual', 'toHaveBeenCalled', 'toHaveBeenCalledTimes', 'toHaveBeenCalledWith', 'toHaveBeenLastCalledWith', 'toHaveBeenNthCalledWith', 'toHaveLastReturnedWith', 'toHaveLength', 'toHaveNthReturnedWith', 'toHaveProperty', 'toHaveReturned', 'toHaveReturnedTimes', 'toHaveReturnedWith', 'toMatch', 'toMatchInlineSnapshot', 'toMatchObject', 'toMatchSnapshot', 'toReturn', 'toReturnTimes', 'toReturnWith', 'toStrictEqual', 'toThrow', 'toThrowError', 'toThrowErrorMatchingInlineSnapshot', 'toThrowErrorMatchingSnapshot'].reduce((all, key) => ({
+    ...all,
+    key: () => {
+      throw new Error(`expect(...)${pre ? `.${pre}` : ''}.${key}(...) not implemented`);
+    }
+  }), {});
+}
+
 // pin-point globals, i.e. available functions
 Object
   .entries(({
     // browser environment via JSDOM
-    ...{ document: dom.window.document, navigator: dom.window.navigator, window: dom.window },
+    ...['crypto', 'document', 'navigator'].reduce((env, k) => ({ ...env, [k]: dom.window[k] }), { window: dom.window }),
     // testing environment via node:test
     ...{ afterAll: after, afterEach, beforeAll: before, beforeEach }
   }))
@@ -30,8 +41,8 @@ Object
 Object
   .entries({ describe, it })
   .forEach(([globalName, fn]) => {
-    const wrap = (opts) => (name, ...args) => fn(name, opts, ...args);
-    const each = (opts) => (arr) => (name, exec) => arr.forEach((v) => fn(name?.replace('%s', v.toString()), opts, exec?.(v)));
+    const wrap = (opts) => (text, exec) => fn(text, opts, exec);
+    const each = (opts) => (arr) => (text, exec) => arr.forEach((v, i) => fn(text?.replace('%s', v.toString()).replace('%i', i.toString()), opts, exec?.(v, i)));
     const globalFn = wrap({});
 
     globalFn.each = each({});
@@ -46,7 +57,9 @@ Object
 
 // a poor-man's version of expect (ease of migration)
 globalThis.expect = (value) => ({
+  ...emptyExpect(),
   not: {
+    ...emptyExpect('not'),
     toBe: (other) => assert.notStrictEqual(value, other),
     toBeDefined: () => assert.equal(value, undefined),
     toBeFalsy: () => assert.ok(value),
