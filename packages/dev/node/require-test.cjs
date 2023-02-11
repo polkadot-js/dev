@@ -28,7 +28,7 @@ function createBrowser () {
 
   return {
     ...expose(dom.window),
-    windo: dom.window
+    window: dom.window
   };
 }
 
