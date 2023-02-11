@@ -19,8 +19,10 @@ function emptyExpect (pre) {
   // logged via Object.keys(expect(0)).sort() (with 'not' dropped)
   ['lastCalledWith', 'lastReturnedWith', 'nthCalledWith', 'nthReturnedWith', 'rejects', 'resolves', 'toBe', 'toBeCalled', 'toBeCalledTimes', 'toBeCalledWith', 'toBeCloseTo', 'toBeDefined', 'toBeFalsy', 'toBeGreaterThan', 'toBeGreaterThanOrEqual', 'toBeInstanceOf', 'toBeLessThan', 'toBeLessThanOrEqual', 'toBeNaN', 'toBeNull', 'toBeTruthy', 'toBeUndefined', 'toContain', 'toContainEqual', 'toEqual', 'toHaveBeenCalled', 'toHaveBeenCalledTimes', 'toHaveBeenCalledWith', 'toHaveBeenLastCalledWith', 'toHaveBeenNthCalledWith', 'toHaveLastReturnedWith', 'toHaveLength', 'toHaveNthReturnedWith', 'toHaveProperty', 'toHaveReturned', 'toHaveReturnedTimes', 'toHaveReturnedWith', 'toMatch', 'toMatchInlineSnapshot', 'toMatchObject', 'toMatchSnapshot', 'toReturn', 'toReturnTimes', 'toReturnWith', 'toStrictEqual', 'toThrow', 'toThrowError', 'toThrowErrorMatchingInlineSnapshot', 'toThrowErrorMatchingSnapshot'].reduce((all, key) => ({
     ...all,
-    key: () => { throw new Error(`expect(...)${pre ? `.${pre}` : ''}.${key}(...) not implemented`) }
-  }), {})
+    key: () => {
+      throw new Error(`expect(...)${pre ? `.${pre}` : ''}.${key}(...) not implemented`);
+    }
+  }), {});
 }
 
 // pin-point globals, i.e. available functions
