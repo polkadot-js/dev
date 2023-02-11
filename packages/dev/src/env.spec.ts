@@ -26,12 +26,20 @@ describe('testing environment', (): void => {
         expect(thrower).toThrow(/me er/);
       });
 
-      it('handles .not correctly (empty message)', (): void => {
+      it('handles .not correctly (no throw, empty message)', (): void => {
         expect(() => undefined).not.toThrow();
       });
 
-      it('handles .not correctly (regex match)', (): void => {
+      it('handles .not correctly (no throw, regex match)', (): void => {
         expect(() => undefined).not.toThrow(/me er/);
+      });
+
+      it('handles .not correctly (throw, string match)', (): void => {
+        expect(() => undefined).not.toThrow('no match');
+      });
+
+      it('handles .not correctly (throw, regex match)', (): void => {
+        expect(() => undefined).not.toThrow(/no match/);
       });
     });
   });
