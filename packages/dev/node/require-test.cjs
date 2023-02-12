@@ -77,7 +77,7 @@ function createJest () {
   const calledWith = (value, args) =>
     value?.mock?.calls.some((c) => {
       try {
-        assert.deepEqual(c.arguments, args);
+        assert.deepStrictEqual(c.arguments, args);
 
         return true;
       } catch {
@@ -111,7 +111,7 @@ function createJest () {
     toHaveBeenCalled: () => assert.ok(value?.mock?.calls.length),
     toHaveBeenCalledTimes: (n) => assert.equal(value?.mock?.calls.length, n),
     toHaveBeenCalledWith: (...args) => assert.ok(calledWith(value, args)),
-    toHaveBeenLastCalledWith: (...args) => assert.deepEqual(value?.mock?.calls[value?.mock?.calls.length - 1].arguments, args),
+    toHaveBeenLastCalledWith: (...args) => assert.deepStrictEqual(value?.mock?.calls[value?.mock?.calls.length - 1].arguments, args),
     toHaveLength: (n) => assert.equal(value?.length, n),
     toThrow: (message) => assert.throws(value, message && { message })
   });
