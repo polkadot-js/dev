@@ -16,7 +16,11 @@ const filters = [];
 for (let i = 0; i < args.length; i++) {
   if (args[i].startsWith('-')) {
     cmd.push(args[i]);
-    cmd.push(args[++i]);
+
+    // for --<param> we only skip when no = is contained
+    if (!args[i].startsWith('--') || !args[i].includes('=')) {
+      cmd.push(args[++i]);
+    }
   } else {
     filters.push(args[i].split(/[\\/]/));
   }

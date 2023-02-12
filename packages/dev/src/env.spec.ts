@@ -43,4 +43,59 @@ describe('testing environment', (): void => {
       });
     });
   });
+
+  describe('describe', (): void => {
+    describe.only('.only', (): void => {
+      it('runs this one', (): void => {
+        expect(true).toBe(true);
+      });
+    });
+
+    // does not work as expected...
+    // describe('.only (none)', (): void => {
+    //   it('skips alongside .only', (): void => {
+    //     throw new Error('FATAL: This should not run');
+    //   });
+    // });
+
+    describe.skip('.only (.skip)', (): void => {
+      it('skips inside .only', (): void => {
+        throw new Error('FATAL: This should not run');
+      });
+    });
+  });
+
+  describe('it', (): void => {
+    describe('.each', (): void => {
+      it.each(['first', 'second', 'third'])('p formatter :: %p', (v): void => {
+        expect(v).toBeDefined();
+      });
+    });
+
+    describe('.only', (): void => {
+      // does not work as expected
+      // it('skips alongside .only', (): void => {
+      //   throw new Error('FATAL: This should not run');
+      // });
+
+      it.only('runs this test when .only is used', (): void => {
+        expect(true).toBe(true);
+      });
+
+      it.skip('skips when .skip is used', (): void => {
+        throw new Error('FATAL: This should not run');
+      });
+
+      // Ummm... this doesn't match my expectation for actually passing...
+      // it.todo('skips when .todo is used', (): void => {
+      //   throw new Error('FATAL: This should not run');
+      // });
+    });
+
+    describe('.skip', (): void => {
+      it.skip('skips when .skip is used', (): void => {
+        throw new Error('FATAL: This should not run');
+      });
+    });
+  });
 });
