@@ -9,7 +9,7 @@
 
 const { JSDOM } = require('jsdom');
 const assert = require('node:assert/strict');
-const { after, afterEach, before, beforeEach, describe, it } = require('node:test');
+const { after, afterEach, before, beforeEach, describe, it, mock } = require('node:test');
 
 /** @internal helper to create an umplemented error throw on use */
 function unimplemented (name, key, post) {
@@ -68,10 +68,58 @@ function createJest () {
     ...env,
     key: unimplemented('expect(...)', key, post)
   }), {});
+
   const emptyJest = () => ['advanceTimersByTime', 'advanceTimersToNextTimer', 'autoMockOff', 'autoMockOn', 'clearAllMocks', 'clearAllTimers', 'createMockFromModule', 'deepUnmock', 'disableAutomock', 'doMock', 'dontMock', 'enableAutomock', 'fn', 'genMockFromModule', 'getRealSystemTime', 'getSeed', 'getTimerCount', 'isEnvironmentTornDown', 'isMockFunction', 'isolateModules', 'isolateModulesAsync', 'mock', 'mocked', 'now', 'replaceProperty', 'requireActual', 'requireMock', 'resetAllMocks', 'resetModules', 'restoreAllMocks', 'retryTimes', 'runAllImmediates', 'runAllTicks', 'runAllTimers', 'runOnlyPendingTimers', 'setMock', 'setSystemTime', 'setTimeout', 'spyOn', 'unmock', 'unstable_mockModule', 'useFakeTimers', 'useRealTimers'].reduce((env, key) => ({
     ...env,
     key: unimplemented('jest', key)
   }), {});
+
+  const calledWith = (value, args) =>
+    value?.mock?.calls.some((c) => {
+      try {
+        assert.deepEqual(c.arguments, args);
+
+        return true;
+      } catch {
+        console.error('not called with', args, c.arguments);
+
+        return false;
+      }
+    });
+
+  const expect = (value) => ({
+    ...emptyMatchers(),
+    not: {
+      ...emptyMatchers('not'),
+      toBe: (other) => assert.notStrictEqual(value, other),
+      toBeDefined: () => assert.equal(value, undefined),
+      toBeFalsy: () => assert.ok(value),
+      toBeTruthy: () => assert.ok(!value),
+      toEqual: (b) => assert.notDeepEqual(value, b),
+      toHaveBeenCalled: () => assert.ok(!value?.mock?.calls.length),
+      toHaveBeenCalledTimes: (n) => assert.notEqual(value?.mock?.calls.length, n),
+      toHaveBeenCalledWith: (...args) => assert.ok(!calledWith(value, args)),
+      toHaveBeenLastCalledWith: (...args) => assert.notDeepEqual(value?.mock?.calls[value?.mock?.calls.length - 1].arguments, args),
+      toHaveLength: (n) => assert.notEqual(value?.length, n),
+      toThrow: (message) => assert.doesNotThrow(value, message && { message })
+    },
+    toBe: (other) => assert.strictEqual(value, other),
+    toBeDefined: () => assert.notEqual(value, undefined),
+    toBeFalsy: () => assert.ok(!value),
+    toBeTruthy: () => assert.ok(value),
+    toEqual: (b) => assert.deepEqual(value, b),
+    toHaveBeenCalled: () => assert.ok(value?.mock?.calls.length),
+    toHaveBeenCalledTimes: (n) => assert.equal(value?.mock?.calls.length, n),
+    toHaveBeenCalledWith: (...args) => assert.ok(calledWith(value, args)),
+    toHaveBeenLastCalledWith: (...args) => assert.deepEqual(value?.mock?.calls[value?.mock?.calls.length - 1].arguments, args),
+    toHaveLength: (n) => assert.equal(value?.length, n),
+    toThrow: (message) => assert.throws(value, message && { message })
+  });
+
+  const jest = {
+    ...emptyJest(),
+    fn: (fn) => mock.fn(fn)
+  };
 
   // map describe/it behavior to node:test
   return {
@@ -79,27 +127,8 @@ function createJest () {
     afterEach,
     beforeAll: before,
     beforeEach,
-    expect: (value) => ({
-      ...emptyMatchers(),
-      not: {
-        ...emptyMatchers('not'),
-        toBe: (other) => assert.notStrictEqual(value, other),
-        toBeDefined: () => assert.equal(value, undefined),
-        toBeFalsy: () => assert.ok(value),
-        toBeTruthy: () => assert.ok(!value),
-        toEqual: (other) => assert.notDeepEqual(value, other),
-        toHaveLength: (length) => assert.notEqual(value.length, length),
-        toThrow: (message) => assert.doesNotThrow(value, message && { message })
-      },
-      toBe: (other) => assert.strictEqual(value, other),
-      toBeDefined: () => assert.notEqual(value, undefined),
-      toBeFalsy: () => assert.ok(!value),
-      toBeTruthy: () => assert.ok(value),
-      toEqual: (other) => assert.deepEqual(value, other),
-      toHaveLength: (length) => assert.equal(value.length, length),
-      toThrow: (message) => assert.throws(value, message && { message })
-    }),
-    jest: { ...emptyJest() }
+    expect,
+    jest
   };
 }
 

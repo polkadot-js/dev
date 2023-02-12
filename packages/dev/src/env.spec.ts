@@ -98,4 +98,40 @@ describe('testing environment', (): void => {
       });
     });
   });
+
+  describe('jest', (): void => {
+    describe('.fn', (): void => {
+      it('works on .toHaveBeenCalled', (): void => {
+        const mock = jest.fn(() => 3);
+
+        expect(mock).not.toHaveBeenCalled();
+        expect(mock()).toBe(3);
+        expect(mock).toHaveBeenCalled();
+      });
+
+      it('works on .toHaveBeenCalledTimes', (): void => {
+        const mock = jest.fn(() => 3);
+
+        expect(mock()).toBe(3);
+        expect(mock()).toBe(3);
+
+        expect(mock).not.toHaveBeenCalledTimes(1);
+        expect(mock).toHaveBeenCalledTimes(2);
+      });
+
+      it('works with .toHaveBeenCalledWith', (): void => {
+        const sum = jest.fn((a: number, b: number) => a + b);
+
+        expect(sum(1, 2)).toBe(3);
+
+        expect(sum).toHaveBeenCalledWith(1, 2);
+
+        expect(sum(2, 3)).toBe(5);
+        expect(sum(4, 5)).toBe(9);
+
+        expect(sum).toHaveBeenCalledWith(2, 3);
+        expect(sum).toHaveBeenLastCalledWith(4, 5);
+      });
+    });
+  });
 });
