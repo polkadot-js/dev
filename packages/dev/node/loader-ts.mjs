@@ -12,10 +12,11 @@ import { fileURLToPath, pathToFileURL, URL } from 'node:url';
 
 const cwdPath = process.cwd();
 const cwdUrl = pathToFileURL(cwdPath).href;
-const extensionsRegex = /\.ts$|\.tsx$/;
+const extensionsRegex = /\.tsx?$/;
 const extensions = ['.ts', '.tsx'];
 const tsAlias = getTsAliases();
 
+/** @internal Resolve fully-specified imports with extensions */
 function resolveExtension (specifier, parentUrl) {
   // handle .ts extensions directly
   if (extensionsRegex.test(specifier)) {
@@ -27,34 +28,38 @@ function resolveExtension (specifier, parentUrl) {
   }
 }
 
+/** @internal Resolve (extensionless) relative paths */
 function resolveRelative (specifier, parentUrl) {
   // handle ./<extensionLess>
   if (specifier.startsWith('.')) {
-    const fil = fileURLToPath(parentUrl);
-    const dir = path.dirname(fil);
-    const extIdx = extensions.map((e) => `index${e}`);
-    const extSpe = extensions.map((e) => `${specifier}${e}`);
-    const extDir = extensions.map((e) => `${specifier}/index${e}`);
-    const extUrl = extensions.map((e) => `${fil}${e}`);
-    const found = (
-      specifier === '.' && (
+    const full = fileURLToPath(parentUrl);
+    const dir = fs.existsSync(full) && fs.lstatSync(full).isDirectory()
+      ? full
+      : path.dirname(full);
+    const found = specifier === '.'
+      ? (
         // handle . imports for directories
-        extIdx.map((f) => path.join(dir, f)).find((f) => fs.existsSync(f)) ||
-        extIdx.map((f) => path.join(fil, f)).find((f) => fs.existsSync(f)) ||
+        extensions
+          .map((e) => `index${e}`)
+          .map((f) => path.join(dir, f))
+          .find((f) => fs.existsSync(f)) ||
         // handle the case where parentUrl needs an extension
-        extUrl.find((f) => fs.existsSync(f))
+        extensions
+          .map((e) => `${full}${e}`)
+          .find((f) => fs.existsSync(f))
       )
-    ) ||
-    (
-      // tests to see if this is a file (without extension)
-      extSpe.map((f) => path.join(dir, f)).find((f) => fs.existsSync(f)) ||
-      extSpe.map((f) => path.join(fil, f)).find((f) => fs.existsSync(f))
-    ) ||
-    (
-      // test to see if this is a directory
-      extDir.map((f) => path.join(dir, f)).find((f) => fs.existsSync(f)) ||
-      extDir.map((f) => path.join(fil, f)).find((f) => fs.existsSync(f))
-    );
+      : (
+        // tests to see if this is a file (without extension)
+        extensions
+          .map((e) => `${specifier}${e}`)
+          .map((f) => path.join(dir, f))
+          .find((f) => fs.existsSync(f)) ||
+        // test to see if this is a directory
+        extensions
+          .map((e) => `${specifier}/index${e}`)
+          .map((f) => path.join(dir, f))
+          .find((f) => fs.existsSync(f))
+      );
 
     if (found) {
       return {
@@ -66,6 +71,7 @@ function resolveRelative (specifier, parentUrl) {
   }
 }
 
+/** @internal Resolve TS aliase mappings */
 function resolveAliases (specifier) {
   const parts = specifier.split(/[\\/]/);
   const entry = tsAlias
@@ -102,6 +108,7 @@ function resolveAliases (specifier) {
   }
 }
 
+/** @summary Try and perform a resolve */
 export function resolve (specifier, context, nextResolve) {
   const parentUrl = context.parentURL || cwdUrl;
 
@@ -113,6 +120,7 @@ export function resolve (specifier, context, nextResolve) {
   );
 }
 
+/** @summary Load TS files, compiling via swc */
 export async function load (url, context, nextLoad) {
   if (extensionsRegex.test(url)) {
     // used the chained loaders to retrieve
@@ -138,7 +146,7 @@ export async function load (url, context, nextLoad) {
   return nextLoad(url, context);
 }
 
-// fills in a tsconfig, taking the extends into account
+/** @internal Extracts the (relevant) tsconfig info, also using extends */
 function readTsConfig (currentPath = cwdPath, tsconfig = 'tsconfig.json') {
   const configPath = path.join(currentPath, tsconfig);
 
@@ -167,7 +175,7 @@ function readTsConfig (currentPath = cwdPath, tsconfig = 'tsconfig.json') {
   }
 }
 
-// retrieves all ts aliases
+/** @internal Retrieves all TS aliases definitions */
 function getTsAliases () {
   const { basePath, paths } = readTsConfig();
 
@@ -190,7 +198,7 @@ function getTsAliases () {
         );
 
         if (pathErr) {
-          throw new Error(`FATAL: Wildcards in tsconfig.json path entries are only supported in the last position. Found a ${pathErr} mapping`);
+          throw new Error(`FATAL: Wildcards in tsconfig.json path entries are only supported in the last position. Invalid ${key}: ${value} mapping`);
         }
 
         return {
