@@ -6,30 +6,20 @@
 //
 // NOTE: node --require only works with commonjs files, hence using it here
 // NOTE: --import was added in Node 19 that would simplify, but too early
+// NOTE: Yes, these are messy
 
 const { JSDOM } = require('jsdom');
 const assert = require('node:assert/strict');
-const { after, afterEach, before, beforeEach, describe, it, mock } = require('node:test');
-
-/** @internal helper to create an umplemented error throw on use */
-function unimplemented (name, key, post) {
-  return () => {
-    throw new Error(`${name}.${post ? `.${post}` : ''}.${key}(...) has not been implemented`);
-  };
-}
+const { after: afterAll, afterEach, before: beforeAll, beforeEach, describe, it, mock } = require('node:test');
 
 /** @internal just enough browser functionality for testing-library */
 function createBrowser () {
-  const dom = new JSDOM();
   const expose = (window) => ['crypto', 'document', 'navigator'].reduce((env, key) => ({
     ...env,
     [key]: window[key]
-  }), {});
+  }), { window });
 
-  return {
-    ...expose(dom.window),
-    window: dom.window
-  };
+  return expose(new JSDOM().window);
 }
 
 /** @internal adjust dewscribe/it to make it jest-like */
@@ -41,7 +31,7 @@ function createSuite () {
       const each = (opts) => (arr) => (text, exec) => arr.forEach((v, i) => fn(text?.replace('%s', v.toString()).replace('%i', i.toString()).replace('%p', JSON.stringify(v)), opts, exec?.(v, i)));
       const globalFn = wrap({});
 
-      // unlike only/skip/todo these are a jest-only exptension
+      // unlike only/skip/todo these are a jest-only extension
       globalFn.each = each({});
 
       // These are the real reason we have this wrapping - however they
@@ -63,10 +53,14 @@ function createSuite () {
 
 /** @internal sets up the full test environment */
 function createJest () {
+  const unimplemented = (name, key) => () => {
+    throw new Error(`${name}.${key}(...) has not been implemented`);
+  };
+
   // logged via Object.keys(expect(0)).sort() (with 'not' dropped)
-  const emptyMatchers = (post) => ['lastCalledWith', 'lastReturnedWith', 'nthCalledWith', 'nthReturnedWith', 'rejects', 'resolves', 'toBe', 'toBeCalled', 'toBeCalledTimes', 'toBeCalledWith', 'toBeCloseTo', 'toBeDefined', 'toBeFalsy', 'toBeGreaterThan', 'toBeGreaterThanOrEqual', 'toBeInstanceOf', 'toBeLessThan', 'toBeLessThanOrEqual', 'toBeNaN', 'toBeNull', 'toBeTruthy', 'toBeUndefined', 'toContain', 'toContainEqual', 'toEqual', 'toHaveBeenCalled', 'toHaveBeenCalledTimes', 'toHaveBeenCalledWith', 'toHaveBeenLastCalledWith', 'toHaveBeenNthCalledWith', 'toHaveLastReturnedWith', 'toHaveLength', 'toHaveNthReturnedWith', 'toHaveProperty', 'toHaveReturned', 'toHaveReturnedTimes', 'toHaveReturnedWith', 'toMatch', 'toMatchInlineSnapshot', 'toMatchObject', 'toMatchSnapshot', 'toReturn', 'toReturnTimes', 'toReturnWith', 'toStrictEqual', 'toThrow', 'toThrowError', 'toThrowErrorMatchingInlineSnapshot', 'toThrowErrorMatchingSnapshot'].reduce((env, key) => ({
+  const emptyMatchers = (extra) => ['lastCalledWith', 'lastReturnedWith', 'nthCalledWith', 'nthReturnedWith', 'rejects', 'resolves', 'toBe', 'toBeCalled', 'toBeCalledTimes', 'toBeCalledWith', 'toBeCloseTo', 'toBeDefined', 'toBeFalsy', 'toBeGreaterThan', 'toBeGreaterThanOrEqual', 'toBeInstanceOf', 'toBeLessThan', 'toBeLessThanOrEqual', 'toBeNaN', 'toBeNull', 'toBeTruthy', 'toBeUndefined', 'toContain', 'toContainEqual', 'toEqual', 'toHaveBeenCalled', 'toHaveBeenCalledTimes', 'toHaveBeenCalledWith', 'toHaveBeenLastCalledWith', 'toHaveBeenNthCalledWith', 'toHaveLastReturnedWith', 'toHaveLength', 'toHaveNthReturnedWith', 'toHaveProperty', 'toHaveReturned', 'toHaveReturnedTimes', 'toHaveReturnedWith', 'toMatch', 'toMatchInlineSnapshot', 'toMatchObject', 'toMatchSnapshot', 'toReturn', 'toReturnTimes', 'toReturnWith', 'toStrictEqual', 'toThrow', 'toThrowError', 'toThrowErrorMatchingInlineSnapshot', 'toThrowErrorMatchingSnapshot'].reduce((env, key) => ({
     ...env,
-    key: unimplemented('expect(...)', key, post)
+    key: unimplemented(`expect(...)${extra}`, key)
   }), {});
 
   const emptyJest = () => ['advanceTimersByTime', 'advanceTimersToNextTimer', 'autoMockOff', 'autoMockOn', 'clearAllMocks', 'clearAllTimers', 'createMockFromModule', 'deepUnmock', 'disableAutomock', 'doMock', 'dontMock', 'enableAutomock', 'fn', 'genMockFromModule', 'getRealSystemTime', 'getSeed', 'getTimerCount', 'isEnvironmentTornDown', 'isMockFunction', 'isolateModules', 'isolateModulesAsync', 'mock', 'mocked', 'now', 'replaceProperty', 'requireActual', 'requireMock', 'resetAllMocks', 'resetModules', 'restoreAllMocks', 'retryTimes', 'runAllImmediates', 'runAllTicks', 'runAllTimers', 'runOnlyPendingTimers', 'setMock', 'setSystemTime', 'setTimeout', 'spyOn', 'unmock', 'unstable_mockModule', 'useFakeTimers', 'useRealTimers'].reduce((env, key) => ({
@@ -81,64 +75,58 @@ function createJest () {
 
         return true;
       } catch {
-        console.error('not called with', args, c.arguments);
-
         return false;
       }
-    });
-
-  const expect = (value) => ({
-    ...emptyMatchers(),
-    not: {
-      ...emptyMatchers('not'),
-      toBe: (other) => assert.notStrictEqual(value, other),
-      toBeDefined: () => assert.equal(value, undefined),
-      toBeFalsy: () => assert.ok(value),
-      toBeTruthy: () => assert.ok(!value),
-      toEqual: (b) => assert.notDeepEqual(value, b),
-      toHaveBeenCalled: () => assert.ok(!value?.mock?.calls.length),
-      toHaveBeenCalledTimes: (n) => assert.notEqual(value?.mock?.calls.length, n),
-      toHaveBeenCalledWith: (...args) => assert.ok(!calledWith(value, args)),
-      toHaveBeenLastCalledWith: (...args) => assert.notDeepEqual(value?.mock?.calls[value?.mock?.calls.length - 1].arguments, args),
-      toHaveLength: (n) => assert.notEqual(value?.length, n),
-      toThrow: (message) => assert.doesNotThrow(value, message && { message })
-    },
-    toBe: (other) => assert.strictEqual(value, other),
-    toBeDefined: () => assert.notEqual(value, undefined),
-    toBeFalsy: () => assert.ok(!value),
-    toBeTruthy: () => assert.ok(value),
-    toEqual: (b) => assert.deepEqual(value, b),
-    toHaveBeenCalled: () => assert.ok(value?.mock?.calls.length),
-    toHaveBeenCalledTimes: (n) => assert.equal(value?.mock?.calls.length, n),
-    toHaveBeenCalledWith: (...args) => assert.ok(calledWith(value, args)),
-    toHaveBeenLastCalledWith: (...args) => assert.deepStrictEqual(value?.mock?.calls[value?.mock?.calls.length - 1].arguments, args),
-    toHaveLength: (n) => assert.equal(value?.length, n),
-    toThrow: (message) => assert.throws(value, message && { message })
-  });
-
-  const jest = {
-    ...emptyJest(),
-    fn: (fn) => mock.fn(fn)
-  };
+    }) || false;
 
   // map describe/it behavior to node:test
   return {
-    afterAll: after,
+    afterAll,
     afterEach,
-    beforeAll: before,
+    beforeAll,
     beforeEach,
-    expect,
-    jest
+    expect: (value) => ({
+      ...emptyMatchers(),
+      not: {
+        ...emptyMatchers('.not'),
+        toBe: (other) => assert.notStrictEqual(value, other),
+        toBeDefined: () => assert.equal(value, undefined),
+        toBeFalsy: () => assert.ok(value),
+        toBeTruthy: () => assert.ok(!value),
+        toEqual: (b) => assert.notDeepEqual(value, b),
+        toHaveBeenCalled: () => assert.ok(!value?.mock?.calls.length),
+        toHaveBeenCalledTimes: (n) => assert.notEqual(value?.mock?.calls.length, n),
+        toHaveBeenCalledWith: (...args) => assert.ok(!calledWith(value, args)),
+        toHaveBeenLastCalledWith: (...args) => assert.notDeepEqual(value?.mock?.calls[value?.mock?.calls.length - 1].arguments, args),
+        toHaveLength: (n) => assert.notEqual(value?.length, n),
+        toThrow: (message) => assert.doesNotThrow(value, message && { message })
+      },
+      toBe: (other) => assert.strictEqual(value, other),
+      toBeDefined: () => assert.notEqual(value, undefined),
+      toBeFalsy: () => assert.ok(!value),
+      toBeTruthy: () => assert.ok(value),
+      toEqual: (b) => assert.deepEqual(value, b),
+      toHaveBeenCalled: () => assert.ok(value?.mock?.calls.length),
+      toHaveBeenCalledTimes: (n) => assert.equal(value?.mock?.calls.length, n),
+      toHaveBeenCalledWith: (...args) => assert.ok(calledWith(value, args)),
+      toHaveBeenLastCalledWith: (...args) => assert.deepStrictEqual(value?.mock?.calls[value?.mock?.calls.length - 1].arguments, args),
+      toHaveLength: (n) => assert.equal(value?.length, n),
+      toThrow: (message) => assert.throws(value, message && { message })
+    }),
+    jest: {
+      ...emptyJest(),
+      fn: (fn) => mock.fn(fn)
+    }
   };
 }
 
 // create all globals for a jest-like env
 Object
-  .entries(({
+  .entries({
     ...createBrowser(),
     ...createSuite(),
     ...createJest()
-  }))
+  })
   .forEach(([globalName, fn]) => {
     global[globalName] = fn;
   });
