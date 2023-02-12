@@ -29,7 +29,7 @@ for (let i = 0; i < args.length; i++) {
 const files = readdirSync('packages', EXTS).filter((f) => {
   const parts = f.split(/[\\/]/);
 
-  if (!parts.some((p) => p === 'src')) {
+  if (parts.some((p) => p === 'build' || p.startsWith('build-'))) {
     return false;
   } else if (filters.length) {
     return filters.some((filter) =>
