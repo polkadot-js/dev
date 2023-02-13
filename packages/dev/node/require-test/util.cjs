@@ -2,12 +2,24 @@
 // SPDX-License-Identifier: Apache-2.0
 
 /**
- * A simple helper to indicate unimplemented functionality
+ * Extends a given object with the named functions if they do not
+ * already exist on the object.
+ *
+ * @param {string} objName - The name of the top-level object
+ * @param {string[]} keys - The keys that we are adding
+ * @param {Record<string, (...args: unknown[]) => unknown>} obj
+ * @returns {Record<string, (...args: unknown[]) => unknown>}
  */
-function unimplemented (name, key) {
-  return () => {
-    throw new Error(`${name}.${key}(...) has not been implemented`);
-  };
+function unimplemented (objName, keys, obj) {
+  keys.forEach((key) => {
+    if (!obj[key]) {
+      obj[key] = () => {
+        throw new Error(`${objName}.${key}(...) has not been implemented`);
+      };
+    }
+  });
+
+  return obj;
 }
 
 module.exports = { unimplemented };

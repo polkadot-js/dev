@@ -6,27 +6,16 @@ const { mock } = require('node:test');
 const { unimplemented } = require('./util.cjs');
 
 // logged via Object.keys(jest).sort()
-const KEYS = ['advanceTimersByTime', 'advanceTimersToNextTimer', 'autoMockOff', 'autoMockOn', 'clearAllMocks', 'clearAllTimers', 'createMockFromModule', 'deepUnmock', 'disableAutomock', 'doMock', 'dontMock', 'enableAutomock', 'fn', 'genMockFromModule', 'getRealSystemTime', 'getSeed', 'getTimerCount', 'isEnvironmentTornDown', 'isMockFunction', 'isolateModules', 'isolateModulesAsync', 'mock', 'mocked', 'now', 'replaceProperty', 'requireActual', 'requireMock', 'resetAllMocks', 'resetModules', 'restoreAllMocks', 'retryTimes', 'runAllImmediates', 'runAllTicks', 'runAllTimers', 'runOnlyPendingTimers', 'setMock', 'setSystemTime', 'setTimeout', 'spyOn', 'unmock', 'unstable_mockModule', 'useFakeTimers', 'useRealTimers'];
-
-/**
- * @internal
- *
- * Creates an empty jest object with all unimplemented values. This allows
- * us to throw and detect areas where we probably need to extend. (Since we
- * are not comprehensive)
- */
-function empty () {
-  return KEYS.reduce((env, key) => ({
-    ...env,
-    key: unimplemented('jest', key)
-  }), {});
-}
+const ALL_KEYS = ['advanceTimersByTime', 'advanceTimersToNextTimer', 'autoMockOff', 'autoMockOn', 'clearAllMocks', 'clearAllTimers', 'createMockFromModule', 'deepUnmock', 'disableAutomock', 'doMock', 'dontMock', 'enableAutomock', 'fn', 'genMockFromModule', 'getRealSystemTime', 'getSeed', 'getTimerCount', 'isEnvironmentTornDown', 'isMockFunction', 'isolateModules', 'isolateModulesAsync', 'mock', 'mocked', 'now', 'replaceProperty', 'requireActual', 'requireMock', 'resetAllMocks', 'resetModules', 'restoreAllMocks', 'retryTimes', 'runAllImmediates', 'runAllTicks', 'runAllTimers', 'runOnlyPendingTimers', 'setMock', 'setSystemTime', 'setTimeout', 'spyOn', 'unmock', 'unstable_mockModule', 'useFakeTimers', 'useRealTimers'];
 
 /**
  * @internal
  *
  * This adds the mockRest and mockRestore functionality to any
  * spy or mock function
+ *
+ * @param {(...args: unknown[]) => unknown} spy
+ * @returns {(...args: unknown[]) => unknown}
  **/
 function extendMock (spy) {
   spy.mockReset = () => spy.mock.resetCalls();
@@ -42,12 +31,11 @@ function extendMock (spy) {
  **/
 function getJestKeys () {
   return {
-    jest: {
-      ...empty(),
+    jest: unimplemented('jest', ALL_KEYS, {
       fn: (fn) => extendMock(mock.fn(fn)),
       restoreAllMocks: () => mock.reset(),
       spyOn: (obj, key) => extendMock(mock.method(obj, key))
-    }
+    })
   };
 }
 
