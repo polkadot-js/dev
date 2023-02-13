@@ -4,8 +4,6 @@
 const { JSDOM } = require('jsdom');
 
 /**
- * @internal
- *
  * Export a very basic JSDom environment - this is just enough so we have
  * @testing-environment/react tests passing in this repo
  *
@@ -13,18 +11,13 @@ const { JSDOM } = require('jsdom');
  * we need some flag to be passed through into the environment to
  * enable it. As it stands it appears on all usages
  */
-function expose (window) {
+function getBrowserKeys () {
+  const { window } = new JSDOM();
+
   return ['crypto', 'document', 'navigator'].reduce((env, key) => ({
     ...env,
     [key]: window[key]
   }), { window });
-}
-
-/**
- * Expose the required browser keys, as extracted from a JSDOM instance
- */
-function getBrowserKeys () {
-  return expose(new JSDOM().window);
 }
 
 module.exports = { getBrowserKeys };

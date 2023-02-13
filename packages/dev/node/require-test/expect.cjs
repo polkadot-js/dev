@@ -45,7 +45,7 @@ function isCalledWith (value, args) {
  *
  * Decorates the expect.not.to* functions with the shim values
  */
-function createToNot (value) {
+function createExpectNotTo (value) {
   return {
     ...empty('.not'),
     toBe: (other) => assert.notStrictEqual(value, other),
@@ -67,7 +67,7 @@ function createToNot (value) {
  *
  * Decorates the expect.to* functions with the shim values
  */
-function createTo (value) {
+function createExpectTo (value) {
   return {
     ...empty(),
     toBe: (other) => assert.strictEqual(value, other),
@@ -90,11 +90,10 @@ function createTo (value) {
  * make all polkadot-js usages pass
  **/
 function getExpectKeys () {
-  // map describe/it behavior to node:test
   return {
     expect: (value) => ({
-      ...createTo(value),
-      not: createToNot(value)
+      ...createExpectTo(value),
+      not: createExpectNotTo(value)
     })
   };
 }
