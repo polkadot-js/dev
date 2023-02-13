@@ -1,4 +1,4 @@
-    1149	Jaco                          	Exclude build-* directories for test matching (#899)
+    1150	Jaco                          	Adjust export map build (incl. test-env updates) (#900)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
