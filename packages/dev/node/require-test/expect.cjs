@@ -3,7 +3,7 @@
 
 const assert = require('node:assert/strict');
 
-const { unimplementedObj } = require('./util.cjs');
+const { unimplemented } = require('./util.cjs');
 
 // logged via Object.keys(expect(0)).sort()
 const ALL_KEYS = ['lastCalledWith', 'lastReturnedWith', 'not', 'nthCalledWith', 'nthReturnedWith', 'rejects', 'resolves', 'toBe', 'toBeCalled', 'toBeCalledTimes', 'toBeCalledWith', 'toBeCloseTo', 'toBeDefined', 'toBeFalsy', 'toBeGreaterThan', 'toBeGreaterThanOrEqual', 'toBeInstanceOf', 'toBeLessThan', 'toBeLessThanOrEqual', 'toBeNaN', 'toBeNull', 'toBeTruthy', 'toBeUndefined', 'toContain', 'toContainEqual', 'toEqual', 'toHaveBeenCalled', 'toHaveBeenCalledTimes', 'toHaveBeenCalledWith', 'toHaveBeenLastCalledWith', 'toHaveBeenNthCalledWith', 'toHaveLastReturnedWith', 'toHaveLength', 'toHaveNthReturnedWith', 'toHaveProperty', 'toHaveReturned', 'toHaveReturnedTimes', 'toHaveReturnedWith', 'toMatch', 'toMatchInlineSnapshot', 'toMatchObject', 'toMatchSnapshot', 'toReturn', 'toReturnTimes', 'toReturnWith', 'toStrictEqual', 'toThrow', 'toThrowError', 'toThrowErrorMatchingInlineSnapshot', 'toThrowErrorMatchingSnapshot'];
@@ -32,7 +32,7 @@ function isCalledWith (value, args) {
  * Decorates the expect.not.to* functions with the shim values
  */
 function createExpectNotTo (value) {
-  return unimplementedObj('expect(...).not', ALL_KEYS, {
+  return unimplemented('expect(...).not', ALL_KEYS, {
     toBe: (other) => assert.notStrictEqual(value, other),
     toBeDefined: () => assert.equal(value, undefined),
     toBeFalsy: () => assert.ok(value),
@@ -53,7 +53,7 @@ function createExpectNotTo (value) {
  * Decorates the expect.to* functions with the shim values
  */
 function createExpectTo (value) {
-  return unimplementedObj('expect(...)', ALL_KEYS, {
+  return unimplemented('expect(...)', ALL_KEYS, {
     toBe: (other) => assert.strictEqual(value, other),
     toBeDefined: () => assert.notEqual(value, undefined),
     toBeFalsy: () => assert.ok(!value),

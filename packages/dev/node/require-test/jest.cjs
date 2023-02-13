@@ -3,7 +3,7 @@
 
 const { mock } = require('node:test');
 
-const { unimplementedObj } = require('./util.cjs');
+const { unimplemented } = require('./util.cjs');
 
 // logged via Object.keys(jest).sort()
 const ALL_KEYS = ['advanceTimersByTime', 'advanceTimersToNextTimer', 'autoMockOff', 'autoMockOn', 'clearAllMocks', 'clearAllTimers', 'createMockFromModule', 'deepUnmock', 'disableAutomock', 'doMock', 'dontMock', 'enableAutomock', 'fn', 'genMockFromModule', 'getRealSystemTime', 'getSeed', 'getTimerCount', 'isEnvironmentTornDown', 'isMockFunction', 'isolateModules', 'isolateModulesAsync', 'mock', 'mocked', 'now', 'replaceProperty', 'requireActual', 'requireMock', 'resetAllMocks', 'resetModules', 'restoreAllMocks', 'retryTimes', 'runAllImmediates', 'runAllTicks', 'runAllTimers', 'runOnlyPendingTimers', 'setMock', 'setSystemTime', 'setTimeout', 'spyOn', 'unmock', 'unstable_mockModule', 'useFakeTimers', 'useRealTimers'];
@@ -31,7 +31,7 @@ function extendMock (spy) {
  **/
 function getJestKeys () {
   return {
-    jest: unimplementedObj('jest', ALL_KEYS, {
+    jest: unimplemented('jest', ALL_KEYS, {
       fn: (fn) => extendMock(mock.fn(fn)),
       restoreAllMocks: () => mock.reset(),
       spyOn: (obj, key) => extendMock(mock.method(obj, key))
