@@ -88,8 +88,6 @@ function anyCallHasArgs (value, args) {
     try {
       return singleCallHasArgs(args, call);
     } catch (error) {
-      console.error(error);
-
       return false;
     }
   }) || false;

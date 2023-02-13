@@ -4,6 +4,7 @@
 /**
  * @typedef {(...args: unknown[]) => unknown} BaseFn
  * @typedef {Record<string, unknown>} BaseObj
+ * @typedef {Record<string, BaseFn>} EnhancedObj
  */
 
 /**
@@ -12,7 +13,7 @@
  *
  * @param {BaseObj | BaseFn} obj
  * @param {BaseObj} add
- * @returns
+ * @returns {EnhancedObj}
  */
 function enhance (obj, add) {
   Object
@@ -31,7 +32,7 @@ function enhance (obj, add) {
  * @param {string} objName - The name of the top-level object
  * @param {string[]} keys - The keys that we are adding
  * @param {BaseObj | BaseFn} obj
- * @returns {Record<string, BaseFn>}
+ * @returns {EnhancedObj}
  */
 function unimplemented (objName, keys, obj) {
   keys.forEach((key) => {
