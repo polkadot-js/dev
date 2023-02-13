@@ -42,6 +42,26 @@ describe('testing environment', (): void => {
         expect(() => undefined).not.toThrow(/no match/);
       });
     });
+
+    describe('.toMatchObject', (): void => {
+      it('matches empty object', (): void => {
+        expect({
+          a: 'foo',
+          b: 'bar'
+        }).toMatchObject({});
+      });
+
+      it('matches object with some fields', (): void => {
+        expect({
+          a: 'foo',
+          b: 'bar',
+          c: 123
+        }).toMatchObject({
+          a: 'foo',
+          c: 123
+        });
+      });
+    });
   });
 
   describe('describe', (): void => {

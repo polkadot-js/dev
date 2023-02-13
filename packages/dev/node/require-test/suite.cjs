@@ -3,6 +3,8 @@
 
 const { after: afterAll, afterEach, before: beforeAll, beforeEach, describe, it } = require('node:test');
 
+const { enhance } = require('./util.cjs');
+
 /**
  * @typedef {{ only?: boolean, skip?: boolean, todo?: boolean }} WrapOpts
  */
@@ -21,26 +23,18 @@ function createWrapper (fn) {
   /** @type {(opts: WrapOpts) => (arr: unknown[]) => (name: string, exec?: (v: unknown, i: number) => unknown) => void} */
   const each = (opts) => (arr) => (name, exec) => arr.map((v, i) => fn(name?.replace('%s', v?.toString()).replace('%i', i.toString()).replace('%p', JSON.stringify(v)), opts, exec?.(v, i)));
 
-  // create the top-level exported wrapper (we don't clobber the input function)
-  const wrapped = wrap({});
-
-  // unlike only/skip/todo these are a jest-only extension and actually
-  // used quite a few times in polkadot-js tests, hence the support here
-  wrapped.each = each({});
-
-  // These are the initial reason we have this wrapping - however they
-  // _are_ being added to the test:node core, so can be removed soon-ish
-  // (Support is very spotty on at least node 18, hence adding them)
-  //
-  // See https://github.com/nodejs/node/pull/46604
-  ['only', 'skip', 'todo'].forEach((key) => {
-    const opts = { [key]: true };
-
-    wrapped[key] = wrap(opts);
-    wrapped.each[key] = each(opts);
+  // Ensure that we have consisten helpers on the function
+  // (if not already applied)
+  return enhance(fn, {
+    each: each({}, {
+      only: each({ only: true }),
+      skip: each({ skip: true }),
+      todo: each({ todo: true })
+    }),
+    only: wrap({ only: true }),
+    skip: wrap({ skip: true }),
+    todo: wrap({ todo: true })
   });
-
-  return wrapped;
 }
 
 /**

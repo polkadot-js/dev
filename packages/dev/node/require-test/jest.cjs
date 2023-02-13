@@ -3,7 +3,7 @@
 
 const { mock } = require('node:test');
 
-const { unimplemented } = require('./util.cjs');
+const { enhance, unimplemented } = require('./util.cjs');
 
 /**
  * @typedef {((...args: unknown[]) => unknown) & { mock: {} }} Spy
@@ -22,10 +22,10 @@ const ALL_KEYS = ['advanceTimersByTime', 'advanceTimersToNextTimer', 'autoMockOf
  * @returns {Spy}
  **/
 function extendMock (spy) {
-  spy.mockReset = () => spy.mock.resetCalls();
-  spy.mockRestore = () => spy.mock.restore();
-
-  return spy;
+  return enhance(spy, {
+    mockReset: () => spy.mock.resetCalls(),
+    mockRestore: () => spy.mock.restore()
+  });
 }
 
 /**

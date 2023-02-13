@@ -3,7 +3,7 @@
 
 const assert = require('node:assert/strict');
 
-const { unimplemented } = require('./util.cjs');
+const { enhance, unimplemented } = require('./util.cjs');
 
 /**
  * @typedef {(other: unknown) => boolean} ExpectMatchFn
@@ -98,6 +98,19 @@ function anyCallHasArgs (value, args) {
 /**
  * @internal
  *
+ * A helper to match the supplied fields against the resulting object
+ */
+function matchObj (match, value) {
+  Object
+    .entries(match)
+    .forEach(([k, v]) => assert.deepStrictEqual(v, value[k]));
+
+  return true;
+}
+
+/**
+ * @internal
+ *
  * Decorates the expect.not.to* functions with the shim values
  */
 function createExpectNotTo (value) {
@@ -132,6 +145,7 @@ function createExpectTo (value) {
     toHaveBeenCalledWith: (...args) => assert.ok(anyCallHasArgs(value, args)),
     toHaveBeenLastCalledWith: (...args) => assert.ok(singleCallHasArgs(args, value?.mock?.calls[value?.mock?.calls.length - 1])),
     toHaveLength: (n) => assert.equal(value?.length, n),
+    toMatchObject: (obj) => assert.ok(matchObj(obj, value)),
     toThrow: (message) => assert.throws(value, message && { message })
   });
 }
@@ -142,17 +156,17 @@ function createExpectTo (value) {
  * make all polkadot-js usages pass
  **/
 function getExpectKeys () {
-  const expect = (value) => ({
-    ...createExpectTo(value),
-    not: createExpectNotTo(value)
-  });
-
-  expect.objectContaining = (check) => createMatcher((value) => Object.entries(check).every(([k, v]) => assert.deepStrictEqual(v, value?.[k])));
-
-  expect.stringMatching = (regExOrStr) => createMatcher((value) => assert.ok(typeof regExOrStr === 'string' ? value.includes(regExOrStr) : value.match(regExOrStr)));
-
   return {
-    expect: unimplemented('expect', OBJ_KEYS, expect)
+    expect: unimplemented('expect', OBJ_KEYS, enhance(
+      (value) => ({
+        ...createExpectTo(value),
+        not: createExpectNotTo(value)
+      }),
+      {
+        objectContaining: (check) => createMatcher((value) => Object.entries(check).every(([k, v]) => assert.deepStrictEqual(v, value?.[k]))),
+        stringMatching: (regExOrStr) => createMatcher((value) => assert.ok(typeof regExOrStr === 'string' ? value.includes(regExOrStr) : value.match(regExOrStr)))
+      }
+    ))
   };
 }
 
