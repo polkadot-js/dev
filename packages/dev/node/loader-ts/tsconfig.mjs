@@ -8,6 +8,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 
+/**
+ * @typedef {{ baseUrl?: string, paths?: Record<string, string[]> }} CompilerOptions
+`* @typedef {{ compilerOptions?: CompilerOptions, extends?: string }} TSConfig
+ * @typedef {{ filter: string[], isWildcard: boolean, path: string }} Alias
+ * @typedef {{ basePath: string, paths: Record<string, string[]> }} PartialConfig
+ * @typedef {PartialConfig & { aliases: Alias[] }} ExtractedConfig
+ */
+
 const cwdPath = process.cwd();
 const modPath = path.join(cwdPath, 'node_modules');
 
@@ -15,11 +23,16 @@ const modPath = path.join(cwdPath, 'node_modules');
  * @internal
  *
  * Extracts the (relevant) tsconfig info, also using extends
+ *
+ * @param {string} [currentPath]
+ * @param {string} [tsconfig]
+ * @returns {PartialTSConfig}
  **/
 function readConfigFile (currentPath = cwdPath, tsconfig = 'tsconfig.json') {
   const configPath = path.join(currentPath, tsconfig);
 
   try {
+    /** @type {TSConfig} */
     const config = JSON5.parse(fs.readFileSync(configPath, 'utf8'));
     const basePath = config.compilerOptions?.baseUrl || '.';
     let paths = config.compilerOptions?.paths || {};
@@ -48,6 +61,8 @@ function readConfigFile (currentPath = cwdPath, tsconfig = 'tsconfig.json') {
  * @internal
  *
  * Retrieves all TS aliases definitions
+ *
+ * @returns {ExtractedConfig}
  **/
 function extractConfig () {
   const { basePath, paths } = readConfigFile();

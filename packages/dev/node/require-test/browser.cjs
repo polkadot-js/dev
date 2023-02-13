@@ -3,6 +3,8 @@
 
 const { JSDOM } = require('jsdom');
 
+const WINDOW_EXPOSE = ['crypto', 'document', 'navigator'];
+
 /**
  * Export a very basic JSDom environment - this is just enough so we have
  * @testing-environment/react tests passing in this repo
@@ -14,7 +16,7 @@ const { JSDOM } = require('jsdom');
 function getBrowserKeys () {
   const { window } = new JSDOM();
 
-  return ['crypto', 'document', 'navigator'].reduce((env, key) => ({
+  return WINDOW_EXPOSE.reduce((env, key) => ({
     ...env,
     [key]: window[key]
   }), { window });

@@ -5,6 +5,10 @@ const { mock } = require('node:test');
 
 const { unimplemented } = require('./util.cjs');
 
+/**
+ * @typedef {((...args: unknown[]) => unknown) & { mock: {} }} Spy
+ **/
+
 // logged via Object.keys(jest).sort()
 const ALL_KEYS = ['advanceTimersByTime', 'advanceTimersToNextTimer', 'autoMockOff', 'autoMockOn', 'clearAllMocks', 'clearAllTimers', 'createMockFromModule', 'deepUnmock', 'disableAutomock', 'doMock', 'dontMock', 'enableAutomock', 'fn', 'genMockFromModule', 'getRealSystemTime', 'getSeed', 'getTimerCount', 'isEnvironmentTornDown', 'isMockFunction', 'isolateModules', 'isolateModulesAsync', 'mock', 'mocked', 'now', 'replaceProperty', 'requireActual', 'requireMock', 'resetAllMocks', 'resetModules', 'restoreAllMocks', 'retryTimes', 'runAllImmediates', 'runAllTicks', 'runAllTimers', 'runOnlyPendingTimers', 'setMock', 'setSystemTime', 'setTimeout', 'spyOn', 'unmock', 'unstable_mockModule', 'useFakeTimers', 'useRealTimers'];
 
@@ -14,8 +18,8 @@ const ALL_KEYS = ['advanceTimersByTime', 'advanceTimersToNextTimer', 'autoMockOf
  * This adds the mockRest and mockRestore functionality to any
  * spy or mock function
  *
- * @param {(...args: unknown[]) => unknown} spy
- * @returns {(...args: unknown[]) => unknown}
+ * @param {Spy} spy
+ * @returns {Spy}
  **/
 function extendMock (spy) {
   spy.mockReset = () => spy.mock.resetCalls();

@@ -5,8 +5,77 @@ const assert = require('node:assert/strict');
 
 const { unimplemented } = require('./util.cjs');
 
+/**
+ * @typedef {(other: unknown) => boolean} ExpectMatchFn
+ * @typedef {{ __isMatcher: boolean, match: MatchFn }} ExpectMatcher
+ */
+
+// FIXME The following expect functions have been found as unimplemented in
+// the polkadot-js/common repo:
+//
+// - error: 'expect.objectContaining is not a function'
+
 // logged via Object.keys(expect(0)).sort()
-const ALL_KEYS = ['lastCalledWith', 'lastReturnedWith', 'not', 'nthCalledWith', 'nthReturnedWith', 'rejects', 'resolves', 'toBe', 'toBeCalled', 'toBeCalledTimes', 'toBeCalledWith', 'toBeCloseTo', 'toBeDefined', 'toBeFalsy', 'toBeGreaterThan', 'toBeGreaterThanOrEqual', 'toBeInstanceOf', 'toBeLessThan', 'toBeLessThanOrEqual', 'toBeNaN', 'toBeNull', 'toBeTruthy', 'toBeUndefined', 'toContain', 'toContainEqual', 'toEqual', 'toHaveBeenCalled', 'toHaveBeenCalledTimes', 'toHaveBeenCalledWith', 'toHaveBeenLastCalledWith', 'toHaveBeenNthCalledWith', 'toHaveLastReturnedWith', 'toHaveLength', 'toHaveNthReturnedWith', 'toHaveProperty', 'toHaveReturned', 'toHaveReturnedTimes', 'toHaveReturnedWith', 'toMatch', 'toMatchInlineSnapshot', 'toMatchObject', 'toMatchSnapshot', 'toReturn', 'toReturnTimes', 'toReturnWith', 'toStrictEqual', 'toThrow', 'toThrowError', 'toThrowErrorMatchingInlineSnapshot', 'toThrowErrorMatchingSnapshot'];
+const INS_KEYS = ['lastCalledWith', 'lastReturnedWith', 'not', 'nthCalledWith', 'nthReturnedWith', 'rejects', 'resolves', 'toBe', 'toBeCalled', 'toBeCalledTimes', 'toBeCalledWith', 'toBeCloseTo', 'toBeDefined', 'toBeFalsy', 'toBeGreaterThan', 'toBeGreaterThanOrEqual', 'toBeInstanceOf', 'toBeLessThan', 'toBeLessThanOrEqual', 'toBeNaN', 'toBeNull', 'toBeTruthy', 'toBeUndefined', 'toContain', 'toContainEqual', 'toEqual', 'toHaveBeenCalled', 'toHaveBeenCalledTimes', 'toHaveBeenCalledWith', 'toHaveBeenLastCalledWith', 'toHaveBeenNthCalledWith', 'toHaveLastReturnedWith', 'toHaveLength', 'toHaveNthReturnedWith', 'toHaveProperty', 'toHaveReturned', 'toHaveReturnedTimes', 'toHaveReturnedWith', 'toMatch', 'toMatchInlineSnapshot', 'toMatchObject', 'toMatchSnapshot', 'toReturn', 'toReturnTimes', 'toReturnWith', 'toStrictEqual', 'toThrow', 'toThrowError', 'toThrowErrorMatchingInlineSnapshot', 'toThrowErrorMatchingSnapshot'];
+
+// logged via Object.keys(expect).sort()
+const OBJ_KEYS = ['addEqualityTesters', 'addSnapshotSerializer', 'any', 'anything', 'arrayContaining', 'assertions', 'closeTo', 'extend', 'extractExpectedAssertionsErrors', 'getState', 'hasAssertions', 'not', 'objectContaining', 'setState', 'stringContaining', 'stringMatching', 'toMatchInlineSnapshot', 'toMatchSnapshot', 'toThrowErrorMatchingInlineSnapshot', 'toThrowErrorMatchingSnapshot'];
+
+/**
+ * @internal
+ *
+ * A helper that wraps a maching function in an ExpectMatcher. This is (currently)
+ * only used/checked for in the calledWith* helpers
+ *
+ * TODO We don't use it in polkadot-js, but a useful enhancement could be for
+ * any of the to* expectations to detect and use those. An example of useful code
+ * in that case:
+ *
+ * ```js
+ * expect({
+ *   a: 'blah',
+ *   b: 3
+ * }).toEqual(
+ *   expect.objectContaining({ b: 3 })
+ * )
+ * ```
+ *
+ * An example of macther use can be seen in the isCalledWith loops
+ *
+ * @param {ExpectMatchFn} match
+ * @returns {(obj: unknown) => ExpectMatcher}
+ */
+function createMatcher (match) {
+  return {
+    __isMatcher: true,
+    match
+  };
+}
+
+/**
+ * @internal
+ *
+ * A helper that checks a single call arguments, which may include the
+ * use of matchers. This is used in finding any call or checking a specific
+ * call
+ *
+ * @param {unknown[]} maches
+ * @param {{ arguments: unknown[] }} [call]
+ * @returns {boolean}
+ */
+function singleCallHasArgs (args, call) {
+  assert.ok(call && args.length === call.arguments?.length, 'Number of arguments does not match');
+
+  args.every((arg, i) => {
+    arg !== null && typeof arg === 'object' && arg.__isMatcher
+      ? arg.match(call.arguments[i])
+      : assert.deepStrictEqual(call.arguments[i], arg);
+
+    return true;
+  });
+
+  return true;
+}
 
 /**
  * @internal
@@ -14,13 +83,13 @@ const ALL_KEYS = ['lastCalledWith', 'lastReturnedWith', 'not', 'nthCalledWith', 
  * A helper that checks for the first instance of a match on the actual call
  * arguments (this extracts the toHaveBeenCalledWith logic)
  */
-function isCalledWith (value, args) {
-  return value?.mock?.calls.some((c) => {
+function anyCallHasArgs (value, args) {
+  return value?.mock?.calls.some((call) => {
     try {
-      assert.deepStrictEqual(c.arguments, args);
+      return singleCallHasArgs(args, call);
+    } catch (error) {
+      console.error(error);
 
-      return true;
-    } catch {
       return false;
     }
   }) || false;
@@ -32,7 +101,7 @@ function isCalledWith (value, args) {
  * Decorates the expect.not.to* functions with the shim values
  */
 function createExpectNotTo (value) {
-  return unimplemented('expect(...).not', ALL_KEYS, {
+  return unimplemented('expect(...).not', INS_KEYS, {
     toBe: (other) => assert.notStrictEqual(value, other),
     toBeDefined: () => assert.equal(value, undefined),
     toBeFalsy: () => assert.ok(value),
@@ -40,8 +109,7 @@ function createExpectNotTo (value) {
     toEqual: (b) => assert.notDeepEqual(value, b),
     toHaveBeenCalled: () => assert.ok(!value?.mock?.calls.length),
     toHaveBeenCalledTimes: (n) => assert.notEqual(value?.mock?.calls.length, n),
-    toHaveBeenCalledWith: (...args) => assert.ok(!isCalledWith(value, args)),
-    toHaveBeenLastCalledWith: (...args) => assert.notDeepEqual(value?.mock?.calls[value?.mock?.calls.length - 1].arguments, args),
+    toHaveBeenCalledWith: (...args) => assert.ok(!anyCallHasArgs(value, args)),
     toHaveLength: (n) => assert.notEqual(value?.length, n),
     toThrow: (message) => assert.doesNotThrow(value, message && { message })
   });
@@ -53,7 +121,7 @@ function createExpectNotTo (value) {
  * Decorates the expect.to* functions with the shim values
  */
 function createExpectTo (value) {
-  return unimplemented('expect(...)', ALL_KEYS, {
+  return unimplemented('expect(...)', INS_KEYS, {
     toBe: (other) => assert.strictEqual(value, other),
     toBeDefined: () => assert.notEqual(value, undefined),
     toBeFalsy: () => assert.ok(!value),
@@ -61,8 +129,8 @@ function createExpectTo (value) {
     toEqual: (b) => assert.deepEqual(value, b),
     toHaveBeenCalled: () => assert.ok(value?.mock?.calls.length),
     toHaveBeenCalledTimes: (n) => assert.equal(value?.mock?.calls.length, n),
-    toHaveBeenCalledWith: (...args) => assert.ok(isCalledWith(value, args)),
-    toHaveBeenLastCalledWith: (...args) => assert.deepStrictEqual(value?.mock?.calls[value?.mock?.calls.length - 1].arguments, args),
+    toHaveBeenCalledWith: (...args) => assert.ok(anyCallHasArgs(value, args)),
+    toHaveBeenLastCalledWith: (...args) => assert.ok(singleCallHasArgs(args, value?.mock?.calls[value?.mock?.calls.length - 1])),
     toHaveLength: (n) => assert.equal(value?.length, n),
     toThrow: (message) => assert.throws(value, message && { message })
   });
@@ -74,11 +142,17 @@ function createExpectTo (value) {
  * make all polkadot-js usages pass
  **/
 function getExpectKeys () {
+  const expect = (value) => ({
+    ...createExpectTo(value),
+    not: createExpectNotTo(value)
+  });
+
+  expect.objectContaining = (check) => createMatcher((value) => Object.entries(check).every(([k, v]) => assert.deepStrictEqual(v, value?.[k])));
+
+  expect.stringMatching = (regExOrStr) => createMatcher((value) => assert.ok(typeof regExOrStr === 'string' ? value.includes(regExOrStr) : value.match(regExOrStr)));
+
   return {
-    expect: (value) => ({
-      ...createExpectTo(value),
-      not: createExpectNotTo(value)
-    })
+    expect: unimplemented('expect', OBJ_KEYS, expect)
   };
 }
 
