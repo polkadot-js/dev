@@ -1,6 +1,5 @@
 {
   "type": "commonjs",
-  "main": "./index.js",
   "exports": {
     ".": "./index.cjs",
     "./browser": "./browser.cjs",

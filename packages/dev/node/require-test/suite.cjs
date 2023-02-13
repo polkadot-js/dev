@@ -3,7 +3,10 @@
 
 const { after: afterAll, afterEach, before: beforeAll, beforeEach, describe, it } = require('node:test');
 
-/** @internal adjust describe/it to make it jest-like */
+/**
+ * This ensures that the describe and it functions match our actual usages.
+ * This includes .only, .skip, .todo as well as .ech helpers
+ **/
 function getSuiteKeys () {
   return Object
     .entries({ describe, it })
