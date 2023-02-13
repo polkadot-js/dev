@@ -604,6 +604,8 @@ function buildExports () {
             [key]: value
           }), {});
 
+      const pathParts = path.split(/[\\/]/);
+
       return {
         ...all,
         ...(
@@ -618,6 +620,11 @@ function buildExports () {
         ...(
           path.endsWith('.mjs') || path.endsWith('.cjs')
             ? { [path.replace(/\.[cm]js$/, '')]: entry }
+            : {}
+        ),
+        ...(
+          ['index.cjs', 'index.mjs'].includes(pathParts[pathParts.length - 1])
+            ? { [pathParts.slice(0, -1).join('/')]: entry }
             : {}
         )
       };
@@ -673,18 +680,13 @@ function orderPackageJson (repoPath, dir, json) {
   });
 
   // move bin, scripts & dependencies to the end
-  [
-    ['bin', 'scripts'],
-    ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies', 'denoDependencies', 'resolutions']
-  ].forEach((a) =>
-    a.forEach((d) => {
-      delete sorted[d];
+  ['bin', 'scripts', 'exports', 'dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies', 'denoDependencies', 'resolutions'].forEach((d) => {
+    delete sorted[d];
 
-      if (json[d] && Object.keys(json[d]).length) {
-        sorted[d] = sortJson(json[d]);
-      }
-    })
-  );
+    if (json[d] && Object.keys(json[d]).length) {
+      sorted[d] = sortJson(json[d]);
+    }
+  });
 
   witeJson(path.join(process.cwd(), 'package.json'), sorted);
 }

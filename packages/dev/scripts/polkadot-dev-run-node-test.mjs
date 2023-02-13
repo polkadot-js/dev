@@ -52,4 +52,4 @@ if (files.length === 0) {
   throw new Error('No matching .{spec, test}.{ts, tsx} files found');
 }
 
-execNodeTsSync(`--require @polkadot/dev/node/require-test.cjs --test ${cmd.join(' ')} ${files.join(' ')}`);
+execNodeTsSync(`--require @polkadot/dev/node/require-test --test ${cmd.join(' ')} ${files.join(' ')}`);

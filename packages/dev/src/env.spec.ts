@@ -132,6 +132,63 @@ describe('testing environment', (): void => {
         expect(sum).toHaveBeenCalledWith(2, 3);
         expect(sum).toHaveBeenLastCalledWith(4, 5);
       });
+
+      it('does allow resets', (): void => {
+        const mock = jest.fn(() => 3);
+
+        expect(mock).not.toHaveBeenCalled();
+        expect(mock()).toBe(3);
+        expect(mock).toHaveBeenCalled();
+
+        mock.mockReset();
+
+        expect(mock).not.toHaveBeenCalled();
+        expect(mock()).toBe(3);
+        expect(mock).toHaveBeenCalled();
+      });
+    });
+
+    describe('.spyOn', (): void => {
+      it('works on .toHaveBeenCalled', (): void => {
+        const obj = {
+          add: (a: number, b: number) => a + b
+        };
+        const spy = jest.spyOn(obj, 'add');
+
+        expect(spy).not.toHaveBeenCalled();
+        expect(obj.add(1, 2)).toBe(3);
+        expect(spy).toHaveBeenCalledTimes(1);
+      });
+
+      it('does allow resets', (): void => {
+        const obj = {
+          add: (a: number, b: number) => a + b
+        };
+        const spy = jest.spyOn(obj, 'add');
+
+        expect(spy).not.toHaveBeenCalled();
+        expect(obj.add(1, 2)).toBe(3);
+        expect(spy).toHaveBeenCalledTimes(1);
+
+        spy.mockReset();
+
+        expect(spy).not.toHaveBeenCalled();
+        expect(obj.add(1, 2)).toBe(3);
+        expect(spy).toHaveBeenCalledTimes(1);
+      });
+
+      it('does allow restores', (): void => {
+        const obj = {
+          add: (a: number, b: number) => a + b
+        };
+        const spy = jest.spyOn(obj, 'add');
+
+        expect(spy).not.toHaveBeenCalled();
+        expect(obj.add(1, 2)).toBe(3);
+        expect(spy).toHaveBeenCalledTimes(1);
+
+        spy.mockRestore();
+      });
     });
   });
 });
