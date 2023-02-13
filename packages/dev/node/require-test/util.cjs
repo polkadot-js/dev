@@ -2,7 +2,8 @@
 // SPDX-License-Identifier: Apache-2.0
 
 /**
- * @typedef {Record<string, (...args: unknown[]) => unknown> | (...args: unknown[]) => unknown} Unimplemented
+ * @typedef {Record<string, (...args: unknown[]) => unknown>} UnimplementedObj
+ * @typedef {(...args: unknown[]) => unknown} UnimplementedFn
  **/
 
 /**
@@ -11,8 +12,8 @@
  *
  * @param {string} objName - The name of the top-level object
  * @param {string[]} keys - The keys that we are adding
- * @param {Unimplemented} obj
- * @returns {Unimplemented}
+ * @param {UnimplementedObj | UnimplementedFn} obj
+ * @returns {UnimplementedObj}
  */
 function unimplemented (objName, keys, obj) {
   keys.forEach((key) => {
