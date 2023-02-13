@@ -129,8 +129,30 @@ describe('testing environment', (): void => {
         expect(sum(2, 3)).toBe(5);
         expect(sum(4, 5)).toBe(9);
 
+        expect(sum).toHaveBeenCalledWith(1, 2);
         expect(sum).toHaveBeenCalledWith(2, 3);
+        expect(sum).toHaveBeenCalledWith(4, 5);
+
         expect(sum).toHaveBeenLastCalledWith(4, 5);
+      });
+
+      it('works with .toHaveBeenCalledWith & expect.objectContaining', (): void => {
+        const test = jest.fn((a: unknown, b: unknown) => !!a && !!b);
+
+        test({ a: 123, b: 'test' }, null);
+
+        expect(test).toHaveBeenLastCalledWith({ a: 123, b: 'test' }, null);
+        expect(test).toHaveBeenLastCalledWith(expect.objectContaining({}), null);
+        expect(test).toHaveBeenLastCalledWith(expect.objectContaining({ a: 123 }), null);
+        expect(test).toHaveBeenLastCalledWith(expect.objectContaining({ b: 'test' }), null);
+      });
+
+      it('works with .not.toHaveBeenCalledWith & expect.objectContaining', (): void => {
+        const test = jest.fn((a: unknown, b: unknown) => !!a && !!b);
+
+        test({ a: 123, b: 'test' }, null);
+
+        expect(test).not.toHaveBeenCalledWith({ a: 234 }, null);
       });
 
       it('does allow resets', (): void => {

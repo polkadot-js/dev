@@ -8,9 +8,11 @@ import { fileURLToPath, pathToFileURL, URL } from 'node:url';
 
 import { tsAliases } from './tsconfig.mjs';
 
-/** @typedef {{ parentURL: URL }} Context */
-/** @typedef {{ format: 'commonjs | 'module', shortCircuit?: boolean, url: string }} Resolved */
-/** @typedef {(specifier: string, context: Context) => Resolved | undefined} Resolver */
+/**
+ * @typedef {{ parentURL: URL }} Context
+ * @typedef {{ format: 'commonjs | 'module', shortCircuit?: boolean, url: string }} Resolved
+ * @typedef {(specifier: string, context: Context) => Resolved | undefined} Resolver
+ */
 
 const EXT_REGEX = /\.tsx?$/;
 const EXT_ARR = ['.ts', '.tsx'];

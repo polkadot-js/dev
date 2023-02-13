@@ -4,14 +4,22 @@
 const { after: afterAll, afterEach, before: beforeAll, beforeEach, describe, it } = require('node:test');
 
 /**
+ * @typedef {{ only?: boolean, skip?: boolean, todo?: boolean }} WrapOpts
+ */
+
+/**
  * @internal
  *
  * Wraps either decribe or it with relevant .only, .skip, .todo & .each helpers,
  * shimming it into a Jest-compatible environment.
+ *
+ * @param {typeof describe | typeof it} fn
  */
 function createWrapper (fn) {
-  const wrap = (opts) => (text, exec) => fn(text, opts, exec);
-  const each = (opts) => (arr) => (text, exec) => arr.forEach((v, i) => fn(text?.replace('%s', v.toString()).replace('%i', i.toString()).replace('%p', JSON.stringify(v)), opts, exec?.(v, i)));
+  /** @type {(opts: WrapOpts) => (name: string, exec?: () => unknown) => void} */
+  const wrap = (opts) => (name, exec) => fn(name, opts, exec);
+  /** @type {(opts: WrapOpts) => (arr: unknown[]) => (name: string, exec?: (v: unknown, i: number) => unknown) => void} */
+  const each = (opts) => (arr) => (name, exec) => arr.map((v, i) => fn(name?.replace('%s', v?.toString()).replace('%i', i.toString()).replace('%p', JSON.stringify(v)), opts, exec?.(v, i)));
 
   // create the top-level exported wrapper (we don't clobber the input function)
   const wrapped = wrap({});

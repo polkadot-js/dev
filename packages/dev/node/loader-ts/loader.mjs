@@ -4,7 +4,9 @@
 import { transform } from '@swc/core';
 import { fileURLToPath } from 'node:url';
 
-/** @typedef {{ format: 'commonjs' | 'module', shortCircuit?: boolean, source: string }} Loaded */
+/**
+ * @typedef {{ format: 'commonjs' | 'module', shortCircuit?: boolean, source: string }} Loaded
+ **/
 
 // files that we support via this loader
 const EXT_REGEX = /\.tsx?$/;
