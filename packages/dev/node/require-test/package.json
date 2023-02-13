@@ -1,0 +1,12 @@
+{
+  "type": "commonjs",
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.cjs",
+    "./browser": "./browser.cjs",
+    "./expect": "./expect.cjs",
+    "./jest": "./jest.cjs",
+    "./suite": "./suite.cjs",
+    "./util": "./util.cjs"
+  }
+}

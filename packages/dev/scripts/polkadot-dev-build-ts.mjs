@@ -604,6 +604,8 @@ function buildExports () {
             [key]: value
           }), {});
 
+      const pathParts = path.split(/[\\/]/);
+
       return {
         ...all,
         ...(
@@ -618,6 +620,11 @@ function buildExports () {
         ...(
           path.endsWith('.mjs') || path.endsWith('.cjs')
             ? { [path.replace(/\.[cm]js$/, '')]: entry }
+            : {}
+        ),
+        ...(
+          ['index.cjs', 'index.mjs'].includes(pathParts[pathParts.length - 1])
+            ? { [pathParts.slice(0, -1).join('/')]: entry }
             : {}
         )
       };
@@ -664,7 +671,7 @@ function orderPackageJson (repoPath, dir, json) {
   });
 
   // move the different entry points to the (almost) end
-  ['browser', 'deno', 'electron', 'main', 'module', 'react-native'].forEach((d) => {
+  ['browser', 'deno', 'electron', 'main', 'module', 'react-native', 'exports'].forEach((d) => {
     delete sorted[d];
 
     if (json[d]) {

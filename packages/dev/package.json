@@ -15,6 +15,11 @@
   "sideEffects": false,
   "type": "module",
   "version": "0.68.20",
+  "exports": {
+    "./config/*": "./config/*",
+    "./node/loader-ts": "./node/loader-ts.mjs",
+    "./node/require-test": "./node/require-test/index.cjs"
+  },
   "bin": {
     "polkadot-ci-ghact-build": "./scripts/polkadot-ci-ghact-build.mjs",
     "polkadot-ci-ghact-docs": "./scripts/polkadot-ci-ghact-docs.mjs",
