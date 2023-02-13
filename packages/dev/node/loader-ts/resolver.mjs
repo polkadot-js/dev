@@ -8,6 +8,10 @@ import { fileURLToPath, pathToFileURL, URL } from 'node:url';
 
 import { tsAliases } from './tsconfig.mjs';
 
+/** @typedef {{ parentURL: URL }} Context */
+/** @typedef {{ format: 'commonjs | 'module', shortCircuit?: boolean, url: string }} Resolved */
+/** @typedef {(specifier: string, context: Context) => Resolved | undefined} Resolver */
+
 const EXT_REGEX = /\.tsx?$/;
 const EXT_ARR = ['.ts', '.tsx'];
 
@@ -17,6 +21,10 @@ const cwdUrl = pathToFileURL(process.cwd()).href;
  * @internal
  *
  * Resolve fully-specified imports with extensions.
+ *
+ * @param {string} specifier
+ * @param {URL} parentUrl
+ * @returns {Resolved | undefined}
  **/
 export function resolveExtension (specifier, parentUrl) {
   // handle .ts extensions directly
@@ -38,6 +46,10 @@ export function resolveExtension (specifier, parentUrl) {
  * ts (recommended) approach for using .js extensions inside the sources.
  * However, since we don't use this in the polkadot-js code, can kick this
  * down the line
+ *
+ * @param {string} specifier
+ * @param {URL} parentUrl
+ * @returns {Resolved | undefined}
  **/
 export function resolveRelative (specifier, parentUrl) {
   if (specifier.startsWith('.')) {
@@ -83,6 +95,11 @@ export function resolveRelative (specifier, parentUrl) {
  * @internal
  *
  * Resolve TS alias mappings as defined in the tsconfig.json file
+ *
+ * @param {string} specifier
+ * @param {URL} parentUrl
+ * @param {typeof tsAliases} [aliases]
+ * @returns {Resolved | undefined}
  **/
 export function resolveAliases (specifier, _, aliases = tsAliases) {
   const parts = specifier.split(/[\\/]/);
@@ -127,6 +144,10 @@ export function resolveAliases (specifier, _, aliases = tsAliases) {
  * 3. The we try to do resolution via TS aliases
  *
  * ... fianlly, try the next loader in the chain
+ *
+ * @param {string} specifier
+ * @param {Context} context
+ * @param {Resolver} nextResolve
  */
 export function resolve (specifier, context, nextResolve) {
   const parentUrl = context.parentURL || cwdUrl;

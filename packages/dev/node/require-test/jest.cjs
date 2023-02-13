@@ -13,6 +13,9 @@ const ALL_KEYS = ['advanceTimersByTime', 'advanceTimersToNextTimer', 'autoMockOf
  *
  * This adds the mockRest and mockRestore functionality to any
  * spy or mock function
+ *
+ * @param {(...args: unknown[]) => unknown} spy
+ * @returns {(...args: unknown[]) => unknown}
  **/
 function extendMock (spy) {
   spy.mockReset = () => spy.mock.resetCalls();
