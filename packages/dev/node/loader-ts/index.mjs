@@ -14,7 +14,7 @@ const cwdPath = process.cwd();
 const cwdUrl = pathToFileURL(cwdPath).href;
 const extensionsRegex = /\.tsx?$/;
 const extensions = ['.ts', '.tsx'];
-const tsAlias = getTsAliases();
+const tsAliases = getTsAliases();
 
 /** @internal Resolve fully-specified imports with extensions */
 function resolveExtension (specifier, parentUrl) {
@@ -74,8 +74,7 @@ function resolveRelative (specifier, parentUrl) {
 /** @internal Resolve TS aliase mappings */
 function resolveAliases (specifier) {
   const parts = specifier.split(/[\\/]/);
-  const entry = tsAlias
-    .values
+  const entry = tsAliases
     // return a [filter, [...partIndex]] mapping
     .map((alias) => ({
       alias,
@@ -179,39 +178,36 @@ function readTsConfig (currentPath = cwdPath, tsconfig = 'tsconfig.json') {
 function getTsAliases () {
   const { basePath, paths } = readTsConfig();
 
-  return {
-    basePath,
-    values: Object
-      .entries(paths)
-      // The path value is an array - we only handle the first entry in there,
-      // this is a possible fix into the future if it is ever an issue...
-      .map(([key, [value]]) => {
-        const filter = key.split(/[\\/]/);
-        const pathSplit = value.split(/[\\/]/);
-        const isWildcard = filter[filter.length - 1] === '*';
-        const isWildcardPath = pathSplit[pathSplit.length - 1] === '*';
+  return Object
+    .entries(paths)
+    // The path value is an array - we only handle the first entry in there,
+    // this is a possible fix into the future if it is ever an issue...
+    .map(([key, [value]]) => {
+      const filter = key.split(/[\\/]/);
+      const pathSplit = value.split(/[\\/]/);
+      const isWildcard = filter[filter.length - 1] === '*';
+      const isWildcardPath = pathSplit[pathSplit.length - 1] === '*';
 
-        // ensure that when we have wilcards specified, they always occur in the last position
-        const pathErr = (
-          ((filter.filter((f) => f === '*').length !== (isWildcard ? 1 : 0)) && key) ||
-          ((pathSplit.filter((f) => f === '*').length !== (isWildcardPath ? 1 : 0)) && value)
-        );
+      // ensure that when we have wilcards specified, they always occur in the last position
+      const pathErr = (
+        ((filter.filter((f) => f === '*').length !== (isWildcard ? 1 : 0)) && key) ||
+        ((pathSplit.filter((f) => f === '*').length !== (isWildcardPath ? 1 : 0)) && value)
+      );
 
-        if (pathErr) {
-          throw new Error(`FATAL: Wildcards in tsconfig.json path entries are only supported in the last position. Invalid ${key}: ${value} mapping`);
-        }
+      if (pathErr) {
+        throw new Error(`FATAL: Wildcards in tsconfig.json path entries are only supported in the last position. Invalid ${key}: ${value} mapping`);
+      }
 
-        return {
-          filter: isWildcard
-            ? filter.slice(0, -1)
-            : filter,
-          isWildcard,
-          path: isWildcardPath
-            // for wilcards exclude the last value
-            ? path.join(cwdPath, basePath, ...pathSplit.slice(0, -1))
-            // for non-wilcards, we just return a full path
-            : path.join(cwdPath, basePath, value)
-        };
-      })
-  };
+      return {
+        filter: isWildcard
+          ? filter.slice(0, -1)
+          : filter,
+        isWildcard,
+        path: isWildcardPath
+          // for wilcards exclude the last value
+          ? path.join(cwdPath, basePath, ...pathSplit.slice(0, -1))
+          // for non-wilcards, we just return a full path
+          : path.join(cwdPath, basePath, value)
+      };
+    });
 }

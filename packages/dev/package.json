@@ -17,7 +17,7 @@
   "version": "0.68.20",
   "exports": {
     "./config/*": "./config/*",
-    "./node/loader-ts": "./node/loader-ts.mjs",
+    "./node/loader-ts": "./node/loader-ts/index.mjs",
     "./node/require-test": "./node/require-test/index.cjs"
   },
   "bin": {
