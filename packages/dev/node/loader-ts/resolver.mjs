@@ -1,8 +1,6 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// Adapted from: https://nodejs.org/api/esm.html#esm_transpiler_loader
-
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
@@ -10,18 +8,19 @@ import { fileURLToPath, pathToFileURL, URL } from 'node:url';
 
 import { tsAliases } from './tsconfig.mjs';
 
+const EXT_REGEX = /\.tsx?$/;
+const EXT_ARR = ['.ts', '.tsx'];
+
 const cwdUrl = pathToFileURL(process.cwd()).href;
-const extensionsRegex = /\.tsx?$/;
-const extensions = ['.ts', '.tsx'];
 
 /**
  * @internal
  *
- * Resolve fully-specified imports with extensions
+ * Resolve fully-specified imports with extensions.
  **/
 export function resolveExtension (specifier, parentUrl) {
   // handle .ts extensions directly
-  if (extensionsRegex.test(specifier)) {
+  if (EXT_REGEX.test(specifier)) {
     return {
       format: 'module',
       shortCircuit: true,
@@ -33,10 +32,14 @@ export function resolveExtension (specifier, parentUrl) {
 /**
  * @internal
  *
- * Resolve (extensionless) relative paths
+ * Resolve relative (extensionless) paths.
+ *
+ * At some point we probably might need to extend this to cater for the
+ * ts (recommended) approach for using .js extensions inside the sources.
+ * However, since we don't use this in the polkadot-js code, can kick this
+ * down the line
  **/
 export function resolveRelative (specifier, parentUrl) {
-  // handle ./<extensionLess>
   if (specifier.startsWith('.')) {
     const full = fileURLToPath(parentUrl);
     const dir = fs.existsSync(full) && fs.lstatSync(full).isDirectory()
@@ -45,22 +48,22 @@ export function resolveRelative (specifier, parentUrl) {
     const found = specifier === '.'
       ? (
         // handle . imports for directories
-        extensions
+        EXT_ARR
           .map((e) => path.join(dir, `index${e}`))
           .find((f) => fs.existsSync(f)) ||
         // handle the case where parentUrl needs an extension
-        extensions
+        EXT_ARR
           .map((e) => `${full}${e}`)
           .find((f) => fs.existsSync(f))
       )
       : (
         // tests to see if this is a file (without extension)
-        extensions
+        EXT_ARR
           .map((e) => `${specifier}${e}`)
           .map((f) => path.join(dir, f))
           .find((f) => fs.existsSync(f)) ||
         // test to see if this is a directory
-        extensions
+        EXT_ARR
           .map((e) => `${specifier}/index${e}`)
           .map((f) => path.join(dir, f))
           .find((f) => fs.existsSync(f))
@@ -79,7 +82,7 @@ export function resolveRelative (specifier, parentUrl) {
 /**
  * @internal
  *
- * Resolve TS alias mappings
+ * Resolve TS alias mappings as defined in the tsconfig.json file
  **/
 export function resolveAliases (specifier, _, aliases = tsAliases) {
   const parts = specifier.split(/[\\/]/);

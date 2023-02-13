@@ -11,7 +11,11 @@ import process from 'node:process';
 const cwdPath = process.cwd();
 const modPath = path.join(cwdPath, 'node_modules');
 
-/** @internal Extracts the (relevant) tsconfig info, also using extends */
+/**
+ * @internal
+ *
+ * Extracts the (relevant) tsconfig info, also using extends
+ **/
 function readConfigFile (currentPath = cwdPath, tsconfig = 'tsconfig.json') {
   const configPath = path.join(currentPath, tsconfig);
 
@@ -40,7 +44,11 @@ function readConfigFile (currentPath = cwdPath, tsconfig = 'tsconfig.json') {
   }
 }
 
-/** @internal Retrieves all TS aliases definitions */
+/**
+ * @internal
+ *
+ * Retrieves all TS aliases definitions
+ **/
 function extractConfig () {
   const { basePath, paths } = readConfigFile();
 
