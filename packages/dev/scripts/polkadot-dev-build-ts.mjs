@@ -671,7 +671,7 @@ function orderPackageJson (repoPath, dir, json) {
   });
 
   // move the different entry points to the (almost) end
-  ['browser', 'deno', 'electron', 'main', 'module', 'react-native', 'exports'].forEach((d) => {
+  ['browser', 'deno', 'electron', 'main', 'module', 'react-native'].forEach((d) => {
     delete sorted[d];
 
     if (json[d]) {
@@ -680,18 +680,13 @@ function orderPackageJson (repoPath, dir, json) {
   });
 
   // move bin, scripts & dependencies to the end
-  [
-    ['bin', 'scripts'],
-    ['dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies', 'denoDependencies', 'resolutions']
-  ].forEach((a) =>
-    a.forEach((d) => {
-      delete sorted[d];
+  ['bin', 'scripts', 'exports', 'dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies', 'denoDependencies', 'resolutions'].forEach((d) => {
+    delete sorted[d];
 
-      if (json[d] && Object.keys(json[d]).length) {
-        sorted[d] = sortJson(json[d]);
-      }
-    })
-  );
+    if (json[d] && Object.keys(json[d]).length) {
+      sorted[d] = sortJson(json[d]);
+    }
+  });
 
   witeJson(path.join(process.cwd(), 'package.json'), sorted);
 }
