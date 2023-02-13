@@ -3,24 +3,10 @@
 
 const assert = require('node:assert/strict');
 
-const { unimplemented } = require('./util.cjs');
+const { unimplementedObj } = require('./util.cjs');
 
 // logged via Object.keys(expect(0)).sort()
-const KEYS = ['lastCalledWith', 'lastReturnedWith', 'not', 'nthCalledWith', 'nthReturnedWith', 'rejects', 'resolves', 'toBe', 'toBeCalled', 'toBeCalledTimes', 'toBeCalledWith', 'toBeCloseTo', 'toBeDefined', 'toBeFalsy', 'toBeGreaterThan', 'toBeGreaterThanOrEqual', 'toBeInstanceOf', 'toBeLessThan', 'toBeLessThanOrEqual', 'toBeNaN', 'toBeNull', 'toBeTruthy', 'toBeUndefined', 'toContain', 'toContainEqual', 'toEqual', 'toHaveBeenCalled', 'toHaveBeenCalledTimes', 'toHaveBeenCalledWith', 'toHaveBeenLastCalledWith', 'toHaveBeenNthCalledWith', 'toHaveLastReturnedWith', 'toHaveLength', 'toHaveNthReturnedWith', 'toHaveProperty', 'toHaveReturned', 'toHaveReturnedTimes', 'toHaveReturnedWith', 'toMatch', 'toMatchInlineSnapshot', 'toMatchObject', 'toMatchSnapshot', 'toReturn', 'toReturnTimes', 'toReturnWith', 'toStrictEqual', 'toThrow', 'toThrowError', 'toThrowErrorMatchingInlineSnapshot', 'toThrowErrorMatchingSnapshot'];
-
-/**
- * @internal
- *
- * Creates an empty environment using all the known keys. This means that
- * when we use this environment any unimplemnted keys would have some details
- * behind them, throwing an error with the exact function that is not available
- */
-function empty (extra) {
-  return KEYS.reduce((env, key) => ({
-    ...env,
-    key: unimplemented(`expect(...)${extra}`, key)
-  }), {});
-}
+const ALL_KEYS = ['lastCalledWith', 'lastReturnedWith', 'not', 'nthCalledWith', 'nthReturnedWith', 'rejects', 'resolves', 'toBe', 'toBeCalled', 'toBeCalledTimes', 'toBeCalledWith', 'toBeCloseTo', 'toBeDefined', 'toBeFalsy', 'toBeGreaterThan', 'toBeGreaterThanOrEqual', 'toBeInstanceOf', 'toBeLessThan', 'toBeLessThanOrEqual', 'toBeNaN', 'toBeNull', 'toBeTruthy', 'toBeUndefined', 'toContain', 'toContainEqual', 'toEqual', 'toHaveBeenCalled', 'toHaveBeenCalledTimes', 'toHaveBeenCalledWith', 'toHaveBeenLastCalledWith', 'toHaveBeenNthCalledWith', 'toHaveLastReturnedWith', 'toHaveLength', 'toHaveNthReturnedWith', 'toHaveProperty', 'toHaveReturned', 'toHaveReturnedTimes', 'toHaveReturnedWith', 'toMatch', 'toMatchInlineSnapshot', 'toMatchObject', 'toMatchSnapshot', 'toReturn', 'toReturnTimes', 'toReturnWith', 'toStrictEqual', 'toThrow', 'toThrowError', 'toThrowErrorMatchingInlineSnapshot', 'toThrowErrorMatchingSnapshot'];
 
 /**
  * @internal
@@ -46,8 +32,7 @@ function isCalledWith (value, args) {
  * Decorates the expect.not.to* functions with the shim values
  */
 function createExpectNotTo (value) {
-  return {
-    ...empty('.not'),
+  return unimplementedObj('expect(...).not', ALL_KEYS, {
     toBe: (other) => assert.notStrictEqual(value, other),
     toBeDefined: () => assert.equal(value, undefined),
     toBeFalsy: () => assert.ok(value),
@@ -59,7 +44,7 @@ function createExpectNotTo (value) {
     toHaveBeenLastCalledWith: (...args) => assert.notDeepEqual(value?.mock?.calls[value?.mock?.calls.length - 1].arguments, args),
     toHaveLength: (n) => assert.notEqual(value?.length, n),
     toThrow: (message) => assert.doesNotThrow(value, message && { message })
-  };
+  });
 }
 
 /**
@@ -68,8 +53,7 @@ function createExpectNotTo (value) {
  * Decorates the expect.to* functions with the shim values
  */
 function createExpectTo (value) {
-  return {
-    ...empty(),
+  return unimplementedObj('expect(...)', ALL_KEYS, {
     toBe: (other) => assert.strictEqual(value, other),
     toBeDefined: () => assert.notEqual(value, undefined),
     toBeFalsy: () => assert.ok(!value),
@@ -81,7 +65,7 @@ function createExpectTo (value) {
     toHaveBeenLastCalledWith: (...args) => assert.deepStrictEqual(value?.mock?.calls[value?.mock?.calls.length - 1].arguments, args),
     toHaveLength: (n) => assert.equal(value?.length, n),
     toThrow: (message) => assert.throws(value, message && { message })
-  };
+  });
 }
 
 /**
