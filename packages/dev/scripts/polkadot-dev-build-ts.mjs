@@ -6,7 +6,7 @@ import babel from '@babel/cli/lib/babel/dir.js';
 import fs from 'fs';
 import path from 'path';
 
-import { __dirname, copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_LND_PRE, DENO_POL_PRE, execSync, mkdirpSync, PATHS_BUILD, rimrafSync } from './util.mjs';
+import { __dirname, copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_LND_PRE, DENO_POL_PRE, execSync, exitFatal, mkdirpSync, PATHS_BUILD, rimrafSync } from './util.mjs';
 
 const BL_CONFIGS = ['js', 'cjs'].map((e) => `babel.config.${e}`);
 const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
@@ -18,7 +18,7 @@ const IGNORE_IMPORTS = [
   // node
   'crypto', 'fs', 'os', 'path', 'process', 'readline', 'util',
   // node (new-style)
-  'node:assert', 'node:crypto', 'node:fs', 'node:os', 'node:path', 'node:process', 'node:test', 'node:url', 'node:util',
+  'node:assert', 'node:child_process', 'node:crypto', 'node:fs', 'node:os', 'node:path', 'node:process', 'node:test', 'node:url', 'node:util',
   // other
   '@jest/globals', 'react', 'react-native'
 ];
@@ -125,7 +125,7 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
         // as-is, the path exists
         return `${DENO_POL_PRE}/${subPath}`;
       } else if (!fs.existsSync(`${checkPath}.ts`)) {
-        throw new Error(`Unable to find ${checkPath}.ts`);
+        exitFatal(`Unable to find ${checkPath}.ts`);
       }
 
       return `${pjsPath}/${subPath}.ts`;
@@ -147,14 +147,14 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
         // as-is, it exists
         return `${pjsPath}/${subPath}`;
       } else if (!fs.existsSync(`${checkPath}.js`)) {
-        throw new Error(`Unable to find ${checkPath}.js`);
+        exitFatal(`Unable to find ${checkPath}.js`);
       }
 
       return `${pjsPath}/${subPath}.ts`;
     }
 
     // we don't know what to do here :(
-    throw new Error(`Unable to find ${f}`);
+    exitFatal(`Unable to find ${f}`);
   } else if (f.startsWith('.')) {
     if (f.endsWith('.ts') || f.endsWith('.tsx') || f.endsWith('.json')) {
       // ignore, these are already fully-specified
@@ -697,7 +697,7 @@ function createError (full, line, lineNumber, error) {
 
 function throwOnErrors (errors) {
   if (errors.length) {
-    throw new Error(errors.join('\n'));
+    exitFatal(errors.join('\n'));
   }
 }
 

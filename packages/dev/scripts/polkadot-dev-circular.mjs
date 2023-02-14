@@ -4,6 +4,8 @@
 
 import madge from 'madge';
 
+import { exitFatal } from './util.mjs';
+
 console.log('$ polkadot-dev-circular', process.argv.slice(2).join(' '));
 
 const res = await madge('./', { fileExtensions: ['ts', 'tsx'] });
@@ -21,4 +23,4 @@ const all = circular
 
 process.stdout.write(`\n${err}:\n\n${all}\n\n`);
 
-throw new Error(err);
+exitFatal(err);

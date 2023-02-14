@@ -7,7 +7,7 @@ import os from 'node:os';
 import path from 'node:path';
 import yargs from 'yargs';
 
-import { copyDirSync, copyFileSync, denoCreateDir, execSync, gitSetup, mkdirpSync, rimrafSync } from './util.mjs';
+import { copyDirSync, copyFileSync, denoCreateDir, execSync, exitFatal, gitSetup, mkdirpSync, rimrafSync } from './util.mjs';
 
 console.log('$ polkadot-ci-ghact-build', process.argv.slice(2).join(' '));
 
@@ -381,7 +381,7 @@ function gitPush () {
     if (changes.includes(`## ${version}`)) {
       doGHRelease = true;
     } else if (version.endsWith('.1')) {
-      throw new Error(`Unable to release, no CHANGELOG entry for ${version}`);
+      exitFatal(`Unable to release, no CHANGELOG entry for ${version}`);
     }
   }
 

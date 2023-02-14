@@ -2,7 +2,9 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { execNodeTsSync, readdirSync } from './util.mjs';
+import process from 'node:process';
+
+import { execNodeTsSync, exitFatal, readdirSync } from './util.mjs';
 
 const EXTS = ['.spec.ts', '.spec.tsx', '.test.ts', '.test.tsx'];
 
@@ -16,47 +18,58 @@ let reqEnv = 'node';
 
 for (let i = 0; i < args.length; i++) {
   if (args[i].startsWith('-')) {
-    if (args[i] === '--browser') {
-      reqEnv = 'browser';
-    } else if (args[i] === '--node') {
-      reqEnv = 'node';
-    } else {
-      cmd.push(args[i]);
+    switch (args[i]) {
+      // for --browser/node we just tweak the default environment require
+      case '--browser':
+      case '--node':
+        reqEnv = args[i].slice(2);
+        break;
 
-      // for --<param> we only skip when no = is contained
-      if (!args[i].startsWith('--') || !args[i].includes('=')) {
-        cmd.push(args[++i]);
-      }
+      // -- means that all following args are passed-through as-is
+      case '--':
+        while (++i < args.length) {
+          cmd.push(args[i]);
+        }
+
+        break;
+
+      // any other arguments are passed-through (check of skipping here)
+      default:
+        cmd.push(args[i]);
+
+        // for --<param> we only push when no = is included (self-contained)
+        if (!args[i].startsWith('--') || !args[i].includes('=')) {
+          cmd.push(args[++i]);
+        }
+
+        break;
     }
   } else {
-    filters.push(args[i].split(/[\\/]/));
+    // no "-"" found, so we use these as path filters
+    filters.push(args[i]);
   }
 }
+
+const filterParts = filters.map((f) => f.split(/[\\/]/));
 
 const files = readdirSync('packages', EXTS).filter((f) => {
   const parts = f.split(/[\\/]/);
 
-  if (parts.some((p) => p === 'build' || p.startsWith('build-'))) {
-    return false;
-  } else if (filters.length) {
-    return filters.some((filter) =>
-      parts
-        .map((_, i) => i)
-        .filter((i) => parts[i].startsWith(filter[0]))
-        .some((start) =>
-          filter.every((f, i) =>
-            parts[start + i] &&
-            parts[start + i].startsWith(f)
-          )
+  return !filters.length || filterParts.some((filter) =>
+    parts
+      .map((_, i) => i)
+      .filter((i) => parts[i].startsWith(filter[0]))
+      .some((start) =>
+        filter.every((f, i) =>
+          parts[start + i] &&
+          parts[start + i].startsWith(f)
         )
-    );
-  }
-
-  return true;
+      )
+  );
 });
 
 if (files.length === 0) {
-  throw new Error('No matching .{spec, test}.{ts, tsx} files found');
+  exitFatal(`No files matching ${EXTS.join(', ')} found${filters.length ? ` (filtering on ${filters.join(', ')})` : ''}`);
 }
 
 execNodeTsSync(`--require @polkadot/dev/node/require-test/${reqEnv} --test ${cmd.join(' ')} ${files.join(' ')}`);

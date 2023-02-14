@@ -1,10 +1,11 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import cp from 'child_process';
-import fs from 'fs';
-import path from 'path';
-import url from 'url';
+import cp from 'node:child_process';
+import fs from 'node:fs';
+import path from 'node:path';
+import process from 'node:process';
+import url from 'node:url';
 
 /** CJS/ESM compatible __dirname */
 export const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
@@ -27,6 +28,9 @@ export const GITHUB_MAIL = '41898282+github-actions[bot]@users.noreply.github.co
 /** Paths that we generally building to */
 export const PATHS_BUILD = ['', '-cjs', '-esm', '-deno', '-docs', '-swc', '-swc-cjs', '-swc-esm', '-wasm'];
 
+/** Paths that are generally excluded from source operations */
+export const PATHS_EXCL = ['node_modules', ...PATHS_BUILD.map((e) => `build${e}`)];
+
 /** Copy a file to a target dit */
 export function copyFileSync (src, destDir) {
   if (Array.isArray(src)) {
@@ -43,7 +47,7 @@ export function copyDirSync (src, dest, extensions) {
   } else if (!fs.existsSync(src)) {
     // it doesn't exist, so we have nothing to copy
   } else if (!fs.statSync(src).isDirectory()) {
-    throw new Error(`Source ${src} should be a directory`);
+    exitFatal(`Source ${src} should be a directory`);
   } else {
     mkdirpSync(dest);
 
@@ -140,7 +144,7 @@ export function rimrafSync (dir) {
 /** Recursively reads a directory, making a list of the matched extensions */
 export function readdirSync (src, extensions, files = []) {
   if (!fs.statSync(src).isDirectory()) {
-    throw new Error(`Source ${src} should be a directory`);
+    exitFatal(`Source ${src} should be a directory`);
   }
 
   fs
@@ -149,11 +153,21 @@ export function readdirSync (src, extensions, files = []) {
       const srcPath = path.join(src, file);
 
       if (fs.statSync(srcPath).isDirectory()) {
-        readdirSync(srcPath, extensions, files);
+        if (!PATHS_EXCL.includes(file)) {
+          readdirSync(srcPath, extensions, files);
+        }
       } else if (extensions.some((e) => file.endsWith(e))) {
         files.push(srcPath);
       }
     });
 
   return files;
+}
+
+/** Prints the fatal error message and exit with a non-zero return code */
+export function exitFatal (message) {
+  console.error();
+  console.error('FATAL:', message);
+  console.error();
+  process.exit(1);
 }

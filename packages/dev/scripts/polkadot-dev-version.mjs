@@ -6,14 +6,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 import yargs from 'yargs';
 
-import { execSync } from './util.mjs';
+import { execSync, exitFatal } from './util.mjs';
 
 const TYPES = ['major', 'minor', 'patch', 'pre'];
 
 const [type] = yargs(process.argv.slice(2)).demandCommand(1).argv._;
 
 if (!TYPES.includes(type)) {
-  throw new Error(`Invalid version bump "${type}", expected one of ${TYPES.join(', ')}`);
+  exitFatal(`Invalid version bump "${type}", expected one of ${TYPES.join(', ')}`);
 }
 
 function updateDependencies (dependencies, others, version) {
