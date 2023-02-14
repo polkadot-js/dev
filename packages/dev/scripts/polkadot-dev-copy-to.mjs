@@ -5,20 +5,20 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { copyDirSync, execSync, mkdirpSync, rimrafSync } from './util.mjs';
+import { copyDirSync, execSync, exitFatal, mkdirpSync, rimrafSync } from './util.mjs';
 
 const args = process.argv.slice(2);
 
 console.log('$ polkadot-dev-copy-to', args.join(' '));
 
 if (args.length !== 1) {
-  throw new Error('Expected one <destination> argument');
+  exitFatal('Expected one <destination> argument');
 }
 
 const dest = path.join(process.cwd(), '..', args[0], 'node_modules');
 
 if (!fs.existsSync(dest)) {
-  throw new Error('Destination node_modules folder does not exist');
+  exitFatal('Destination node_modules folder does not exist');
 }
 
 // build to ensure we actually have latest
