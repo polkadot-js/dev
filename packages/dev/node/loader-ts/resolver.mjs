@@ -56,11 +56,11 @@ export function resolveRelative (specifier, parentUrl) {
       : path.dirname(full);
     const found = specifier === '.'
       ? (
-        // handle . imports for directories
+        // handle . imports for <dir>/index.ts
         EXT_ARRAY
           .map((e) => path.join(dir, `index${e}`))
           .find((f) => fs.existsSync(f)) ||
-        // handle the case where parentUrl needs an extension
+        // handle the case where parentUrl needs an extension (generally via alias)
         EXT_ARRAY
           .map((e) => `${full}${e}`)
           .find((f) => fs.existsSync(f))
