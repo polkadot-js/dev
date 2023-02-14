@@ -6,7 +6,8 @@
 import JSON5 from 'json5';
 import fs from 'node:fs';
 import path from 'node:path';
-import process from 'node:process';
+
+import { CWD_PATH, MOD_PATH } from './common.mjs';
 
 /**
  * @typedef {{ baseUrl?: string, paths?: Record<string, string[]> }} CompilerOptions
@@ -15,9 +16,6 @@ import process from 'node:process';
  * @typedef {{ basePath: string, paths: Record<string, string[]> }} PartialConfig
  * @typedef {PartialConfig & { aliases: Alias[] }} ExtractedConfig
  */
-
-const cwdPath = process.cwd();
-const modPath = path.join(cwdPath, 'node_modules');
 
 /**
  * @internal
@@ -28,7 +26,7 @@ const modPath = path.join(cwdPath, 'node_modules');
  * @param {string} [tsconfig]
  * @returns {PartialTSConfig}
  **/
-function readConfigFile (currentPath = cwdPath, tsconfig = 'tsconfig.json') {
+function readConfigFile (currentPath = CWD_PATH, tsconfig = 'tsconfig.json') {
   const configPath = path.join(currentPath, tsconfig);
 
   try {
@@ -40,7 +38,7 @@ function readConfigFile (currentPath = cwdPath, tsconfig = 'tsconfig.json') {
     if (config.extends) {
       const extRoot = config.extends.startsWith('.')
         ? currentPath
-        : modPath;
+        : MOD_PATH;
       const extSubs = config.extends.split(/[\\/]/);
       const extPath = path.join(extRoot, ...extSubs.slice(0, -1));
       const extConfig = readConfigFile(extPath, extSubs.at(-1));
@@ -95,9 +93,9 @@ function extractConfig () {
           isWildcard,
           path: isWildcardPath
             // for wilcards exclude the last value
-            ? path.join(cwdPath, basePath, ...pathSplit.slice(0, -1))
+            ? path.join(CWD_PATH, basePath, ...pathSplit.slice(0, -1))
             // for non-wilcards, we just return a full path
-            : path.join(cwdPath, basePath, value)
+            : path.join(CWD_PATH, basePath, value)
         };
       }),
     basePath,
@@ -105,4 +103,5 @@ function extractConfig () {
   };
 }
 
+/** We only export the aliases from the config */
 export const tsAliases = extractConfig().aliases;
