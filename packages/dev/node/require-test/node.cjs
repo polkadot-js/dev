@@ -9,4 +9,4 @@
 
 const { exposeEnv } = require('./env/index.cjs');
 
-exposeEnv(true);
+exposeEnv(false);

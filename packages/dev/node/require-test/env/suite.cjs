@@ -3,7 +3,7 @@
 
 const { after: afterAll, afterEach, before: beforeAll, beforeEach, describe, it } = require('node:test');
 
-const { enhance } = require('./util.cjs');
+const { enhanceObj } = require('../util.cjs');
 
 /**
  * @typedef {{ only?: boolean, skip?: boolean, todo?: boolean }} WrapOpts
@@ -20,12 +20,13 @@ const { enhance } = require('./util.cjs');
 function createWrapper (fn) {
   /** @type {(opts: WrapOpts) => (name: string, exec?: () => unknown) => void} */
   const wrap = (opts) => (name, exec) => fn(name, opts, exec);
+
   /** @type {(opts: WrapOpts) => (arr: unknown[]) => (name: string, exec?: (v: unknown, i: number) => unknown) => void} */
   const each = (opts) => (arr) => (name, exec) => arr.map((v, i) => fn(name?.replace('%s', v?.toString()).replace('%i', i.toString()).replace('%p', JSON.stringify(v)), opts, exec?.(v, i)));
 
   // Ensure that we have consisten helpers on the function
   // (if not already applied)
-  return enhance(fn, {
+  return enhanceObj(fn, {
     each: each({}, {
       only: each({ only: true }),
       skip: each({ skip: true }),
@@ -41,7 +42,7 @@ function createWrapper (fn) {
  * This ensures that the describe and it functions match our actual usages.
  * This includes .only, .skip, .todo as well as .ech helpers
  **/
-function getSuiteKeys () {
+function suite () {
   return {
     afterAll,
     afterEach,
@@ -52,4 +53,4 @@ function getSuiteKeys () {
   };
 }
 
-module.exports = { getSuiteKeys };
+module.exports = { suite };

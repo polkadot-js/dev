@@ -73,13 +73,11 @@ export function resolveRelative (specifier, parentUrl) {
       : (
         // tests to see if this is a file (without extension)
         EXT_ARR
-          .map((e) => `${specifier}${e}`)
-          .map((f) => path.join(dir, f))
+          .map((e) => path.join(dir, `${specifier}${e}`))
           .find((f) => fs.existsSync(f)) ||
         // test to see if this is a directory
         EXT_ARR
-          .map((e) => `${specifier}/index${e}`)
-          .map((f) => path.join(dir, f))
+          .map((e) => path.join(dir, `${specifier}/index${e}`))
           .find((f) => fs.existsSync(f))
       );
 
@@ -145,7 +143,7 @@ export function resolveAliases (specifier, _, aliases = tsAliases) {
  * 2. Then we do relative resolves (this is for extension-less .ts files)
  * 3. The we try to do resolution via TS aliases
  *
- * ... fianlly, try the next loader in the chain
+ * ... finally, try the next loader in the chain
  *
  * @param {string} specifier
  * @param {Context} context

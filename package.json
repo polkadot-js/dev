@@ -32,9 +32,10 @@
     "lint": "polkadot-dev-run-lint",
     "postinstall": "./packages/dev/scripts/polkadot-dev-yarn-only.mjs",
     "prettier": "./packages/dev/scripts/polkadot-dev-run-prettier.mjs",
-    "test": "yarn build && yarn test:esm && polkadot-dev-run-test --coverage",
-    "test:esm": "node ./tester.cjs && node ./tester.mjs",
-    "test:node": "polkadot-dev-run-node-test"
+    "test": "yarn test:esm && yarn test:node && yarn test:jest",
+    "test:esm": "yarn build && node ./tester.cjs && node ./tester.mjs",
+    "test:jest": "polkadot-dev-run-test --coverage",
+    "test:node": "polkadot-dev-run-node-test --browser"
   },
   "devDependencies": {
     "@polkadot/dev": "workspace:packages/dev",
