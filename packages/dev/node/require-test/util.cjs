@@ -12,17 +12,35 @@
  * are not already existing.
  *
  * @param {BaseObj | BaseFn} obj
- * @param {BaseObj} add
+ * @param {BaseObj[]} adds
  * @returns {EnhancedObj}
  */
-function enhance (obj, add) {
-  Object
-    .entries(add)
-    .forEach(([key, value]) => {
-      obj[key] ??= value;
-    });
+function enhanceObj (obj, ...adds) {
+  adds.forEach((add) =>
+    Object
+      .entries(add)
+      .forEach(([key, value]) => {
+        obj[key] ??= value;
+      })
+  );
 
   return obj;
+}
+
+/**
+ * Creates a stub function that will throw with the name when
+ * called. This is used to indicate future work, defined functions
+ * with no defined implementation.
+ *
+ * @param {string} objName - The name of the top-level object
+ * @param {string} fnName - The name of this function
+ * @param {Record<string, string>} [alts] - Alternatives, if existing
+ * @returns {(...args: unknown[]) => never}
+ */
+function stubFn (objName, fnName, alts = {}) {
+  return () => {
+    throw new Error(`${objName}.${fnName} has not been implemented${alts[fnName] ? ` (Use ${alts[fnName]} instead)` : ''}`);
+  };
 }
 
 /**
@@ -30,18 +48,32 @@ function enhance (obj, add) {
  * already exist on the object.
  *
  * @param {string} objName - The name of the top-level object
- * @param {string[]} keys - The keys that we are adding
- * @param {BaseObj | BaseFn} obj
+ * @param {string[]} keys - The stub key names we are adding
+ * @param {Record<string, string>} [alts] - Alternatives, if existing
  * @returns {EnhancedObj}
  */
-function unimplemented (objName, keys, obj) {
-  keys.forEach((key) => {
-    obj[key] ??= () => {
-      throw new Error(`${objName}.${key}(...) has not been implemented`);
-    };
+function stubObj (objName, keys, alts) {
+  const obj = {};
+
+  keys.forEach((fnName) => {
+    obj[fnName] ??= stubFn(objName, fnName, alts);
   });
 
   return obj;
 }
 
-module.exports = { enhance, unimplemented };
+/**
+ * Warns on the usage of a certain function while performing a noop.
+ * This is much like stubFn, however it does not fail the operation.
+ *
+ * @param {string} objName - The name of the top-level object
+ * @param {string} fnName - The name of this function
+ * @returns {(...args: unknown[]) => void}
+ */
+function warnFn (objName, fnName) {
+  return () => {
+    console.warn(`${objName}.${fnName} has been implemented as a noop`);
+  };
+}
+
+module.exports = { enhanceObj, stubFn, stubObj, warnFn };

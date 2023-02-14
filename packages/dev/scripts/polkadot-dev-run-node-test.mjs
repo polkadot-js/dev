@@ -12,14 +12,21 @@ console.log('$ polkadot-run-node-test', args.join(' '));
 
 const cmd = [];
 const filters = [];
+let reqEnv = 'node';
 
 for (let i = 0; i < args.length; i++) {
   if (args[i].startsWith('-')) {
-    cmd.push(args[i]);
+    if (args[i] === '--browser') {
+      reqEnv = 'browser';
+    } else if (args[i] === '--node') {
+      reqEnv = 'node';
+    } else {
+      cmd.push(args[i]);
 
-    // for --<param> we only skip when no = is contained
-    if (!args[i].startsWith('--') || !args[i].includes('=')) {
-      cmd.push(args[++i]);
+      // for --<param> we only skip when no = is contained
+      if (!args[i].startsWith('--') || !args[i].includes('=')) {
+        cmd.push(args[++i]);
+      }
     }
   } else {
     filters.push(args[i].split(/[\\/]/));
@@ -52,4 +59,4 @@ if (files.length === 0) {
   throw new Error('No matching .{spec, test}.{ts, tsx} files found');
 }
 
-execNodeTsSync(`--require @polkadot/dev/node/require-test --test ${cmd.join(' ')} ${files.join(' ')}`);
+execNodeTsSync(`--require @polkadot/dev/node/require-test/${reqEnv} --test ${cmd.join(' ')} ${files.join(' ')}`);

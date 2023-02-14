@@ -47,7 +47,8 @@
   "exports": {
     "./config/*": "./config/*",
     "./node/loader-ts": "./node/loader-ts/index.mjs",
-    "./node/require-test": "./node/require-test/index.cjs"
+    "./node/require-test/browser": "./node/require-test/browser.cjs",
+    "./node/require-test/node": "./node/require-test/node.cjs"
   },
   "dependencies": {
     "@babel/cli": "^7.20.7",

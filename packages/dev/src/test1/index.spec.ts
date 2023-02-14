@@ -5,8 +5,7 @@ import index, { blah } from '.';
 
 describe('index', () => {
   it('has blah that is all ok', () => {
-    expect(blah).toBeDefined();
-    expect(blah).not.toBeFalsy();
+    expect(blah).toBeTruthy();
     expect(blah()).toBeFalsy();
   });
 

@@ -9,6 +9,22 @@ describe('testing environment', (): void => {
   });
 
   describe('expect', (): void => {
+    it('has been decorated', (): void => {
+      expect(expect.not).toBeDefined();
+    });
+
+    it('throws on unimplemented', (): void => {
+      expect(
+        () => expect(true).not.toReturnWith()
+      ).toThrow('expect(...).not.toReturnWith has not been implemented');
+    });
+
+    it('throws on unimplemented (with alternative)', (): void => {
+      expect(
+        () => expect(true).not.toBeFalsy()
+      ).toThrow('expect(...).not.toBeFalsy has not been implemented (Use expect(...).toBeTruthy instead)');
+    });
+
     describe('.toThrow', (): void => {
       const thrower = () => {
         throw new Error('some error');
@@ -86,6 +102,10 @@ describe('testing environment', (): void => {
   });
 
   describe('it', (): void => {
+    it('has been enhanced', (): void => {
+      expect(it.each).toBeDefined();
+    });
+
     describe('.each', (): void => {
       it.each(['first', 'second', 'third'])('p formatter :: %p', (v): void => {
         expect(v).toBeDefined();
@@ -120,6 +140,10 @@ describe('testing environment', (): void => {
   });
 
   describe('jest', (): void => {
+    it('has been enhanced', (): void => {
+      expect(jest.setTimeout).toBeDefined();
+    });
+
     describe('.fn', (): void => {
       it('works on .toHaveBeenCalled', (): void => {
         const mock = jest.fn(() => 3);

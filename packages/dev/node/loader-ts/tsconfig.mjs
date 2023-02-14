@@ -43,7 +43,7 @@ function readConfigFile (currentPath = cwdPath, tsconfig = 'tsconfig.json') {
         : modPath;
       const extSubs = config.extends.split(/[\\/]/);
       const extPath = path.join(extRoot, ...extSubs.slice(0, -1));
-      const extConfig = readConfigFile(extPath, extSubs[extSubs.length - 1]);
+      const extConfig = readConfigFile(extPath, extSubs.at(-1));
 
       // base configs are overridden by later configs, order here matters
       paths = { ...extConfig.paths, ...paths };
@@ -75,8 +75,8 @@ function extractConfig () {
       .map(([key, [value]]) => {
         const filter = key.split(/[\\/]/);
         const pathSplit = value.split(/[\\/]/);
-        const isWildcard = filter[filter.length - 1] === '*';
-        const isWildcardPath = pathSplit[pathSplit.length - 1] === '*';
+        const isWildcard = filter.at(-1) === '*';
+        const isWildcardPath = pathSplit.at(-1) === '*';
 
         // ensure that when we have wilcards specified, they always occur in the last position
         const pathErr = (

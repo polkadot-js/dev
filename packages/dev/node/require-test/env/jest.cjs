@@ -3,7 +3,7 @@
 
 const { mock } = require('node:test');
 
-const { enhance, unimplemented } = require('./util.cjs');
+const { enhanceObj, stubObj, warnFn } = require('../util.cjs');
 
 /**
  * @typedef {((...args: unknown[]) => unknown) & { mock: {} }} Spy
@@ -11,6 +11,8 @@ const { enhance, unimplemented } = require('./util.cjs');
 
 // logged via Object.keys(jest).sort()
 const ALL_KEYS = ['advanceTimersByTime', 'advanceTimersToNextTimer', 'autoMockOff', 'autoMockOn', 'clearAllMocks', 'clearAllTimers', 'createMockFromModule', 'deepUnmock', 'disableAutomock', 'doMock', 'dontMock', 'enableAutomock', 'fn', 'genMockFromModule', 'getRealSystemTime', 'getSeed', 'getTimerCount', 'isEnvironmentTornDown', 'isMockFunction', 'isolateModules', 'isolateModulesAsync', 'mock', 'mocked', 'now', 'replaceProperty', 'requireActual', 'requireMock', 'resetAllMocks', 'resetModules', 'restoreAllMocks', 'retryTimes', 'runAllImmediates', 'runAllTicks', 'runAllTimers', 'runOnlyPendingTimers', 'setMock', 'setSystemTime', 'setTimeout', 'spyOn', 'unmock', 'unstable_mockModule', 'useFakeTimers', 'useRealTimers'];
+
+const jestStub = stubObj('jest', ALL_KEYS);
 
 /**
  * @internal
@@ -22,7 +24,7 @@ const ALL_KEYS = ['advanceTimersByTime', 'advanceTimersToNextTimer', 'autoMockOf
  * @returns {Spy}
  **/
 function extendMock (spy) {
-  return enhance(spy, {
+  return enhanceObj(spy, {
     mockReset: () => spy.mock.resetCalls(),
     mockRestore: () => spy.mock.restore()
   });
@@ -33,14 +35,15 @@ function extendMock (spy) {
  * not quite meant to be (never say never). Rather this adds the functionality
  * that we use in the polkadot-js projects.
  **/
-function getJestKeys () {
+function jest () {
   return {
-    jest: unimplemented('jest', ALL_KEYS, {
+    jest: enhanceObj({
       fn: (fn) => extendMock(mock.fn(fn)),
       restoreAllMocks: () => mock.reset(),
+      setTimeout: warnFn('jest', 'setTimeout'),
       spyOn: (obj, key) => extendMock(mock.method(obj, key))
-    })
+    }, jestStub)
   };
 }
 
-module.exports = { getJestKeys };
+module.exports = { jest };
