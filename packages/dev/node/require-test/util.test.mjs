@@ -3,8 +3,8 @@
 
 import { enhanceObj, stubObj } from './util.cjs';
 
-describe('enhanceObj', (): void => {
-  it('extends objects with non-existing values', (): void => {
+describe('enhanceObj', () => {
+  it('extends objects with non-existing values', () => {
     const test = enhanceObj(
       { a: () => 1 },
       { b: () => 2 },
@@ -16,7 +16,7 @@ describe('enhanceObj', (): void => {
     expect(test.c()).toBe(3);
   });
 
-  it('does not override existing values', (): void => {
+  it('does not override existing values', () => {
     const test = enhanceObj(
       { a: 0, b: () => 1 },
       { a: () => 0, b: () => 2 },
@@ -29,8 +29,8 @@ describe('enhanceObj', (): void => {
   });
 });
 
-describe('stubObj', (): void => {
-  it('has entries throwing for unimplemented values', (): void => {
+describe('stubObj', () => {
+  it('has entries throwing for unimplemented values', () => {
     const test = stubObj('obj', ['a', 'b']);
 
     expect(
@@ -38,7 +38,7 @@ describe('stubObj', (): void => {
     ).toThrow('obj.b has not been implemented');
   });
 
-  it('has entries throwing for unimplemented values (w/ alternatives)', (): void => {
+  it('has entries throwing for unimplemented values (w/ alternatives)', () => {
     const test = stubObj('obj', ['a', 'b'], { b: 'obj.a' });
 
     expect(

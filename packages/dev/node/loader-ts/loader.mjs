@@ -33,8 +33,12 @@ const SWC_OPTS = {
 export async function load (url, context, nextLoad) {
   if (EXT_REGEX.test(url)) {
     // used the chained loaders to retrieve
-    const { source } = await nextLoad(url, { ...context, format: 'module' });
-    // compile via swc - we can also use transformSync
+    const { source } = await nextLoad(url, {
+      ...context,
+      format: 'module'
+    });
+
+    // compile via swc - we can also use transformSync (no penalty either way)
     const { code } = await transform(source.toString(), {
       ...SWC_OPTS,
       filename: fileURLToPath(url)

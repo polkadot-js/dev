@@ -60,6 +60,12 @@ describe('testing environment', (): void => {
     });
 
     describe('.toMatchObject', (): void => {
+      it('fails matching when non-object passed in', (): void => {
+        expect(
+          () => expect(undefined).toMatchObject({ foo: 'bar' })
+        ).toThrow('Non-object received');
+      });
+
       it('matches empty object', (): void => {
         expect({
           a: 'foo',

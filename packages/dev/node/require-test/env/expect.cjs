@@ -98,9 +98,11 @@ function anyCallHasArgs (value, args) {
  * A helper to match the supplied fields against the resulting object
  */
 function matchObj (match, value) {
+  assert.ok(value, 'Non-object received');
+
   Object
     .entries(match)
-    .forEach(([k, v]) => assert.deepStrictEqual(v, value[k]));
+    .forEach(([k, v]) => assert.deepStrictEqual(v, value?.[k]));
 
   return true;
 }
