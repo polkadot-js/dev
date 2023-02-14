@@ -12,14 +12,14 @@ const SRC_URL = pathToFileURL(`${CWD_PATH}/${SRC_PATH}/`);
 const INDEX_PATH = `${SRC_PATH}/index.ts`;
 const INDEX_URL = pathToFileURL(INDEX_PATH);
 
-describe('resolveExtension', (): void => {
-  it('returns no value for a non .{ts, tsx} extension', (): void => {
+describe('resolveExtension', () => {
+  it('returns no value for a non .{ts, tsx} extension', () => {
     expect(
       resolveExtension(`./${SRC_PATH}/cjs/sample.js`, ROOT_URL)
     ).not.toBeDefined();
   });
 
-  it('returns a correct object for a .ts extension', (): void => {
+  it('returns a correct object for a .ts extension', () => {
     expect(
       resolveExtension(INDEX_PATH, ROOT_URL)
     ).toEqual({
@@ -30,14 +30,14 @@ describe('resolveExtension', (): void => {
   });
 });
 
-describe('resolveRelative', (): void => {
-  it('does not resolve non-relative paths', (): void => {
+describe('resolveRelative', () => {
+  it('does not resolve non-relative paths', () => {
     expect(
       resolveRelative(INDEX_PATH, ROOT_URL)
     ).not.toBeDefined();
   });
 
-  it('does resolve to the index via .', (): void => {
+  it('does resolve to the index via .', () => {
     expect(
       resolveRelative('.', SRC_URL)
     ).toEqual({
@@ -47,7 +47,7 @@ describe('resolveRelative', (): void => {
     });
   });
 
-  it('does resolve to the index via ./index', (): void => {
+  it('does resolve to the index via ./index', () => {
     expect(
       resolveRelative('./index', SRC_URL)
     ).toEqual({
@@ -57,7 +57,7 @@ describe('resolveRelative', (): void => {
     });
   });
 
-  it('does resolve to the sub-directory via ./test1', (): void => {
+  it('does resolve to the sub-directory via ./test1', () => {
     expect(
       resolveRelative('./test1', SRC_URL)
     ).toEqual({
