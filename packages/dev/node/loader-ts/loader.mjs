@@ -4,12 +4,11 @@
 import { transform } from '@swc/core';
 import { fileURLToPath } from 'node:url';
 
+import { EXT_REGEX } from './common.mjs';
+
 /**
  * @typedef {{ format: 'commonjs' | 'module', shortCircuit?: boolean, source: string }} Loaded
  **/
-
-// files that we support via this loader
-const EXT_REGEX = /\.tsx?$/;
 
 // options that are passed to the SWC compiler (note the use of
 // import assertions, these are needed for later Node.js versions)

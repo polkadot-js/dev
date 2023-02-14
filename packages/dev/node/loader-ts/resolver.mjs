@@ -3,9 +3,9 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import process from 'node:process';
 import { fileURLToPath, pathToFileURL, URL } from 'node:url';
 
+import { CWD_URL, EXT_ARRAY, EXT_REGEX } from './common.mjs';
 import { tsAliases } from './tsconfig.mjs';
 
 /**
@@ -13,11 +13,6 @@ import { tsAliases } from './tsconfig.mjs';
  * @typedef {{ format: 'commonjs | 'module', shortCircuit?: boolean, url: string }} Resolved
  * @typedef {(specifier: string, context: Context) => Resolved | undefined} Resolver
  */
-
-const EXT_REGEX = /\.tsx?$/;
-const EXT_ARR = ['.ts', '.tsx'];
-
-const cwdUrl = pathToFileURL(process.cwd()).href;
 
 /**
  * @internal
@@ -62,21 +57,21 @@ export function resolveRelative (specifier, parentUrl) {
     const found = specifier === '.'
       ? (
         // handle . imports for directories
-        EXT_ARR
+        EXT_ARRAY
           .map((e) => path.join(dir, `index${e}`))
           .find((f) => fs.existsSync(f)) ||
         // handle the case where parentUrl needs an extension
-        EXT_ARR
+        EXT_ARRAY
           .map((e) => `${full}${e}`)
           .find((f) => fs.existsSync(f))
       )
       : (
         // tests to see if this is a file (without extension)
-        EXT_ARR
+        EXT_ARRAY
           .map((e) => path.join(dir, `${specifier}${e}`))
           .find((f) => fs.existsSync(f)) ||
         // test to see if this is a directory
-        EXT_ARR
+        EXT_ARRAY
           .map((e) => path.join(dir, `${specifier}/index${e}`))
           .find((f) => fs.existsSync(f))
       );
@@ -150,7 +145,7 @@ export function resolveAliases (specifier, _, aliases = tsAliases) {
  * @param {Resolver} nextResolve
  */
 export function resolve (specifier, context, nextResolve) {
-  const parentUrl = context.parentURL || cwdUrl;
+  const parentUrl = context.parentURL || CWD_URL;
 
   return (
     resolveExtension(specifier, parentUrl) ||

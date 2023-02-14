@@ -6,7 +6,12 @@ import process from 'node:process';
 
 import { execNodeTsSync, exitFatal, readdirSync } from './util.mjs';
 
-const EXTS = ['.spec.ts', '.spec.tsx', '.test.ts', '.test.tsx'];
+// A & B are just helpers here and in the errors below
+const EXT_A = ['spec', 'test'];
+const EXT_B = ['ts', 'tsx', 'js', 'jsx', 'cjs', 'mjs'];
+
+// The actual extensions we are looking for
+const EXTS = EXT_A.reduce((exts, s) => exts.concat(...EXT_B.map((e) => `.${s}.${e}`)), []);
 
 const args = process.argv.slice(2);
 
@@ -69,7 +74,7 @@ const files = readdirSync('packages', EXTS).filter((f) => {
 });
 
 if (files.length === 0) {
-  exitFatal(`No files matching ${EXTS.join(', ')} found${filters.length ? ` (filtering on ${filters.join(', ')})` : ''}`);
+  exitFatal(`No files matching *.{${EXT_A.join(', ')}}.{${EXT_B.join(', ')}} found${filters.length ? ` (filtering on ${filters.join(', ')})` : ''}`);
 }
 
 execNodeTsSync(`--require @polkadot/dev/node/require-test/${reqEnv} --test ${cmd.join(' ')} ${files.join(' ')}`);
