@@ -8,6 +8,14 @@ import { fileURLToPath, pathToFileURL, URL } from 'node:url';
 import { CWD_URL, EXT_ARRAY, EXT_REGEX } from './common.mjs';
 import { tsAliases } from './tsconfig.mjs';
 
+// TODO When TypeScript 5 is released it would allow for all *.ts imports.
+// The idea is that polkadot-js aligns with the bundler/minimal resolution,
+// which in turn could make this loader much simpler.
+//
+// 1. We certainly don't need the (unused) JS resolution
+// 2. Relative import handling will always have the extension (can be dropped)
+// 3. Aliases would only need directory resolution
+
 /**
  * @typedef {{ parentURL: URL }} Context
  * @typedef {{ format: 'commonjs | 'module', shortCircuit?: boolean, url: string }} Resolved
