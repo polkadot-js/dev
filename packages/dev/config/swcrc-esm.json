@@ -27,5 +27,6 @@
       "node": "14"
     },
     "mode": "entry"
-  }
+  },
+  "minify": false
 }

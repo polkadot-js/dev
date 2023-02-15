@@ -10,18 +10,6 @@ import { EXT_REGEX } from './common.mjs';
  * @typedef {{ format: 'commonjs' | 'module', shortCircuit?: boolean, source: string }} Loaded
  **/
 
-// options that are passed to the SWC compiler (note the use of
-// import assertions, these are needed for later Node.js versions)
-const SWC_OPTS = {
-  jsc: {
-    experimental: {
-      keepImportAssertions: true
-    },
-    target: 'es2020'
-  },
-  sourceMaps: 'inline'
-};
-
 /**
  * Load all TypeScript files, compile via swc on-the-fly
  *
@@ -40,8 +28,17 @@ export async function load (url, context, nextLoad) {
 
     // compile via swc - we can also use transformSync (no penalty either way)
     const { code } = await transform(source.toString(), {
-      ...SWC_OPTS,
-      filename: fileURLToPath(url)
+      // we add the actual filename - this enables auto-jsx transforms
+      filename: fileURLToPath(url),
+      jsc: {
+        experimental: {
+          // import assertions, these are needed for later Node.js versions)
+          keepImportAssertions: true
+        },
+        target: 'es2020'
+      },
+      sourceMaps: 'inline',
+      swcrc: false
     });
 
     return {
