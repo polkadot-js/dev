@@ -23,7 +23,9 @@
     ".d.ts",
     ".manual.ts",
     ".spec.ts",
+    ".spec.tsx",
     ".test.ts",
+    ".test.tsx",
     "mod.ts"
   ],
   "env": {

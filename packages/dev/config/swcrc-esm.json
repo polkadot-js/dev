@@ -11,7 +11,7 @@
         "runtime": "automatic"
       }
     },
-    "target": "es2016",
+    "target": "es2020",
     "loose": false,
     "externalHelpers": true
   },
@@ -19,7 +19,9 @@
     ".d.ts",
     ".manual.ts",
     ".spec.ts",
+    ".spec.tsx",
     ".test.ts",
+    ".test.tsx",
     "mod.ts"
   ],
   "env": {

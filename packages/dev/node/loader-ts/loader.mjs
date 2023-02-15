@@ -35,7 +35,7 @@ export async function load (url, context, nextLoad) {
           // import assertions, these are needed for later Node.js versions)
           keepImportAssertions: true
         },
-        target: 'es2020'
+        target: 'esnext'
       },
       sourceMaps: 'inline',
       swcrc: false
