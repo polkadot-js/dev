@@ -14,6 +14,8 @@ import { tsAliases } from './tsconfig.mjs';
  * @typedef {(specifier: string, context: Context) => Resolved | undefined} Resolver
  */
 
+const EXT_REGEX_JS = /\.jsx?$/;
+
 /**
  * @internal
  *
@@ -23,7 +25,7 @@ import { tsAliases } from './tsconfig.mjs';
  * @param {URL} parentUrl
  * @returns {Resolved | undefined}
  **/
-export function resolveExtension (specifier, parentUrl) {
+export function resolveExtensionTs (specifier, parentUrl) {
   // handle .ts extensions directly
   if (EXT_REGEX.test(specifier)) {
     return {
@@ -31,6 +33,45 @@ export function resolveExtension (specifier, parentUrl) {
       shortCircuit: true,
       url: new URL(specifier, parentUrl).href
     };
+  }
+}
+
+/**
+ * @internal
+ *
+ * Resolve fully-specified imports with extensions. Here we cater for the TS
+ * mapping of import blah from './blah.js' where only './blah.ts' exists
+ *
+ * TODO: While this is being validated by the tests, this is not actually used
+ * interally, i.e. it does not participate in the resolve(..) function. If we
+ * we start using `import { a } from './b.js'` inside the polkadot-js codebase
+ * we should add it to the chain. (We only use extensionless imports atm, will
+ * go to .ts when support does appear)
+ *
+ * @param {string} specifier
+ * @param {URL} parentUrl
+ * @returns {Resolved | undefined}
+ **/
+export function resolveExtensionJs (specifier, parentUrl) {
+  // handle ts imports where import *.js -> *.ts
+  // (unlike the ts resolution, we only cater for relative paths)
+  if (specifier.startsWith('.') && EXT_REGEX_JS.test(specifier)) {
+    const full = fileURLToPath(new URL(specifier, parentUrl));
+
+    // when it doesn't exist, we try and see if a source replacement helps
+    if (!fs.existsSync(full)) {
+      const found = EXT_ARRAY
+        .map((e) => full.replace(EXT_REGEX_JS, e))
+        .find((f) => fs.existsSync(f) && fs.lstatSync(f).isFile());
+
+      if (found) {
+        return {
+          format: 'module',
+          shortCircuit: true,
+          url: pathToFileURL(found).href
+        };
+      }
+    }
   }
 }
 
@@ -148,7 +189,7 @@ export function resolve (specifier, context, nextResolve) {
   const parentUrl = context.parentURL || CWD_URL;
 
   return (
-    resolveExtension(specifier, parentUrl) ||
+    resolveExtensionTs(specifier, parentUrl) ||
     resolveRelative(specifier, parentUrl) ||
     resolveAliases(specifier, parentUrl) ||
     nextResolve(specifier, context)
