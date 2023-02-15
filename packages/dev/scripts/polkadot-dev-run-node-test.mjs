@@ -19,6 +19,8 @@ console.log('$ polkadot-run-node-test', args.join(' '));
 
 const cmd = [];
 const filters = [];
+const filtersExcl = [];
+const filtersIncl = [];
 let reqEnv = 'node';
 
 for (let i = 0; i < args.length; i++) {
@@ -52,25 +54,48 @@ for (let i = 0; i < args.length; i++) {
   } else {
     // no "-"" found, so we use these as path filters
     filters.push(args[i]);
+
+    if (args[i].startsWith('^')) {
+      filtersExcl.push(args[i].slice(1).split(/[\\/]/));
+    } else {
+      filtersIncl.push(args[i].split(/[\\/]/));
+    }
   }
 }
 
-const filterParts = filters.map((f) => f.split(/[\\/]/));
-
-const files = readdirSync('packages', EXTS).filter((f) => {
-  const parts = f.split(/[\\/]/);
-
-  return !filters.length || filterParts.some((filter) =>
+const applyFilters = (parts, filters) =>
+  filters.some((filter) =>
     parts
       .map((_, i) => i)
-      .filter((i) => parts[i].startsWith(filter[0]))
+      .filter((i) =>
+        filter.length === 1
+          ? parts[i].startsWith(filter[0])
+          : parts[i] === filter[0]
+      )
       .some((start) =>
         filter.every((f, i) =>
-          parts[start + i] &&
-          parts[start + i].startsWith(f)
+          parts[start + i] && (
+            i === (filter.length - 1)
+              ? parts[start + i].startsWith(f)
+              : parts[start + i] === f
+          )
         )
       )
   );
+
+const files = readdirSync('packages', EXTS).filter((f) => {
+  const parts = f.split(/[\\/]/);
+  let isIncluded = true;
+
+  if (filtersIncl.length) {
+    isIncluded = applyFilters(parts, filtersIncl);
+  }
+
+  if (isIncluded && filtersExcl.length) {
+    isIncluded = !applyFilters(parts, filtersExcl);
+  }
+
+  return isIncluded;
 });
 
 if (files.length === 0) {
