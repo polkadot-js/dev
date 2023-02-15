@@ -18,7 +18,7 @@ module.exports = {
   ),
   // custom resolver to do TS-like imports
   resolver: require.resolve('./jest-resolver.cjs'),
-  // See https://jestjs.io/docs/configuration#extraglobals-arraystring
+  // See https://jestjs.io/docs/configuration#sandboxinjectedglobals-arraystring
   sandboxInjectedGlobals: ['Math'],
   testMatch: [
     '**/__tests__/**/*.[jt]s?(x)',
