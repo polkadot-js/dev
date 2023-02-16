@@ -137,6 +137,30 @@ function assertStrMatches (value, check) {
 /**
  * @internal
  *
+ * A helper to check the type of a specific value as used in the expect.any(Clazz) matcher
+ *
+ * @see https://github.com/facebook/jest/blob/a49c88610e49a3242576160740a32a2fe11161e1/packages/expect/src/asymmetricMatchers.ts#L103-L133
+ *
+ * @param {unknown} value
+ * @param {Object} value
+ */
+function assertTypeof (value, Clazz) {
+  assert.ok(
+    (Clazz === BigInt && typeof value === 'bigint') ||
+    (Clazz === Boolean && typeof value === 'boolean') ||
+    (Clazz === Function && typeof value === 'function') ||
+    (Clazz === Number && typeof value === 'number') ||
+    (Clazz === Object && typeof value === 'object') ||
+    (Clazz === String && typeof value === 'string') ||
+    (Clazz === Symbol && typeof value === 'symbol') ||
+    (value instanceof Clazz),
+    `${value} is not an instance of ${Clazz.name}`
+  );
+}
+
+/**
+ * @internal
+ *
  * Decorates the expect(...).to* functions with the shim values
  *
  * @returns {(value: unknown) => Record<string, (...args: unknown[]) => unknown>}
@@ -176,6 +200,8 @@ function expect () {
     expect: enhanceObj(
       createExpectFn(),
       {
+        any: (Clazz) => new Matcher((value) => assertTypeof(value, Clazz)),
+        anything: () => new Matcher((value) => assert.ok(value !== null && value !== undefined, 'Value is either null or undefined')),
         objectContaining: (check) => new Matcher((value) => assertObjMatches(value, check)),
         stringMatching: (check) => new Matcher((value) => assertStrMatches(value, check))
       },

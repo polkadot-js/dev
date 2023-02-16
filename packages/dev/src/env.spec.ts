@@ -117,7 +117,7 @@ describe('expect', (): void => {
       });
     });
 
-    it('matches an object with some matcher supplied', (): void => {
+    it('matches an object with some expect.stringMatching supplied', (): void => {
       expect({
         a: 'foo bar',
         b: 'baz',
@@ -129,6 +129,56 @@ describe('expect', (): void => {
         b: expect.stringMatching('baz'),
         c: 'zaz'
       });
+    });
+
+    it('matches an object with expect.any supplied', (): void => {
+      expect({
+        a: 123,
+        b: Boolean(true),
+        c: 'foo'
+      }).toMatchObject({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        a: expect.any(Number),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        b: expect.any(Boolean),
+        c: 'foo'
+      });
+    });
+
+    it('does not match an object with non instance value for expect.any', (): void => {
+      expect(
+        () => expect({
+          a: true,
+          b: 'foo'
+        }).toMatchObject({
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          a: expect.any(Number),
+          b: 'foo'
+        })
+      ).toThrow(/not an instance of Number/);
+    });
+
+    it('matches an object with expect.anything supplied', (): void => {
+      expect({
+        a: 123,
+        b: 'foo'
+      }).toMatchObject({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        a: expect.anything(),
+        b: 'foo'
+      });
+    });
+
+    it('does not match an object with undefined value for expect.anything', (): void => {
+      expect(
+        () => expect({
+          b: 'foo'
+        }).toMatchObject({
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          a: expect.anything(),
+          b: 'foo'
+        })
+      ).toThrow();
     });
   });
 });
