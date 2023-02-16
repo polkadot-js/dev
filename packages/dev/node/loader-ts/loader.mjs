@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { transform } from '@swc/core';
+// import { transform } from 'esbuild';
 import { fileURLToPath } from 'node:url';
 
 import { EXT_REGEX } from './common.mjs';
@@ -26,7 +27,7 @@ export async function load (url, context, nextLoad) {
       format: 'module'
     });
 
-    // compile via swc - we can also use transformSync (no penalty either way)
+    // compile via swc
     const { code } = await transform(source.toString(), {
       // we add the actual filename - this enables auto-jsx transforms
       filename: fileURLToPath(url),
@@ -40,6 +41,23 @@ export async function load (url, context, nextLoad) {
       sourceMaps: 'inline',
       swcrc: false
     });
+
+    // // compile via esbuild
+    // const { code } = await transform(source, {
+    //   format: 'esm',
+    //   loader: url.endsWith('.tsx')
+    //     ? 'tsx'
+    //     : 'ts',
+    //   platform: 'node',
+    //   sourcefile: fileURLToPath(url),
+    //   sourcemap: 'inline',
+    //   target: 'esnext',
+    //   tsconfigRaw: {
+    //     compilerOptions: {
+    //       jsx: 'react-jsx'
+    //     }
+    //   }
+    // });
 
     return {
       format: 'module',
