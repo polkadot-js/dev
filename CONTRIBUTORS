@@ -1,4 +1,4 @@
-    1164	Jaco                          	Cleanup test env expectations (#914)
+    1165	Jaco                          	Dev test with esbuild alongside swc (#915)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
