@@ -111,7 +111,7 @@ function assertSomeCallHasArgs (value, args) {
  * @param {object} check
  */
 function assertObjMatches (value, check) {
-  assert.ok(value && typeof value === 'object', `Cannot match object. Expected object value, found ${typeof value}`);
+  assert.ok(value && typeof value === 'object', `Expected object value, found ${typeof value}`);
 
   Object
     .entries(check)
@@ -127,7 +127,7 @@ function assertObjMatches (value, check) {
  * @param {string | RegEx} check
  */
 function assertStrMatches (value, check) {
-  assert.ok(typeof value === 'string', `Cannot match string. Expected string value, found ${typeof value}`);
+  assert.ok(typeof value === 'string', `Expected string value, found ${typeof value}`);
 
   typeof check === 'string'
     ? assert.strictEqual(value, check)
