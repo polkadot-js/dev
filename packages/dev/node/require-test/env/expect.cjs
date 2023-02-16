@@ -47,9 +47,12 @@ class Matcher {
   /** @type AssertMatchFn */
   assertMatch;
 
-  /** @param {AssertMatchFn} assertMatch */
-  constructor (assertMatch) {
-    this.assertMatch = assertMatch;
+  /**
+   * @param {(value: unknown, check: unknown) => unknown} assertFn
+   * @param {unknown} [check]
+   **/
+  constructor (assertFn, check) {
+    this.assertMatch = (value) => assertFn(value, check);
   }
 }
 
@@ -65,6 +68,17 @@ function assertMatch (value, check) {
   check instanceof Matcher
     ? check.assertMatch(value)
     : assert.deepStrictEqual(value, check);
+}
+
+/**
+ * @internal
+ *
+ * Asserts that the input value is non-nullish
+ *
+ * @param {unknown} value
+ */
+function assertNonNullish (value) {
+  assert.ok(value !== null && value !== undefined);
 }
 
 /**
@@ -200,10 +214,10 @@ function expect () {
     expect: enhanceObj(
       createExpectFn(),
       {
-        any: (Clazz) => new Matcher((value) => assertTypeof(value, Clazz)),
-        anything: () => new Matcher((value) => assert.ok(value !== null && value !== undefined)),
-        objectContaining: (check) => new Matcher((value) => assertObjMatches(value, check)),
-        stringMatching: (check) => new Matcher((value) => assertStrMatches(value, check))
+        any: (Clazz) => new Matcher(assertTypeof, Clazz),
+        anything: () => new Matcher(assertNonNullish),
+        objectContaining: (check) => new Matcher(assertObjMatches, check),
+        stringMatching: (check) => new Matcher(assertStrMatches, check)
       },
       stubExpect
     )
