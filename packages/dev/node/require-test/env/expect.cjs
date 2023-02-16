@@ -201,7 +201,7 @@ function expect () {
       createExpectFn(),
       {
         any: (Clazz) => new Matcher((value) => assertTypeof(value, Clazz)),
-        anything: () => new Matcher((value) => assert.ok(value !== null && value !== undefined, 'Value is either null or undefined')),
+        anything: () => new Matcher((value) => assert.ok(value !== null && value !== undefined)),
         objectContaining: (check) => new Matcher((value) => assertObjMatches(value, check)),
         stringMatching: (check) => new Matcher((value) => assertStrMatches(value, check))
       },
