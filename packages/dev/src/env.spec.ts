@@ -22,6 +22,22 @@ describe('expect', (): void => {
     ).toThrow('expect(...).not.toBeFalsy has not been implemented (Use expect(...).toBeTruthy instead)');
   });
 
+  describe('.toBeDefined', (): void => {
+    it('does not throw on null', (): void => {
+      expect(null).toBeDefined();
+    });
+
+    it('throws on undefined', (): void => {
+      expect(
+        () => expect(undefined).toBeDefined()
+      ).toThrow();
+    });
+
+    it('.not does not throw on undefined', (): void => {
+      expect(undefined).not.toBeDefined();
+    });
+  });
+
   describe('.toThrow', (): void => {
     const thrower = () => {
       throw new Error('some error');
@@ -56,11 +72,31 @@ describe('expect', (): void => {
     });
   });
 
+  describe('.toMatch', (): void => {
+    it('fails matching when non-object passed in', (): void => {
+      expect(
+        () => expect(undefined).toMatch(/match/)
+      ).toThrow(/Expected string/);
+    });
+
+    it('fails matching when non-matching string passed in', (): void => {
+      expect(
+        () => expect('some').toMatch(/match/)
+      ).toThrow(/did not match/);
+    });
+
+    it('matches string passed', (): void => {
+      expect(
+        () => expect('matching').toMatch(/match/)
+      ).not.toThrow();
+    });
+  });
+
   describe('.toMatchObject', (): void => {
     it('fails matching when non-object passed in', (): void => {
       expect(
         () => expect(undefined).toMatchObject({ foo: 'bar' })
-      ).toThrow('Non-object received');
+      ).toThrow(/Expected object/);
     });
 
     it('matches empty object', (): void => {
@@ -79,6 +115,70 @@ describe('expect', (): void => {
         a: 'foo',
         c: 123
       });
+    });
+
+    it('matches an object with some expect.stringMatching supplied', (): void => {
+      expect({
+        a: 'foo bar',
+        b: 'baz',
+        c: 'zaz'
+      }).toMatchObject({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        a: expect.stringMatching(/o b/),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        b: expect.stringMatching('baz'),
+        c: 'zaz'
+      });
+    });
+
+    it('matches an object with expect.any supplied', (): void => {
+      expect({
+        a: 123,
+        b: Boolean(true),
+        c: 'foo'
+      }).toMatchObject({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        a: expect.any(Number),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        b: expect.any(Boolean),
+        c: 'foo'
+      });
+    });
+
+    it('does not match an object with non instance value for expect.any', (): void => {
+      expect(
+        () => expect({
+          a: true,
+          b: 'foo'
+        }).toMatchObject({
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          a: expect.any(Number),
+          b: 'foo'
+        })
+      ).toThrow(/not an instance of Number/);
+    });
+
+    it('matches an object with expect.anything supplied', (): void => {
+      expect({
+        a: 123,
+        b: 'foo'
+      }).toMatchObject({
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+        a: expect.anything(),
+        b: 'foo'
+      });
+    });
+
+    it('does not match an object with undefined value for expect.anything', (): void => {
+      expect(
+        () => expect({
+          b: 'foo'
+        }).toMatchObject({
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          a: expect.anything(),
+          b: 'foo'
+        })
+      ).toThrow();
     });
   });
 });
@@ -162,7 +262,6 @@ describe('jest', (): void => {
       expect(mock()).toBe(3);
       expect(mock()).toBe(3);
 
-      expect(mock).not.toHaveBeenCalledTimes(1);
       expect(mock).toHaveBeenCalledTimes(2);
     });
 
@@ -192,14 +291,6 @@ describe('jest', (): void => {
       expect(test).toHaveBeenLastCalledWith(expect.objectContaining({}), null);
       expect(test).toHaveBeenLastCalledWith(expect.objectContaining({ a: 123 }), null);
       expect(test).toHaveBeenLastCalledWith(expect.objectContaining({ b: 'test' }), null);
-    });
-
-    it('works with .not.toHaveBeenCalledWith & expect.objectContaining', (): void => {
-      const test = jest.fn((a: unknown, b: unknown) => !!a && !!b);
-
-      test({ a: 123, b: 'test' }, null);
-
-      expect(test).not.toHaveBeenCalledWith({ a: 234 }, null);
     });
 
     it('allows resets', (): void => {

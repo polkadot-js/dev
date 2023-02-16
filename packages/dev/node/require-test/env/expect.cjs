@@ -6,7 +6,7 @@ const assert = require('node:assert/strict');
 const { enhanceObj, stubObj } = require('../util.cjs');
 
 /**
- * @typedef {(other: unknown) => boolean} MatcherFn
+ * @typedef {(value: unknown) => void} AssertMatchFn
  */
 
 // logged via Object.keys(expect).sort()
@@ -44,13 +44,41 @@ const stubExpectFnNot = stubObj('expect(...).not', EXPECT_KEYS_FN, {
  * An example of matcher use can be seen in the isCalledWith loops
  */
 class Matcher {
-  /** @type MatcherFn */
-  match;
+  /** @type AssertMatchFn */
+  assertMatch;
 
-  /** @param {MatcherFn} match */
-  constructor (match) {
-    this.match = match;
+  /**
+   * @param {(value: unknown, check: unknown) => unknown} assertFn
+   * @param {unknown} [check]
+   **/
+  constructor (assertFn, check) {
+    this.assertMatch = (value) => assertFn(value, check);
   }
+}
+
+/**
+ * @internal
+ *
+ * Asserts that the value is either (equal deep) or matches the matcher (if supplied)
+ *
+ * @param {unknown} value
+ * @param {Macther | unknown} check
+ */
+function assertMatch (value, check) {
+  check instanceof Matcher
+    ? check.assertMatch(value)
+    : assert.deepStrictEqual(value, check);
+}
+
+/**
+ * @internal
+ *
+ * Asserts that the input value is non-nullish
+ *
+ * @param {unknown} value
+ */
+function assertNonNullish (value) {
+  assert.ok(value !== null && value !== undefined);
 }
 
 /**
@@ -60,20 +88,14 @@ class Matcher {
  * use of matchers. This is used in finding any call or checking a specific
  * call
  *
- * @param {unknown[]} maches
  * @param {{ arguments: unknown[] }} [call]
+ * @param {unknown[]} args
  * @returns {boolean}
  */
-function singleCallHasArgs (args, call) {
+function assertCallHasArgs (call, args) {
   assert.ok(call && args.length === call.arguments?.length, 'Number of arguments does not match');
 
-  return args.every((arg, i) => {
-    arg instanceof Matcher
-      ? arg.match(call.arguments[i])
-      : assert.deepStrictEqual(call.arguments[i], arg);
-
-    return true;
-  });
+  args.forEach((arg, i) => assertMatch(call.arguments[i], arg));
 }
 
 /**
@@ -82,29 +104,72 @@ function singleCallHasArgs (args, call) {
  * A helper that checks for the first instance of a match on the actual call
  * arguments (this extracts the toHaveBeenCalledWith logic)
  */
-function anyCallHasArgs (value, args) {
-  return value?.mock?.calls.some((call) => {
+function assertSomeCallHasArgs (value, args) {
+  assert.ok(value?.mock?.calls.some((call) => {
     try {
-      return singleCallHasArgs(args, call);
-    } catch (error) {
+      assertCallHasArgs(call, args);
+
+      return true;
+    } catch {
       return false;
     }
-  }) || false;
+  }), 'No call found matching arguments');
 }
 
 /**
  * @internal
  *
  * A helper to match the supplied fields against the resulting object
+ *
+ * @param {object} value
+ * @param {object} check
  */
-function matchObj (match, value) {
-  assert.ok(value, 'Non-object received');
+function assertObjMatches (value, check) {
+  assert.ok(value && typeof value === 'object', `Expected object value, found ${typeof value}`);
 
   Object
-    .entries(match)
-    .forEach(([k, v]) => assert.deepStrictEqual(v, value?.[k]));
+    .entries(check)
+    .forEach(([key, other]) => assertMatch(value?.[key], other));
+}
 
-  return true;
+/**
+ * @internal
+ *
+ * A helper to match a string value against another string or regex
+ *
+ * @param {string} value
+ * @param {string | RegEx} check
+ */
+function assertStrMatches (value, check) {
+  assert.ok(typeof value === 'string', `Expected string value, found ${typeof value}`);
+
+  typeof check === 'string'
+    ? assert.strictEqual(value, check)
+    : assert.match(value, check);
+}
+
+/**
+ * @internal
+ *
+ * A helper to check the type of a specific value as used in the expect.any(Clazz) matcher
+ *
+ * @see https://github.com/facebook/jest/blob/a49c88610e49a3242576160740a32a2fe11161e1/packages/expect/src/asymmetricMatchers.ts#L103-L133
+ *
+ * @param {unknown} value
+ * @param {Object} value
+ */
+function assertTypeof (value, Clazz) {
+  assert.ok(
+    (Clazz === BigInt && typeof value === 'bigint') ||
+    (Clazz === Boolean && typeof value === 'boolean') ||
+    (Clazz === Function && typeof value === 'function') ||
+    (Clazz === Number && typeof value === 'number') ||
+    (Clazz === Object && typeof value === 'object') ||
+    (Clazz === String && typeof value === 'string') ||
+    (Clazz === Symbol && typeof value === 'symbol') ||
+    (value instanceof Clazz),
+    `${value} is not an instance of ${Clazz.name}`
+  );
 }
 
 /**
@@ -121,22 +186,20 @@ function createExpectFn () {
       toBeDefined: () => assert.equal(value, undefined),
       toEqual: (other) => assert.notDeepEqual(value, other),
       toHaveBeenCalled: () => assert.ok(!value?.mock?.calls.length),
-      toHaveBeenCalledTimes: (n) => assert.notEqual(value?.mock?.calls.length, n),
-      toHaveBeenCalledWith: (...args) => assert.ok(!anyCallHasArgs(value, args)),
-      toHaveLength: (n) => assert.notEqual(value?.length, n),
       toThrow: (message) => assert.doesNotThrow(value, message && { message })
     }, stubExpectFnNot),
     toBe: (other) => assert.strictEqual(value, other),
     toBeDefined: () => assert.notEqual(value, undefined),
     toBeFalsy: () => assert.ok(!value),
     toBeTruthy: () => assert.ok(value),
-    toEqual: (b) => assert.deepEqual(value, b),
+    toEqual: (other) => assert.deepEqual(value, other),
     toHaveBeenCalled: () => assert.ok(value?.mock?.calls.length),
-    toHaveBeenCalledTimes: (n) => assert.equal(value?.mock?.calls.length, n),
-    toHaveBeenCalledWith: (...args) => assert.ok(anyCallHasArgs(value, args)),
-    toHaveBeenLastCalledWith: (...args) => assert.ok(singleCallHasArgs(args, value?.mock?.calls.at(-1))),
-    toHaveLength: (n) => assert.equal(value?.length, n),
-    toMatchObject: (obj) => assert.ok(matchObj(obj, value)),
+    toHaveBeenCalledTimes: (count) => assert.equal(value?.mock?.calls.length, count),
+    toHaveBeenCalledWith: (...args) => assertSomeCallHasArgs(value, args),
+    toHaveBeenLastCalledWith: (...args) => assertCallHasArgs(value?.mock?.calls.at(-1), args),
+    toHaveLength: (length) => assert.equal(value?.length, length),
+    toMatch: (check) => assertStrMatches(value, check),
+    toMatchObject: (check) => assertObjMatches(value, check),
     toThrow: (message) => assert.throws(value, message && { message })
   }, stubExpectFn);
 }
@@ -151,8 +214,10 @@ function expect () {
     expect: enhanceObj(
       createExpectFn(),
       {
-        objectContaining: (check) => new Matcher((value) => Object.entries(check).every(([k, v]) => assert.deepStrictEqual(v, value?.[k]))),
-        stringMatching: (regExOrStr) => new Matcher((value) => assert.ok(typeof regExOrStr === 'string' ? value.includes(regExOrStr) : value.test(regExOrStr)))
+        any: (Clazz) => new Matcher(assertTypeof, Clazz),
+        anything: () => new Matcher(assertNonNullish),
+        objectContaining: (check) => new Matcher(assertObjMatches, check),
+        stringMatching: (check) => new Matcher(assertStrMatches, check)
       },
       stubExpect
     )

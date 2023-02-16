@@ -37,9 +37,9 @@ function enhanceObj (obj, ...adds) {
  * @param {Record<string, string>} [alts] - Alternatives, if existing
  * @returns {(...args: unknown[]) => never}
  */
-function stubFn (objName, fnName, alts = {}) {
+function stubFn (objName, fnName, alts) {
   return () => {
-    throw new Error(`${objName}.${fnName} has not been implemented${alts[fnName] ? ` (Use ${alts[fnName]} instead)` : ''}`);
+    throw new Error(`${objName}.${fnName} has not been implemented${alts?.[fnName] ? ` (Use ${alts[fnName]} instead)` : ''}`);
   };
 }
 
