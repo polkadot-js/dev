@@ -22,6 +22,14 @@ describe('expect', (): void => {
     ).toThrow('expect(...).not.toBeFalsy has not been implemented (Use expect(...).toBeTruthy instead)');
   });
 
+  describe('rejects', (): void => {
+    it('matches a rejection via .toThrow', async (): Promise<void> => {
+      await expect(
+        Promise.reject(new Error('this is a rejection message'))
+      ).rejects.toThrow(/rejection/);
+    });
+  });
+
   describe('.toBeDefined', (): void => {
     it('does not throw on null', (): void => {
       expect(null).toBeDefined();
@@ -110,10 +118,12 @@ describe('expect', (): void => {
       expect({
         a: 'foo',
         b: 'bar',
-        c: 123
+        c: 123,
+        d: [456, 789]
       }).toMatchObject({
         a: 'foo',
-        c: 123
+        c: 123,
+        d: [456, 789]
       });
     });
 
@@ -178,7 +188,48 @@ describe('expect', (): void => {
           a: expect.anything(),
           b: 'foo'
         })
-      ).toThrow();
+      ).toThrow(/non-nullish/);
+    });
+
+    it('does not match an object with non-array value', (): void => {
+      expect(
+        () => expect({
+          a: 'foo',
+          b: 'bar'
+        }).toMatchObject({
+          a: 'foo',
+          b: [123, 456]
+        })
+      ).toThrow(/Expected array value/);
+    });
+
+    it('allows for deep matching', (): void => {
+      expect({
+        a: 123,
+        b: {
+          c: 456,
+          d: {
+            e: 'foo',
+            f: 'bar',
+            g: {
+              h: [789, { z: 'baz' }]
+            }
+          }
+        }
+      }).toMatchObject({
+        a: 123,
+        b: {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+          c: expect.any(Number),
+          d: {
+            f: 'bar',
+            g: {
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+              h: [expect.any(Number), { z: 'baz' }]
+            }
+          }
+        }
+      });
     });
   });
 });

@@ -17,9 +17,12 @@ const EXPECT_KEYS_FN = ['lastCalledWith', 'lastReturnedWith', 'not', 'nthCalledW
 
 const stubExpect = stubObj('expect', EXPECT_KEYS);
 const stubExpectFn = stubObj('expect(...)', EXPECT_KEYS_FN);
+const stubExpectFnRejects = stubObj('expect(...).rejects', EXPECT_KEYS_FN);
+const stubExpectFnResolves = stubObj('expect(...).resolves', EXPECT_KEYS_FN);
 const stubExpectFnNot = stubObj('expect(...).not', EXPECT_KEYS_FN, {
   toBeFalsy: 'expect(...).toBeTruthy',
-  toBeTruthy: 'expect(...).toBeFalsy'
+  toBeTruthy: 'expect(...).toBeFalsy',
+  toThrowError: 'expect(...).not.toThrow'
 });
 
 /**
@@ -59,26 +62,12 @@ class Matcher {
 /**
  * @internal
  *
- * Asserts that the value is either (equal deep) or matches the matcher (if supplied)
- *
- * @param {unknown} value
- * @param {Macther | unknown} check
- */
-function assertMatch (value, check) {
-  check instanceof Matcher
-    ? check.assertMatch(value)
-    : assert.deepStrictEqual(value, check);
-}
-
-/**
- * @internal
- *
  * Asserts that the input value is non-nullish
  *
  * @param {unknown} value
  */
 function assertNonNullish (value) {
-  assert.ok(value !== null && value !== undefined);
+  assert.ok(value !== null && value !== undefined, `Expected non-nullish value, found ${value}`);
 }
 
 /**
@@ -119,17 +108,50 @@ function assertSomeCallHasArgs (value, args) {
 /**
  * @internal
  *
+ * Asserts that the value is either (equal deep) or matches the matcher (if supplied)
+ *
+ * @param {unknown} value
+ * @param {Matcher | unknown} check
+ */
+function assertMatch (value, check) {
+  check instanceof Matcher
+    ? check.assertMatch(value)
+    : Array.isArray(check)
+      ? assertMatchArr(value, check)
+      : check && typeof check === 'object'
+        ? assertMatchObj(value, check)
+        : assert.deepStrictEqual(value, check);
+}
+
+/**
+ * @internal
+ *
+ * A helper to match the supplied array check against the resulting array
+ *
+ * @param {unknown[]} value
+ * @param {unknown[]} check
+ */
+function assertMatchArr (value, check) {
+  assert.ok(value && Array.isArray(value), `Expected array value, found ${typeof value}`);
+  assert.ok(value.length === check.length, `Expected array with ${check.length} entries, found ${value.length}`);
+
+  check.forEach((other, i) => assertMatch(value[i], other));
+}
+
+/**
+ * @internal
+ *
  * A helper to match the supplied fields against the resulting object
  *
  * @param {object} value
  * @param {object} check
  */
-function assertObjMatches (value, check) {
+function assertMatchObj (value, check) {
   assert.ok(value && typeof value === 'object', `Expected object value, found ${typeof value}`);
 
   Object
     .entries(check)
-    .forEach(([key, other]) => assertMatch(value?.[key], other));
+    .forEach(([key, other]) => assertMatch(value[key], other));
 }
 
 /**
@@ -140,7 +162,7 @@ function assertObjMatches (value, check) {
  * @param {string} value
  * @param {string | RegEx} check
  */
-function assertStrMatches (value, check) {
+function assertMatchStr (value, check) {
   assert.ok(typeof value === 'string', `Expected string value, found ${typeof value}`);
 
   typeof check === 'string'
@@ -158,7 +180,7 @@ function assertStrMatches (value, check) {
  * @param {unknown} value
  * @param {Object} value
  */
-function assertTypeof (value, Clazz) {
+function assertInstanceOf (value, Clazz) {
   assert.ok(
     (Clazz === BigInt && typeof value === 'bigint') ||
     (Clazz === Boolean && typeof value === 'boolean') ||
@@ -188,9 +210,14 @@ function createExpectFn () {
       toHaveBeenCalled: () => assert.ok(!value?.mock?.calls.length),
       toThrow: (message) => assert.doesNotThrow(value, message && { message })
     }, stubExpectFnNot),
+    rejects: enhanceObj({
+      toThrow: (message) => assert.rejects(value, message)
+    }, stubExpectFnRejects),
+    resolves: enhanceObj({}, stubExpectFnResolves),
     toBe: (other) => assert.strictEqual(value, other),
     toBeDefined: () => assert.notEqual(value, undefined),
     toBeFalsy: () => assert.ok(!value),
+    toBeInstanceOf: (Clazz) => assertInstanceOf(value, Clazz),
     toBeTruthy: () => assert.ok(value),
     toEqual: (other) => assert.deepEqual(value, other),
     toHaveBeenCalled: () => assert.ok(value?.mock?.calls.length),
@@ -198,8 +225,8 @@ function createExpectFn () {
     toHaveBeenCalledWith: (...args) => assertSomeCallHasArgs(value, args),
     toHaveBeenLastCalledWith: (...args) => assertCallHasArgs(value?.mock?.calls.at(-1), args),
     toHaveLength: (length) => assert.equal(value?.length, length),
-    toMatch: (check) => assertStrMatches(value, check),
-    toMatchObject: (check) => assertObjMatches(value, check),
+    toMatch: (check) => assertMatchStr(value, check),
+    toMatchObject: (check) => assertMatchObj(value, check),
     toThrow: (message) => assert.throws(value, message && { message })
   }, stubExpectFn);
 }
@@ -214,10 +241,10 @@ function expect () {
     expect: enhanceObj(
       createExpectFn(),
       {
-        any: (Clazz) => new Matcher(assertTypeof, Clazz),
+        any: (Clazz) => new Matcher(assertInstanceOf, Clazz),
         anything: () => new Matcher(assertNonNullish),
-        objectContaining: (check) => new Matcher(assertObjMatches, check),
-        stringMatching: (check) => new Matcher(assertStrMatches, check)
+        objectContaining: (check) => new Matcher(assertMatchObj, check),
+        stringMatching: (check) => new Matcher(assertMatchStr, check)
       },
       stubExpect
     )
