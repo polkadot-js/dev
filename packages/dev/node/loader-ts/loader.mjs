@@ -5,7 +5,7 @@ import { transform } from '@swc/core';
 // import { transform } from 'esbuild';
 import { fileURLToPath } from 'node:url';
 
-import { EXT_REGEX } from './common.mjs';
+import { EXT_TS_REGEX } from './common.mjs';
 
 /**
  * @typedef {{ format: 'commonjs' | 'module', shortCircuit?: boolean, source: string }} Loaded
@@ -20,7 +20,7 @@ import { EXT_REGEX } from './common.mjs';
  * @returns {Promise<Loaded>}
  **/
 export async function load (url, context, nextLoad) {
-  if (EXT_REGEX.test(url)) {
+  if (EXT_TS_REGEX.test(url)) {
     // used the chained loaders to retrieve
     const { source } = await nextLoad(url, {
       ...context,
