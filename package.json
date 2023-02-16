@@ -21,7 +21,10 @@
   ],
   "scripts": {
     "build": "polkadot-dev-build-ts",
-    "build:extra": "yarn build:extra:copy && yarn build:swc",
+    "build:esbuild": "yarn build:esbuild:cjs && yarn build:esbuild:esm",
+    "build:esbuild:cjs": "cd packages/dev && yarn polkadot-dev-run-esbuild --type cjs",
+    "build:esbuild:esm": "cd packages/dev && yarn polkadot-dev-run-esbuild --type esm",
+    "build:extra": "yarn build:extra:copy && yarn build:esbuild && yarn build:swc",
     "build:extra:copy": "(cd packages/dev && polkadot-dev-copy-dir config build/config && polkadot-dev-copy-dir node build/node && polkadot-dev-copy-dir scripts build/scripts)",
     "build:release": "polkadot-ci-ghact-build --skip-beta",
     "build:swc": "yarn build:swc:cjs && yarn build:swc:esm",

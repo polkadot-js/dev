@@ -1,7 +1,8 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { transform } from '@swc/core';
+// import { transform } from '@swc/core';
+import { transform } from 'esbuild';
 import { fileURLToPath } from 'node:url';
 
 import { EXT_REGEX } from './common.mjs';
@@ -27,18 +28,35 @@ export async function load (url, context, nextLoad) {
     });
 
     // compile via swc - we can also use transformSync (no penalty either way)
-    const { code } = await transform(source.toString(), {
-      // we add the actual filename - this enables auto-jsx transforms
-      filename: fileURLToPath(url),
-      jsc: {
-        experimental: {
-          // import assertions, these are needed for later Node.js versions)
-          keepImportAssertions: true
-        },
-        target: 'esnext'
-      },
-      sourceMaps: 'inline',
-      swcrc: false
+    // const { code } = await transform(source.toString(), {
+    //   // we add the actual filename - this enables auto-jsx transforms
+    //   filename: fileURLToPath(url),
+    //   jsc: {
+    //     experimental: {
+    //       // import assertions, these are needed for later Node.js versions)
+    //       keepImportAssertions: true
+    //     },
+    //     target: 'esnext'
+    //   },
+    //   sourceMaps: 'inline',
+    //   swcrc: false
+    // });
+
+    // compile via esbuild
+    const { code } = await transform(source, {
+      format: 'esm',
+      loader: url.endsWith('.tsx')
+        ? 'tsx'
+        : 'ts',
+      platform: 'node',
+      sourcefile: fileURLToPath(url),
+      sourcemap: 'inline',
+      target: 'esnext',
+      tsconfigRaw: {
+        compilerOptions: {
+          jsx: 'react-jsx'
+        }
+      }
     });
 
     return {
