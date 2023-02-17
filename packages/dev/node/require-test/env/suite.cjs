@@ -21,8 +21,8 @@ function createWrapper (fn) {
   /** @type {(opts: WrapOpts) => (name: string, exec?: () => unknown) => void} */
   const wrap = (opts) => (name, exec) => fn(name, opts, exec);
 
-  /** @type {(opts: WrapOpts) => (arr: unknown[]) => (name: string, exec?: (v: unknown, i: number) => unknown) => void} */
-  const each = (opts) => (arr) => (name, exec) => arr.map((v, i) => fn(name?.replace('%s', v?.toString()).replace('%i', i.toString()).replace('%p', JSON.stringify(v)), opts, exec?.(v, i)));
+  /** @type {(opts: WrapOpts) => (arr: unknown[]) => (name: string, exec?: (...v: unknown[]) => unknown) => void} */
+  const each = (opts) => (arr) => (name, exec) => arr.map((v, i) => fn(name?.replace('%s', v?.toString()).replace('%i', i.toString()).replace('%p', JSON.stringify(v)), opts, Array.isArray(v) ? exec?.(...v, i) : exec?.(v, i)));
 
   // Ensure that we have consisten helpers on the function
   // (if not already applied)
