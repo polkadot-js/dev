@@ -28,8 +28,8 @@ export async function load (url, context, nextLoad) {
 
     // compile via swc
     const { code } = await transform(source.toString(), {
-      // we add the actual filename - this enables auto-jsx transforms
-      // (alternatively we can do the checks and pass the options)
+      // we add the actual filename - this enables both ts and tsx transforms
+      // (alternatively we can do the extension check and pass the options)
       filename: fileURLToPath(url),
       jsc: {
         experimental: {
@@ -42,23 +42,6 @@ export async function load (url, context, nextLoad) {
       sourceMaps: 'inline',
       swcrc: false
     });
-
-    // // compile via esbuild
-    // const { code } = await transform(source, {
-    //   format: 'esm',
-    //   loader: url.endsWith('.tsx')
-    //     ? 'tsx'
-    //     : 'ts',
-    //   platform: 'node',
-    //   sourcefile: fileURLToPath(url),
-    //   sourcemap: 'inline',
-    //   target: 'esnext',
-    //   tsconfigRaw: {
-    //     compilerOptions: {
-    //       jsx: 'react-jsx'
-    //     }
-    //   }
-    // });
 
     return {
       format: 'module',
