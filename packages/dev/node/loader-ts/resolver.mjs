@@ -30,7 +30,7 @@ const ALLOW = {
   // we don't use the import x from './somewhere.js' form in polkadot-js
   extJs: false,
   // this is used extensively in the polkadot-js/api repo
-  extJson: false,
+  extJson: true,
   // the reason for this actual resolver, so always true
   extTs: true,
   // alias definitions are used in all polkadot-js projects

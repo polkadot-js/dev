@@ -2,7 +2,6 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import { transform } from '@swc/core';
-// import { transform } from 'esbuild';
 import { fileURLToPath } from 'node:url';
 
 import { EXT_TS_REGEX } from './common.mjs';
@@ -30,12 +29,14 @@ export async function load (url, context, nextLoad) {
     // compile via swc
     const { code } = await transform(source.toString(), {
       // we add the actual filename - this enables auto-jsx transforms
+      // (alternatively we can do the checks and pass the options)
       filename: fileURLToPath(url),
       jsc: {
         experimental: {
           // import assertions, these are needed for later Node.js versions)
           keepImportAssertions: true
         },
+        externalHelpers: true,
         target: 'esnext'
       },
       sourceMaps: 'inline',
