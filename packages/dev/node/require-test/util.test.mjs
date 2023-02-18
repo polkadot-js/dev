@@ -1,7 +1,7 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { enhanceObj, stubObj } from './util.cjs';
+import { enhanceObj, stubObj, warnObj } from './util.cjs';
 
 describe('enhanceObj', () => {
   it('extends objects with non-existing values', () => {
@@ -44,5 +44,25 @@ describe('stubObj', () => {
     expect(
       () => test.b()
     ).toThrow('obj.b has not been implemented (Use obj.a instead)');
+  });
+});
+
+describe('warnObj', () => {
+  let spy;
+
+  beforeEach(() => {
+    spy = jest.spyOn(console, 'warn');
+  });
+
+  afterEach(() => {
+    spy.mockRestore();
+  });
+
+  it('has entries warning on unimplemented', () => {
+    const test = warnObj('obj', ['a', 'b']);
+
+    test.b();
+
+    expect(spy).toHaveBeenCalledWith('obj.b has been implemented as a noop');
   });
 });
