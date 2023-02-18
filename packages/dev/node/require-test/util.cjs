@@ -5,7 +5,27 @@
  * @typedef {(...args: unknown[]) => unknown} BaseFn
  * @typedef {Record<string, unknown>} BaseObj
  * @typedef {Record<string, BaseFn>} EnhancedObj
+ * @typedef {(objName: string, fnName: string, alts?: Record<string, string>) => BaseFn} StubKeyFn
+ * @typedef {(objName: string, fnNames: string[], alts?: Record<string, string>) => EnhancedObj} StubObjFn
  */
+
+/**
+ * @internal
+ *
+ * Creates a replacer function which would extends a given object with the
+ * named functions if they do not already exist on the object.
+ *
+ * @param {StubKeyFn} stubKeyFn
+ * @returns {StubObjFn}
+ */
+function createStubObjFn (stubKeyFn) {
+  return (objName, fnNames, alts) =>
+    fnNames.reduce((obj, fnName) => {
+      obj[fnName] ??= stubKeyFn(objName, fnName, alts);
+
+      return obj;
+    }, {});
+}
 
 /**
  * Extends an existing object with the additional function if they
@@ -28,52 +48,23 @@ function enhanceObj (obj, ...adds) {
 }
 
 /**
- * Creates a stub function that will throw with the name when
- * called. This is used to indicate future work, defined functions
- * with no defined implementation.
+ * Extends a given object with the named functions if they do not
+ * already exist on the object.
  *
- * @param {string} objName - The name of the top-level object
- * @param {string} fnName - The name of this function
- * @param {Record<string, string>} [alts] - Alternatives, if existing
- * @returns {(...args: unknown[]) => never}
+ * @type {StubObjFn}
  */
-function stubFn (objName, fnName, alts) {
-  return () => {
-    throw new Error(`${objName}.${fnName} has not been implemented${alts?.[fnName] ? ` (Use ${alts[fnName]} instead)` : ''}`);
-  };
-}
+const stubObj = createStubObjFn((objName, fnName, alts) => () => {
+  throw new Error(`${objName}.${fnName} has not been implemented${alts?.[fnName] ? ` (Use ${alts[fnName]} instead)` : ''}`);
+});
 
 /**
  * Extends a given object with the named functions if they do not
  * already exist on the object.
  *
- * @param {string} objName - The name of the top-level object
- * @param {string[]} keys - The stub key names we are adding
- * @param {Record<string, string>} [alts] - Alternatives, if existing
- * @returns {EnhancedObj}
+ * @type {StubObjFn}
  */
-function stubObj (objName, keys, alts) {
-  const obj = {};
+const warnObj = createStubObjFn((objName, fnName) => () => {
+  console.warn(`${objName}.${fnName} has been implemented as a noop`);
+});
 
-  keys.forEach((fnName) => {
-    obj[fnName] ??= stubFn(objName, fnName, alts);
-  });
-
-  return obj;
-}
-
-/**
- * Warns on the usage of a certain function while performing a noop.
- * This is much like stubFn, however it does not fail the operation.
- *
- * @param {string} objName - The name of the top-level object
- * @param {string} fnName - The name of this function
- * @returns {(...args: unknown[]) => void}
- */
-function warnFn (objName, fnName) {
-  return () => {
-    console.warn(`${objName}.${fnName} has been implemented as a noop`);
-  };
-}
-
-module.exports = { enhanceObj, stubFn, stubObj, warnFn };
+module.exports = { enhanceObj, stubObj, warnObj };

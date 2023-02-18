@@ -195,43 +195,6 @@ function assertInstanceOf (value, Clazz) {
 }
 
 /**
- * @internal
- *
- * Decorates the expect(...).to* functions with the shim values
- *
- * @returns {(value: unknown) => Record<string, (...args: unknown[]) => unknown>}
- */
-function createExpectFn () {
-  return (value) => enhanceObj({
-    not: enhanceObj({
-      toBe: (other) => assert.notStrictEqual(value, other),
-      toBeDefined: () => assert.equal(value, undefined),
-      toEqual: (other) => assert.notDeepEqual(value, other),
-      toHaveBeenCalled: () => assert.ok(!value?.mock?.calls.length),
-      toThrow: (message) => assert.doesNotThrow(value, message && { message })
-    }, stubExpectFnNot),
-    rejects: enhanceObj({
-      toThrow: (message) => assert.rejects(value, message)
-    }, stubExpectFnRejects),
-    resolves: enhanceObj({}, stubExpectFnResolves),
-    toBe: (other) => assert.strictEqual(value, other),
-    toBeDefined: () => assert.notEqual(value, undefined),
-    toBeFalsy: () => assert.ok(!value),
-    toBeInstanceOf: (Clazz) => assertInstanceOf(value, Clazz),
-    toBeTruthy: () => assert.ok(value),
-    toEqual: (other) => assert.deepEqual(value, other),
-    toHaveBeenCalled: () => assert.ok(value?.mock?.calls.length),
-    toHaveBeenCalledTimes: (count) => assert.equal(value?.mock?.calls.length, count),
-    toHaveBeenCalledWith: (...args) => assertSomeCallHasArgs(value, args),
-    toHaveBeenLastCalledWith: (...args) => assertCallHasArgs(value?.mock?.calls.at(-1), args),
-    toHaveLength: (length) => assert.equal(value?.length, length),
-    toMatch: (check) => assertMatchStr(value, check),
-    toMatchObject: (check) => assertMatchObj(value, check),
-    toThrow: (message) => assert.throws(value, message && { message })
-  }, stubExpectFn);
-}
-
-/**
  * Sets up the shimmed expect(...) function, includding all .to* and .not.to*
  * functions. This is not comprehensive, rather is contains what we need to
  * make all polkadot-js usages pass
@@ -239,7 +202,33 @@ function createExpectFn () {
 function expect () {
   return {
     expect: enhanceObj(
-      createExpectFn(),
+      (value) => enhanceObj({
+        not: enhanceObj({
+          toBe: (other) => assert.notStrictEqual(value, other),
+          toBeDefined: () => assert.equal(value, undefined),
+          toEqual: (other) => assert.notDeepEqual(value, other),
+          toHaveBeenCalled: () => assert.ok(!value?.mock?.calls.length),
+          toThrow: (message) => assert.doesNotThrow(value, message && { message })
+        }, stubExpectFnNot),
+        rejects: enhanceObj({
+          toThrow: (message) => assert.rejects(value, message)
+        }, stubExpectFnRejects),
+        resolves: enhanceObj({}, stubExpectFnResolves),
+        toBe: (other) => assert.strictEqual(value, other),
+        toBeDefined: () => assert.notEqual(value, undefined),
+        toBeFalsy: () => assert.ok(!value),
+        toBeInstanceOf: (Clazz) => assertInstanceOf(value, Clazz),
+        toBeTruthy: () => assert.ok(value),
+        toEqual: (other) => assert.deepEqual(value, other),
+        toHaveBeenCalled: () => assert.ok(value?.mock?.calls.length),
+        toHaveBeenCalledTimes: (count) => assert.equal(value?.mock?.calls.length, count),
+        toHaveBeenCalledWith: (...args) => assertSomeCallHasArgs(value, args),
+        toHaveBeenLastCalledWith: (...args) => assertCallHasArgs(value?.mock?.calls.at(-1), args),
+        toHaveLength: (length) => assert.equal(value?.length, length),
+        toMatch: (check) => assertMatchStr(value, check),
+        toMatchObject: (check) => assertMatchObj(value, check),
+        toThrow: (message) => assert.throws(value, message && { message })
+      }, stubExpectFn),
       {
         any: (Clazz) => new Matcher(assertInstanceOf, Clazz),
         anything: () => new Matcher(assertNonNullish),

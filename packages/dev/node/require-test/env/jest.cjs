@@ -3,7 +3,7 @@
 
 const { mock } = require('node:test');
 
-const { enhanceObj, stubObj, warnFn } = require('../util.cjs');
+const { enhanceObj, stubObj, warnObj } = require('../util.cjs');
 
 /**
  * @typedef {((...args: unknown[]) => unknown) & { mock: {} }} Spy
@@ -16,6 +16,7 @@ const JEST_KEYS = ['advanceTimersByTime', 'advanceTimersToNextTimer', 'autoMockO
 const MOCK_KEYS = ['_isMockFunction', 'getMockImplementation', 'getMockName', 'mock', 'mockClear', 'mockImplementation', 'mockImplementationOnce', 'mockName', 'mockRejectedValue', 'mockRejectedValueOnce', 'mockReset', 'mockResolvedValue', 'mockResolvedValueOnce', 'mockRestore', 'mockReturnThis', 'mockReturnValue', 'mockReturnValueOnce', 'withImplementation'];
 
 const jestStub = stubObj('jest', JEST_KEYS);
+const jestWarn = warnObj('jest', ['setTimeout']);
 const mockStub = stubObj('jest.fn()', MOCK_KEYS);
 
 /**
@@ -44,9 +45,8 @@ function jest () {
     jest: enhanceObj({
       fn: (fn) => extendMock(mock.fn(fn)),
       restoreAllMocks: () => mock.reset(),
-      setTimeout: warnFn('jest', 'setTimeout'),
       spyOn: (obj, key) => extendMock(mock.method(obj, key))
-    }, jestStub)
+    }, jestWarn, jestStub)
   };
 }
 
