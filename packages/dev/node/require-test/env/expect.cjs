@@ -201,7 +201,7 @@ function assertInstanceOf (value, Clazz) {
 /**
  * @internal
  *
- * A hekper ro ensure that the supplied string/array does include the checker string.
+ * A helper to ensure that the supplied string/array does include the checker string.
  *
  * @param {string | unknown[]} value
  * @param {string} check
