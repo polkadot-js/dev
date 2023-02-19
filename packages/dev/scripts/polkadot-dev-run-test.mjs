@@ -18,6 +18,7 @@ const args = process.argv.slice(2);
 console.log('$ polkadot-dev-run-test', args.join(' '));
 
 const cmd = [];
+const nodeFlags = [];
 const filters = [];
 const filtersExcl = [];
 const filtersIncl = [];
@@ -26,12 +27,31 @@ let testEnv = 'jest';
 for (let i = 0; i < args.length; i++) {
   if (args[i].startsWith('-')) {
     switch (args[i]) {
+      // environment, not passed-htrough
       case '--env':
         if (!['browser', 'jest', 'node'].includes(args[++i])) {
           throw new Error(`Invalid --env ${args[i]}, expected 'browser', 'node' or 'jest'`);
         }
 
         testEnv = args[i];
+        break;
+
+      // additional node flags (with args)
+      case '--import':
+      case '--loader':
+      case '--require':
+        nodeFlags.push(args[i]);
+
+        if (!args[i].includes('=')) {
+          nodeFlags.push(args[++i]);
+        }
+
+        break;
+
+      // node flags without additional params
+      case '--experimental-vm-modules':
+      case '--no-warnings':
+        nodeFlags.push(args[i]);
         break;
 
       // -- means that all following args are passed-through as-is
@@ -107,13 +127,11 @@ if (files.length === 0) {
 const cliArgs = [...cmd, ...files].join(' ');
 
 if (testEnv === 'jest') {
-  process.env.NODE_OPTIONS = `--no-warnings --experimental-vm-modules${
-    process.env.NODE_OPTIONS
-      ? ` ${process.env.NODE_OPTIONS}`
-      : ''
-  }`;
+  ['--no-warnings', '--experimental-vm-modules']
+    .filter((f) => !nodeFlags.includes(f))
+    .forEach((f) => nodeFlags.push(f));
 
-  execSync(`${importPath('jest-cli/bin/jest.js')} ${cliArgs}`);
+  execSync(`${process.execPath} ${nodeFlags.join(' ')} ${importPath('jest-cli/bin/jest.js')} ${cliArgs}`);
 } else {
-  execNodeTsSync(`--require @polkadot/dev/node/require-test/${testEnv} --test ${cliArgs}`);
+  execNodeTsSync(`--require @polkadot/dev/node/require-test/${testEnv} ${nodeFlags.join(' ')} --test ${cliArgs}`);
 }
