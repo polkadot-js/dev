@@ -2087,7 +2087,7 @@ __metadata:
     prettier: ^2.8.4
     react: ^18.2.0
     react-dom: ^18.2.0
-    rollup: ^3.15.0
+    rollup: ^3.17.1
     rollup-plugin-cleanup: ^3.2.1
     typescript: ^4.9.5
     webpack: ^5.75.0
@@ -2779,10 +2779,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^18.13.0":
-  version: 18.13.0
-  resolution: "@types/node@npm:18.13.0"
-  checksum: 4ea10f8802848b01672bce938f678b6774ca2cee0c9774f12275ab064ae07818419c3e2e41d6257ce7ba846d1ea26c63214aa1dfa4166fa3746291752b8c6416
+"@types/node@npm:*, @types/node@npm:^18.14.0":
+  version: 18.14.0
+  resolution: "@types/node@npm:18.14.0"
+  checksum: d83fcf5e4ed544755dd9028f5cbb6b9d46235043159111bb2ad62223729aee581c0144a9f6df8ba73d74011db9ed4ebd7af2fd5e0996714e3beb508a5da8ac5c
   languageName: node
   linkType: hard
 
@@ -10801,9 +10801,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^3.15.0":
-  version: 3.15.0
-  resolution: "rollup@npm:3.15.0"
+"rollup@npm:^3.17.1":
+  version: 3.17.1
+  resolution: "rollup@npm:3.17.1"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -10811,7 +10811,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 1a75b09503f705b594dcfebf65b9e1ca4536e3facdf5716e10d4272697b4bb7e6bd8ab35be1b3fe1271f864d4c4a75d012bd77cbe7a55579d5138258b9e85c23
+  checksum: 3c6076eba228a6623b886929154ebbb9ddfb6a044e567456eeb6257b5235f4fd740655836b539155b1b25697f38f5d189bf81b9ce0624ce5aafc6c8620bd80c0
   languageName: node
   linkType: hard
 
@@ -10821,7 +10821,7 @@ __metadata:
   dependencies:
     "@polkadot/dev": "workspace:packages/dev"
     "@types/jest": ^29.4.0
-    "@types/node": ^18.13.0
+    "@types/node": ^18.14.0
     "@types/react": ^18.0.28
     "@types/yargs": ^17.0.22
   languageName: unknown
