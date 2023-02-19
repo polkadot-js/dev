@@ -37,8 +37,8 @@
     "prettier": "./packages/dev/scripts/polkadot-dev-run-prettier.mjs",
     "test": "yarn test:esm && yarn test:node && yarn test:jest",
     "test:esm": "yarn build && node ./tester.cjs && node ./tester.mjs",
-    "test:jest": "polkadot-dev-run-test --coverage",
-    "test:node": "polkadot-dev-run-node-test --browser"
+    "test:jest": "polkadot-dev-run-test --env jest --coverage",
+    "test:node": "polkadot-dev-run-test --env browser"
   },
   "devDependencies": {
     "@polkadot/dev": "workspace:packages/dev",
