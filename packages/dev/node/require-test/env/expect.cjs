@@ -186,6 +186,7 @@ function assertMatchStr (value, check) {
  */
 function assertInstanceOf (value, Clazz) {
   assert.ok(
+    (Clazz === Array && Array.isArray(value)) ||
     (Clazz === BigInt && typeof value === 'bigint') ||
     (Clazz === Boolean && typeof value === 'boolean') ||
     (Clazz === Function && typeof value === 'function') ||
@@ -206,7 +207,8 @@ function assertInstanceOf (value, Clazz) {
  * @param {string | unknown[]} value
  * @param {string} check
  */
-function assertIncludes (value, check) {
+function assertIncludes (value, [check, Clazz]) {
+  assertInstanceOf(value, Clazz);
   assert.ok(value?.includes(check), `${value} does not include ${check}`);
 }
 
@@ -252,9 +254,9 @@ function expect () {
       {
         any: (Clazz) => new Matcher(assertInstanceOf, Clazz),
         anything: () => new Matcher(assertNonNullish),
-        arrayContaining: (check) => new Matcher(assertIncludes, check),
+        arrayContaining: (check) => new Matcher(assertIncludes, [check, Array]),
         objectContaining: (check) => new Matcher(assertMatchObj, check),
-        stringContaining: (check) => new Matcher(assertIncludes, check),
+        stringContaining: (check) => new Matcher(assertIncludes, [check, String]),
         stringMatching: (check) => new Matcher(assertMatchStr, check)
       },
       stubExpect
