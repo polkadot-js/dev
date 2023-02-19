@@ -16,8 +16,12 @@ const EXPECT_KEYS = ['addEqualityTesters', 'addSnapshotSerializer', 'any', 'anyt
 const EXPECT_KEYS_FN = ['lastCalledWith', 'lastReturnedWith', 'not', 'nthCalledWith', 'nthReturnedWith', 'rejects', 'resolves', 'toBe', 'toBeCalled', 'toBeCalledTimes', 'toBeCalledWith', 'toBeCloseTo', 'toBeDefined', 'toBeFalsy', 'toBeGreaterThan', 'toBeGreaterThanOrEqual', 'toBeInstanceOf', 'toBeLessThan', 'toBeLessThanOrEqual', 'toBeNaN', 'toBeNull', 'toBeTruthy', 'toBeUndefined', 'toContain', 'toContainEqual', 'toEqual', 'toHaveBeenCalled', 'toHaveBeenCalledTimes', 'toHaveBeenCalledWith', 'toHaveBeenLastCalledWith', 'toHaveBeenNthCalledWith', 'toHaveLastReturnedWith', 'toHaveLength', 'toHaveNthReturnedWith', 'toHaveProperty', 'toHaveReturned', 'toHaveReturnedTimes', 'toHaveReturnedWith', 'toMatch', 'toMatchInlineSnapshot', 'toMatchObject', 'toMatchSnapshot', 'toReturn', 'toReturnTimes', 'toReturnWith', 'toStrictEqual', 'toThrow', 'toThrowError', 'toThrowErrorMatchingInlineSnapshot', 'toThrowErrorMatchingSnapshot'];
 
 const stubExpect = stubObj('expect', EXPECT_KEYS);
-const stubExpectFn = stubObj('expect(...)', EXPECT_KEYS_FN);
-const stubExpectFnRejects = stubObj('expect(...).rejects', EXPECT_KEYS_FN);
+const stubExpectFn = stubObj('expect(...)', EXPECT_KEYS_FN, {
+  toThrowError: 'expect(...).toThrow'
+});
+const stubExpectFnRejects = stubObj('expect(...).rejects', EXPECT_KEYS_FN, {
+  toThrowError: 'expect(...).rejects.toThrow'
+});
 const stubExpectFnResolves = stubObj('expect(...).resolves', EXPECT_KEYS_FN);
 const stubExpectFnNot = stubObj('expect(...).not', EXPECT_KEYS_FN, {
   toBeFalsy: 'expect(...).toBeTruthy',
@@ -195,6 +199,18 @@ function assertInstanceOf (value, Clazz) {
 }
 
 /**
+ * @internal
+ *
+ * A hekper ro ensure that the supplied string/array does include the checker string.
+ *
+ * @param {string | unknown[]} value
+ * @param {string} check
+ */
+function assertIncludes (value, check) {
+  assert.ok(value?.includes(check), `${value} does not include ${check}`);
+}
+
+/**
  * Sets up the shimmed expect(...) function, includding all .to* and .not.to*
  * functions. This is not comprehensive, rather is contains what we need to
  * make all polkadot-js usages pass
@@ -206,6 +222,8 @@ function expect () {
         not: enhanceObj({
           toBe: (other) => assert.notStrictEqual(value, other),
           toBeDefined: () => assert.equal(value, undefined),
+          toBeNull: (value) => assert.notEqual(value, null),
+          toBeUndefined: () => assert.notEqual(value, undefined),
           toEqual: (other) => assert.notDeepEqual(value, other),
           toHaveBeenCalled: () => assert.ok(!value?.mock?.calls.length),
           toThrow: (message) => assert.doesNotThrow(value, message && { message })
@@ -218,7 +236,9 @@ function expect () {
         toBeDefined: () => assert.notEqual(value, undefined),
         toBeFalsy: () => assert.ok(!value),
         toBeInstanceOf: (Clazz) => assertInstanceOf(value, Clazz),
+        toBeNull: (value) => assert.equal(value, null),
         toBeTruthy: () => assert.ok(value),
+        toBeUndefined: () => assert.equal(value, undefined),
         toEqual: (other) => assert.deepEqual(value, other),
         toHaveBeenCalled: () => assert.ok(value?.mock?.calls.length),
         toHaveBeenCalledTimes: (count) => assert.equal(value?.mock?.calls.length, count),
@@ -232,7 +252,9 @@ function expect () {
       {
         any: (Clazz) => new Matcher(assertInstanceOf, Clazz),
         anything: () => new Matcher(assertNonNullish),
+        arrayContaining: (check) => new Matcher(assertIncludes, check),
         objectContaining: (check) => new Matcher(assertMatchObj, check),
+        stringContaining: (check) => new Matcher(assertIncludes, check),
         stringMatching: (check) => new Matcher(assertMatchStr, check)
       },
       stubExpect
