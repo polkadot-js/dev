@@ -20,6 +20,7 @@ console.log('$ polkadot-dev-run-test', args.join(' '));
 const cmd = [];
 const nodeFlags = [];
 const filters = [];
+const filtersCont = [];
 const filtersExcl = [];
 const filtersIncl = [];
 let testEnv = 'jest';
@@ -77,7 +78,9 @@ for (let i = 0; i < args.length; i++) {
     // no "-"" found, so we use these as path filters
     filters.push(args[i]);
 
-    if (args[i].startsWith('^')) {
+    if (args[i].startsWith('~')) {
+      filtersCont.push(args[i].slice(1).split(/[\\/]/));
+    } else if (args[i].startsWith('^')) {
       filtersExcl.push(args[i].slice(1).split(/[\\/]/));
     } else {
       filtersIncl.push(args[i].split(/[\\/]/));
@@ -105,8 +108,8 @@ const applyFilters = (parts, filters) =>
       )
   );
 
-const files = readdirSync('packages', EXTS).filter((f) => {
-  const parts = f.split(/[\\/]/);
+const files = readdirSync('packages', EXTS).filter((file) => {
+  const parts = file.split(/[\\/]/);
   let isIncluded = true;
 
   if (filtersIncl.length) {
@@ -115,6 +118,10 @@ const files = readdirSync('packages', EXTS).filter((f) => {
 
   if (isIncluded && filtersExcl.length) {
     isIncluded = !applyFilters(parts, filtersExcl);
+  }
+
+  if (isIncluded && filtersCont.length) {
+    isIncluded = filtersCont.some((f) => file.includes(f));
   }
 
   return isIncluded;

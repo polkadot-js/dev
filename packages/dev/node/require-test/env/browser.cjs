@@ -11,6 +11,7 @@ function browser () {
   const { window } = new JSDOM();
 
   return {
+    HTMLElement: window.HTMLElement,
     crypto: window.crypto,
     document: window.document,
     navigator: window.navigator,
