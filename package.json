@@ -11,10 +11,10 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.68.36",
+  "version": "0.68.37",
   "versions": {
-    "git": "0.68.36",
-    "npm": "0.68.36"
+    "git": "0.68.37",
+    "npm": "0.68.37"
   },
   "workspaces": [
     "packages/*"
@@ -43,7 +43,7 @@
   "devDependencies": {
     "@polkadot/dev": "workspace:packages/dev",
     "@types/jest": "^29.4.0",
-    "@types/node": "^18.13.0",
+    "@types/node": "^18.14.0",
     "@types/react": "^18.0.28",
     "@types/yargs": "^17.0.22"
   },

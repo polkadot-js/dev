@@ -2135,7 +2135,7 @@ __metadata:
     prettier: ^2.8.4
     react: ^18.2.0
     react-dom: ^18.2.0
-    rollup: ^3.15.0
+    rollup: ^3.17.1
     rollup-plugin-cleanup: ^3.2.1
     typescript: ^4.9.5
     webpack: ^5.75.0
@@ -2826,7 +2826,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^18.13.0":
+"@types/node@npm:*, @types/node@npm:^18.14.0":
   version: 18.14.0
   resolution: "@types/node@npm:18.14.0"
   checksum: d83fcf5e4ed544755dd9028f5cbb6b9d46235043159111bb2ad62223729aee581c0144a9f6df8ba73d74011db9ed4ebd7af2fd5e0996714e3beb508a5da8ac5c
@@ -10762,7 +10762,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^3.15.0":
+"rollup@npm:^3.17.1":
   version: 3.17.1
   resolution: "rollup@npm:3.17.1"
   dependencies:
@@ -10782,7 +10782,7 @@ __metadata:
   dependencies:
     "@polkadot/dev": "workspace:packages/dev"
     "@types/jest": ^29.4.0
-    "@types/node": ^18.13.0
+    "@types/node": ^18.14.0
     "@types/react": ^18.0.28
     "@types/yargs": ^17.0.22
   languageName: unknown
