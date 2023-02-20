@@ -2156,6 +2156,7 @@ __metadata:
     rollup: ^3.17.2
     rollup-plugin-cleanup: ^3.2.1
     styled-components: ^v6.0.0-beta.11
+    tap-parser: ^12.0.1
     typescript: ^4.9.5
     webpack: ^5.75.0
     webpack-cli: ^5.0.1
@@ -2187,6 +2188,7 @@ __metadata:
     polkadot-exec-eslint: ./scripts/polkadot-exec-eslint.mjs
     polkadot-exec-ghpages: ./scripts/polkadot-exec-ghpages.mjs
     polkadot-exec-ghrelease: ./scripts/polkadot-exec-ghrelease.mjs
+    polkadot-exec-node-test: ./scripts/polkadot-exec-node-test.mjs
     polkadot-exec-prettier: ./scripts/polkadot-exec-prettier.mjs
     polkadot-exec-rollup: ./scripts/polkadot-exec-rollup.mjs
     polkadot-exec-swc: ./scripts/polkadot-exec-swc.mjs
@@ -6030,6 +6032,13 @@ __metadata:
   version: 4.0.7
   resolution: "eventemitter3@npm:4.0.7"
   checksum: 1875311c42fcfe9c707b2712c32664a245629b42bb0a5a84439762dd0fd637fc54d078155ea83c2af9e0323c9ac13687e03cfba79b03af9f40c89b4960099374
+  languageName: node
+  linkType: hard
+
+"events-to-array@npm:^2.0.3":
+  version: 2.0.3
+  resolution: "events-to-array@npm:2.0.3"
+  checksum: 8a5aa632c2078fee673671a2fc1241c9090f0a1e6ed7b203936717f20273e9bbbb73942cf9a1ce45b7befb93945c18b254e176e0553674a72c7d1dcca100acc5
   languageName: node
   linkType: hard
 
@@ -11713,6 +11722,27 @@ __metadata:
   languageName: node
   linkType: hard
 
+"tap-parser@npm:^12.0.1":
+  version: 12.0.1
+  resolution: "tap-parser@npm:12.0.1"
+  dependencies:
+    events-to-array: ^2.0.3
+    tap-yaml: ^1.0.2
+  bin:
+    tap-parser: bin/cmd.js
+  checksum: bc62a7cac455f3cd97f33d5417b1b59807279873c1fa2d7792daf8f8a501d92f2661ce509dc93521b9b9d373748774fd73fe4a7bc1f337c236f2485478a08960
+  languageName: node
+  linkType: hard
+
+"tap-yaml@npm:^1.0.2":
+  version: 1.0.2
+  resolution: "tap-yaml@npm:1.0.2"
+  dependencies:
+    yaml: ^1.10.2
+  checksum: 842024ca2aee6a3016182b1c06d69807b859e2da09639ad17b16bd31370d3cc54e6b083a67629c0680c7180628115b768ac9803cfea13fc13455ff57737a8964
+  languageName: node
+  linkType: hard
+
 "tapable@npm:^2.1.1, tapable@npm:^2.2.0":
   version: 2.2.1
   resolution: "tapable@npm:2.2.1"
@@ -12781,6 +12811,13 @@ __metadata:
   version: 4.0.0
   resolution: "yallist@npm:4.0.0"
   checksum: 343617202af32df2a15a3be36a5a8c0c8545208f3d3dfbc6bb7c3e3b7e8c6f8e7485432e4f3b88da3031a6e20afa7c711eded32ddfb122896ac5d914e75848d5
+  languageName: node
+  linkType: hard
+
+"yaml@npm:^1.10.2":
+  version: 1.10.2
+  resolution: "yaml@npm:1.10.2"
+  checksum: ce4ada136e8a78a0b08dc10b4b900936912d15de59905b2bf415b4d33c63df1d555d23acb2a41b23cf9fb5da41c256441afca3d6509de7247daa062fd2c5ea5f
   languageName: node
   linkType: hard
 
