@@ -16,9 +16,11 @@ const stats = {
 };
 
 function output (ch) {
-  if (stats.total % 50 === 0) {
+  if (stats.total % 100 === 0) {
     process.stdout.write('\n');
   } else if (stats.total % 10 === 0) {
+    process.stdout.write('  ');
+  } else if (stats.total % 5 === 0) {
     process.stdout.write(' ');
   }
 
@@ -44,7 +46,7 @@ run({
 
     stats.fail.forEach((r) => {
       console.log();
-      console.log('\t✕', r.fullname);
+      console.log(/* '\t✕' */ '\tx', r.fullname);
       console.log();
       console.log('\t\t', r.name);
       console.log();
@@ -68,18 +70,18 @@ run({
   })
     .on('fail', (r) => {
       stats.fail.push(r);
-      output('✕');
+      output('x'); // '✕');
     })
     .on('pass', (r) => {
       stats.pass.push(r);
-      output('·'); // '✔');
+      output('.'); // '·'); // '✔');
     })
     .on('skip', (r) => {
       stats.skip.push(r);
-      output('⁃');
+      output('='); // '⁃');
     })
     .on('todo', (r) => {
       stats.todo.push(r);
-      output('⁃');
+      output('*'); // '⁃');
     })
 );
