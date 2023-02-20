@@ -81,7 +81,7 @@ export function execSync (cmd, noLog) {
 
 /** Node execution with ts support */
 export function execNodeTsSync (cmd, noLog) {
-  execSync(`${process.execPath} --no-warnings --loader @polkadot/dev/node/loader-ts ${cmd}`, noLog);
+  execSync(`${process.execPath} --no-warnings --enable-source-maps --loader @polkadot/dev/node/loader-ts ${cmd}`, noLog);
 }
 
 /** Node binary execution */
