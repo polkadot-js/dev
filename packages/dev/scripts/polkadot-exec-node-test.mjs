@@ -99,7 +99,7 @@ parser
     output('*'); // '⁃');
   });
 
-run({ files, timeout: 60_000 })
+run({ files })
   .on('test:diagnostic', (r) => {
     stats.diag.push(r);
   })
