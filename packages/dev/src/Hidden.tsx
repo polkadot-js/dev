@@ -4,6 +4,7 @@
 // Adapted from https://github.com/testing-library/react-testing-library#basic-example
 
 import React, { useCallback, useState } from 'react';
+import { styled } from 'styled-components';
 
 interface Props {
   children?: React.ReactNode;
@@ -20,7 +21,7 @@ function Hidden ({ children, className }: Props): React.ReactElement<Props> {
   );
 
   return (
-    <div className={className}>
+    <StyledDiv className={className}>
       <label htmlFor='toggle'>Show Message</label>
       <input
         checked={isMessageVisible}
@@ -29,8 +30,12 @@ function Hidden ({ children, className }: Props): React.ReactElement<Props> {
         type='checkbox'
       />
       {isMessageVisible && children}
-    </div>
+    </StyledDiv>
   );
 }
+
+const StyledDiv = styled.div`
+  background: red;
+`;
 
 export default React.memo(Hidden);

@@ -37,7 +37,16 @@ export async function load (url, context, nextLoad) {
           keepImportAssertions: true
         },
         externalHelpers: true,
-        target: 'esnext'
+        target: 'esnext',
+        transform: {
+          react: {
+            // this is non-default, so required to allow React 17+ style
+            runtime: 'automatic'
+          }
+        }
+      },
+      module: {
+        type: 'es6'
       },
       sourceMaps: 'inline',
       swcrc: false
