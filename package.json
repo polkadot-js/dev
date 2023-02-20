@@ -11,7 +11,7 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.68.43",
+  "version": "0.69.0",
   "versions": {
     "git": "0.68.43",
     "npm": "0.68.43"
@@ -35,9 +35,8 @@
     "lint": "polkadot-dev-run-lint",
     "postinstall": "./packages/dev/scripts/polkadot-dev-yarn-only.mjs",
     "prettier": "./packages/dev/scripts/polkadot-dev-run-prettier.mjs",
-    "test": "yarn test:esm && yarn test:node && yarn test:jest",
+    "test": "yarn test:esm && yarn test:node",
     "test:esm": "yarn build && node ./tester.cjs && node ./tester.mjs",
-    "test:jest": "polkadot-dev-run-test --env jest --coverage",
     "test:node": "polkadot-dev-run-test --env browser"
   },
   "devDependencies": {
