@@ -23,7 +23,7 @@ const filters = [];
 const filtersCont = [];
 const filtersExcl = [];
 const filtersIncl = [];
-let testEnv = 'jest';
+let testEnv = 'node';
 
 for (let i = 0; i < args.length; i++) {
   if (args[i].startsWith('-')) {

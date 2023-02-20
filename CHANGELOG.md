@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.69.1
+
+- Remove Jest
+
+
 ## 0.68.1
 
 - 2023
