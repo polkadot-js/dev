@@ -18,16 +18,16 @@ const { enhanceObj } = require('../util.cjs');
  * @param {typeof describe | typeof it} fn
  */
 function createWrapper (fn) {
-  /** @type {(opts: WrapOpts) => (name: string, exec?: () => unknown) => void} */
-  const wrap = (opts) => (name, exec) => fn(name, opts, exec);
+  /** @type {(opts: WrapOpts) => (name: string, exec?: () => unknown, timeout?: number) => void} */
+  const wrap = (opts = {}) => (name, exec, timeout) => fn(name, timeout ? { ...opts, timeout } : opts, exec);
 
-  /** @type {(opts: WrapOpts) => (arr: unknown[]) => (name: string, exec?: (...v: unknown[]) => unknown) => void} */
-  const each = (opts) => (arr) => (name, exec) => arr.forEach((v, i) => fn(name?.replace('%s', v?.toString()).replace('%i', i.toString()).replace('%p', JSON.stringify(v)), opts, () => Array.isArray(v) ? exec?.(...v, i) : exec?.(v, i)));
+  /** @type {(opts: WrapOpts) => (arr: unknown[]) => (name: string, exec?: (...v: unknown[]) => unknown, timeout?: number) => void} */
+  const each = (opts = {}) => (arr) => (name, exec, timeout) => arr.forEach((v, i) => fn(name?.replace('%s', v?.toString()).replace('%i', i.toString()).replace('%p', JSON.stringify(v)), timeout ? { ...opts, timeout } : opts, () => Array.isArray(v) ? exec?.(...v, i) : exec?.(v, i)));
 
   // Ensure that we have consistent helpers on the function
   // (if not already applied)
-  return enhanceObj(fn, {
-    each: each({}, {
+  return enhanceObj(wrap(), {
+    each: enhanceObj(each(), {
       only: each({ only: true }),
       skip: each({ skip: true }),
       todo: each({ todo: true })
