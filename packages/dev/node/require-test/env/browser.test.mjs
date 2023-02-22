@@ -11,10 +11,8 @@ describe('browser', () => {
   });
 
   it('contains a crypto implementation', () => {
-    expect(
-      all.crypto &&
-      typeof all.crypto.getRandomValues === 'function'
-    ).toBeTruthy();
+    expect(all.crypto).toBeTruthy();
+    expect(typeof all.crypto.getRandomValues).toBe('function');
   });
 
   it('contains the top-level objects', () => {
@@ -23,6 +21,6 @@ describe('browser', () => {
   });
 
   it('contains HTML*Element', () => {
-    expect(typeof all.HTMLElement === 'function').toBeTruthy();
+    expect(typeof all.HTMLElement).toBe('function');
   });
 });

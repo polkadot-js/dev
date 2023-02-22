@@ -11,19 +11,8 @@ console.time('\t elapsed :');
 
 const WITH_DEBUG = false;
 
-let logFile = null;
 const args = process.argv.slice(2);
 const files = [];
-
-for (let i = 0; i < args.length; i++) {
-  if (args[i] === '--log') {
-    i++;
-    logFile = args[i];
-  } else {
-    files.push(args[i]);
-  }
-}
-
 const stats = {
   comm: [],
   diag: [],
@@ -34,6 +23,19 @@ const stats = {
   todo: [],
   total: 0
 };
+let logFile = null;
+let bail = false;
+
+for (let i = 0; i < args.length; i++) {
+  if (args[i] === '--log') {
+    i++;
+    logFile = args[i];
+  } else if (args[i] === '--bail') {
+    bail = true;
+  } else {
+    files.push(args[i]);
+  }
+}
 
 function output (ch) {
   if (stats.total % 100 === 0) {
@@ -49,18 +51,41 @@ function output (ch) {
   process.stdout.write(ch);
 }
 
-function indent (str = '') {
-  return `\t\t\t ${
+function indent (count, str = '') {
+  let pre = '\n';
+
+  switch (count) {
+    case 0:
+      break;
+
+    case 1:
+      pre += '\t';
+      break;
+
+    case 2:
+      pre += '\t\t';
+      break;
+
+    default:
+      pre += '\t\t\t';
+      break;
+  }
+
+  pre += ' ';
+
+  return `${pre}${
     str
-      .replaceAll('\n', '[&&*&&]')
-      .replaceAll('[&&*&&]', '\n\t\t\t ')
-  }`;
+      .trim()
+      .split('\n')
+      .map((l) => l.trim())
+      .join(pre)
+  }\n`;
 }
 
-const parser = new TapParser(() => {
+const parser = new TapParser({ bail }, () => {
   process.stdout.write('\n');
 
-  let error = '';
+  let logError = '';
 
   stats.fail.forEach((r) => {
     WITH_DEBUG && console.error(r);
@@ -68,22 +93,23 @@ const parser = new TapParser(() => {
     let item = '';
 
     if (r.diag) {
-      item += `\n\tx ${r.fullname.replaceAll('\n', ' ')}\n`;
-      item += `\n\t\t ${r.name}\n`;
-      item += `\n${indent(`${r.diag.failureType} / ${r.diag.code}`)}\n`;
-      item += `\n${indent(r.diag.error)}\n`;
+      item += indent(1, `x ${r.fullname.replaceAll('\n', ' ')}`);
+      item += indent(2, r.name);
+      item += indent(3, `${r.diag.failureType} / ${r.diag.code}`);
+      item += indent(3, r.diag.error);
 
-      error += item;
+      // we don't add the stack to the log-to-file below
+      logError += item;
 
-      item += `\n${indent(r.diag.stack)}\n`;
+      item += indent(3, r.diag.stack);
 
-      console.log(item);
+      process.stdout.write(item);
     }
   });
 
-  if (logFile && error) {
+  if (logFile && logError) {
     try {
-      fs.appendFileSync(path.join(process.cwd(), logFile), error);
+      fs.appendFileSync(path.join(process.cwd(), logFile), logError);
     } catch (e) {
       console.error(e);
     }
@@ -137,15 +163,15 @@ parser
   })
   .on('pass', (r) => {
     stats.pass.push(r);
-    output('.');
+    output('·');
   })
   .on('skip', (r) => {
     stats.skip.push(r);
-    output('=');
+    output('>');
   })
   .on('todo', (r) => {
     stats.todo.push(r);
-    output('*');
+    output('!');
   });
 
 // 1hr default timeout ... just in-case something goes wrong on an

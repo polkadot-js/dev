@@ -135,7 +135,7 @@ if (testEnv === 'jest') {
   execSync(`${process.execPath} ${nodeFlags.join(' ')} ${importPath('jest-cli/bin/jest.js')} ${cliArgs}`);
 } else {
   try {
-    execNodeTsSync(`--require @polkadot/dev/node/require-test/${testEnv} ${nodeFlags.join(' ')} ${importPath('@polkadot/dev/scripts/polkadot-exec-node-test.mjs')} ${cliArgs}`);
+    execNodeTsSync(`--require @polkadot/dev/node/test/${testEnv} ${nodeFlags.join(' ')} ${importPath('@polkadot/dev/scripts/polkadot-exec-node-test.mjs')} ${cliArgs}`);
   } catch {
     process.exit(1);
   }

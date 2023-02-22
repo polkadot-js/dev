@@ -48,9 +48,9 @@
   },
   "exports": {
     "./config/*": "./config/*",
-    "./node/loader-ts": "./node/loader-ts/index.mjs",
-    "./node/require-test/browser": "./node/require-test/browser.cjs",
-    "./node/require-test/node": "./node/require-test/node.cjs"
+    "./node/test/browser": "./node/test/browser.cjs",
+    "./node/test/node": "./node/test/node.cjs",
+    "./node/ts": "./node/ts/index.mjs"
   },
   "dependencies": {
     "@babel/cli": "^7.21.0",
@@ -120,8 +120,9 @@
     "yargs": "^17.7.1"
   },
   "devDependencies": {
+    "@types/styled-components": "^5.1.26",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "styled-components": "^v6.0.0-beta.11"
+    "styled-components": "^5.3.6"
   }
 }
