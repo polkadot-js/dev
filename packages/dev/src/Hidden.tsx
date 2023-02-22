@@ -4,12 +4,18 @@
 // Adapted from https://github.com/testing-library/react-testing-library#basic-example
 
 import React, { useCallback, useState } from 'react';
-import { styled } from 'styled-components';
+import styledComponents from 'styled-components';
 
 interface Props {
   children?: React.ReactNode;
   className?: string;
 }
+
+export const styled = (
+  (styledComponents as unknown as { styled: typeof styledComponents }).styled ||
+  (styledComponents as unknown as { default: typeof styledComponents }).default ||
+  styledComponents
+);
 
 function Hidden ({ children, className }: Props): React.ReactElement<Props> {
   const [isMessageVisible, setMessageVisibility] = useState(false);

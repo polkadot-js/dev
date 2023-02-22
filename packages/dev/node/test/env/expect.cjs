@@ -223,9 +223,9 @@ function expect () {
       (value) => enhanceObj({
         not: enhanceObj({
           toBe: (other) => assert.notStrictEqual(value, other),
-          toBeDefined: () => assert.equal(value, undefined),
-          toBeNull: (value) => assert.notEqual(value, null),
-          toBeUndefined: () => assert.notEqual(value, undefined),
+          toBeDefined: () => assert.ok(value === undefined),
+          toBeNull: (value) => assert.ok(value !== null),
+          toBeUndefined: () => assert.ok(value !== undefined),
           toEqual: (other) => assert.notDeepEqual(value, other),
           toHaveBeenCalled: () => assert.ok(!value?.mock?.calls.length),
           toThrow: (message) => assert.doesNotThrow(value, message && { message })
@@ -235,12 +235,12 @@ function expect () {
         }, stubExpectFnRejects),
         resolves: enhanceObj({}, stubExpectFnResolves),
         toBe: (other) => assert.strictEqual(value, other),
-        toBeDefined: () => assert.notEqual(value, undefined),
+        toBeDefined: () => assert.ok(value !== undefined),
         toBeFalsy: () => assert.ok(!value),
         toBeInstanceOf: (Clazz) => assertInstanceOf(value, Clazz),
-        toBeNull: (value) => assert.equal(value, null),
+        toBeNull: (value) => assert.ok(value === null),
         toBeTruthy: () => assert.ok(value),
-        toBeUndefined: () => assert.equal(value, undefined),
+        toBeUndefined: () => assert.ok(value === undefined),
         toEqual: (other) => assert.deepEqual(value, other),
         toHaveBeenCalled: () => assert.ok(value?.mock?.calls.length),
         toHaveBeenCalledTimes: (count) => assert.equal(value?.mock?.calls.length, count),
