@@ -376,8 +376,8 @@ function findFiles (buildDir, extra = '', exclude = []) {
       const jsPath = `${extra}/${jsName}`;
       const fullPathEsm = path.join(buildDir, jsPath);
       const toDelete = (
-        // no test paths
-        jsPath.includes('/test/') ||
+        // no test paths (w/ hack for this repo loaders...)
+        (jsPath.includes('/test/') && !jsPath.includes('/node/test/')) ||
         // no rust files
         ['.rs'].some((e) => jsName.endsWith(e)) ||
         // // no tests
