@@ -48,9 +48,9 @@
   },
   "exports": {
     "./config/*": "./config/*",
-    "./node/test/browser": "./node/test/browser.cjs",
-    "./node/test/node": "./node/test/node.cjs",
-    "./node/ts": "./node/ts/index.mjs"
+    "./node/test/browser": "./src/node/test/browser.cjs",
+    "./node/test/node": "./src/node/test/node.cjs",
+    "./node/ts": "./src/node/ts/index.mjs"
   },
   "dependencies": {
     "@babel/cli": "^7.21.0",
