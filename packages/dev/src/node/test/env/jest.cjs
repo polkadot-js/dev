@@ -22,7 +22,7 @@ const mockStub = stubObj('jest.fn()', MOCK_KEYS);
 /**
  * @internal
  *
- * This adds the mockRest and mockRestore functionality to any
+ * This adds the mockReset and mockRestore functionality to any
  * spy or mock function
  *
  * @param {Spy} spy

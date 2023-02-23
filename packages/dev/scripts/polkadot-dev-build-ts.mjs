@@ -20,6 +20,7 @@ const IGNORE_IMPORTS = [
   // node (new-style)
   'node:assert', 'node:child_process', 'node:crypto', 'node:fs', 'node:os', 'node:path', 'node:process', 'node:test', 'node:url', 'node:util',
   // other
+  '@testing-library/react',
   'react', 'react-native', 'styled-components'
 ];
 
@@ -389,7 +390,7 @@ function findFiles (buildDir, extra = '', exclude = []) {
         (
           // .d.ts without .js as an output
           jsName.endsWith('.d.ts') &&
-          !fs.existsSync(path.join(buildDir, jsPath.replace('.d.ts', '.js')))
+          !['.js', '.cjs', '.mjs'].some((e) => fs.existsSync(path.join(buildDir, jsPath.replace('.d.ts', e))))
         )
       );
 
