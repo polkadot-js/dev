@@ -27,7 +27,6 @@
     "docs": "polkadot-dev-build-docs",
     "lint": "polkadot-dev-run-lint",
     "postinstall": "./packages/dev/scripts/polkadot-dev-yarn-only.mjs",
-    "prettier": "./packages/dev/scripts/polkadot-dev-run-prettier.mjs",
     "test": "polkadot-dev-run-test --env browser"
   },
   "devDependencies": {
