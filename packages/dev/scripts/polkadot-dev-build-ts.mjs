@@ -430,7 +430,11 @@ function deleteFiles (compileType, extra = '', exclude = []) {
         (
           // .d.ts without .js as an output
           jsName.endsWith('.d.ts') &&
-          !fs.existsSync(path.join(`${buildDir}-${compileType}-esm`, jsPath.replace('.d.ts', '.js')))
+          !['.js', '.cjs', '.mjs'].some((e) =>
+            ['', `-${compileType}-esm`].some((p) =>
+              fs.existsSync(path.join(`${buildDir}${p}`, jsPath.replace('.d.ts', e)))
+            )
+          )
         )
       );
 
