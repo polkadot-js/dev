@@ -7,6 +7,7 @@ import type { BlahType } from '@polkadot/dev/types';
 import type { EchoString } from './types';
 
 import { foo } from './test1/foo';
+import { styled } from './Hidden';
 import { adder, blah } from './test1';
 import * as bob from './test1';
 import { addThree } from './util';
@@ -20,6 +21,8 @@ const SOMETHING = {
 const A: BlahType = 123;
 let count = 0;
 let testFn: null | (() => void) = null;
+
+console.log(typeof styled);
 
 import('./testRoot')
   .then(({ test }): void => {
@@ -50,6 +53,15 @@ export const echo = (value: EchoString, start = 0, end?: number): string => {
 
   return `${count}: ${A}: ${value}`.substring(start, end);
 };
+
+export async function testAwait () {
+  const result = await somePromise;
+  let a = result ?? 'b';
+
+  a ??= '123';
+
+  console.log(a);
+}
 
 function assert (a: boolean): void {
   if (!a) {

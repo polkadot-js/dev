@@ -3,10 +3,14 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import babel from '@babel/cli/lib/babel/dir.js';
+import { transform } from '@swc/core';
 import fs from 'fs';
 import path from 'path';
+import process from 'process';
 
-import { __dirname, copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_LND_PRE, DENO_POL_PRE, execSync, exitFatal, mkdirpSync, PATHS_BUILD, rimrafSync } from './util.mjs';
+import swcrcCjs from '../config/swcrc-cjs.json' assert { type: 'json' };
+import swcrcEsm from '../config/swcrc-esm.json' assert { type: 'json' };
+import { __dirname, copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_LND_PRE, DENO_POL_PRE, execSync, exitFatal, mkdirpSync, PATHS_BUILD, readdirSync, rimrafSync } from './util.mjs';
 
 const BL_CONFIGS = ['js', 'cjs'].map((e) => `babel.config.${e}`);
 const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
@@ -31,37 +35,53 @@ function buildWebpack () {
 }
 
 // compile via babel, either via supplied config or default
-async function buildBabel (dir, type) {
-  const configs = BL_CONFIGS.map((c) => path.join(process.cwd(), `../../${c}`));
-  const buildDir = `build${type === 'esm' ? '' : '-cjs'}`;
-  const outDir = path.join(process.cwd(), buildDir);
+async function compileJs (compileType, type) {
+  const buildDir = path.join(process.cwd(), `build-${compileType}-${type}`);
 
-  await babel.default({
-    babelOptions: {
-      configFile: type === 'esm'
-        ? path.join(__dirname, '../config/babel-config-esm.cjs')
-        : configs.find((f) => fs.existsSync(f)) || path.join(__dirname, '../config/babel-config-cjs.cjs')
-    },
-    cliOptions: {
-      extensions: ['.ts', '.tsx'],
-      filenames: ['src'],
-      ignore: '**/*.d.ts',
-      outDir,
-      outFileExtension: '.js'
-    }
-  });
+  mkdirpSync(buildDir);
 
-  // rewrite a skeleton package.json with a type=module
-  if (buildDir === 'build') {
-    // copy package info stuff
-    copyFileSync(['package.json', 'README.md'], 'build');
-    copyFileSync('../../LICENSE', 'build');
+  if (compileType === 'babel') {
+    const configs = BL_CONFIGS.map((c) => path.join(process.cwd(), `../../${c}`));
 
-    // copy interesting files
-    copyDirSync('src', 'build', ['.patch', '.js', '.cjs', '.mjs', '.json', '.d.ts', '.css', '.gif', '.hbs', '.jpg', '.png', '.rs', '.svg']);
+    await babel.default({
+      babelOptions: {
+        configFile: type === 'esm'
+          ? path.join(__dirname, '../config/babel-config-esm.cjs')
+          : configs.find((f) => fs.existsSync(f)) || path.join(__dirname, '../config/babel-config-cjs.cjs')
+      },
+      cliOptions: {
+        extensions: ['.ts', '.tsx'],
+        filenames: ['src'],
+        ignore: '**/*.d.ts',
+        outDir: buildDir,
+        outFileExtension: '.js'
+      }
+    });
+  } else if (compileType === 'swc') {
+    const swcrc = type === 'cjs'
+      ? swcrcCjs
+      : swcrcEsm;
 
-    // copy all *.d.ts files
-    copyDirSync([path.join('../../build', dir, 'src'), path.join('../../build/packages', dir, 'src')], 'build', ['.d.ts']);
+    await timeIt(`Successfully compiled ${compileType} ${type}`, () =>
+      Promise.all(
+        readdirSync('src', ['.ts', '.tsx'])
+          .filter((f) => !swcrc.exclude.some((e) => f.endsWith(e.replaceAll('\\', ''))))
+          .map(async (filename) => {
+            // split src prefix, replace .ts extension with .js
+            const outFile = path.join(buildDir, filename.split(/[\\/]/).slice(1).join('/').replace(/\.tsx?$/, '.js'));
+            const { code } = await transform(fs.readFileSync(filename, 'utf-8'), {
+              ...swcrc,
+              filename,
+              swcrc: false
+            });
+
+            mkdirpSync(path.dirname(outFile));
+            fs.writeFileSync(outFile, code);
+          })
+      )
+    );
+  } else {
+    throw new Error(`Unknown --compiler ${compileType}`);
   }
 }
 
@@ -253,7 +273,7 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
     : `${DENO_EXT_PRE}/${depName}${version ? `@${version}` : ''}${depPath || ''}`;
 }
 
-function rewriteEsmImports (pkgCwd, pkgJson, dir, replacer) {
+function rewriteEsmImports (dir, pkgCwd, pkgJson, replacer) {
   if (!fs.existsSync(dir)) {
     return;
   }
@@ -264,7 +284,7 @@ function rewriteEsmImports (pkgCwd, pkgJson, dir, replacer) {
       const thisPath = path.join(process.cwd(), dir, p);
 
       if (fs.statSync(thisPath).isDirectory()) {
-        rewriteEsmImports(pkgCwd, pkgJson, `${dir}/${p}`, replacer);
+        rewriteEsmImports(`${dir}/${p}`, pkgCwd, pkgJson, replacer);
       } else if (thisPath.endsWith('.spec.js') || thisPath.endsWith('.spec.ts')) {
         // we leave specs as-is
       } else if (thisPath.endsWith('.js') || thisPath.endsWith('.ts') || thisPath.endsWith('.tsx') || thisPath.endsWith('.md')) {
@@ -364,15 +384,36 @@ function createMapEntry (rootDir, jsPath, noTypes) {
   return [jsPath, field];
 }
 
-// find the names of all the files in a certain directory
-function findFiles (buildDir, extra = '', exclude = []) {
+// copies all output files into the build directory
+function copyBuildFiles (compileType, dir) {
+  // copy package info stuff
+  copyFileSync(['package.json', 'README.md'], 'build');
+  copyFileSync('../../LICENSE', 'build');
+
+  // copy interesting files
+  copyDirSync('src', 'build', ['.patch', '.js', '.cjs', '.mjs', '.json', '.d.ts', '.css', '.gif', '.hbs', '.md', '.jpg', '.png', '.rs', '.svg']);
+
+  // copy all *.d.ts files
+  copyDirSync([path.join('../../build', dir, 'src'), path.join('../../build/packages', dir, 'src')], 'build', ['.d.ts']);
+
+  // copy all from build-{babel|swc|...}-esm to build
+  copyDirSync(`build-${compileType}-esm`, 'build');
+
+  // copy from build-{babel|swc|...}-cjs to build/cjs (js-only)
+  copyDirSync(`build-${compileType}-cjs`, 'build/cjs', ['.js']);
+}
+
+// remove all extra files that were generated as part of the build
+function deleteFiles (compileType, extra = '', exclude = []) {
+  const buildDir = 'build';
   const currDir = extra
-    ? path.join(buildDir, extra)
+    ? path.join('build', extra)
     : buildDir;
 
-  return fs
+  fs
     .readdirSync(currDir)
-    .reduce((all, jsName) => {
+    .filter((f) => !exclude.includes(f))
+    .forEach((jsName) => {
       const jsPath = `${extra}/${jsName}`;
       const fullPathEsm = path.join(buildDir, jsPath);
       const toDelete = (
@@ -380,7 +421,7 @@ function findFiles (buildDir, extra = '', exclude = []) {
         (jsPath.includes('/test/') && !jsPath.includes('/node/test/')) ||
         // no rust files
         ['.rs'].some((e) => jsName.endsWith(e)) ||
-        // // no tests
+        // no tests
         ['.manual.', '.spec.', '.test.'].some((t) => jsName.includes(t)) ||
         // no .d.ts compiled outputs
         ['.d.js', '.d.cjs', '.d.mjs'].some((e) => jsName.endsWith(e)) ||
@@ -389,12 +430,12 @@ function findFiles (buildDir, extra = '', exclude = []) {
         (
           // .d.ts without .js as an output
           jsName.endsWith('.d.ts') &&
-          !fs.existsSync(path.join(buildDir, jsPath.replace('.d.ts', '.js')))
+          !fs.existsSync(path.join(`${buildDir}-${compileType}-esm`, jsPath.replace('.d.ts', '.js')))
         )
       );
 
       if (fs.statSync(fullPathEsm).isDirectory()) {
-        findFiles(buildDir, jsPath).forEach((e) => all.push(e));
+        deleteFiles(compileType, jsPath);
 
         PATHS_BUILD.forEach((b) => {
           // remove all empty directories
@@ -413,19 +454,36 @@ function findFiles (buildDir, extra = '', exclude = []) {
 
           [otherPath, otherTs].forEach((f) => rimrafSync(f));
         });
+      }
+    }, []);
+}
+
+// find the names of all the files in a certain directory
+function findFiles (buildDir, extra = '', exclude = []) {
+  const currDir = extra
+    ? path.join(buildDir, extra)
+    : buildDir;
+
+  return fs
+    .readdirSync(currDir)
+    .filter((f) => !exclude.includes(f))
+    .reduce((all, jsName) => {
+      const jsPath = `${extra}/${jsName}`;
+      const fullPathEsm = path.join(buildDir, jsPath);
+
+      if (fs.statSync(fullPathEsm).isDirectory()) {
+        findFiles(buildDir, jsPath).forEach((e) => all.push(e));
       } else {
-        if (!exclude.some((e) => jsName === e)) {
-          // this is not mapped to a compiled .js file (where we have dual esm/cjs mappings)
-          all.push(createMapEntry(buildDir, jsPath));
-        }
+        // this is not mapped to a compiled .js file (where we have dual esm/cjs mappings)
+        all.push(createMapEntry(buildDir, jsPath));
       }
 
       return all;
     }, []);
 }
 
-function tweakCjsPaths (buildDir) {
-  const cjsDir = `${buildDir}-cjs`;
+function tweakCjsPaths (compileType) {
+  const cjsDir = `build-${compileType}-cjs`;
 
   fs
     .readdirSync(cjsDir)
@@ -446,7 +504,7 @@ function tweakCjsPaths (buildDir) {
     });
 }
 
-function tweakPackageInfo (buildDir) {
+function tweakPackageInfo (compileType) {
   // Hack around some bundler issues, in this case Vite which has import.meta.url
   // as undefined in production contexts (and subsequently makes URL fail)
   // See https://github.com/vitejs/vite/issues/5558
@@ -454,9 +512,8 @@ function tweakPackageInfo (buildDir) {
   const esmDirname = `(import.meta && import.meta.url) ? ${esmPathname}.substring(0, ${esmPathname}.lastIndexOf('/') + 1) : 'auto'`;
   const cjsDirname = "typeof __dirname === 'string' ? __dirname : 'auto'";
 
-  ['esm', 'cjs'].forEach((type) => {
-    const inputPath = `${buildDir}${type === 'esm' ? '' : '-cjs'}`;
-    const infoFile = path.join(inputPath, 'packageInfo.js');
+  ['esm', 'cjs'].forEach((jsType) => {
+    const infoFile = `build-${compileType}-${jsType}/packageInfo.js`;
 
     fs.writeFileSync(
       infoFile,
@@ -464,32 +521,30 @@ function tweakPackageInfo (buildDir) {
         .readFileSync(infoFile, 'utf8')
         .replace(
           "type: 'auto'",
-          `type: '${type === 'cjs' ? 'cjs' : 'esm'}'`
+          `type: '${jsType}'`
         )
         .replace(
           "path: 'auto'",
-          `path: ${type === 'cjs' ? cjsDirname : esmDirname}`
+          `path: ${jsType === 'cjs' ? cjsDirname : esmDirname}`
         )
     );
   });
 
-  const denoFile = path.join(`${buildDir}-deno`, 'packageInfo.ts');
+  const denoFile = path.join('build-deno', 'packageInfo.ts');
 
-  if (fs.existsSync(denoFile)) {
-    fs.writeFileSync(
-      denoFile,
-      fs
-        .readFileSync(denoFile, 'utf8')
-        .replace(
-          "type: 'auto'",
-          "type: 'deno'"
-        )
-        .replace(
-          "path: 'auto'",
-          `path: ${esmPathname}`
-        )
-    );
-  }
+  fs.writeFileSync(
+    denoFile,
+    fs
+      .readFileSync(denoFile, 'utf8')
+      .replace(
+        "type: 'auto'",
+        "type: 'deno'"
+      )
+      .replace(
+        "path: 'auto'",
+        `path: ${esmPathname}`
+      )
+  );
 }
 
 function moveFields (pkg, fields) {
@@ -505,18 +560,15 @@ function moveFields (pkg, fields) {
 }
 
 // iterate through all the files that have been built, creating an exports map
-function buildExports () {
+function buildExports (compileType) {
   const buildDir = path.join(process.cwd(), 'build');
 
-  mkdirpSync(path.join(buildDir, 'cjs'));
-
   witeJson(path.join(buildDir, 'cjs/package.json'), { type: 'commonjs' });
-  tweakPackageInfo(buildDir);
-  tweakCjsPaths(buildDir);
+  tweakCjsPaths(compileType);
 
   const pkgPath = path.join(buildDir, 'package.json');
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
-  const listRoot = findFiles(buildDir, '', ['README.md', 'LICENSE']);
+  const listRoot = findFiles(buildDir, '', ['cjs', 'README.md', 'LICENSE']);
 
   if (!listRoot.some(([key]) => key === '.')) {
     const indexDef = relativePath(pkg.main).replace('.js', '.d.ts');
@@ -632,9 +684,6 @@ function buildExports () {
 
   moveFields(pkg, ['main', 'module', 'browser', 'deno', 'react-native', 'types', 'exports', 'dependencies', 'optionalDependencies', 'peerDependencies', 'denoDependencies']);
   witeJson(pkgPath, pkg);
-
-  // copy from build-cjs/**/*.js */ to build/cjs
-  copyDirSync('build-cjs', 'build/cjs', ['.js']);
 }
 
 function sortJson (json) {
@@ -867,15 +916,15 @@ function lintDependencies (dir, locals) {
   }
 }
 
-function timeIt (label, fn) {
+async function timeIt (label, fn) {
   const start = Date.now();
 
-  fn();
+  await Promise.resolve(fn());
 
   console.log(`${label} (${Date.now() - start}ms)`);
 }
 
-async function buildJs (repoPath, dir, locals) {
+async function buildJs (compileType, repoPath, dir, locals) {
   const pkgJson = JSON.parse(fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf-8'));
   const { name, version } = pkgJson;
 
@@ -916,17 +965,42 @@ async function buildJs (repoPath, dir, locals) {
     if (fs.existsSync(path.join(process.cwd(), 'public'))) {
       buildWebpack();
     } else {
-      await buildBabel(dir, 'cjs');
-      await buildBabel(dir, 'esm');
+      await compileJs(compileType, 'cjs');
+      await compileJs(compileType, 'esm');
 
-      buildDeno(pkgJson);
+      // Deno
+      await timeIt('Successfully compiled deno', () => {
+        buildDeno(pkgJson);
+      });
 
-      // adjust the import paths
-      rewriteEsmImports(process.cwd(), pkgJson, 'build-deno', adjustDenoPath);
-      rewriteEsmImports(process.cwd(), pkgJson, 'build-swc-esm', adjustJsPath);
+      // delete all unneeded files
+      await timeIt('Successfully removed extra files', () => {
+        deleteFiles(compileType);
+      });
 
-      timeIt('Successfully built exports', () => buildExports());
-      timeIt('Successfully linted configs', () => {
+      await timeIt('Successfully rewrote imports', () => {
+        // adjust the import paths (deno imports from .ts - can remove this on typescript 5)
+        rewriteEsmImports('build-deno', process.cwd(), pkgJson, adjustDenoPath);
+
+        // adjust all output js esm to have .js path imports
+        ['babel', 'esbuild', 'swc'].forEach((compileType) =>
+          rewriteEsmImports(`build-${compileType}-esm`, process.cwd(), pkgJson, adjustJsPath)
+        );
+      });
+
+      await timeIt('Successfully combined build', () => {
+        // adjust all packageInfo.js files for the correct usage
+        tweakPackageInfo(compileType);
+
+        // copy output files (after delete & import rewriting)
+        copyBuildFiles(compileType, dir);
+      });
+
+      await timeIt('Successfully built exports', () => {
+        buildExports(compileType);
+      });
+
+      await timeIt('Successfully linted configs', () => {
         lintOutput(dir);
         lintDependencies(dir, locals);
       });
@@ -937,6 +1011,15 @@ async function buildJs (repoPath, dir, locals) {
 }
 
 async function main () {
+  const args = process.argv.slice(2);
+  let compileType = 'babel';
+
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === '--compiler') {
+      compileType = args[++i];
+    }
+  }
+
   execSync('yarn polkadot-dev-clean-build');
 
   const pkg = JSON.parse(fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf-8'));
@@ -972,7 +1055,7 @@ async function main () {
   for (const dir of dirs) {
     process.chdir(dir);
 
-    await buildJs(repoPath, dir, locals);
+    await buildJs(compileType, repoPath, dir, locals);
 
     process.chdir('..');
   }
