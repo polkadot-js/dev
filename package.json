@@ -21,7 +21,7 @@
   ],
   "scripts": {
     "build": "polkadot-dev-build-ts --compiler babel",
-    "build:extra": "(cd packages/dev && polkadot-dev-copy-dir config build/config && polkadot-dev-copy-dir node build/node && polkadot-dev-copy-dir scripts build/scripts)",
+    "build:extra": "(cd packages/dev && polkadot-dev-copy-dir config build/config && polkadot-dev-copy-dir scripts build/scripts)",
     "build:release": "polkadot-ci-ghact-build --skip-beta",
     "clean": "polkadot-dev-clean-build",
     "docs": "polkadot-dev-build-docs",
@@ -30,11 +30,7 @@
     "test": "polkadot-dev-run-test --env browser"
   },
   "devDependencies": {
-    "@polkadot/dev": "workspace:packages/dev",
-    "@types/jest": "^29.4.0",
-    "@types/node": "^18.14.0",
-    "@types/react": "^18.0.28",
-    "@types/yargs": "^17.0.22"
+    "@polkadot/dev": "workspace:packages/dev"
   },
   "resolutions": {
     "typescript": "^4.9.5"

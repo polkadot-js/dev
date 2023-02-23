@@ -4,7 +4,7 @@
 
 import process from 'node:process';
 
-import { execNodeTsSync, execSync, exitFatal, importPath, readdirSync } from './util.mjs';
+import { execNodeTsSync, exitFatal, importPath, readdirSync } from './util.mjs';
 
 // A & B are just helpers here and in the errors below
 const EXT_A = ['spec', 'test'];
@@ -20,9 +20,8 @@ console.log('$ polkadot-dev-run-test', args.join(' '));
 const cmd = [];
 const nodeFlags = [];
 const filters = [];
-const filtersCont = [];
-const filtersExcl = [];
-const filtersIncl = [];
+const filtersExcl = {};
+const filtersIncl = {};
 let testEnv = 'node';
 
 for (let i = 0; i < args.length; i++) {
@@ -30,8 +29,8 @@ for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
       // environment, not passed-htrough
       case '--env':
-        if (!['browser', 'jest', 'node'].includes(args[++i])) {
-          throw new Error(`Invalid --env ${args[i]}, expected 'browser', 'node' or 'jest'`);
+        if (!['browser', 'node'].includes(args[++i])) {
+          throw new Error(`Invalid --env ${args[i]}, expected 'browser' or 'node'`);
         }
 
         testEnv = args[i];
@@ -72,50 +71,62 @@ for (let i = 0; i < args.length; i++) {
     // no "-"" found, so we use these as path filters
     filters.push(args[i]);
 
-    if (args[i].startsWith('~')) {
-      filtersCont.push(args[i].slice(1).split(/[\\/]/));
-    } else if (args[i].startsWith('^')) {
-      filtersExcl.push(args[i].slice(1).split(/[\\/]/));
+    if (args[i].startsWith('^')) {
+      const key = args[i].slice(1);
+
+      if (filtersIncl[key]) {
+        delete filtersIncl[key];
+      } else {
+        filtersExcl[key] = key.split(/[\\/]/);
+      }
     } else {
-      filtersIncl.push(args[i].split(/[\\/]/));
+      const key = args[i];
+
+      if (filtersExcl[key]) {
+        delete filtersExcl[key];
+      } else {
+        filtersIncl[key] = key.split(/[\\/]/);
+      }
     }
   }
 }
 
 const applyFilters = (parts, filters) =>
-  filters.some((filter) =>
-    parts
-      .map((_, i) => i)
-      .filter((i) =>
-        filter.length === 1
-          ? parts[i].startsWith(filter[0])
-          : parts[i] === filter[0]
-      )
-      .some((start) =>
-        filter.every((f, i) =>
-          parts[start + i] && (
-            i === (filter.length - 1)
-              ? parts[start + i].startsWith(f)
-              : parts[start + i] === f
+  Object
+    .values(filters)
+    .some((filter) =>
+      parts
+        .map((_, i) => i)
+        .filter((i) =>
+          filter[0].startsWith(':')
+            ? parts[i].includes(filter[0].slice(1))
+            : filter.length === 1
+              ? parts[i].startsWith(filter[0])
+              : parts[i] === filter[0]
+        )
+        .some((start) =>
+          filter.every((f, i) =>
+            parts[start + i] && (
+              f.startsWith(':')
+                ? parts[start + i].includes(f.slice(1))
+                : i === (filter.length - 1)
+                  ? parts[start + i].startsWith(f)
+                  : parts[start + i] === f
+            )
           )
         )
-      )
-  );
+    );
 
 const files = readdirSync('packages', EXTS).filter((file) => {
   const parts = file.split(/[\\/]/);
   let isIncluded = true;
 
-  if (filtersIncl.length) {
+  if (Object.keys(filtersIncl).length) {
     isIncluded = applyFilters(parts, filtersIncl);
   }
 
-  if (isIncluded && filtersExcl.length) {
+  if (isIncluded && Object.keys(filtersExcl).length) {
     isIncluded = !applyFilters(parts, filtersExcl);
-  }
-
-  if (isIncluded && filtersCont.length) {
-    isIncluded = filtersCont.some((f) => file.includes(f));
   }
 
   return isIncluded;
@@ -127,16 +138,8 @@ if (files.length === 0) {
 
 const cliArgs = [...cmd, ...files].join(' ');
 
-if (testEnv === 'jest') {
-  ['--no-warnings', '--experimental-vm-modules']
-    .filter((f) => !nodeFlags.includes(f))
-    .forEach((f) => nodeFlags.push(f));
-
-  execSync(`${process.execPath} ${nodeFlags.join(' ')} ${importPath('jest-cli/bin/jest.js')} ${cliArgs}`);
-} else {
-  try {
-    execNodeTsSync(`--require @polkadot/dev/node/test/${testEnv} ${nodeFlags.join(' ')} ${importPath('@polkadot/dev/scripts/polkadot-exec-node-test.mjs')} ${cliArgs}`);
-  } catch {
-    process.exit(1);
-  }
+try {
+  execNodeTsSync(`--require @polkadot/dev/node/test/${testEnv} ${nodeFlags.join(' ')} ${importPath('@polkadot/dev/scripts/polkadot-exec-node-test.mjs')} ${cliArgs}`);
+} catch {
+  process.exit(1);
 }

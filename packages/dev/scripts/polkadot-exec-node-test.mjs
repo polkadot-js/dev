@@ -51,7 +51,7 @@ function output (ch) {
   process.stdout.write(ch);
 }
 
-function indent (count, str = '') {
+function indent (count, str = '', start = '') {
   let pre = '\n';
 
   switch (count) {
@@ -73,12 +73,11 @@ function indent (count, str = '') {
 
   pre += ' ';
 
-  return `${pre}${
+  return `${pre}${start}${
     str
-      .trim()
       .split('\n')
       .map((l) => l.trim())
-      .join(pre)
+      .join(`${pre}${start ? ' '.padStart(start.length, ' ') : ''}`)
   }\n`;
 }
 
@@ -93,15 +92,15 @@ const parser = new TapParser({ bail }, () => {
     let item = '';
 
     if (r.diag) {
-      item += indent(1, `x ${r.fullname.replaceAll('\n', ' ')}`);
-      item += indent(2, r.name);
-      item += indent(3, `${r.diag.failureType} / ${r.diag.code}`);
-      item += indent(3, r.diag.error);
+      item += indent(1, [...r.fullname.split('\n'), r.name].filter((s) => !!s).join('\n'), 'x ');
+      // item += indent(2, r.name);
+      item += indent(2, `${r.diag.failureType} / ${r.diag.code}`);
+      item += indent(2, r.diag.error);
 
       // we don't add the stack to the log-to-file below
       logError += item;
 
-      item += indent(3, r.diag.stack);
+      item += indent(2, r.diag.stack);
 
       process.stdout.write(item);
     }
