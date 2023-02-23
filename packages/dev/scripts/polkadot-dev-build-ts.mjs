@@ -390,7 +390,7 @@ function findFiles (buildDir, extra = '', exclude = []) {
         (
           // .d.ts without .js as an output
           jsName.endsWith('.d.ts') &&
-          !fs.existsSync(path.join(buildDir, jsPath.replace('.d.ts', '.js')))
+          !['.js', '.cjs', '.mjs'].some((e) => fs.existsSync(path.join(buildDir, jsPath.replace('.d.ts', e))))
         )
       );
 
