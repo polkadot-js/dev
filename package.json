@@ -20,21 +20,15 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "yarn build:swc",
-    "build:babel": "polkadot-dev-build-ts --compiler babel",
-    "build:esbuild": "polkadot-dev-build-ts --compiler esbuild",
-    "build:extra": "yarn build:extra:copy",
-    "build:extra:copy": "(cd packages/dev && polkadot-dev-copy-dir config build/config && polkadot-dev-copy-dir node build/node && polkadot-dev-copy-dir scripts build/scripts)",
+    "build": "polkadot-dev-build-ts --compiler babel",
+    "build:extra": "(cd packages/dev && polkadot-dev-copy-dir config build/config && polkadot-dev-copy-dir node build/node && polkadot-dev-copy-dir scripts build/scripts)",
     "build:release": "polkadot-ci-ghact-build --skip-beta",
-    "build:swc": "polkadot-dev-build-ts --compiler swc",
     "clean": "polkadot-dev-clean-build",
     "docs": "polkadot-dev-build-docs",
     "lint": "polkadot-dev-run-lint",
     "postinstall": "./packages/dev/scripts/polkadot-dev-yarn-only.mjs",
     "prettier": "./packages/dev/scripts/polkadot-dev-run-prettier.mjs",
-    "test": "yarn test:esm && yarn test:node",
-    "test:esm": "yarn build && node ./tester.cjs && node ./tester.mjs",
-    "test:node": "polkadot-dev-run-test --env browser"
+    "test": "polkadot-dev-run-test --env browser"
   },
   "devDependencies": {
     "@polkadot/dev": "workspace:packages/dev",
