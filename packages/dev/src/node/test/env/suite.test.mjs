@@ -22,26 +22,11 @@ describe('describe', () => {
       });
     });
   });
-
-  describe('.each', () => {
-    describe.each([['foo', 'bar', 1]])('each passes through variables %i', (foo, bar, num, i) => {
-      expect(foo).toEqual('foo');
-      expect(bar).toEqual('bar');
-      expect(num).toEqual(1);
-      expect(i).toEqual(0);
-    });
-  });
 });
 
 describe('it', () => {
   it('has been enhanced', () => {
-    expect(it.each).toBeDefined();
-  });
-
-  describe('.each', () => {
-    it.each(['first', 'second', 'third'])('p formatter :: %p', (v) => {
-      expect(v).toBeDefined();
-    });
+    expect(it.todo).toBeDefined();
   });
 
   describe('.only', () => {
@@ -67,6 +52,12 @@ describe('it', () => {
   describe('.skip', () => {
     it.skip('skips when .skip is used', () => {
       throw new Error('FATAL: This should not run');
+    });
+  });
+
+  describe('.todo', () => {
+    it.todo('marks as a todo when .todo is used', () => {
+      expect(true).toBe(true);
     });
   });
 });
