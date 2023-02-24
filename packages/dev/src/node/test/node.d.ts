@@ -30,7 +30,7 @@ interface Expect {
 }
 
 interface It {
-  (name: string, fn: (done?: () => void) => void, timeout?: number): void;
+  (name: string, fn: (done?: () => void) => Promise<void> | void, timeout?: number): void;
 
   only: It;
   skip: It;
@@ -43,7 +43,7 @@ interface Jest {
   spyOn: (obj: object, key: string) => Mock;
 }
 
-type Lifecycle = (fn: () => unknown | Promise<unknown>) => void;
+type Lifecycle = (fn: () => Promise<void> | void) => void;
 
 interface Matchers {
   not: Matchers;
