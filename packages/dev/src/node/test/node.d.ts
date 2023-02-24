@@ -12,8 +12,6 @@
 interface Describe {
   (name: string, fn: () => void, timeout?: number): void;
 
-  // while each is specified in our environment, it is not in node:test, so
-  // we also don't include it here to start weeding it out
   only: Describe;
   skip: Describe;
   todo: Describe;
@@ -36,8 +34,6 @@ type HookFn = () => unknown | Promise<unknown>;
 interface It {
   (name: string, fn: HookFn, timeout?: number): void;
 
-  // while each is specified in our environment, it is not in node:test, so
-  // we also don't include it here to start weeding it out
   only: It;
   skip: It;
   todo: It;
@@ -54,7 +50,7 @@ type Lifecycle = (fn: HookFn) => void;
 interface Matchers {
   not: Matchers;
   rejects: {
-    toThrow: (message: string | RegExp) => Promise<void>;
+    toThrow: (message?: string | RegExp) => Promise<void>;
   };
 
   toBe: (check: unknown) => void;
@@ -73,7 +69,7 @@ interface Matchers {
   toHaveLength: (length: number) => void;
   toMatch: (check: string | RegExp) => void;
   toMatchObject: (check: object) => void;
-  toThrow: (message: string | RegExp) => void;
+  toThrow: (message?: string | RegExp) => void;
 }
 
 interface Mock {
@@ -84,8 +80,12 @@ interface Mock {
 }
 
 declare global {
+  var after: Lifecycle;
+  /** Jest-compatible alias for before */
   var afterAll: Lifecycle;
   var afterEach: Lifecycle;
+  var before: Lifecycle;
+  /** Jest-compatible alias for after */
   var beforeAll: Lifecycle;
   var beforeEach: Lifecycle;
   var describe: Describe;
