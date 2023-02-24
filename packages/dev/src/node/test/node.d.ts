@@ -9,8 +9,13 @@
 //
 // NOTE: What is here needs to align with the implementations in node/test/env
 
+interface SuiteContext {
+  name: string;
+  signal: AbortSignal;
+}
+
 interface Describe {
-  (name: string, fn: () => void, timeout?: number): void;
+  (name: string, fn: (ctx: DescribeCtx) => void, timeout?: number): void;
 
   only: Describe;
   skip: Describe;
@@ -30,7 +35,7 @@ interface Expect {
 }
 
 interface It {
-  (name: string, fn: (done?: () => void) => Promise<void> | void, timeout?: number): void;
+  (name: string, fn: (done: () => void) => Promise<void> | void, timeout?: number): void;
 
   only: It;
   skip: It;
