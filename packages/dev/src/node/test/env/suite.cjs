@@ -1,7 +1,7 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-const { after: afterAll, afterEach, before: beforeAll, beforeEach, describe, it } = require('node:test');
+const { after, afterEach, before, beforeEach, describe, it } = require('node:test');
 
 const { enhanceObj } = require('../util.cjs');
 
@@ -21,17 +21,9 @@ function createWrapper (fn) {
   /** @type {(opts: WrapOpts) => (name: string, exec?: () => unknown, timeout?: number) => void} */
   const wrap = (opts = {}) => (name, exec, timeout) => fn(name, timeout ? { ...opts, timeout } : opts, exec);
 
-  /** @type {(opts: WrapOpts) => (arr: unknown[]) => (name: string, exec?: (...v: unknown[]) => unknown, timeout?: number) => void} */
-  const each = (opts = {}) => (arr) => (name, exec, timeout) => arr.forEach((v, i) => fn(name?.replace('%s', v?.toString()).replace('%i', i.toString()).replace('%p', JSON.stringify(v)), timeout ? { ...opts, timeout } : opts, () => Array.isArray(v) ? exec?.(...v, i) : exec?.(v, i)));
-
   // Ensure that we have consistent helpers on the function
   // (if not already applied)
   return enhanceObj(wrap(), {
-    each: enhanceObj(each(), {
-      only: each({ only: true }),
-      skip: each({ skip: true }),
-      todo: each({ todo: true })
-    }),
     only: wrap({ only: true }),
     skip: wrap({ skip: true }),
     todo: wrap({ todo: true })
@@ -44,9 +36,11 @@ function createWrapper (fn) {
  **/
 function suite () {
   return {
-    afterAll,
+    after,
+    afterAll: after,
     afterEach,
-    beforeAll,
+    before,
+    beforeAll: before,
     beforeEach,
     describe: createWrapper(describe),
     it: createWrapper(it)
