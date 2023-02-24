@@ -18,12 +18,12 @@ const { enhanceObj } = require('../util.cjs');
  * @param {typeof describe | typeof it} fn
  */
 function createWrapper (fn) {
-  /** @type {(opts: WrapOpts) => (name: string, exec?: () => unknown, timeout?: number) => void} */
-  const wrap = (opts = {}) => (name, exec, timeout) => fn(name, timeout ? { ...opts, timeout } : opts, exec);
+  /** @type {(opts: WrapOpts) => (name: string, exec?: (done?: () => void) => unknown, timeout?: number) => void} */
+  const wrap = (opts) => (name, exec, timeout) => fn(name, timeout ? { ...opts, timeout } : opts, exec);
 
   // Ensure that we have consistent helpers on the function
   // (if not already applied)
-  return enhanceObj(wrap(), {
+  return enhanceObj(wrap({}), {
     only: wrap({ only: true }),
     skip: wrap({ skip: true }),
     todo: wrap({ todo: true })
