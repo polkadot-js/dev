@@ -26,7 +26,7 @@ describe('describe', () => {
 
 describe('it', () => {
   it('has been enhanced', () => {
-    expect(it.each).toBeDefined();
+    expect(it.todo).toBeDefined();
   });
 
   describe('.only', () => {
