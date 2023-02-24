@@ -50,7 +50,8 @@
     "./config/*": "./config/*",
     "./node/test/browser": "./src/node/test/browser.cjs",
     "./node/test/node": "./src/node/test/node.cjs",
-    "./node/ts": "./src/node/ts/index.mjs"
+    "./node/ts": "./src/node/ts/index.mjs",
+    "./rootJs/testJson.json": "./src/rootJs/testJson.json"
   },
   "dependencies": {
     "@babel/cli": "^7.21.0",

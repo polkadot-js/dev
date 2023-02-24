@@ -9,5 +9,9 @@
     "**/mod.ts",
     "**/node/**/*.test.ts"
   ],
+  "include": [
+    "src/**/*",
+    "src/**/*.json"
+  ],
   "references": []
 }

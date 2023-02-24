@@ -1,13 +1,13 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-export class Testing123 {
+export class Clazz {
   #something = 123_456_789;
 
   readonly and: number;
 
-  static staticProperty = 'babelIsCool';
-  static staticFunction = (): string|null => Testing123.staticProperty;
+  static staticProperty = 'foobar';
+  static staticFunction = (): string|null => Clazz.staticProperty;
 
   /**
    * @param and the number we should and with
@@ -34,7 +34,7 @@ export class Testing123 {
    * @param something The addition
    */
   setSomething = (something: number): number => {
-    this.#something = something;
+    this.#something = something & this.and;
 
     return this.#something;
   };

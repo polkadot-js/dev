@@ -6,7 +6,8 @@
       "@polkadot/dev/types": ["dev/src/types.ts"],
       "@polkadot/dev/*": ["dev/src/*"]
     },
+    "resolveJsonModule": true,
     "skipLibCheck": true,
-    "target": "es2015"
+    "target": "es2020"
   }
 }

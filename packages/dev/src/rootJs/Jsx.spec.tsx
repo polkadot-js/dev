@@ -5,13 +5,13 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { strict as assert } from 'node:assert';
 import React from 'react';
 
-import Hidden from './Hidden';
+import Jsx from './Jsx';
 
 describe('react testing', () => {
   it('shows the children when the checkbox is checked', () => {
     const testMessage = 'Test Message';
 
-    render(<Hidden>{testMessage}</Hidden>);
+    render(<Jsx>{testMessage}</Jsx>);
 
     assert.equal(screen.queryByText(testMessage), null);
 

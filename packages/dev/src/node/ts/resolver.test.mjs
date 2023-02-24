@@ -46,17 +46,17 @@ describe('resolveExtJs', () => {
 
   it('returns the correct value for ../mod.js resolution', () => {
     expect(
-      resolveExtJs('../mod.js', pathToFileURL(`${CWD_PATH}/${SRC_PATH}/test1/index.ts`), { extJs: true })
+      resolveExtJs('../mod.js', pathToFileURL(`${CWD_PATH}/${SRC_PATH}/rootJs/index.ts`), { extJs: true })
     ).toEqual(modFound);
   });
 
   it('returns a correct object for a .jsx extension', () => {
     expect(
-      resolveExtJs(`./${SRC_PATH}/Hidden.jsx`, ROOT_URL, { extJs: true })
+      resolveExtJs(`./${SRC_PATH}/rootJs/Jsx.jsx`, ROOT_URL, { extJs: true })
     ).toEqual({
       format: 'module',
       shortCircuit: true,
-      url: pathToFileURL(`${SRC_PATH}/Hidden.tsx`).href
+      url: pathToFileURL(`${SRC_PATH}/rootJs/Jsx.tsx`).href
     });
   });
 });
@@ -98,13 +98,13 @@ describe('resolveRelative', () => {
     ).toEqual(indexFound);
   });
 
-  it('resolves to the sub-directory via ./test1', () => {
+  it('resolves to the sub-directory via ./rootJs', () => {
     expect(
-      resolveRelative('./test1', SRC_URL)
+      resolveRelative('./rootJs', SRC_URL)
     ).toEqual({
       format: 'module',
       shortCircuit: true,
-      url: pathToFileURL(`${SRC_PATH}/test1/index.ts`).href
+      url: pathToFileURL(`${SRC_PATH}/rootJs/index.ts`).href
     });
   });
 });

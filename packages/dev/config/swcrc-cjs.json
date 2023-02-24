@@ -1,9 +1,27 @@
 {
   "$schema": "https://json.schemastore.org/swcrc",
+  "env": {
+    "dynamicImport": true,
+    "mode": "entry",
+    "targets": {
+      "node": "14"
+    }
+  },
+  "exclude": [
+    "\\.d\\.ts",
+    "\\.manual\\.ts",
+    "\\.spec\\.ts",
+    "\\.spec\\.tsx",
+    "\\.test\\.ts",
+    "\\.test\\.tsx",
+    "mod\\.ts"
+  ],
   "jsc": {
+    "externalHelpers": true,
+    "loose": false,
     "parser": {
+      "dynamicImport": true,
       "syntax": "typescript",
-      "dynamicImport": false,
       "tsx": true
     },
     "transform": {
@@ -11,28 +29,11 @@
         "runtime": "automatic"
       }
     },
-    "target": "es5",
-    "loose": false,
-    "externalHelpers": true
+    "target": "es2015"
   },
+  "minify": false,
   "module": {
-    "type": "commonjs",
-    "ignoreDynamic": true
-  },
-  "exclude": [
-    ".d.ts",
-    ".manual.ts",
-    ".spec.ts",
-    ".spec.tsx",
-    ".test.ts",
-    ".test.tsx",
-    "mod.ts"
-  ],
-  "env": {
-    "targets": {
-      "node": "14"
-    },
-    "mode": "entry"
-  },
-  "minify": false
+    "ignoreDynamic": true,
+    "type": "commonjs"
+  }
 }

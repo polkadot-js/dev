@@ -20,22 +20,15 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "polkadot-dev-build-ts",
-    "build:esbuild": "yarn build:esbuild:cjs && yarn build:esbuild:esm",
-    "build:esbuild:cjs": "cd packages/dev && yarn polkadot-dev-run-esbuild --type cjs",
-    "build:esbuild:esm": "cd packages/dev && yarn polkadot-dev-run-esbuild --type esm",
-    "build:extra": "yarn build:extra:copy && yarn build:swc",
-    "build:extra:copy": "(cd packages/dev && polkadot-dev-copy-dir config build/config && polkadot-dev-copy-dir scripts build/scripts)",
+    "build": "polkadot-dev-build-ts --compiler babel",
+    "build:extra": "(cd packages/dev && polkadot-dev-copy-dir config build/config && polkadot-dev-copy-dir scripts build/scripts)",
     "build:release": "polkadot-ci-ghact-build --skip-beta",
-    "build:swc": "yarn build:swc:cjs && yarn build:swc:esm",
-    "build:swc:cjs": "cd packages/dev && yarn polkadot-dev-run-swc --type cjs",
-    "build:swc:esm": "cd packages/dev && yarn polkadot-dev-run-swc --type esm",
     "clean": "polkadot-dev-clean-build",
     "docs": "polkadot-dev-build-docs",
     "lint": "polkadot-dev-run-lint",
     "postinstall": "./packages/dev/scripts/polkadot-dev-yarn-only.mjs",
-    "prettier": "./packages/dev/scripts/polkadot-dev-run-prettier.mjs",
-    "test": "polkadot-dev-run-test --env browser"
+    "test": "yarn build && yarn test:one",
+    "test:one": "polkadot-dev-run-test --env browser"
   },
   "devDependencies": {
     "@polkadot/dev": "workspace:packages/dev"

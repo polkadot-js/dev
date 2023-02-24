@@ -3,13 +3,12 @@
 
 // Adapted from https://github.com/testing-library/react-testing-library#basic-example
 
+import type { Props } from './JsxChild';
+
 import React, { useCallback, useState } from 'react';
 import styledComponents from 'styled-components';
 
-interface Props {
-  children?: React.ReactNode;
-  className?: string;
-}
+import Child from './JsxChild';
 
 export const styled = (
   (styledComponents as unknown as { styled: typeof styledComponents }).styled ||
@@ -35,7 +34,12 @@ function Hidden ({ children, className }: Props): React.ReactElement<Props> {
         onChange={onShow}
         type='checkbox'
       />
-      {isMessageVisible && children}
+      {isMessageVisible && (
+        <>
+          {children}
+          <Child label='hello' />
+        </>
+      )}
     </StyledDiv>
   );
 }

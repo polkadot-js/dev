@@ -3,7 +3,7 @@
 
 /* eslint-disable no-var, spaced-comment, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
 
-// A very basic descriptor fro the actual global objects we expose in our Jest-like
+// A very basic descriptor for the actual global objects we expose in our Jest-like
 // environment. Literally what is here is what it took us to convert all the tests
 // in polkadot-js to node:test with a compatibility wrapper
 //
@@ -29,10 +29,8 @@ interface Expect {
   stringMatching: (check: string | RegExp) => object;
 }
 
-type HookFn = () => unknown | Promise<unknown>;
-
 interface It {
-  (name: string, fn: HookFn, timeout?: number): void;
+  (name: string, fn: (done?: () => void) => Promise<void> | void, timeout?: number): void;
 
   only: It;
   skip: It;
@@ -45,7 +43,7 @@ interface Jest {
   spyOn: (obj: object, key: string) => Mock;
 }
 
-type Lifecycle = (fn: HookFn) => void;
+type Lifecycle = (fn: () => Promise<void> | void) => void;
 
 interface Matchers {
   not: Matchers;

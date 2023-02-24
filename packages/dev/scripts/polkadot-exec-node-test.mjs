@@ -25,13 +25,17 @@ const stats = {
 };
 let logFile = null;
 let bail = false;
+let format = 'dot';
 
 for (let i = 0; i < args.length; i++) {
-  if (args[i] === '--log') {
+  if (args[i] === '--bail') {
+    bail = true;
+  } else if (args[i] === '--format') {
+    i++;
+    format = args[i];
+  } else if (args[i] === '--log') {
     i++;
     logFile = args[i];
-  } else if (args[i] === '--bail') {
-    bail = true;
   } else {
     files.push(args[i]);
   }
@@ -81,7 +85,7 @@ function indent (count, str = '', start = '') {
   }\n`;
 }
 
-const parser = new TapParser({ bail }, () => {
+const dotParser = new TapParser({ bail }, () => {
   process.stdout.write('\n');
 
   let logError = '';
@@ -141,7 +145,7 @@ const parser = new TapParser({ bail }, () => {
   process.exit(stats.fail.length);
 });
 
-parser
+dotParser
   // Ignore the comments for now - it is mostly timing and overlaps with
   // the actual diagnostic information
   //
@@ -187,5 +191,8 @@ run({ files, timeout: 3_600_000 })
           : r.message
     );
   })
-  // .pipe(process.stdout)
-  .pipe(parser);
+  .pipe(
+    format === 'dot'
+      ? dotParser
+      : process.stdout
+  );
