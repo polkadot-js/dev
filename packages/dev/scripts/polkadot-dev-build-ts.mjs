@@ -274,7 +274,7 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
     : `${DENO_EXT_PRE}/${depName}${version ? `@${version}` : ''}${depPath || ''}`;
 }
 
-function rewriteEsmImports (dir, pkgCwd, pkgJson, replacer) {
+function rewriteImports (dir, pkgCwd, pkgJson, replacer) {
   if (!fs.existsSync(dir)) {
     return;
   }
@@ -285,7 +285,7 @@ function rewriteEsmImports (dir, pkgCwd, pkgJson, replacer) {
       const thisPath = path.join(process.cwd(), dir, p);
 
       if (fs.statSync(thisPath).isDirectory()) {
-        rewriteEsmImports(`${dir}/${p}`, pkgCwd, pkgJson, replacer);
+        rewriteImports(`${dir}/${p}`, pkgCwd, pkgJson, replacer);
       } else if (thisPath.endsWith('.spec.js') || thisPath.endsWith('.spec.ts')) {
         // we leave specs as-is
       } else if (thisPath.endsWith('.js') || thisPath.endsWith('.ts') || thisPath.endsWith('.tsx') || thisPath.endsWith('.md')) {
@@ -799,7 +799,7 @@ function lintOutput (dir) {
       } else if (/[\+\-\*\/\=\<\>\|\&\%\^\(\)\{\}\[\] ][0-9]{1,}n/.test(l)) {
         if (l.includes(';base64,')) {
           // ignore base64 encoding, e.g. data uris
-        } else {
+        } else if (dir !== 'dev') {
           // we don't want untamed BigInt literals
           return createError(full, l, n, 'Prefer BigInt(<digits>) to <digits>n');
         }
@@ -985,11 +985,11 @@ async function buildJs (compileType, repoPath, dir, locals) {
 
       await timeIt('Successfully rewrote imports', () => {
         // adjust the import paths (deno imports from .ts - can remove this on typescript 5)
-        rewriteEsmImports('build-deno', process.cwd(), pkgJson, adjustDenoPath);
+        rewriteImports('build-deno', process.cwd(), pkgJson, adjustDenoPath);
 
         // adjust all output js esm to have .js path imports
-        ['babel', 'esbuild', 'swc'].forEach((compileType) =>
-          rewriteEsmImports(`build-${compileType}-esm`, process.cwd(), pkgJson, adjustJsPath)
+        ['cjs', 'esm'].forEach((jsType) =>
+          rewriteImports(`build-${compileType}-${jsType}`, process.cwd(), pkgJson, adjustJsPath)
         );
       });
 

@@ -27,7 +27,8 @@
     "docs": "polkadot-dev-build-docs",
     "lint": "polkadot-dev-run-lint",
     "postinstall": "./packages/dev/scripts/polkadot-dev-yarn-only.mjs",
-    "test": "polkadot-dev-run-test --env browser"
+    "test": "yarn build && yarn test:one",
+    "test:one": "polkadot-dev-run-test --env browser"
   },
   "devDependencies": {
     "@polkadot/dev": "workspace:packages/dev"
