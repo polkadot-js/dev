@@ -15,7 +15,7 @@ interface SuiteContext {
 }
 
 interface Describe {
-  (name: string, fn: (ctx: DescribeCtx) => void, timeout?: number): void;
+  (name: string, fn: (ctx: SuiteContext) => void, timeout?: number): void;
 
   only: Describe;
   skip: Describe;
