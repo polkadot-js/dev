@@ -12,6 +12,4 @@ import testRootBuild from '../build/cjs/root.js';
 import * as testRoot from './root';
 import { runTests } from './rootTests';
 
-console.error(testRootBuild);
-
 runTests(testRootBuild as unknown as typeof testRoot);
