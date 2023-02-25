@@ -537,19 +537,22 @@ function tweakPackageInfo (compileType) {
 
   const denoFile = path.join('build-deno', 'packageInfo.ts');
 
-  fs.writeFileSync(
-    denoFile,
-    fs
-      .readFileSync(denoFile, 'utf8')
-      .replace(
-        "type: 'auto'",
-        "type: 'deno'"
-      )
-      .replace(
-        "path: 'auto'",
-        `path: ${esmPathname}`
-      )
-  );
+  // Not all packages are built for deno (if no mod.ts, don't build)
+  if (fs.existsSync(denoFile)) {
+    fs.writeFileSync(
+      denoFile,
+      fs
+        .readFileSync(denoFile, 'utf8')
+        .replace(
+          "type: 'auto'",
+          "type: 'deno'"
+        )
+        .replace(
+          "path: 'auto'",
+          `path: ${esmPathname}`
+        )
+    );
+  }
 }
 
 function moveFields (pkg, fields) {
