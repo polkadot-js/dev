@@ -52,6 +52,28 @@ describe('jest', () => {
       expect(test).toHaveBeenLastCalledWith(expect.objectContaining({ b: 'test' }), null);
     });
 
+    it('allows .mockImplementation', () => {
+      const mock = jest.fn(() => 3);
+
+      expect(mock()).toBe(3);
+
+      mock.mockImplementation(() => 4);
+
+      expect(mock()).toBe(4);
+      expect(mock()).toBe(4);
+    });
+
+    it('allows .mockImplementationOnce', () => {
+      const mock = jest.fn(() => 3);
+
+      expect(mock()).toBe(3);
+
+      mock.mockImplementationOnce(() => 4);
+
+      expect(mock()).toBe(4);
+      expect(mock()).toBe(3);
+    });
+
     it('allows resets', () => {
       const mock = jest.fn(() => 3);
 
@@ -77,6 +99,40 @@ describe('jest', () => {
       expect(spy).not.toHaveBeenCalled();
       expect(obj.add(1, 2)).toBe(3);
       expect(spy).toHaveBeenCalledTimes(1);
+    });
+
+    it('allows .mockImplementation', () => {
+      const obj = {
+        add: (a, b) => a + b
+      };
+      const spy = jest.spyOn(obj, 'add');
+
+      expect(obj.add(1, 2)).toBe(3);
+      expect(spy).toHaveBeenCalledTimes(1);
+
+      spy.mockImplementation(() => 4);
+
+      expect(obj.add(1, 2)).toBe(4);
+      expect(spy).toHaveBeenCalledTimes(2);
+      expect(obj.add(1, 2)).toBe(4);
+      expect(spy).toHaveBeenCalledTimes(3);
+    });
+
+    it('allows .mockImplementationOnce', () => {
+      const obj = {
+        add: (a, b) => a + b
+      };
+      const spy = jest.spyOn(obj, 'add');
+
+      expect(obj.add(1, 2)).toBe(3);
+      expect(spy).toHaveBeenCalledTimes(1);
+
+      spy.mockImplementationOnce(() => 4);
+
+      expect(obj.add(1, 2)).toBe(4);
+      expect(spy).toHaveBeenCalledTimes(2);
+      expect(obj.add(1, 2)).toBe(3);
+      expect(spy).toHaveBeenCalledTimes(3);
     });
 
     it('allows resets', () => {

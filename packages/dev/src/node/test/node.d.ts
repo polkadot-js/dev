@@ -78,6 +78,8 @@ interface Matchers {
 interface Mock {
   (...args: any[]): any;
 
+  mockImplementation: (fn: (...args: unknown[]) => unknown) => void;
+  mockImplementationOnce: (fn: (...args: unknown[]) => unknown) => void;
   mockReset: () => void;
   mockRestore: () => void;
 }
