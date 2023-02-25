@@ -41,9 +41,9 @@ export function copyFileSync (src, destDir) {
 }
 
 /** Recursively copies a directory to a target dir */
-export function copyDirSync (src, dest, extensions) {
+export function copyDirSync (src, dest, include, exclude) {
   if (Array.isArray(src)) {
-    src.forEach((s) => copyDirSync(s, dest, extensions));
+    src.forEach((s) => copyDirSync(s, dest, include, exclude));
   } else if (!fs.existsSync(src)) {
     // it doesn't exist, so we have nothing to copy
   } else if (!fs.statSync(src).isDirectory()) {
@@ -57,9 +57,11 @@ export function copyDirSync (src, dest, extensions) {
         const srcPath = path.join(src, file);
 
         if (fs.statSync(srcPath).isDirectory()) {
-          copyDirSync(srcPath, path.join(dest, file), extensions);
-        } else if (!extensions || extensions.some((e) => file.endsWith(e))) {
-          copyFileSync(srcPath, dest);
+          copyDirSync(srcPath, path.join(dest, file), include, exclude);
+        } else if (!include || !include.length || include.some((e) => file.endsWith(e))) {
+          if (!exclude || !exclude.some((e) => file.endsWith(e))) {
+            copyFileSync(srcPath, dest);
+          }
         }
       });
   }

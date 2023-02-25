@@ -41,6 +41,10 @@ async function compileJs (compileType, type) {
 
   mkdirpSync(buildDir);
 
+  const files = readdirSync('src', ['.ts', '.tsx']).filter((f) => ![
+    '.d.ts', '.manual.ts', '.spec.ts', '.spec.tsx', '.test.ts', '.test.tsx', 'mod.ts'
+  ].some((e) => f.endsWith(e)));
+
   if (compileType === 'babel') {
     const configs = BL_CONFIGS.map((c) => path.join(process.cwd(), `../../${c}`));
 
@@ -65,20 +69,18 @@ async function compileJs (compileType, type) {
 
     await timeIt(`Successfully compiled ${compileType} ${type}`, () =>
       Promise.all(
-        readdirSync('src', ['.ts', '.tsx'])
-          .filter((f) => !swcrc.exclude.some((e) => f.endsWith(e.replaceAll('\\', ''))))
-          .map(async (filename) => {
-            // split src prefix, replace .ts extension with .js
-            const outFile = path.join(buildDir, filename.split(/[\\/]/).slice(1).join('/').replace(/\.tsx?$/, '.js'));
-            const { code } = await transform(fs.readFileSync(filename, 'utf-8'), {
-              ...swcrc,
-              filename,
-              swcrc: false
-            });
+        files.map(async (filename) => {
+          // split src prefix, replace .ts extension with .js
+          const outFile = path.join(buildDir, filename.split(/[\\/]/).slice(1).join('/').replace(/\.tsx?$/, '.js'));
+          const { code } = await transform(fs.readFileSync(filename, 'utf-8'), {
+            ...swcrc,
+            filename,
+            swcrc: false
+          });
 
-            mkdirpSync(path.dirname(outFile));
-            fs.writeFileSync(outFile, code);
-          })
+          mkdirpSync(path.dirname(outFile));
+          fs.writeFileSync(outFile, code);
+        })
       )
     );
   } else {
@@ -336,7 +338,7 @@ function buildDeno () {
   }
 
   // copy the sources as-is
-  copyDirSync('src', 'build-deno');
+  copyDirSync('src', 'build-deno', [], ['.spec.ts', '.spec.tsx', '.test.ts', '.test.tsx']);
   copyFileSync('README.md', 'build-deno');
 
   // remove unneeded directories
@@ -392,7 +394,7 @@ function copyBuildFiles (compileType, dir) {
   copyFileSync('../../LICENSE', 'build');
 
   // copy interesting files
-  copyDirSync('src', 'build', ['.patch', '.js', '.cjs', '.mjs', '.json', '.d.ts', '.css', '.gif', '.hbs', '.md', '.jpg', '.png', '.rs', '.svg']);
+  copyDirSync('src', 'build', ['.patch', '.js', '.cjs', '.mjs', '.json', '.d.ts', '.d.cts', '.d.mts', '.css', '.gif', '.hbs', '.md', '.jpg', '.png', '.rs', '.svg']);
 
   // copy all *.d.ts files
   copyDirSync([path.join('../../build', dir, 'src'), path.join('../../build/packages', dir, 'src')], 'build', ['.d.ts']);
@@ -405,7 +407,7 @@ function copyBuildFiles (compileType, dir) {
 }
 
 // remove all extra files that were generated as part of the build
-function deleteFiles (compileType, extra = '', exclude = []) {
+function deleteBuildFiles (compileType, extra = '', exclude = []) {
   const buildDir = 'build';
   const currDir = extra
     ? path.join('build', extra)
@@ -432,15 +434,13 @@ function deleteFiles (compileType, extra = '', exclude = []) {
           // .d.ts without .js as an output
           jsName.endsWith('.d.ts') &&
           !['.js', '.cjs', '.mjs'].some((e) =>
-            ['', `-${compileType}-esm`].some((p) =>
-              fs.existsSync(path.join(`${buildDir}${p}`, jsPath.replace('.d.ts', e)))
-            )
+            fs.existsSync(path.join(buildDir, jsPath.replace('.d.ts', e)))
           )
         )
       );
 
       if (fs.statSync(fullPathEsm).isDirectory()) {
-        deleteFiles(compileType, jsPath);
+        deleteBuildFiles(compileType, jsPath);
 
         PATHS_BUILD.forEach((b) => {
           // remove all empty directories
@@ -978,11 +978,6 @@ async function buildJs (compileType, repoPath, dir, locals) {
         buildDeno(pkgJson);
       });
 
-      // delete all unneeded files
-      await timeIt('Successfully removed extra files', () => {
-        deleteFiles(compileType);
-      });
-
       await timeIt('Successfully rewrote imports', () => {
         // adjust the import paths (deno imports from .ts - can remove this on typescript 5)
         rewriteImports('build-deno', process.cwd(), pkgJson, adjustDenoPath);
@@ -997,8 +992,13 @@ async function buildJs (compileType, repoPath, dir, locals) {
         // adjust all packageInfo.js files for the correct usage
         tweakPackageInfo(compileType);
 
-        // copy output files (after delete & import rewriting)
+        // copy output files (after import rewriting)
         copyBuildFiles(compileType, dir);
+      });
+
+      // delete all unneeded files (after all is combined)
+      await timeIt('Successfully removed extra files', () => {
+        deleteBuildFiles(compileType);
       });
 
       await timeIt('Successfully built exports', () => {

@@ -7,16 +7,10 @@
       "node": "14"
     }
   },
-  "exclude": [
-    "\\.d\\.ts",
-    "\\.manual\\.ts",
-    "\\.spec\\.ts",
-    "\\.spec\\.tsx",
-    "\\.test\\.ts",
-    "\\.test\\.tsx",
-    "mod\\.ts"
-  ],
   "jsc": {
+    "experimental": {
+      "keepImportAssertions": true
+    },
     "externalHelpers": true,
     "loose": false,
     "parser": {
@@ -24,12 +18,12 @@
       "syntax": "typescript",
       "tsx": true
     },
+    "target": "es2020",
     "transform": {
       "react": {
         "runtime": "automatic"
       }
-    },
-    "target": "es2020"
+    }
   },
   "minify": false,
   "module": {

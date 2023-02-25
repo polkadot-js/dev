@@ -3,7 +3,7 @@
 
 import * as testRoot from './root';
 
-export function runTests ({ Clazz, TEST_PURE, bigIntExp, dynamic, json }: typeof testRoot): void {
+export function runTests ({ Clazz, TEST_PURE, bigIntExp, dynamic, jsOpExp, json }: typeof testRoot): void {
   describe('Clazz', (): void => {
     it('has staticProperty', (): void => {
       expect(Clazz.staticProperty).toBe('foobar');
@@ -26,12 +26,6 @@ export function runTests ({ Clazz, TEST_PURE, bigIntExp, dynamic, json }: typeof
     });
   });
 
-  describe('json()', (): void => {
-    it('should return the correct value', (): void => {
-      expect(json()).toBe('works');
-    });
-  });
-
   describe('dynamic()', (): void => {
     it('should allow dynamic import usage', async (): Promise<void> => {
       expect(await dynamic(5, 37)).toBe(42);
@@ -41,6 +35,22 @@ export function runTests ({ Clazz, TEST_PURE, bigIntExp, dynamic, json }: typeof
   describe('bigIntExp()', (): void => {
     it('should return the correct value', (): void => {
       expect(bigIntExp()).toBe(123_456n * 137_858_491_849n);
+    });
+  });
+
+  describe('jsOpExp', (): void => {
+    it('handles 0 ?? 42 correctly', (): void => {
+      expect(jsOpExp(0)).toBe(0);
+    });
+
+    it('handles undefined ?? 42 correctly', (): void => {
+      expect(jsOpExp()).toBe(42);
+    });
+  });
+
+  describe('json()', (): void => {
+    it('should return the correct value', (): void => {
+      expect(json()).toBe('works');
     });
   });
 }

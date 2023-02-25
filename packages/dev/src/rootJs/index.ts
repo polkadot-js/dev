@@ -20,14 +20,19 @@ export function bigIntExp (): bigint {
 export async function dynamic (a: number, b: number): Promise<number> {
   // NOTE we go via this path so it points to the same location in both ESM
   // and CJS output (a './dynamic' import would be different otherwise)
-  const { sum } = await import('../esm/dynamic');
+  // @ts-expect-error We don't have a definition
+  const { sum } = await import('@polkadot/dev/rootJs/dynamic.mjs');
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return sum(a, b);
 }
 
 /** Function to ensure we have json correctly imported */
 export function json (): string {
-  console.error(JSON.stringify(testJson));
-
   return testJson.test.json;
+}
+
+/** Check support for the ?? operator */
+export function jsOpExp (a?: number): number {
+  return a ?? 42;
 }
