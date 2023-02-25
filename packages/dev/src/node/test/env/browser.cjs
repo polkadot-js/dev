@@ -6,9 +6,13 @@ const { JSDOM } = require('jsdom');
 /**
  * Export a very basic JSDom environment - this is just enough so we have
  * @testing-environment/react tests passing in this repo
+ *
+ * FIXME: This apporach is actually _explicitly_ discouraged by JSDOM - when
+ * using window you should run the tests inside that context, instead of just
+ * blindly relying on the globals as we do here
  */
 function browser () {
-  const { window } = new JSDOM();
+  const { window } = new JSDOM('', { url: 'http://localhost' });
 
   return {
     // All HTML Elements that are defined on the JSDOM window object.
@@ -88,6 +92,7 @@ function browser () {
     // normal service resumes, the base top-level names
     crypto: window.crypto,
     document: window.document,
+    localStorage: window.localStorage,
     navigator: window.navigator,
     // window...
     window
