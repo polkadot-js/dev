@@ -30,6 +30,8 @@ const mockStub = stubObj('jest.fn()', MOCK_KEYS);
  **/
 function extendMock (spy) {
   return enhanceObj(spy, {
+    mockImplementation: (fn) => spy.mock.mockImplementation(fn),
+    mockImplementationOnce: (fn) => spy.mock.mockImplementationOnce(fn),
     mockReset: () => spy.mock.resetCalls(),
     mockRestore: () => spy.mock.restore()
   }, mockStub);
