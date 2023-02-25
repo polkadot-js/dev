@@ -1,4 +1,4 @@
-    1190	Jaco                          	Add .mockImplementation test env support (#940)
+    1191	Jaco                          	Set JSDOM url for browser env (#941)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
