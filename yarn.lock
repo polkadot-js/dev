@@ -1510,7 +1510,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@eslint/js@npm:8.35.0":
+"@eslint/js@npm:8.35.0, @eslint/js@npm:^8.35.0":
   version: 8.35.0
   resolution: "@eslint/js@npm:8.35.0"
   checksum: 6687ceff659a6d617e37823f809dc9c4b096535961a81acead27d26b1a51a4cf608a5e59d831ddd57f24f6f8bb99340a4a0e19f9c99b390fbb4b275f51ed5f5e
@@ -1840,6 +1840,7 @@ __metadata:
     "@babel/preset-typescript": ^7.21.0
     "@babel/register": ^7.21.0
     "@babel/runtime": ^7.21.0
+    "@eslint/js": ^8.35.0
     "@rollup/plugin-alias": ^4.0.3
     "@rollup/plugin-commonjs": ^24.0.1
     "@rollup/plugin-dynamic-import-vars": ^2.0.3
