@@ -353,18 +353,18 @@ function relativePath (value) {
 function createMapEntry (rootDir, jsPath, noTypes) {
   jsPath = relativePath(jsPath);
 
-  const otherPath = jsPath.replace('./', './cjs/');
-  const hasOther = fs.existsSync(path.join(`${rootDir}-cjs`, jsPath));
+  const cjsPath = jsPath.replace('./', './cjs/');
+  const hasCjs = fs.existsSync(path.join(rootDir, cjsPath));
   const typesPath = jsPath.replace('.js', '.d.ts');
   const hasTypes = !noTypes && jsPath.endsWith('.js') && fs.existsSync(path.join(rootDir, typesPath));
-  const field = hasOther
+  const field = hasCjs
     ? {
       ...(
         hasTypes
           ? { types: typesPath }
           : {}
       ),
-      require: otherPath,
+      require: cjsPath,
       // eslint-disable-next-line sort-keys
       default: jsPath
     }
@@ -407,7 +407,7 @@ function copyBuildFiles (compileType, dir) {
 }
 
 // remove all extra files that were generated as part of the build
-function deleteBuildFiles (compileType, extra = '', exclude = []) {
+function deleteBuildFiles (extra = '', exclude = []) {
   const buildDir = 'build';
   const currDir = extra
     ? path.join('build', extra)
@@ -440,7 +440,7 @@ function deleteBuildFiles (compileType, extra = '', exclude = []) {
       );
 
       if (fs.statSync(fullPathEsm).isDirectory()) {
-        deleteBuildFiles(compileType, jsPath);
+        deleteBuildFiles(jsPath);
 
         PATHS_BUILD.forEach((b) => {
           // remove all empty directories
@@ -487,8 +487,8 @@ function findFiles (buildDir, extra = '', exclude = []) {
     }, []);
 }
 
-function tweakCjsPaths (compileType) {
-  const cjsDir = `build-${compileType}-cjs`;
+function tweakCjsPaths () {
+  const cjsDir = 'build/cjs';
 
   fs
     .readdirSync(cjsDir)
@@ -568,11 +568,11 @@ function moveFields (pkg, fields) {
 }
 
 // iterate through all the files that have been built, creating an exports map
-function buildExports (compileType) {
+function buildExports () {
   const buildDir = path.join(process.cwd(), 'build');
 
   witeJson(path.join(buildDir, 'cjs/package.json'), { type: 'commonjs' });
-  tweakCjsPaths(compileType);
+  tweakCjsPaths();
 
   const pkgPath = path.join(buildDir, 'package.json');
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
@@ -999,13 +999,12 @@ async function buildJs (compileType, repoPath, dir, locals) {
         copyBuildFiles(compileType, dir);
       });
 
-      // delete all unneeded files (after all is combined)
-      await timeIt('Successfully removed extra files', () => {
-        deleteBuildFiles(compileType);
-      });
-
       await timeIt('Successfully built exports', () => {
-        buildExports(compileType);
+        // everything combined now, delete what we don't need
+        deleteBuildFiles();
+
+        // build the package.json exports
+        buildExports();
       });
 
       await timeIt('Successfully linted configs', () => {
