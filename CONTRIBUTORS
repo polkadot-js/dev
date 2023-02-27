@@ -1,4 +1,4 @@
-    1193	Jaco                          	Adjust for usage of new eslint ruleset (#943)
+    1194	Jaco                          	Adjust eslint recommended rule imports (#944)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
