@@ -6,7 +6,7 @@
 
 require('@rushstack/eslint-patch/modern-module-resolution');
 
-const configJs = require('@eslint/js');
+const path = require('node:path');
 
 module.exports = {
   env: {
@@ -33,6 +33,7 @@ module.exports = {
     '/rollup.config.mjs'
   ],
   extends: [
+    path.join(__dirname, './eslint-recommended.cjs'),
     require.resolve('eslint-config-standard'),
     'plugin:@typescript-eslint/recommended',
     'plugin:@typescript-eslint/recommended-requiring-type-checking',
@@ -80,7 +81,6 @@ module.exports = {
     'sort-destructure-keys'
   ],
   rules: {
-    ...configJs.configs.recommended.rules,
     'deprecation/deprecation': 'error',
     // required as 'off' since typescript-eslint has own versions
     indent: 'off',
