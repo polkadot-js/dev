@@ -857,11 +857,19 @@ function getReferences (config) {
   return [[], false];
 }
 
-function lintDependencies (dir, locals) {
+function lintDependencies (compileType, dir, locals) {
   const { dependencies = {}, devDependencies = {}, name, optionalDependencies = {}, peerDependencies = {}, private: isPrivate } = JSON.parse(fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf-8'));
 
   if (isPrivate) {
     return;
+  }
+
+  const checkDep = compileType === 'swc'
+    ? '@swc/helpers'
+    : '@babel/runtime';
+
+  if (!dependencies[checkDep]) {
+    throw new Error(`${name} does not include the ${checkDep} dependency`);
   }
 
   const deps = [
@@ -1009,7 +1017,7 @@ async function buildJs (compileType, repoPath, dir, locals) {
 
       await timeIt('Successfully linted configs', () => {
         lintOutput(dir);
-        lintDependencies(dir, locals);
+        lintDependencies(compileType, dir, locals);
       });
     }
   }
