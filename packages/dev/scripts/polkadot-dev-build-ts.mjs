@@ -389,6 +389,8 @@ function createMapEntry (rootDir, jsPath, noTypes) {
 
 // copies all output files into the build directory
 function copyBuildFiles (compileType, dir) {
+  mkdirpSync('build');
+
   // copy package info stuff
   copyFileSync(['package.json', 'README.md'], 'build');
   copyFileSync('../../LICENSE', 'build');
