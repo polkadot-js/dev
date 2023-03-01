@@ -9,13 +9,10 @@
 //
 // NOTE: What is here needs to align with the implementations in node/test/env
 
-interface SuiteContext {
-  name: string;
-  signal: AbortSignal;
-}
-
 interface Describe {
-  (name: string, fn: (ctx: SuiteContext) => void, timeout?: number): void;
+  // NOTE In the node:test environment, fn is (ctx: SuiteContext) - we simplify our usages
+  // (see the comment around it(..) later on that describes the rationale)
+  (name: string, fn: () => void, timeout?: number): void;
 
   only: Describe;
   skip: Describe;
@@ -35,7 +32,10 @@ interface Expect {
 }
 
 interface It {
-  (name: string, fn: (done: () => void) => Promise<void> | void, timeout?: number): void;
+  // NOTE In some versions of node:test this is fn(done: () => void), however it is being
+  // changed to be it(ctx: SuiteContext, done) - with this discrepancy it is better to
+  // not have this since we would need to have differrening tests usages
+  (name: string, fn: () => Promise<void> | void, timeout?: number): void;
 
   only: It;
   skip: It;
