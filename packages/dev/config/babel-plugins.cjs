@@ -3,7 +3,7 @@
 
 const resolver = require('./babel-resolver.cjs');
 
-module.exports = function (isEsm, doRewrite) {
+module.exports = function (isEsm) {
   return resolver([
     '@babel/plugin-proposal-nullish-coalescing-operator',
     '@babel/plugin-proposal-numeric-separator',
@@ -16,10 +16,6 @@ module.exports = function (isEsm, doRewrite) {
     '@babel/plugin-syntax-import-assertions',
     '@babel/plugin-syntax-import-meta',
     '@babel/plugin-syntax-top-level-await',
-    'babel-plugin-styled-components',
-    doRewrite && ['babel-plugin-module-extension-resolver', {
-      dstExtension: '.js',
-      srcExtensions: ['.ts', '.tsx']
-    }]
+    'babel-plugin-styled-components'
   ]);
 };
