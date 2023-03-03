@@ -85,7 +85,7 @@ function indent (count, str = '', start = '') {
   }\n`;
 }
 
-const dotParser = new TapParser({ bail }, () => {
+function parseComplete () {
   process.stdout.write('\n');
 
   let logError = '';
@@ -97,7 +97,6 @@ const dotParser = new TapParser({ bail }, () => {
 
     if (r.diag) {
       item += indent(1, [...r.fullname.split('\n'), r.name].filter((s) => !!s).join('\n'), 'x ');
-      // item += indent(2, r.name);
       item += indent(2, `${r.diag.failureType} / ${r.diag.code}`);
       item += indent(2, r.diag.error);
 
@@ -143,39 +142,7 @@ const dotParser = new TapParser({ bail }, () => {
   }
 
   process.exit(stats.fail.length);
-});
-
-dotParser
-  // Ignore the comments for now - it is mostly timing and overlaps with
-  // the actual diagnostic information
-  //
-  // .on('comment', (r) => {
-  //   stats.comm.push(r);
-  // })
-  // .on('extra', (r) => {
-  //   stats.extr.push(r);
-  // })
-  //
-  // just in-case, we want these logged
-  //
-  // .on('bailout', (r) => console.error('bailout', r))
-  // .on('plan', (r) => console.error('plan', r))
-  .on('fail', (r) => {
-    stats.fail.push(r);
-    output('x');
-  })
-  .on('pass', (r) => {
-    stats.pass.push(r);
-    output('·');
-  })
-  .on('skip', (r) => {
-    stats.skip.push(r);
-    output('>');
-  })
-  .on('todo', (r) => {
-    stats.todo.push(r);
-    output('!');
-  });
+}
 
 // 1hr default timeout ... just in-case something goes wrong on an
 // CI-like environment, don't expect this to be hit (never say never)
@@ -193,6 +160,36 @@ run({ files, timeout: 3_600_000 })
   })
   .pipe(
     format === 'dot'
-      ? dotParser
+      ? new TapParser({ bail }, parseComplete)
+      // Ignore the comments for now - it is mostly timing and overlaps with
+      // the actual diagnostic information
+      //
+      // .on('comment', (r) => {
+      //   stats.comm.push(r);
+      // })
+      // .on('extra', (r) => {
+      //   stats.extr.push(r);
+      // })
+      //
+      // just in-case, we want these logged
+      //
+      // .on('bailout', (r) => console.error('bailout', r))
+      // .on('plan', (r) => console.error('plan', r))
+        .on('fail', (r) => {
+          stats.fail.push(r);
+          output('x');
+        })
+        .on('pass', (r) => {
+          stats.pass.push(r);
+          output('·');
+        })
+        .on('skip', (r) => {
+          stats.skip.push(r);
+          output('>');
+        })
+        .on('todo', (r) => {
+          stats.todo.push(r);
+          output('!');
+        })
       : process.stdout
   );

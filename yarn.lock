@@ -1859,7 +1859,6 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.54.0
     "@typescript-eslint/parser": ^5.54.0
     "@vue/component-compiler-utils": ^3.3.0
-    babel-plugin-module-extension-resolver: ^1.0.0
     babel-plugin-module-resolver: ^5.0.0
     babel-plugin-styled-components: ^2.0.7
     browserslist: ^4.21.5
@@ -1881,7 +1880,6 @@ __metadata:
     gh-release: ^7.0.2
     jsdom: ^21.1.0
     madge: ^6.0.0
-    prettier: ^2.8.4
     react: ^18.2.0
     react-dom: ^18.2.0
     rollup: ^3.18.0
@@ -1907,22 +1905,16 @@ __metadata:
     polkadot-dev-copy-dir: ./scripts/polkadot-dev-copy-dir.mjs
     polkadot-dev-copy-to: ./scripts/polkadot-dev-copy-to.mjs
     polkadot-dev-deno-map: ./scripts/polkadot-dev-deno-map.mjs
-    polkadot-dev-run-esbuild: ./scripts/polkadot-dev-run-esbuild.mjs
     polkadot-dev-run-lint: ./scripts/polkadot-dev-run-lint.mjs
     polkadot-dev-run-node-ts: ./scripts/polkadot-dev-run-node-ts.mjs
-    polkadot-dev-run-prettier: ./scripts/polkadot-dev-run-prettier.mjs
-    polkadot-dev-run-swc: ./scripts/polkadot-dev-run-swc.mjs
     polkadot-dev-run-test: ./scripts/polkadot-dev-run-test.mjs
     polkadot-dev-version: ./scripts/polkadot-dev-version.mjs
     polkadot-dev-yarn-only: ./scripts/polkadot-dev-yarn-only.mjs
-    polkadot-exec-esbuild: ./scripts/polkadot-exec-esbuild.mjs
     polkadot-exec-eslint: ./scripts/polkadot-exec-eslint.mjs
     polkadot-exec-ghpages: ./scripts/polkadot-exec-ghpages.mjs
     polkadot-exec-ghrelease: ./scripts/polkadot-exec-ghrelease.mjs
     polkadot-exec-node-test: ./scripts/polkadot-exec-node-test.mjs
-    polkadot-exec-prettier: ./scripts/polkadot-exec-prettier.mjs
     polkadot-exec-rollup: ./scripts/polkadot-exec-rollup.mjs
-    polkadot-exec-swc: ./scripts/polkadot-exec-swc.mjs
     polkadot-exec-tsc: ./scripts/polkadot-exec-tsc.mjs
     polkadot-exec-webpack: ./scripts/polkadot-exec-webpack.mjs
   languageName: unknown
@@ -3388,13 +3380,6 @@ __metadata:
   version: 1.0.5
   resolution: "available-typed-arrays@npm:1.0.5"
   checksum: 20eb47b3cefd7db027b9bbb993c658abd36d4edd3fe1060e83699a03ee275b0c9b216cc076ff3f2db29073225fb70e7613987af14269ac1fe2a19803ccc97f1a
-  languageName: node
-  linkType: hard
-
-"babel-plugin-module-extension-resolver@npm:^1.0.0":
-  version: 1.0.0
-  resolution: "babel-plugin-module-extension-resolver@npm:1.0.0"
-  checksum: ade0426653bad6d395ee27ffef26b962635d070c78dd9b3a18a631dd9bf8009d76eb0bd26166ad4ab2fb178fb3d439da8d085f973038a122ee42851781570aa4
   languageName: node
   linkType: hard
 
@@ -8867,7 +8852,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:^1.18.2 || ^2.0.0, prettier@npm:^2.8.4":
+"prettier@npm:^1.18.2 || ^2.0.0":
   version: 2.8.4
   resolution: "prettier@npm:2.8.4"
   bin:
