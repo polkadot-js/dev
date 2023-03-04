@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs",
+    "moduleResolution": "node16",
+    "jsx": "react-jsx",
+    "importHelpers": true,
+    "esModuleInterop": true
+  }
+}

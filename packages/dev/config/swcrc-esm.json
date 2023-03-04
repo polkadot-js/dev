@@ -4,10 +4,15 @@
     "dynamicImport": true,
     "mode": "entry",
     "targets": {
-      "node": "14"
+      "node": "12"
     }
   },
   "jsc": {
+    "assumptions": {
+      "noDocumentAll": true,
+      "privateFieldsAsProperties": true,
+      "setPublicClassFields": true
+    },
     "experimental": {
       "keepImportAssertions": true
     },

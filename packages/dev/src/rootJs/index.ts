@@ -13,7 +13,7 @@ export { Clazz } from './Clazz';
 /** Function to ensure that BigInt does not have the Babel Math.pow() transform */
 export function bigIntExp (): bigint {
   // 123_456n * 137_858_491_849n
-  return 123_456n * (13n ** 10n);
+  return 123_456_789n * (13n ** 10n);
 }
 
 /** Function to ensure that dynamic imports work */

@@ -20,7 +20,7 @@
     "packages/*"
   ],
   "scripts": {
-    "build": "polkadot-dev-build-ts --compiler babel",
+    "build": "polkadot-dev-build-ts",
     "build:extra": "(cd packages/dev && polkadot-dev-copy-dir config build/config && polkadot-dev-copy-dir scripts build/scripts)",
     "build:release": "polkadot-ci-ghact-build --skip-beta",
     "clean": "polkadot-dev-clean-build",

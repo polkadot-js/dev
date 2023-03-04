@@ -33,8 +33,8 @@ export class Clazz {
    * @description Sets something to something
    * @param something The addition
    */
-  setSomething = (something: number): number => {
-    this.#something = something & this.and;
+  setSomething = (something?: number): number => {
+    this.#something = (something ?? 123_456) & this.and;
 
     return this.#something;
   };

@@ -3,13 +3,16 @@
 // SPDX-License-Identifier: Apache-2.0
 
 import babel from '@babel/cli/lib/babel/dir.js';
-import { transform } from '@swc/core';
-import fs from 'fs';
-import path from 'path';
-import process from 'process';
+import * as swc from '@swc/core';
+import fs from 'node:fs';
+import path from 'node:path';
+import process from 'node:process';
+import ts from 'typescript';
 
 import swcrcCjs from '../config/swcrc-cjs.json' assert { type: 'json' };
 import swcrcEsm from '../config/swcrc-esm.json' assert { type: 'json' };
+import tscfgCjs from '../config/tsconfig-cjs.json' assert { type: 'json' };
+import tscfgEsm from '../config/tsconfig-esm.json' assert { type: 'json' };
 import { __dirname, copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_LND_PRE, DENO_POL_PRE, execSync, exitFatal, mkdirpSync, PATHS_BUILD, readdirSync, rimrafSync } from './util.mjs';
 
 const BL_CONFIGS = ['js', 'cjs'].map((e) => `babel.config.${e}`);
@@ -72,7 +75,7 @@ async function compileJs (compileType, type) {
         files.map(async (filename) => {
           // split src prefix, replace .ts extension with .js
           const outFile = path.join(buildDir, filename.split(/[\\/]/).slice(1).join('/').replace(/\.tsx?$/, '.js'));
-          const { code } = await transform(fs.readFileSync(filename, 'utf-8'), {
+          const { code } = await swc.transform(fs.readFileSync(filename, 'utf-8'), {
             ...swcrc,
             filename,
             swcrc: false
@@ -83,6 +86,21 @@ async function compileJs (compileType, type) {
         })
       )
     );
+  } else if (compileType === 'tsc') {
+    const tscfg = type === 'cjs'
+      ? tscfgCjs
+      : tscfgEsm;
+
+    await timeIt(`Successfully compiled ${compileType} ${type}`, () => {
+      files.forEach((filename) => {
+        // split src prefix, replace .ts extension with .js
+        const outFile = path.join(buildDir, filename.split(/[\\/]/).slice(1).join('/').replace(/\.tsx?$/, '.js'));
+        const { outputText } = ts.transpileModule(fs.readFileSync(filename, 'utf-8'), tscfg);
+
+        mkdirpSync(path.dirname(outFile));
+        fs.writeFileSync(outFile, outputText);
+      });
+    });
   } else {
     throw new Error(`Unknown --compiler ${compileType}`);
   }
@@ -866,9 +884,11 @@ function lintDependencies (compileType, dir, locals) {
     return;
   }
 
-  const checkDep = compileType === 'swc'
-    ? '@swc/helpers'
-    : '@babel/runtime';
+  const checkDep = compileType === 'babel'
+    ? '@babel/runtime'
+    : compileType === 'swc'
+      ? '@swc/helpers'
+      : 'tslib';
 
   if (!dependencies[checkDep]) {
     throw new Error(`${name} does not include the ${checkDep} dependency`);
@@ -1029,7 +1049,7 @@ async function buildJs (compileType, repoPath, dir, locals) {
 
 async function main () {
   const args = process.argv.slice(2);
-  let compileType = 'babel';
+  let compileType = 'tsc';
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--compiler') {
