@@ -1,8 +1,6 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// import * as swc from '@swc/core';
-// import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 
 import { EXT_TS_REGEX } from './common.mjs';
@@ -30,41 +28,19 @@ export async function load (url, context, nextLoad) {
     // compile via typescript
     const { outputText } = ts.transpileModule(source.toString(), {
       compilerOptions: {
+        ...(
+          url.endsWith('.tsx')
+            ? { jsx: 'react-jsx' }
+            : {}
+        ),
         esModuleInterop: true,
         importHelpers: true,
         inlineSourceMap: true,
-        jsx: 'react-jsx',
         module: 'esnext',
         moduleResolution: 'node16',
         target: 'esnext'
       }
     });
-
-    // // compile via swc
-    // const { code } = await swc.transform(source.toString(), {
-    //   // we add the actual filename - this enables both ts and tsx transforms
-    //   // (alternatively we can do the extension check and pass the options)
-    //   filename: fileURLToPath(url),
-    //   jsc: {
-    //     experimental: {
-    //       // import assertions, these are needed for later Node.js versions)
-    //       keepImportAssertions: true
-    //     },
-    //     externalHelpers: true,
-    //     target: 'esnext',
-    //     transform: {
-    //       react: {
-    //         // this is non-default, so required to allow React 17+ style
-    //         runtime: 'automatic'
-    //       }
-    //     }
-    //   },
-    //   module: {
-    //     type: 'es6'
-    //   },
-    //   sourceMaps: 'inline',
-    //   swcrc: false
-    // });
 
     return {
       format: 'module',
