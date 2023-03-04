@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "esnext",
+    "moduleResolution": "node16",
+    "jsx": "react-jsx",
+    "importHelpers": true,
+    "esModuleInterop": true
+  }
+}

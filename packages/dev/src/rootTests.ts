@@ -34,7 +34,7 @@ export function runTests ({ Clazz, TEST_PURE, bigIntExp, dynamic, jsOpExp, json 
 
   describe('bigIntExp()', (): void => {
     it('should return the correct value', (): void => {
-      expect(bigIntExp()).toBe(123_456n * 137_858_491_849n);
+      expect(bigIntExp()).toBe(123_456_789n * 137_858_491_849n);
     });
   });
 
