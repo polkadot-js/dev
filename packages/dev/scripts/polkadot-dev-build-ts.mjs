@@ -2,20 +2,13 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import babel from '@babel/cli/lib/babel/dir.js';
-import * as swc from '@swc/core';
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import ts from 'typescript';
 
-import swcrcCjs from '../config/swcrc-cjs.json' assert { type: 'json' };
-import swcrcEsm from '../config/swcrc-esm.json' assert { type: 'json' };
-import tscfgCjs from '../config/tsconfig-cjs.json' assert { type: 'json' };
-import tscfgEsm from '../config/tsconfig-esm.json' assert { type: 'json' };
-import { __dirname, copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_LND_PRE, DENO_POL_PRE, execSync, exitFatal, mkdirpSync, PATHS_BUILD, readdirSync, rimrafSync } from './util.mjs';
+import { copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_LND_PRE, DENO_POL_PRE, execSync, exitFatal, mkdirpSync, PATHS_BUILD, readdirSync, rimrafSync } from './util.mjs';
 
-const BL_CONFIGS = ['js', 'cjs'].map((e) => `babel.config.${e}`);
 const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
 const RL_CONFIGS = ['js', 'mjs', 'cjs'].map((e) => `rollup.config.${e}`);
 
@@ -48,54 +41,31 @@ async function compileJs (compileType, type) {
     '.d.ts', '.manual.ts', '.spec.ts', '.spec.tsx', '.test.ts', '.test.tsx', 'mod.ts'
   ].some((e) => f.endsWith(e)));
 
-  if (compileType === 'babel') {
-    const configs = BL_CONFIGS.map((c) => path.join(process.cwd(), `../../${c}`));
-
-    await babel.default({
-      babelOptions: {
-        configFile: type === 'esm'
-          ? path.join(__dirname, '../config/babel-config-esm.cjs')
-          : configs.find((f) => fs.existsSync(f)) || path.join(__dirname, '../config/babel-config-cjs.cjs')
-      },
-      cliOptions: {
-        extensions: ['.ts', '.tsx'],
-        filenames: ['src'],
-        ignore: '**/*.d.ts',
-        outDir: buildDir,
-        outFileExtension: '.js'
-      }
-    });
-  } else if (compileType === 'swc') {
-    const swcrc = type === 'cjs'
-      ? swcrcCjs
-      : swcrcEsm;
-
-    await timeIt(`Successfully compiled ${compileType} ${type}`, () =>
-      Promise.all(
-        files.map(async (filename) => {
-          // split src prefix, replace .ts extension with .js
-          const outFile = path.join(buildDir, filename.split(/[\\/]/).slice(1).join('/').replace(/\.tsx?$/, '.js'));
-          const { code } = await swc.transform(fs.readFileSync(filename, 'utf-8'), {
-            ...swcrc,
-            filename,
-            swcrc: false
-          });
-
-          mkdirpSync(path.dirname(outFile));
-          fs.writeFileSync(outFile, code);
-        })
-      )
-    );
-  } else if (compileType === 'tsc') {
-    const tscfg = type === 'cjs'
-      ? tscfgCjs
-      : tscfgEsm;
-
+  if (compileType === 'tsc') {
     await timeIt(`Successfully compiled ${compileType} ${type}`, () => {
       files.forEach((filename) => {
         // split src prefix, replace .ts extension with .js
         const outFile = path.join(buildDir, filename.split(/[\\/]/).slice(1).join('/').replace(/\.tsx?$/, '.js'));
-        const { outputText } = ts.transpileModule(fs.readFileSync(filename, 'utf-8'), tscfg);
+        const { outputText } = ts.transpileModule(fs.readFileSync(filename, 'utf-8'), {
+          compilerOptions: {
+            ...(
+              filename.endsWith('.tsx')
+                ? { jsx: 'react-jsx' }
+                : {}
+            ),
+            ...(
+              type === 'cjs'
+                // we need es2020 for dynamic imports
+                ? { module: 'commonjs', target: 'es2020' }
+                // target latest for ESM
+                : { module: 'esnext', target: 'esnext' }
+            ),
+            esModuleInterop: true,
+            importHelpers: true,
+            inlineSourceMap: true,
+            moduleResolution: 'node16'
+          }
+        });
 
         mkdirpSync(path.dirname(outFile));
         fs.writeFileSync(outFile, outputText);
