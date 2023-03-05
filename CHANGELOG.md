@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.70.1
+
+- Remove Babel (all compilation via tsc)
+
+
 ## 0.69.1
 
 - Remove Jest
