@@ -18,7 +18,7 @@ const IGNORE_IMPORTS = [
   // node
   'crypto', 'fs', 'os', 'path', 'process', 'readline', 'util',
   // node (new-style)
-  'node:assert', 'node:assert/strict', 'node:child_process', 'node:crypto', 'node:fs', 'node:os', 'node:path', 'node:process', 'node:test', 'node:url', 'node:util',
+  'node:assert', 'node:child_process', 'node:crypto', 'node:fs', 'node:os', 'node:path', 'node:process', 'node:test', 'node:url', 'node:util',
   // other
   '@testing-library/react',
   'react', 'react-native', 'styled-components'
@@ -895,7 +895,7 @@ function lintDependencies (compileType, dir, locals) {
           const local = locals.find(([, name]) => name === dep);
           const isTest = full.endsWith('.spec.ts') || full.endsWith('.test.ts') || full.endsWith('.manual.ts') || full.includes('/test/');
 
-          if (!(isTest ? devDeps : deps).includes(dep)) {
+          if (!(isTest ? devDeps : deps).includes(dep) && !deps.includes(dep.split('/')[0])) {
             return createError(full, l, n, `${dep} is not included in package.json dependencies`);
           } else if (local) {
             const ref = local[0];
