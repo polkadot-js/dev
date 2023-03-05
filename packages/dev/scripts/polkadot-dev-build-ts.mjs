@@ -31,7 +31,7 @@ function buildWebpack () {
   execSync(`yarn polkadot-exec-webpack --config ${config} --mode production`);
 }
 
-// compile via babel, either via supplied config or default
+// compile via tsc, either via supplied config or default
 async function compileJs (compileType, type) {
   const buildDir = path.join(process.cwd(), `build-${compileType}-${type}`);
 
@@ -389,10 +389,10 @@ function copyBuildFiles (compileType, dir) {
   // copy all *.d.ts files
   copyDirSync([path.join('../../build', dir, 'src'), path.join('../../build/packages', dir, 'src')], 'build', ['.d.ts']);
 
-  // copy all from build-{babel|swc|...}-esm to build
+  // copy all from build-{babel|swc|tsc|...}-esm to build
   copyDirSync(`build-${compileType}-esm`, 'build');
 
-  // copy from build-{babel|swc|...}-cjs to build/cjs (js-only)
+  // copy from build-{babel|swc|tsc|...}-cjs to build/cjs (js-only)
   copyDirSync(`build-${compileType}-cjs`, 'build/cjs', ['.js']);
 }
 
