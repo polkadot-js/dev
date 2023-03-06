@@ -1,6 +1,8 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// @ts-check
+
 const assert = require('node:assert/strict');
 
 const { enhanceObj, stubObj } = require('../util.cjs');
@@ -55,7 +57,7 @@ class Matcher {
   assertMatch;
 
   /**
-   * @param {(value: unknown, check: unknown) => unknown} assertFn
+   * @param {(value: any, check: any) => void} assertFn
    * @param {unknown} [check]
    **/
   constructor (assertFn, check) {
@@ -81,9 +83,8 @@ function assertNonNullish (value) {
  * use of matchers. This is used in finding any call or checking a specific
  * call
  *
- * @param {{ arguments: unknown[] }} [call]
+ * @param {{ arguments: unknown[] } | undefined} call
  * @param {unknown[]} args
- * @returns {boolean}
  */
 function assertCallHasArgs (call, args) {
   assert.ok(call && args.length === call.arguments?.length, 'Number of arguments does not match');
@@ -132,7 +133,7 @@ function assertMatch (value, check) {
  *
  * A helper to match the supplied array check against the resulting array
  *
- * @param {unknown[]} value
+ * @param {unknown} value
  * @param {unknown[]} check
  */
 function assertMatchArr (value, check) {
@@ -164,7 +165,7 @@ function assertMatchObj (value, check) {
  * A helper to match a string value against another string or regex
  *
  * @param {string} value
- * @param {string | RegEx} check
+ * @param {string | RegExp} check
  */
 function assertMatchStr (value, check) {
   assert.ok(typeof value === 'string', `Expected string value, found ${typeof value}`);

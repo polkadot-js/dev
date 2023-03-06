@@ -1,13 +1,13 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-/**
- * @typedef {(...args: unknown[]) => unknown} BaseFn
- * @typedef {Record<string, unknown>} BaseObj
- * @typedef {Record<string, BaseFn>} EnhancedObj
- * @typedef {(objName: string, fnName: string, alts?: Record<string, string>) => BaseFn} StubKeyFn
- * @typedef {(objName: string, fnNames: string[], alts?: Record<string, string>) => EnhancedObj} StubObjFn
- */
+// @ts-check
+
+/** @typedef {(...args: any[]) => any} BaseFn */
+/** @typedef {Record<string, any>} BaseObj */
+/** @typedef {Record<string, BaseFn>} EnhancedObj */
+/** @typedef {(objName: string, fnName: string, alts?: Record<string, string>) => BaseFn} StubKeyFn */
+/** @typedef {(objName: string, fnNames: string[], alts?: Record<string, string>) => EnhancedObj} StubObjFn */
 
 /**
  * @internal
@@ -33,7 +33,7 @@ function createStubObjFn (stubKeyFn) {
  *
  * @param {BaseObj | BaseFn} obj
  * @param {BaseObj[]} adds
- * @returns {EnhancedObj}
+ * @returns {any}
  */
 function enhanceObj (obj, ...adds) {
   adds.forEach((add) =>

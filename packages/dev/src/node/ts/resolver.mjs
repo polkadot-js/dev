@@ -1,6 +1,8 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// @ts-check
+
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL, URL } from 'node:url';
@@ -16,12 +18,10 @@ import { tsAliases } from './tsconfig.mjs';
 // 2. Relative import handling will always have the extension (can be dropped)
 // 3. Aliases would only need directory resolution
 
-/**
- * @typedef {{ parentURL: URL }} Context
- * @typedef {{ format: 'commonjs | 'module', shortCircuit?: boolean, url: string }} Resolved
- * @typedef {(specifier: string, context: Context) => Resolved | undefined} Resolver
- * @typedef {{ extJs?: boolean, extJson?: boolean, extTs?: boolean, pathAlias?: boolean, pathRelative?: boolean}} Allow
- */
+/** @typedef {{ parentURL: string }} Context */
+/** @typedef {{ format: 'commonjs' | 'json' | 'module'; shortCircuit?: boolean; url: string }} Resolved */
+/** @typedef {(specifier: string, context: Context) => Resolved | undefined} Resolver */
+/** @typedef {{ extJs?: boolean; extJson?: boolean; extTs?: boolean; pathAlias?: boolean; pathRelative?: boolean }} Allow */
 
 // the resolution modes we actually support here
 // (on a per-function basis we do allow overrides for testing)
@@ -46,7 +46,7 @@ const ALLOW = {
  * directory that this path reflects (either equivalent to path or the
  * root of the file being referenced)
  *
- * @param {URL} parentUrl
+ * @param {URL | string} parentUrl
  * @returns {{ parentDir: string, parentPath: string }}
  */
 function getParentPath (parentUrl) {
@@ -66,7 +66,7 @@ function getParentPath (parentUrl) {
  * Resolve fully-specified imports with extensions.
  *
  * @param {string} specifier
- * @param {URL} parentUrl
+ * @param {URL | string} parentUrl
  * @param {Allow} [allow]
  * @returns {Resolved | undefined}
  **/
@@ -88,7 +88,7 @@ export function resolveExtTs (specifier, parentUrl, allow = ALLOW) {
  * mapping of import foo from './bar.js' where only './bar.ts' exists
  *
  * @param {string} specifier
- * @param {URL} parentUrl
+ * @param {URL | string} parentUrl
  * @param {Allow} [allow]
  * @returns {Resolved | undefined}
  **/
@@ -121,7 +121,7 @@ export function resolveExtJs (specifier, parentUrl, allow = ALLOW) {
  * Resolution for Json files. Generally these would be via path aliasing.
  *
  * @param {string} specifier
- * @param {URL} parentUrl
+ * @param {URL | string} parentUrl
  * @param {Allow} [allow]
  * @returns {Resolved | undefined}
  */
@@ -153,7 +153,7 @@ export function resolveExtJson (specifier, parentUrl, allow = ALLOW) {
  * down the line
  *
  * @param {string} specifier
- * @param {URL} parentUrl
+ * @param {URL | string} parentUrl
  * @param {Allow} [allow]
  * @returns {Resolved | undefined}
  **/
@@ -198,12 +198,12 @@ export function resolveRelative (specifier, parentUrl, allow = ALLOW) {
  * Resolve TS alias mappings as defined in the tsconfig.json file
  *
  * @param {string} specifier
- * @param {URL} parentUrl
+ * @param {URL | string} parentUrl
  * @param {Allow} [allow]
  * @param {typeof tsAliases} [aliases]
  * @returns {Resolved | undefined}
  **/
-export function resolveAliases (specifier, _, allow = ALLOW, aliases = tsAliases) {
+export function resolveAliases (specifier, parentUrl, allow = ALLOW, aliases = tsAliases) {
   if (allow.pathAlias) {
     const parts = specifier.split(/[\\/]/);
     const found = aliases
