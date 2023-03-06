@@ -161,7 +161,7 @@ module.exports = {
     'spaced-comment': ['error', 'always', {
       block: {
         // pure export helpers
-        exceptions: ['#__PURE__']
+        markers: ['#__PURE__']
       },
       line: {
         // TS reference types
