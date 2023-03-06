@@ -1,13 +1,14 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// @ts-check
+
+import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 
 import { EXT_TS_REGEX } from './common.mjs';
 
-/**
- * @typedef {{ format: 'commonjs' | 'module', shortCircuit?: boolean, source: string }} Loaded
- **/
+/** @typedef {{ format: 'commonjs' | 'module'; shortCircuit?: boolean; source: string }} Loaded */
 
 /**
  * Load all TypeScript files, compile via tsc on-the-fly
@@ -28,18 +29,18 @@ export async function load (url, context, nextLoad) {
     // compile via typescript
     const { outputText } = ts.transpileModule(source.toString(), {
       compilerOptions: {
-        ...(
-          url.endsWith('.tsx')
-            ? { jsx: 'react-jsx' }
-            : {}
-        ),
         esModuleInterop: true,
         importHelpers: true,
         inlineSourceMap: true,
-        module: 'esnext',
-        moduleResolution: 'node16',
-        target: 'esnext'
-      }
+        jsx: url.endsWith('.tsx')
+          ? ts.JsxEmit.ReactJSX
+          : undefined,
+        module: ts.ModuleKind.ESNext,
+        moduleResolution: ts.ModuleResolutionKind.Node16,
+        skipLibCheck: true,
+        target: ts.ScriptTarget.ESNext
+      },
+      fileName: fileURLToPath(url)
     });
 
     return {

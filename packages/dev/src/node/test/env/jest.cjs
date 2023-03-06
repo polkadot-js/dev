@@ -1,13 +1,15 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// @ts-check
+
 const { mock } = require('node:test');
 
 const { enhanceObj, stubObj, warnObj } = require('../util.cjs');
 
-/**
- * @typedef {((...args: unknown[]) => unknown) & { mock: {} }} Spy
- **/
+/** @typedef {(...args: unknown[]) => unknown} MockFn */
+/** @typedef {{ mockImplementation: (fn: MockFn) => unknown; mockImplementationOnce: (fn: MockFn) => unknown; resetCalls: () => void; restore: () => void }} Mock */
+/** @typedef {MockFn & { mock: Mock }} Spy */
 
 // logged via Object.keys(jest).sort()
 const JEST_KEYS = ['advanceTimersByTime', 'advanceTimersToNextTimer', 'autoMockOff', 'autoMockOn', 'clearAllMocks', 'clearAllTimers', 'createMockFromModule', 'deepUnmock', 'disableAutomock', 'doMock', 'dontMock', 'enableAutomock', 'fn', 'genMockFromModule', 'getRealSystemTime', 'getSeed', 'getTimerCount', 'isEnvironmentTornDown', 'isMockFunction', 'isolateModules', 'isolateModulesAsync', 'mock', 'mocked', 'now', 'replaceProperty', 'requireActual', 'requireMock', 'resetAllMocks', 'resetModules', 'restoreAllMocks', 'retryTimes', 'runAllImmediates', 'runAllTicks', 'runAllTimers', 'runOnlyPendingTimers', 'setMock', 'setSystemTime', 'setTimeout', 'spyOn', 'unmock', 'unstable_mockModule', 'useFakeTimers', 'useRealTimers'];

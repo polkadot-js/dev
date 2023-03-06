@@ -1,6 +1,8 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// @ts-check
+
 const { browser } = require('./browser.cjs');
 const { expect } = require('./expect.cjs');
 const { jest } = require('./jest.cjs');

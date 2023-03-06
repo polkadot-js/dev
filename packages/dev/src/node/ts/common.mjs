@@ -1,6 +1,8 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// @ts-check
+
 import path from 'node:path';
 import process from 'node:process';
 import { pathToFileURL } from 'node:url';

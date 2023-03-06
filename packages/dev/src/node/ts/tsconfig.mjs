@@ -1,7 +1,7 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// Adapted from: https://nodejs.org/api/esm.html#esm_transpiler_loader
+// @ts-check
 
 import JSON5 from 'json5';
 import fs from 'node:fs';
@@ -9,13 +9,11 @@ import path from 'node:path';
 
 import { CWD_PATH, MOD_PATH } from './common.mjs';
 
-/**
- * @typedef {{ baseUrl?: string, paths?: Record<string, string[]> }} CompilerOptions
-`* @typedef {{ compilerOptions?: CompilerOptions, extends?: string }} TSConfig
- * @typedef {{ filter: string[], isWildcard: boolean, path: string }} Alias
- * @typedef {{ basePath: string, paths: Record<string, string[]> }} PartialConfig
- * @typedef {PartialConfig & { aliases: Alias[] }} ExtractedConfig
- */
+/** @typedef {{ filter: string[]; isWildcard: boolean; path: string }} Alias */
+/** @typedef {{ baseUrl?: string; paths?: Record<string, string[]> }} CompilerOptions */
+/** @typedef {{ compilerOptions?: CompilerOptions; extends?: string }} JsonConfig */
+/** @typedef {{ basePath: string; paths: Record<string, string[]> }} PartialConfig */
+/** @typedef {PartialConfig & { aliases: Alias[] }} ExtractedConfig */
 
 /**
  * @internal
@@ -24,13 +22,13 @@ import { CWD_PATH, MOD_PATH } from './common.mjs';
  *
  * @param {string} [currentPath]
  * @param {string} [tsconfig]
- * @returns {PartialTSConfig}
+ * @returns {PartialConfig}
  **/
 function readConfigFile (currentPath = CWD_PATH, tsconfig = 'tsconfig.json') {
   const configPath = path.join(currentPath, tsconfig);
 
   try {
-    /** @type {TSConfig} */
+    /** @type {JsonConfig} */
     const config = JSON5.parse(fs.readFileSync(configPath, 'utf8'));
     const basePath = config.compilerOptions?.baseUrl || '.';
     let paths = config.compilerOptions?.paths || {};
