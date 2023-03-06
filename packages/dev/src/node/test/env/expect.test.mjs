@@ -3,7 +3,7 @@
 
 // @ts-check
 
-// / <reference types ="../node" />
+/// <reference types ="../node" />
 
 describe('expect', () => {
   it('has been decorated', () => {

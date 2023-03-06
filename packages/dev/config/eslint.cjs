@@ -165,7 +165,7 @@ module.exports = {
       },
       line: {
         // TS reference types
-        exceptions: ['/ <reference types']
+        exceptions: ['/ <reference']
       }
     }]
   },

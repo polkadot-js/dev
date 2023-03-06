@@ -3,7 +3,7 @@
 
 // @ts-check
 
-// / <reference types ="../test/node" />
+/// <reference types ="../test/node" />
 
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';

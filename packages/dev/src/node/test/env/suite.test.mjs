@@ -3,7 +3,7 @@
 
 // @ts-check
 
-// / <reference types ="../node" />
+/// <reference types ="../node" />
 
 describe('describe', () => {
   describe.only('.only', () => {
