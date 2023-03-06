@@ -3,8 +3,7 @@
 
 // @ts-check
 
-// eslint-disable-next-line spaced-comment
-/// <reference types="../test/node" />
+/// <reference types ="../test/node" />
 
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
