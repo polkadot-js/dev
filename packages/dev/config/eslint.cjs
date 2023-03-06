@@ -159,7 +159,14 @@ module.exports = {
     }],
     'sort-keys': 'error',
     'spaced-comment': ['error', 'always', {
-      exceptions: ['#__PURE__']
+      block: {
+        // pure export helpers
+        exceptions: ['#__PURE__']
+      },
+      line: {
+        // TS reference types
+        exceptions: ['/ <reference types']
+      }
     }]
   },
   settings: {

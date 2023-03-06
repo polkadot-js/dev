@@ -36,3 +36,6 @@ export function json (): string {
 export function jsOpExp (a?: number): number {
   return a ?? 42;
 }
+
+/** This is an actual check to ensure PURE is all-happy */
+export const pureOpExp = /*#__PURE__*/ jsOpExp();

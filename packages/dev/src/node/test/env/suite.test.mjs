@@ -3,8 +3,7 @@
 
 // @ts-check
 
-// eslint-disable-next-line spaced-comment
-/// <reference types="../node" />
+// / <reference types ="../node" />
 
 describe('describe', () => {
   describe.only('.only', () => {

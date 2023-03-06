@@ -3,8 +3,7 @@
 
 // @ts-check
 
-// eslint-disable-next-line spaced-comment
-/// <reference types="./node" />
+// / <reference types ="./node" />
 
 import { enhanceObj, stubObj, warnObj } from './util.cjs';
 
