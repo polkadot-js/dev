@@ -1,6 +1,11 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// @ts-check
+
+// eslint-disable-next-line spaced-comment
+/// <reference types="../node" />
+
 import { browser } from './browser.cjs';
 
 const all = browser();

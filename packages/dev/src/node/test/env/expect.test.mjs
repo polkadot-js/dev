@@ -1,13 +1,19 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// @ts-check
+
+// eslint-disable-next-line spaced-comment
+/// <reference types="../node" />
+
 describe('expect', () => {
   it('has been decorated', () => {
-    expect(expect.not).toBeDefined();
+    expect(expect(true).not).toBeDefined();
   });
 
   it('throws on unimplemented', () => {
     expect(
+      // @ts-expect-error This is a known unimplemented function
       () => expect(true).not.toReturnWith()
     ).toThrow('expect(...).not.toReturnWith has not been implemented');
   });
