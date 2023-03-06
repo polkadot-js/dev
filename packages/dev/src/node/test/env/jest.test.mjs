@@ -1,8 +1,14 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// @ts-check
+
+// eslint-disable-next-line spaced-comment
+/// <reference types="../node" />
+
 describe('jest', () => {
   it('has been enhanced', () => {
+    // @ts-expect-error setTimeout is defined with a noop
     expect(jest.setTimeout).toBeDefined();
   });
 

@@ -3,7 +3,7 @@
 
 /* eslint-disable no-var, spaced-comment, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
 
-/// <reference types="./node.d.ts" />
+/// <reference types="./node" />
 
 declare global {
   var window: typeof globalThis;
