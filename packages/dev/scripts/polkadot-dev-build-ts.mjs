@@ -478,25 +478,17 @@ function findFiles (buildDir, extra = '', exclude = []) {
 }
 
 function tweakCjsPaths () {
-  const cjsDir = 'build/cjs';
-
-  fs
-    .readdirSync(cjsDir)
-    .filter((n) => n.endsWith('.js'))
-    .forEach((jsName) => {
-      const thisPath = path.join(cjsDir, jsName);
-
-      fs.writeFileSync(
-        thisPath,
-        fs
-          .readFileSync(thisPath, 'utf8')
-          .replace(
-            // require("@polkadot/$1/$2")
-            /require\("@polkadot\/([a-z-]*)\/(.*)"\)/g,
-            'require("@polkadot/$1/cjs/$2")'
-          )
-      );
-    });
+  readdirSync('build/cjs', ['.js']).forEach((thisPath) => {
+    fs.writeFileSync(
+      thisPath,
+      fs
+        .readFileSync(thisPath, 'utf8')
+        .replace(
+          /require\("@polkadot\/([a-z-]*)\/(.*)"\)/g,
+          'require("@polkadot/$1/cjs/$2")'
+        )
+    );
+  });
 }
 
 function tweakPackageInfo (compileType) {

@@ -3,12 +3,12 @@
 
 // Adapted from https://github.com/testing-library/react-testing-library#basic-example
 
-import type { Props } from './JsxChild';
+import type { Props } from './JsxChild.js';
 
 import React, { useCallback, useState } from 'react';
 import styledComponents from 'styled-components';
 
-import Child from './JsxChild';
+import Child from './JsxChild.js';
 
 export const styled = (
   (styledComponents as unknown as { styled: typeof styledComponents }).styled ||

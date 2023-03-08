@@ -1,7 +1,7 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import * as testRoot from './root';
+import * as testRoot from './root.js';
 
 export function runTests ({ Clazz, TEST_PURE, bigIntExp, dynamic, jsOpExp, json }: typeof testRoot): void {
   describe('Clazz', (): void => {

@@ -64,6 +64,12 @@ module.exports = {
         '@typescript-eslint/no-unsafe-call': 'off',
         '@typescript-eslint/no-unsafe-member-access': 'off'
       }
+    },
+    {
+      files: 'mod.ts',
+      rules: {
+        'import/extensions': 'off'
+      }
     }
   ],
   parser: require.resolve('@typescript-eslint/parser'),
@@ -100,6 +106,10 @@ module.exports = {
       { pattern: ` Copyright 20(17|18|19|20|21|22)(-${new Date().getFullYear()})? @polkadot/` },
       ' SPDX-License-Identifier: Apache-2.0'
     ], 2],
+    'import/extensions': ['error', 'ignorePackages', {
+      json: 'always',
+      jsx: 'never'
+    }],
     'import-newlines/enforce': ['error', 2048],
     'jsx-quotes': ['error', 'prefer-single'],
     'react/prop-types': [0], // this is a completely broken rule

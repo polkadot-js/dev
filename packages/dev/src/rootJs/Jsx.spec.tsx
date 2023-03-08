@@ -5,7 +5,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { strict as assert } from 'node:assert';
 import React from 'react';
 
-import Jsx from './Jsx';
+import Jsx from './Jsx.js';
 
 describe('react testing', () => {
   it('shows the children when the checkbox is checked', () => {
