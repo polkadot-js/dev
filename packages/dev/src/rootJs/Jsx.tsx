@@ -11,7 +11,7 @@ import styledComponents, { StyledInterface } from 'styled-components';
 import Child from './JsxChild.js';
 
 // The styled-components typings are problematic, especially in nodenext - here
-// e actually cater for both styled-componentsn 5.0 and 6.0 (where a named export exists)
+// we actually cater for both styled-componentsn 5.0 and 6.0 (where a named export exists)
 export const styled = (
   (styledComponents as unknown as { styled: StyledInterface }).styled ||
   (styledComponents as unknown as { default: StyledInterface }).default ||
