@@ -64,12 +64,6 @@ module.exports = {
         '@typescript-eslint/no-unsafe-call': 'off',
         '@typescript-eslint/no-unsafe-member-access': 'off'
       }
-    },
-    {
-      files: 'mod.ts',
-      rules: {
-        'import/extensions': 'off'
-      }
     }
   ],
   parser: require.resolve('@typescript-eslint/parser'),
