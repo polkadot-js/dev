@@ -1,7 +1,7 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-/* eslint-disable no-var, spaced-comment, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
+/* eslint-disable no-var, @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars */
 
 // A very basic descriptor for the actual global objects we expose in our Jest-like
 // environment. Literally what is here is what it took us to convert all the tests
