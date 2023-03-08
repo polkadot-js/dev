@@ -41,7 +41,6 @@
     "polkadot-exec-webpack": "./scripts/polkadot-exec-webpack.mjs"
   },
   "exports": {
-    "./cjs/rootJs/testJson.json": "./src/rootJs/testJson.json",
     "./config/*": "./config/*",
     "./node/test/browser": "./src/node/test/browser.cjs",
     "./node/test/node": "./src/node/test/node.cjs",

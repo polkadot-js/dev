@@ -483,9 +483,17 @@ function tweakCjsPaths () {
       thisPath,
       fs
         .readFileSync(thisPath, 'utf8')
+        // This is actually problematic - while we don't use non-js imports (mostly),
+        // this would also match those, which creates issues. For the most part we only
+        // actually should only care about packageInfo, so add this one explicitly. If we
+        // do use path-imports for others, rather adjust them at that specific point
+        // .replace(
+        //   /require\("@polkadot\/([a-z-]*)\/(.*)"\)/g,
+        //   'require("@polkadot/$1/cjs/$2")'
+        // )
         .replace(
-          /require\("@polkadot\/([a-z-]*)\/(.*)"\)/g,
-          'require("@polkadot/$1/cjs/$2")'
+          /require\("@polkadot\/([a-z-]*)\/packageInfo"\)/g,
+          'require("@polkadot/$1/cjs/packageInfo")'
         )
     );
   });
