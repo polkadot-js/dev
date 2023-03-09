@@ -9,7 +9,7 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
 import { CWD_PATH } from './common.mjs';
-import { resolveExtJs, resolveExtJson, resolveExtTs, resolveRelative } from './resolver.mjs';
+import { resolveAliases, resolveExtBare, resolveExtJs, resolveExtJson, resolveExtTs } from './resolver.mjs';
 
 const ROOT_URL = pathToFileURL(`${CWD_PATH}/`);
 const SRC_PATH = 'packages/dev/src';
@@ -44,19 +44,19 @@ describe('resolveExtJs', () => {
 
   it('returns the correct value for ./mod.js resolution', () => {
     expect(
-      resolveExtJs('./mod.js', SRC_URL, { extJs: true })
+      resolveExtJs('./mod.js', SRC_URL)
     ).toEqual(modFound);
   });
 
   it('returns the correct value for ../mod.js resolution', () => {
     expect(
-      resolveExtJs('../mod.js', pathToFileURL(`${CWD_PATH}/${SRC_PATH}/rootJs/index.ts`), { extJs: true })
+      resolveExtJs('../mod.js', pathToFileURL(`${CWD_PATH}/${SRC_PATH}/rootJs/index.ts`))
     ).toEqual(modFound);
   });
 
   it('returns a correct object for a .jsx extension', () => {
     expect(
-      resolveExtJs(`./${SRC_PATH}/rootJs/Jsx.jsx`, ROOT_URL, { extJs: true })
+      resolveExtJs(`./${SRC_PATH}/rootJs/Jsx.jsx`, ROOT_URL)
     ).toEqual({
       format: 'module',
       shortCircuit: true,
@@ -68,7 +68,7 @@ describe('resolveExtJs', () => {
 describe('resolveExtJson', () => {
   it('resolves .json files', () => {
     expect(
-      resolveExtJson('../package.json', SRC_URL, { extJson: true })
+      resolveExtJson('../package.json', SRC_URL)
     ).toEqual({
       format: 'json',
       shortCircuit: true,
@@ -77,7 +77,7 @@ describe('resolveExtJson', () => {
   });
 });
 
-describe('resolveRelative', () => {
+describe('resolveExtBare', () => {
   const indexFound = {
     format: 'module',
     shortCircuit: true,
@@ -86,29 +86,51 @@ describe('resolveRelative', () => {
 
   it('does not resolve non-relative paths', () => {
     expect(
-      resolveRelative(INDEX_PATH, ROOT_URL)
+      resolveExtBare(INDEX_PATH, ROOT_URL)
     ).not.toBeDefined();
   });
 
   it('resolves to the index via .', () => {
     expect(
-      resolveRelative('.', SRC_URL)
+      resolveExtBare('.', SRC_URL)
     ).toEqual(indexFound);
   });
 
   it('resolves to the index via ./index', () => {
     expect(
-      resolveRelative('./index', SRC_URL)
+      resolveExtBare('./index', SRC_URL)
     ).toEqual(indexFound);
   });
 
   it('resolves to the sub-directory via ./rootJs', () => {
     expect(
-      resolveRelative('./rootJs', SRC_URL)
+      resolveExtBare('./rootJs', SRC_URL)
     ).toEqual({
       format: 'module',
       shortCircuit: true,
       url: pathToFileURL(`${SRC_PATH}/rootJs/index.ts`).href
+    });
+  });
+
+  it('resolves to extensionless path', () => {
+    expect(
+      resolveExtBare('./packageInfo', SRC_URL)
+    ).toEqual({
+      format: 'module',
+      shortCircuit: true,
+      url: pathToFileURL(`${SRC_PATH}/packageInfo.ts`).href
+    });
+  });
+});
+
+describe('resolveAliases', () => {
+  it('resolves packageInfo', () => {
+    expect(
+      resolveAliases('@polkadot/dev/packageInfo', ROOT_URL)
+    ).toEqual({
+      format: 'module',
+      shortCircuit: true,
+      url: pathToFileURL(`${SRC_PATH}/packageInfo.ts`).href
     });
   });
 });

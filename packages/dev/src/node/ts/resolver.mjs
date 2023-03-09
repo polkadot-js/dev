@@ -21,23 +21,6 @@ import { tsAliases } from './tsconfig.mjs';
 /** @typedef {{ parentURL: string }} Context */
 /** @typedef {{ format: 'commonjs' | 'json' | 'module'; shortCircuit?: boolean; url: string }} Resolved */
 /** @typedef {(specifier: string, context: Context) => Resolved | undefined} Resolver */
-/** @typedef {{ extJs?: boolean; extJson?: boolean; extTs?: boolean; pathAlias?: boolean; pathRelative?: boolean }} Allow */
-
-// the resolution modes we actually support here
-// (on a per-function basis we do allow overrides for testing)
-/** @type {Allow} */
-const ALLOW = {
-  // we don't use the import x from './somewhere.js' form in polkadot-js
-  extJs: false,
-  // this is used extensively in the polkadot-js/api repo
-  extJson: true,
-  // the reason for this actual resolver, so always true
-  extTs: true,
-  // alias definitions are used in all polkadot-js projects
-  pathAlias: true,
-  // relative extensionless imports (files and directories) are used
-  pathRelative: true
-};
 
 /**
  * @internal
@@ -67,12 +50,11 @@ function getParentPath (parentUrl) {
  *
  * @param {string} specifier
  * @param {URL | string} parentUrl
- * @param {Allow} [allow]
  * @returns {Resolved | undefined}
  **/
-export function resolveExtTs (specifier, parentUrl, allow = ALLOW) {
+export function resolveExtTs (specifier, parentUrl) {
   // handle .ts extensions directly
-  if (allow.extTs && EXT_TS_REGEX.test(specifier)) {
+  if (EXT_TS_REGEX.test(specifier)) {
     return {
       format: 'module',
       shortCircuit: true,
@@ -89,13 +71,12 @@ export function resolveExtTs (specifier, parentUrl, allow = ALLOW) {
  *
  * @param {string} specifier
  * @param {URL | string} parentUrl
- * @param {Allow} [allow]
  * @returns {Resolved | undefined}
  **/
-export function resolveExtJs (specifier, parentUrl, allow = ALLOW) {
+export function resolveExtJs (specifier, parentUrl) {
   // handle ts imports where import *.js -> *.ts
   // (unlike the ts resolution, we only cater for relative paths)
-  if (allow.extJs && specifier.startsWith('.') && EXT_JS_REGEX.test(specifier)) {
+  if (specifier.startsWith('.') && EXT_JS_REGEX.test(specifier)) {
     const full = fileURLToPath(new URL(specifier, parentUrl));
 
     // when it doesn't exist, we try and see if a source replacement helps
@@ -122,11 +103,10 @@ export function resolveExtJs (specifier, parentUrl, allow = ALLOW) {
  *
  * @param {string} specifier
  * @param {URL | string} parentUrl
- * @param {Allow} [allow]
  * @returns {Resolved | undefined}
  */
-export function resolveExtJson (specifier, parentUrl, allow = ALLOW) {
-  if (allow.extJson && specifier.startsWith('.') && EXT_JSON_REGEX.test(specifier)) {
+export function resolveExtJson (specifier, parentUrl) {
+  if (specifier.startsWith('.') && EXT_JSON_REGEX.test(specifier)) {
     const { parentDir } = getParentPath(parentUrl);
     const jsonPath = path.join(parentDir, specifier);
 
@@ -154,11 +134,10 @@ export function resolveExtJson (specifier, parentUrl, allow = ALLOW) {
  *
  * @param {string} specifier
  * @param {URL | string} parentUrl
- * @param {Allow} [allow]
  * @returns {Resolved | undefined}
  **/
-export function resolveRelative (specifier, parentUrl, allow = ALLOW) {
-  if (allow.pathRelative && specifier.startsWith('.')) {
+export function resolveExtBare (specifier, parentUrl) {
+  if (specifier.startsWith('.')) {
     const { parentDir, parentPath } = getParentPath(parentUrl);
     const found = specifier === '.'
       ? (
@@ -199,47 +178,46 @@ export function resolveRelative (specifier, parentUrl, allow = ALLOW) {
  *
  * @param {string} specifier
  * @param {URL | string} parentUrl
- * @param {Allow} [allow]
  * @param {typeof tsAliases} [aliases]
  * @returns {Resolved | undefined}
  **/
-export function resolveAliases (specifier, parentUrl, allow = ALLOW, aliases = tsAliases) {
-  if (allow.pathAlias) {
-    const parts = specifier.split(/[\\/]/);
-    const found = aliases
-      // return a [filter, [...partIndex]] mapping
-      .map((alias) => ({
-        alias,
-        indexes: parts
-          .map((_, i) => i)
-          .filter((start) =>
-            // parts should have more entries than the wildcard
-            parts.length >= alias.filter.length &&
-            // match all parts of the alias (excluding last wilcard)
-            alias.filter.every((f, i) =>
-              parts[start + i] &&
-              parts[start + i] === f
-            )
+export function resolveAliases (specifier, parentUrl, aliases = tsAliases) {
+  const parts = specifier.split(/[\\/]/);
+  const found = aliases
+    // return a [filter, [...partIndex]] mapping
+    .map((alias) => ({
+      alias,
+      indexes: parts
+        .map((_, i) => i)
+        .filter((start) =>
+          (
+            alias.isWildcard
+              // parts should have more entries than the wildcard
+              ? parts.length > alias.filter.length
+              // or the same amount in case of a non-wildcard match
+              : parts.length === alias.filter.length
+          ) &&
+          // match all parts of the alias
+          alias.filter.every((f, i) =>
+            parts[start + i] &&
+            parts[start + i] === f
           )
-      }))
-      // we only return the first
-      .find(({ indexes }) => indexes.length);
+        )
+    }))
+    // we only return the first
+    .find(({ indexes }) => indexes.length);
 
-    if (found) {
-      // get the initial parts
-      const initial = parts.slice(found.alias.filter.length);
-      const newSpecifier = initial.length
-        ? `./${path.join(...initial)}`
-        : '.';
-      const newParentUrl = pathToFileURL(found.alias.path).href;
+  if (found) {
+    // get the initial parts
+    const newSpecifier = `./${found.alias.path.replace('*', path.join(...parts.slice(found.alias.filter.length)))}`;
 
-      // do the actual alias resolution
-      return (
-        resolveRelative(newSpecifier, newParentUrl, allow) ||
-        resolveExtJs(newSpecifier, newParentUrl, allow) ||
-        resolveExtJson(newSpecifier, newParentUrl, allow)
-      );
-    }
+    // do the actual alias resolution
+    return (
+      resolveExtTs(newSpecifier, found.alias.baseParentUrl) ||
+      resolveExtJs(newSpecifier, found.alias.baseParentUrl) ||
+      resolveExtJson(newSpecifier, found.alias.baseParentUrl) ||
+      resolveExtBare(newSpecifier, found.alias.baseParentUrl)
+    );
   }
 }
 
@@ -260,11 +238,13 @@ export function resolve (specifier, context, nextResolve) {
   const parentUrl = context.parentURL || CWD_URL;
 
   return (
-    resolveExtTs(specifier, parentUrl) ||
-    resolveRelative(specifier, parentUrl) ||
-    resolveAliases(specifier, parentUrl) ||
     resolveExtJs(specifier, parentUrl) ||
     resolveExtJson(specifier, parentUrl) ||
+    resolveAliases(specifier, parentUrl) ||
+    // use internally in aliases, avoided top-level
+    // resolveExtBare(specifier, parentUrl) ||
+    // unused (currently) in source imports
+    // resolveExtTs(specifier, parentUrl) ||
     nextResolve(specifier, context)
   );
 }

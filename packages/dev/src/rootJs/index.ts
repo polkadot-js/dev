@@ -2,13 +2,13 @@
 // SPDX-License-Identifier: Apache-2.0
 
 /** This should appear as-is in the output with: 1. extension added, 2. augmented.d.ts correct */
-import './augmented';
+import './augmented.js';
 
 /** This import should appear as-in in the ouput (cjs without asserts) */
 import testJson from '@polkadot/dev/rootJs/testJson.json' assert { type: 'json' };
 
 /** Double double work, i.e. re-exports */
-export { Clazz } from './Clazz';
+export { Clazz } from './Clazz.js';
 
 /** Function to ensure that BigInt does not have the Babel Math.pow() transform */
 export function bigIntExp (): bigint {
