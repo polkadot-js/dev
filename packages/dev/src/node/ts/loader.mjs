@@ -36,7 +36,7 @@ export async function load (url, context, nextLoad) {
           ? ts.JsxEmit.ReactJSX
           : undefined,
         module: ts.ModuleKind.ESNext,
-        moduleResolution: ts.ModuleResolutionKind.Node16,
+        moduleResolution: ts.ModuleResolutionKind.NodeNext,
         skipLibCheck: true,
         target: ts.ScriptTarget.ESNext
       },

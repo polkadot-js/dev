@@ -63,7 +63,7 @@ async function compileJs (compileType, type) {
             esModuleInterop: true,
             importHelpers: true,
             inlineSourceMap: true,
-            moduleResolution: 'node16'
+            moduleResolution: 'nodenext'
           }
         });
 
