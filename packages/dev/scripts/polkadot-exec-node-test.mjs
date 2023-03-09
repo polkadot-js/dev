@@ -26,6 +26,7 @@ const stats = {
 let logFile = null;
 let bail = false;
 let format = 'dot';
+let startAt = 0;
 
 for (let i = 0; i < args.length; i++) {
   if (args[i] === '--bail') {
@@ -43,7 +44,17 @@ for (let i = 0; i < args.length; i++) {
 
 function output (ch) {
   if (stats.total % 100 === 0) {
-    process.stdout.write('\n');
+    const now = performance.now();
+
+    if (!startAt) {
+      startAt = now;
+    }
+
+    const elapsed = (now - startAt) / 1000;
+    const m = (elapsed / 60) | 0;
+    const s = (elapsed - (m * 60));
+
+    process.stdout.write(`\n ${`${m}:${s.toFixed(3).padStart(6, '0')}`.padStart(11)}  `);
   } else if (stats.total % 10 === 0) {
     process.stdout.write('  ');
   } else if (stats.total % 5 === 0) {
