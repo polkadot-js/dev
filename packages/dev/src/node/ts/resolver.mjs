@@ -190,9 +190,14 @@ export function resolveAliases (specifier, parentUrl, aliases = tsAliases) {
       indexes: parts
         .map((_, i) => i)
         .filter((start) =>
-          // parts should have more entries than the wildcard
-          parts.length >= alias.filter.length &&
-          // match all parts of the alias (excluding last wilcard)
+          (
+            alias.isWildcard
+              // parts should have more entries than the wildcard
+              ? parts.length > alias.filter.length
+              // or the same amount in case of a non-wildcard match
+              : parts.length === alias.filter.length
+          ) &&
+          // match all parts of the alias
           alias.filter.every((f, i) =>
             parts[start + i] &&
             parts[start + i] === f
@@ -204,18 +209,14 @@ export function resolveAliases (specifier, parentUrl, aliases = tsAliases) {
 
   if (found) {
     // get the initial parts
-    const initial = parts.slice(found.alias.filter.length);
-    const newSpecifier = initial.length
-      ? `./${path.join(...initial)}`
-      : '.';
-    const newParentUrl = pathToFileURL(found.alias.path).href;
+    const newSpecifier = `./${found.alias.path.replace('*', path.join(...parts.slice(found.alias.filter.length)))}`;
 
     // do the actual alias resolution
     return (
-      resolveExtBare(newSpecifier, newParentUrl) ||
-      resolveExtTs(newSpecifier, newParentUrl) ||
-      resolveExtJs(newSpecifier, newParentUrl) ||
-      resolveExtJson(newSpecifier, newParentUrl)
+      resolveExtTs(newSpecifier, found.alias.baseParentUrl) ||
+      resolveExtJs(newSpecifier, found.alias.baseParentUrl) ||
+      resolveExtJson(newSpecifier, found.alias.baseParentUrl) ||
+      resolveExtBare(newSpecifier, found.alias.baseParentUrl)
     );
   }
 }
