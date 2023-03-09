@@ -1,4 +1,4 @@
-    1210	Jaco                          	Bump ts eslint (#960)
+    1211	Jaco                          	Require .js extensions for all imports (#961)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
