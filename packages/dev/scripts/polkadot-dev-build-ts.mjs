@@ -48,22 +48,18 @@ async function compileJs (compileType, type) {
         const outFile = path.join(buildDir, filename.split(/[\\/]/).slice(1).join('/').replace(/\.tsx?$/, '.js'));
         const { outputText } = ts.transpileModule(fs.readFileSync(filename, 'utf-8'), {
           compilerOptions: {
-            ...(
-              filename.endsWith('.tsx')
-                ? { jsx: 'react-jsx' }
-                : {}
-            ),
-            ...(
-              type === 'cjs'
-                // we need es2020 for dynamic imports
-                ? { module: 'commonjs', target: 'es2020' }
-                // target latest for ESM
-                : { module: 'esnext', target: 'esnext' }
-            ),
             esModuleInterop: true,
             importHelpers: true,
             inlineSourceMap: true,
-            moduleResolution: 'nodenext'
+            jsx: filename.endsWith('.tsx')
+              ? 'react-jsx'
+              : undefined,
+            module: type === 'cjs'
+              ? 'commonjs'
+              : 'esnext',
+            moduleResolution: 'nodenext',
+            // we need at least es2020 for dynamic imports
+            target: 'es2020'
           }
         });
 

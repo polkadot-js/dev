@@ -38,7 +38,7 @@ export async function load (url, context, nextLoad) {
         module: ts.ModuleKind.ESNext,
         moduleResolution: ts.ModuleResolutionKind.NodeNext,
         skipLibCheck: true,
-        target: ts.ScriptTarget.ESNext
+        target: ts.ScriptTarget.ES2020
       },
       fileName: fileURLToPath(url)
     });
