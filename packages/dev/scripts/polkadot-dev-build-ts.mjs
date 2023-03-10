@@ -1027,8 +1027,14 @@ async function main () {
 
   const pkg = JSON.parse(fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf-8'));
 
-  if (pkg.scripts && pkg.scripts['build:extra']) {
-    execSync('yarn build:extra');
+  if (pkg.scripts) {
+    if (pkg.scripts['build:extra']) {
+      throw new Error('Found deprecated build:extra script, use build:before or build:after instead');
+    }
+
+    if (pkg.scripts['build:before']) {
+      execSync('yarn build:before');
+    }
   }
 
   const repoPath = pkg.repository.url
@@ -1067,6 +1073,12 @@ async function main () {
 
   if (RL_CONFIGS.some((c) => fs.existsSync(path.join(process.cwd(), c)))) {
     execSync('yarn polkadot-exec-rollup --config');
+  }
+
+  if (pkg.scripts) {
+    if (pkg.scripts['build:after']) {
+      execSync('yarn build:after');
+    }
   }
 }
 
