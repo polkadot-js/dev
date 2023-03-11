@@ -781,7 +781,7 @@ function loopFiles (exts, dir, sub, fn, allowComments = false) {
 function lintOutput (dir) {
   throwOnErrors(
     loopFiles(['.d.ts', '.js', '.cjs'], dir, 'build', (full, l, n) => {
-      if (l.startsWith('import ') && l.includes(" from '") && l.includes('/src/')) {
+      if ((l.includes('import(') || (l.startsWith('import ') && l.includes(" from '"))) && l.includes('/src/')) {
         // we are not allowed to import from /src/
         return createError(full, l, n, 'Invalid import from /src/');
       // eslint-disable-next-line no-useless-escape

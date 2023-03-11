@@ -49,7 +49,7 @@
     "./rootJs/testJson.json": "./src/rootJs/testJson.json"
   },
   "dependencies": {
-    "@eslint/js": "^8.35.0",
+    "@eslint/js": "^8.36.0",
     "@rollup/plugin-alias": "^4.0.3",
     "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-dynamic-import-vars": "^2.0.3",
@@ -59,7 +59,7 @@
     "@rushstack/eslint-patch": "^1.2.0",
     "@typescript-eslint/eslint-plugin": "^5.54.1",
     "@typescript-eslint/parser": "^5.54.1",
-    "eslint": "^8.35.0",
+    "eslint": "^8.36.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-import-resolver-node": "^0.3.7",
     "eslint-plugin-deprecation": "^1.3.3",
@@ -82,7 +82,7 @@
     "tap-parser": "^12.0.1",
     "tslib": "^2.5.0",
     "typescript": "^4.9.5",
-    "webpack": "^5.76.0",
+    "webpack": "^5.76.1",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.11.1",
     "webpack-merge": "^5.8.0",
