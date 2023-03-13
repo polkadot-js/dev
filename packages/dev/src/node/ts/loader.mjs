@@ -38,6 +38,7 @@ export async function load (url, context, nextLoad) {
         module: ts.ModuleKind.ESNext,
         moduleResolution: ts.ModuleResolutionKind.NodeNext,
         skipLibCheck: true,
+        // Aligns with scripts/polkadot-dev-build-ts & config/tsconfig
         target: ts.ScriptTarget.ES2020
       },
       fileName: fileURLToPath(url)
