@@ -1,7 +1,8 @@
 {
   "compilerOptions": {
     /* Basic Options */
-    /* This aligns with scripts/polkadot-dev-build-ts ans node/ts/loader */
+    /* This aligns with scripts/polkadot-dev-build-ts & node/ts/loader */
+    /* https://github.com/tsconfig/bases/blob/d699759e29cfd5f6ab0fab9f3365c7767fca9787/bases/node16-strictest-esm.combined.json#L11 */
     /* Node 14 === es2020, Node 16 === es2021, Node 18 === es2022 */
     "target": "es2021",                       /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */
     "module": "esnext",                       /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
