@@ -58,8 +58,9 @@ async function compileJs (compileType, type) {
               ? 'commonjs'
               : 'esnext',
             moduleResolution: 'nodenext',
-            // we need at least es2020 for dynamic imports
-            target: 'es2020'
+            // We need at least es2020 for dynamic imports
+            // Aligns with node/ts/loader & config/tsconfig
+            target: 'es2021'
           }
         });
 
