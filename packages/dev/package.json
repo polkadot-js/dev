@@ -1,11 +1,12 @@
 {
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "bugs": "https://github.com/polkadot-js/dev/issues",
-  "contributors": [],
   "description": "A collection of shared CI scripts and development environment used by @polkadot projects",
+  "engines": {
+    "node": ">=16"
+  },
   "homepage": "https://github.com/polkadot-js/dev/tree/master/packages/dev#readme",
   "license": "Apache-2.0",
-  "maintainers": [],
   "name": "@polkadot/dev",
   "repository": {
     "directory": "packages/dev",
