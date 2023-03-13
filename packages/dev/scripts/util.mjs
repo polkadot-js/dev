@@ -1,6 +1,8 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// @ts-check
+
 import cp from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -31,7 +33,12 @@ export const PATHS_BUILD = ['', '-cjs', '-esm'].reduce((r, a) => r.concat(['', '
 /** Paths that are generally excluded from source operations */
 export const PATHS_EXCL = ['node_modules', ...PATHS_BUILD.map((e) => `build${e}`)];
 
-/** Copy a file to a target dit */
+/**
+ * Copy a file to a target dir
+ *
+ * @param {string | string[]} src
+ * @param {string} destDir
+ **/
 export function copyFileSync (src, destDir) {
   if (Array.isArray(src)) {
     src.forEach((s) => copyFileSync(s, destDir));
@@ -40,7 +47,14 @@ export function copyFileSync (src, destDir) {
   }
 }
 
-/** Recursively copies a directory to a target dir */
+/**
+ * Recursively copies a directory to a target dir
+ *
+ * @param {string | string[]} src
+ * @param {string} dest
+ * @param {string[]} [include]
+ * @param {string[]} [exclude]
+ **/
 export function copyDirSync (src, dest, include, exclude) {
   if (Array.isArray(src)) {
     src.forEach((s) => copyDirSync(s, dest, include, exclude));
@@ -67,26 +81,46 @@ export function copyDirSync (src, dest, include, exclude) {
   }
 }
 
-/** Creates a deno directory name */
+/**
+ * Creates a deno directory name
+ *
+ * @param {string} name
+ * @returns {string}
+ **/
 export function denoCreateDir (name) {
   // aligns with name above - since we have sub-paths, we only return
   // the actual path inside packages/* (i.e. the last part of the name)
   return name.replace('@polkadot/', '');
 }
 
-/** Process execution */
+/**
+ * Process execution
+ *
+ * @param {string} cmd
+ * @param {boolean} [noLog]
+ **/
 export function execSync (cmd, noLog) {
-  !noLog && console.log(`$ ${cmd.replaceAll('  ', ' ')}`);
+  !noLog && console.log(`$ ${cmd.replace(/ {2}/g, ' ')}`);
 
   cp.execSync(cmd, { stdio: 'inherit' });
 }
 
-/** Node execution with ts support */
+/**
+ * Node execution with ts support
+ *
+ * @param {string} cmd
+ * @param {boolean} [noLog]
+ **/
 export function execNodeTsSync (cmd, noLog) {
   execSync(`${process.execPath} --no-warnings --enable-source-maps --loader @polkadot/dev/node/ts ${cmd}`, noLog);
 }
 
-/** Node binary execution */
+/**
+ * Node binary execution
+ *
+ * @param {string} name
+ * @param {string} cmd
+ **/
 export function execViaNode (name, cmd) {
   const args = process.argv.slice(2).join(' ');
 
@@ -106,12 +140,23 @@ export function gitSetup () {
   execSync('git checkout master');
 }
 
-/** Do an import from a <this module> path */
+/**
+ * Do an import from a <this module> path
+ *
+ * @param {string} req
+ * @returns {string}
+ **/
 export function importPath (req) {
   return path.join(process.cwd(), 'node_modules', req);
 }
 
-/** Do an async import */
+/**
+ * Do an async import
+ *
+ * @param {string} bin
+ * @param {string} req
+ * @returns {Promise<any>}
+ **/
 export async function importDirect (bin, req) {
   console.log(`$ ${bin} ${process.argv.slice(2).join(' ')}`);
 
@@ -120,30 +165,48 @@ export async function importDirect (bin, req) {
 
     return mod;
   } catch (error) {
-    console.error(`Error importing ${req}`);
-    console.error(error);
-    process.exit(1);
+    exitFatal(`Error importing ${req}`, error);
   }
 }
 
-/** Do a relative async import */
+/**
+ * Do a relative async import
+ *
+ * @param {string} bin
+ * @param {string} req
+ * @returns {Promise<any>}
+ **/
 export function importRelative (bin, req) {
   return importDirect(bin, importPath(req));
 }
 
-/** Do a mkdirp (no global support, native) */
+/**
+ * Do a mkdirp (no global support, native)
+ *
+ * @param {string} dir
+ **/
 export function mkdirpSync (dir) {
   fs.mkdirSync(dir, { recursive: true });
 }
 
-/** Delete the ful path (no glob support) */
+/**
+ * Delete the ful path (no glob support)
+ *
+ * @param {string} dir
+ **/
 export function rimrafSync (dir) {
   if (fs.existsSync(dir)) {
     fs.rmSync(dir, { force: true, recursive: true });
   }
 }
 
-/** Recursively reads a directory, making a list of the matched extensions */
+/**
+ * Recursively reads a directory, making a list of the matched extensions
+ *
+ * @param {string} src
+ * @param {string[]} extensions
+ * @param {string[]} [files]
+ **/
 export function readdirSync (src, extensions, files = []) {
   if (!fs.statSync(src).isDirectory()) {
     exitFatal(`Source ${src} should be a directory`);
@@ -166,10 +229,21 @@ export function readdirSync (src, extensions, files = []) {
   return files;
 }
 
-/** Prints the fatal error message and exit with a non-zero return code */
-export function exitFatal (message) {
+/**
+ * Prints the fatal error message and exit with a non-zero return code
+ *
+ * @param {string} message
+ * @param {Error} [error]
+ **/
+export function exitFatal (message, error) {
   console.error();
   console.error('FATAL:', message);
+
+  if (error) {
+    console.error();
+    console.error(error);
+  }
+
   console.error();
   process.exit(1);
 }
