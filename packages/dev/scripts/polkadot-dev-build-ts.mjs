@@ -14,6 +14,12 @@ const RL_CONFIGS = ['js', 'mjs', 'cjs'].map((e) => `rollup.config.${e}`);
 
 console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
+// We need at least es2020 for dynamic imports. Aligns with node/ts/loader & config/tsconfig
+// Node 14 === es2020, Node 16 === es2021, Node 18 === es2022
+// https://github.com/tsconfig/bases/blob/d699759e29cfd5f6ab0fab9f3365c7767fca9787/bases/node14.json#L8
+const TARGET_TSES = ts.ScriptTarget.ES2020;
+const TARGET_NODE = '14';
+
 const IGNORE_IMPORTS = [
   // node
   'crypto', 'fs', 'os', 'path', 'process', 'readline', 'util',
@@ -50,16 +56,14 @@ async function compileJs (compileType, type) {
           compilerOptions: {
             esModuleInterop: true,
             importHelpers: true,
-            inlineSourceMap: true,
             jsx: filename.endsWith('.tsx')
-              ? 'react-jsx'
+              ? ts.JsxEmit.ReactJSX
               : undefined,
             module: type === 'cjs'
-              ? 'commonjs'
-              : 'esnext',
-            moduleResolution: 'nodenext',
-            // we need at least es2020 for dynamic imports
-            target: 'es2020'
+              ? ts.ModuleKind.CommonJS
+              : ts.ModuleKind.ESNext,
+            moduleResolution: ts.ModuleResolutionKind.NodeNext,
+            target: TARGET_TSES
           }
         });
 
@@ -702,15 +706,16 @@ function orderPackageJson (repoPath, dir, json) {
     url: `https://github.com/${repoPath}.git`
   };
   json.sideEffects = json.sideEffects || false;
+  json.engines = {
+    node: `>=${TARGET_NODE}`
+  };
 
   // sort the object
   const sorted = sortJson(json);
 
-  // remove empty artifacts
-  ['engines'].forEach((d) => {
-    if (typeof json[d] === 'object' && Object.keys(json[d]).length === 0) {
-      delete sorted[d];
-    }
+  // remove empties (may be re-added at some point)
+  ['contributors', 'maintainers'].forEach((d) => {
+    delete sorted[d];
   });
 
   // move the different entry points to the (almost) end
