@@ -2,12 +2,16 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// @ts-check
+
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import yargs from 'yargs';
 
 import { copyDirSync, copyFileSync, denoCreateDir, execSync, exitFatal, gitSetup, mkdirpSync, rimrafSync } from './util.mjs';
+
+/** @typedef {object} ChangelogMap */
 
 console.log('$ polkadot-ci-ghact-build', process.argv.slice(2).join(' '));
 
@@ -23,7 +27,10 @@ const denoClone = 'build-deno-clone';
 let withDeno = false;
 let withBund = false;
 let withNpm = false;
+
+/** @type {string[]} */
 const shouldDeno = [];
+/** @type {string[]} */
 const shouldBund = [];
 
 const argv = yargs(process.argv.slice(2))
@@ -36,22 +43,32 @@ const argv = yargs(process.argv.slice(2))
   .strict()
   .argv;
 
+/** Runs the clean command */
 function runClean () {
   execSync('yarn polkadot-dev-clean-build');
 }
 
-function runCheck () {
+/** Runs the lint command */
+function runLint () {
   execSync('yarn lint');
 }
 
+/** Runs the test command */
 function runTest () {
   execSync('yarn test');
 }
 
+/** Runs the build command */
 function runBuild () {
   execSync('yarn build');
 }
 
+/**
+ * Removes a specific file, returning true if found, false otherwise
+ *
+ * @param {string} file
+ * @returns {boolean}
+ */
 function rmFile (file) {
   if (fs.existsSync(file)) {
     rimrafSync(file);
@@ -62,24 +79,47 @@ function rmFile (file) {
   return false;
 }
 
+/**
+ * Retrieves the path of the root package.json
+ *
+ * @returns {string}
+ */
 function npmGetJsonPath () {
   return path.resolve(process.cwd(), 'package.json');
 }
 
+/**
+ * Retrieves the contents of the root package.json
+ *
+ * @returns {{ name: string; version: string; versions?: { npm?: string; git?: string } }}
+ */
 function npmGetJson () {
   return JSON.parse(
     fs.readFileSync(npmGetJsonPath(), 'utf8')
   );
 }
 
+/**
+ * Writes the contents of the root package.json
+ *
+ * @param {any} json
+ */
 function npmSetJson (json) {
   fs.writeFileSync(npmGetJsonPath(), `${JSON.stringify(json, null, 2)}\n`);
 }
 
+/**
+ * Retrieved the current version included in package.json
+ *
+ * @returns {string}
+ */
 function npmGetVersion () {
   return npmGetJson().version;
 }
 
+/**
+ * Sets the current to have an -x version specifier (aka beta)
+ */
 function npmAddVersionX () {
   const json = npmGetJson();
 
@@ -89,6 +129,9 @@ function npmAddVersionX () {
   }
 }
 
+/**
+ * Removes the current -x version specifier (aka beta)
+ */
 function npmDelVersionX () {
   const json = npmGetJson();
 
@@ -98,21 +141,14 @@ function npmDelVersionX () {
   }
 }
 
+/**
+ * Sets the {versions: { npm, git } } fields in package.json
+ */
 function npmSetVersionFields () {
   const json = npmGetJson();
 
   if (!json.versions) {
     json.versions = {};
-  }
-
-  if (json.versionGit) {
-    json.versions.git = json.versionGit;
-    delete json.versionGit;
-  }
-
-  if (json.versionNpm) {
-    json.versions.npm = json.versionNpm;
-    delete json.versionNpm;
   }
 
   json.versions.git = json.version;
@@ -125,12 +161,20 @@ function npmSetVersionFields () {
   rmFile('.123current');
 }
 
+/**
+ * Sets the npm token in the home directory
+ */
 function npmSetup () {
   const registry = 'registry.npmjs.org';
 
   fs.writeFileSync(path.join(os.homedir(), '.npmrc'), `//${registry}/:_authToken=${process.env.NPM_TOKEN}`);
 }
 
+/**
+ * Publishes the current package
+ *
+ * @returns {void}
+ */
 function npmPublish () {
   if (fs.existsSync('.skip-npm') || !withNpm) {
     return;
@@ -167,6 +211,13 @@ function npmPublish () {
   process.chdir('..');
 }
 
+/**
+ * Creates a map of changelog entries
+ *
+ * @param {string[][]} parts
+ * @param {ChangelogMap} result
+ * @returns
+ */
 function createChangelogMap (parts, result = {}) {
   for (let i = 0; i < parts.length; i++) {
     const [n, ...e] = parts[i];
@@ -189,6 +240,12 @@ function createChangelogMap (parts, result = {}) {
   return result;
 }
 
+/**
+ * Creates an array of changelog entries
+ *
+ * @param {ChangelogMap} map
+ * @returns {string[]}
+ */
 function createChangelogArr (map) {
   const result = [];
   const entries = Object.entries(map);
@@ -214,7 +271,14 @@ function createChangelogArr (map) {
   return result;
 }
 
-function addChangelog (version, ...names) {
+/**
+ * Adds changelog entries
+ *
+ * @param {string[]} changelog
+ * @returns {string}
+ */
+function addChangelog (changelog) {
+  const [version, ...names] = changelog;
   const entry = `${
     createChangelogArr(
       createChangelogMap(
@@ -240,11 +304,17 @@ function addChangelog (version, ...names) {
   return entry;
 }
 
+/**
+ *
+ * @param {string} repo
+ * @param {string} clone
+ * @param {string[]} names
+ */
 function commitClone (repo, clone, names) {
   if (names.length) {
     process.chdir(clone);
 
-    const entry = addChangelog(...names);
+    const entry = addChangelog(names);
 
     gitSetup();
     execSync('git add --all .');
@@ -255,6 +325,11 @@ function commitClone (repo, clone, names) {
   }
 }
 
+/**
+ * Publishes a specific package to polkadot-js bundles
+ *
+ * @returns {void}
+ */
 function bundlePublishPkg () {
   const { name, version } = npmGetJson();
   const dirName = name.split('/')[1];
@@ -278,6 +353,11 @@ function bundlePublishPkg () {
   copyFileSync(srcPath, dstDir);
 }
 
+/**
+ * Publishes all packages to polkadot-js bundles
+ *
+ * @returns {void}
+ */
 function bundlePublish () {
   const { version } = npmGetJson();
 
@@ -292,6 +372,11 @@ function bundlePublish () {
   commitClone(bundRepo, bundClone, shouldBund);
 }
 
+/**
+ * Publishes a specific package to Deno
+ *
+ * @returns {void}
+ */
 function denoPublishPkg () {
   const { name, version } = npmGetJson();
 
@@ -316,6 +401,11 @@ function denoPublishPkg () {
   copyDirSync('build-deno', denoPath);
 }
 
+/**
+ * Publishes all packages to Deno
+ *
+ * @returns {void}
+ */
 function denoPublish () {
   const { version } = npmGetJson();
 
@@ -330,19 +420,23 @@ function denoPublish () {
   commitClone(denoRepo, denoClone, shouldDeno);
 }
 
+/**
+ * Retrieves flags based on current specifications
+ */
 function getFlags () {
   withDeno = rmFile('.123deno');
   withBund = rmFile('.123bundle');
   withNpm = rmFile('.123npm');
 }
 
+/**
+ * Bumps the current version, also applying to all sub-packages
+ */
 function verBump () {
-  const { version: currentVersion, versionNpm, versions } = npmGetJson();
+  const { version: currentVersion, versions } = npmGetJson();
   const [version, tag] = currentVersion.split('-');
   const [,, patch] = version.split('.');
-  const lastVersion = versions
-    ? versions.npm
-    : versionNpm;
+  const lastVersion = (versions && versions.npm) || currentVersion;
 
   if (argv['skip-beta'] || patch === '0') {
     // don't allow beta versions
@@ -371,6 +465,9 @@ function verBump () {
   execSync('git add --all .');
 }
 
+/**
+ * Commits and pushes the current version on git
+ */
 function gitPush () {
   const version = npmGetVersion();
   let doGHRelease = false;
@@ -408,6 +505,12 @@ skip-checks: true"`);
   }
 }
 
+/**
+ * Loops through the packages/* (or root), executing the supplied
+ * function for each package found
+ *
+ * @param {() => unknown} fn
+ */
 function loopFunc (fn) {
   if (fs.existsSync('packages')) {
     fs
@@ -439,7 +542,7 @@ verBump();
 
 // perform the actual CI ops
 runClean();
-runCheck();
+runLint();
 runTest();
 runBuild();
 
