@@ -17,7 +17,7 @@ console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 // We need at least es2020 for dynamic imports. Aligns with node/ts/loader & config/tsconfig
 // Node 14 === es2020, Node 16 === es2021, Node 18 === es2022
 // https://github.com/tsconfig/bases/blob/d699759e29cfd5f6ab0fab9f3365c7767fca9787/bases/node16-strictest-esm.combined.json#L11
-const TARGET_ES = 'es2021';
+const TARGET_ES = ts.ScriptTarget.ES2021;
 const TARGET_NODE = '16';
 
 const IGNORE_IMPORTS = [
@@ -58,12 +58,12 @@ async function compileJs (compileType, type) {
             importHelpers: true,
             inlineSourceMap: true,
             jsx: filename.endsWith('.tsx')
-              ? 'react-jsx'
+              ? ts.JsxEmit.ReactJSX
               : undefined,
             module: type === 'cjs'
-              ? 'commonjs'
-              : 'esnext',
-            moduleResolution: 'nodenext',
+              ? ts.ModuleKind.CommonJS
+              : ts.ModuleKind.ESNext,
+            moduleResolution: ts.ModuleResolutionKind.NodeNext,
             target: TARGET_ES
           }
         });
