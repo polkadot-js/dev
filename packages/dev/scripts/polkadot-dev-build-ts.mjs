@@ -56,7 +56,6 @@ async function compileJs (compileType, type) {
           compilerOptions: {
             esModuleInterop: true,
             importHelpers: true,
-            inlineSourceMap: true,
             jsx: filename.endsWith('.tsx')
               ? ts.JsxEmit.ReactJSX
               : undefined,
