@@ -30,7 +30,7 @@ export async function load (url, context, nextLoad) {
     });
 
     // we use a hash of the source to determine caching
-    const sourceHash = crypto.createHash('sha256').update(source).digest('hex');
+    const sourceHash = `//# sourceHash=${crypto.createHash('sha256').update(source).digest('hex')}`;
     const compiledFile = url.includes('/src/')
       ? fileURLToPath(
         url
@@ -42,7 +42,7 @@ export async function load (url, context, nextLoad) {
     if (compiledFile && fs.existsSync(compiledFile)) {
       const compiled = fs.readFileSync(compiledFile, 'utf-8');
 
-      if (compiled.includes(`//# sourceHash=${sourceHash}`)) {
+      if (compiled.includes(sourceHash)) {
         return {
           format: 'module',
           source: compiled
@@ -75,7 +75,7 @@ export async function load (url, context, nextLoad) {
         fs.mkdirSync(compiledDir, { recursive: true });
       }
 
-      fs.writeFileSync(compiledFile, `${outputText}\n//# sourceHash=${sourceHash}`, 'utf-8');
+      fs.writeFileSync(compiledFile, `${outputText}\n${sourceHash}`, 'utf-8');
     }
 
     return {
