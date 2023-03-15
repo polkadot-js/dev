@@ -30,17 +30,19 @@ export async function load (url, context, nextLoad) {
     });
 
     // we use a hash of the source to determine caching
-    const sourceHash = crypto.createHash('sha256').update(source).digest('hex');
-    const compiledFile = fileURLToPath(
-      url
-        .replace(/\.tsx?$/, '.js')
-        .replace('/src/', '/build-loader/')
-    );
+    const sourceHash = `//# sourceHash=${crypto.createHash('sha256').update(source).digest('hex')}`;
+    const compiledFile = url.includes('/src/')
+      ? fileURLToPath(
+        url
+          .replace(/\.tsx?$/, '.js')
+          .replace('/src/', '/build-loader/')
+      )
+      : null;
 
-    if (fs.existsSync(compiledFile)) {
+    if (compiledFile && fs.existsSync(compiledFile)) {
       const compiled = fs.readFileSync(compiledFile, 'utf-8');
 
-      if (compiled.includes(`//# sourceHash=${sourceHash}`)) {
+      if (compiled.includes(sourceHash)) {
         return {
           format: 'module',
           source: compiled
@@ -66,13 +68,15 @@ export async function load (url, context, nextLoad) {
       fileName: fileURLToPath(url)
     });
 
-    const compiledDir = path.dirname(compiledFile);
+    if (compiledFile) {
+      const compiledDir = path.dirname(compiledFile);
 
-    if (!fs.existsSync(compiledDir)) {
-      fs.mkdirSync(compiledDir, { recursive: true });
+      if (!fs.existsSync(compiledDir)) {
+        fs.mkdirSync(compiledDir, { recursive: true });
+      }
+
+      fs.writeFileSync(compiledFile, `${outputText}\n${sourceHash}`, 'utf-8');
     }
-
-    fs.writeFileSync(compiledFile, `${outputText}\n//# sourceHash=${sourceHash}`, 'utf-8');
 
     return {
       format: 'module',
