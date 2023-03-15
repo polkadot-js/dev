@@ -1,0 +1,28 @@
+{
+  "author": "Jaco Greeff <jacogr@gmail.com>",
+  "bugs": "https://github.com/polkadot-js/dev/issues",
+  "description": "A basic test-functions-as-global library on top of node:test",
+  "engines": {
+    "node": ">=14"
+  },
+  "homepage": "https://github.com/polkadot-js/dev/tree/master/packages/dev-test#readme",
+  "license": "Apache-2.0",
+  "name": "@polkadot/dev-test",
+  "repository": {
+    "directory": "packages/dev-test",
+    "type": "git",
+    "url": "https://github.com/polkadot-js/dev.git"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "version": "0.71.11",
+  "main": "./index.js",
+  "exports": {
+    "./browser": "./src/browser.cjs",
+    "./node": "./src/node.cjs",
+    "./node.d.ts": "./src/node.d.ts"
+  },
+  "dependencies": {
+    "tslib": "^2.5.0"
+  }
+}

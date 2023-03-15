@@ -43,9 +43,6 @@
   },
   "exports": {
     "./config/*": "./config/*",
-    "./node/test/browser": "./src/node/test/browser.cjs",
-    "./node/test/node": "./src/node/test/node.cjs",
-    "./node/ts": "./src/node/ts/index.mjs",
     "./rootJs/dynamic.mjs": "./src/rootJs/dynamic.mjs",
     "./rootJs/testJson.json": "./src/rootJs/testJson.json"
   },

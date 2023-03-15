@@ -12,5 +12,5 @@
 // This is a bit of a pain since in dev mode we now need latest-ish Node
 // versions, but at the same time we don't want to build against multiple APIs)
 
-export { load } from './loader.mjs';
-export { resolve } from './resolver.mjs';
+export { load } from './loader.js';
+export { resolve } from './resolver.js';

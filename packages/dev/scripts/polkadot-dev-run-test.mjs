@@ -139,7 +139,7 @@ if (files.length === 0) {
 const cliArgs = [...cmd, ...files].join(' ');
 
 try {
-  execNodeTsSync(`--require @polkadot/dev/node/test/${testEnv} ${nodeFlags.join(' ')} ${importPath('@polkadot/dev/scripts/polkadot-exec-node-test.mjs')} ${cliArgs}`);
+  execNodeTsSync(`--require @polkadot/dev-test/${testEnv} ${nodeFlags.join(' ')} ${importPath('@polkadot/dev/scripts/polkadot-exec-node-test.mjs')} ${cliArgs}`);
 } catch {
   process.exit(1);
 }

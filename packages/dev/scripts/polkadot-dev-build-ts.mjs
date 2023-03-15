@@ -954,7 +954,7 @@ async function buildJs (compileType, repoPath, dir, locals) {
     fs.writeFileSync(path.join(process.cwd(), 'src/packageInfo.ts'), `${genHeader}\nexport const packageInfo = { name: '${name}', path: 'auto', type: 'auto', version: '${version}' };\n`);
 
     if (!name.startsWith('@polkadot/x-')) {
-      if (name !== '@polkadot/util' && name !== '@polkadot/dev') {
+      if (name !== '@polkadot/util' && !name.startsWith('@polkadot/dev')) {
         const detectOther = path.join(process.cwd(), 'src/detectOther.ts');
 
         if (!fs.existsSync(detectOther)) {

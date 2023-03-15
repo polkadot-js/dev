@@ -34,7 +34,9 @@
     "test:one": "polkadot-dev-run-test --env browser"
   },
   "devDependencies": {
-    "@polkadot/dev": "workspace:packages/dev"
+    "@polkadot/dev": "workspace:packages/dev",
+    "@polkadot/dev-test": "workspace:packages/dev-test",
+    "@polkadot/dev-ts": "workspace:packages/dev-ts"
   },
   "resolutions": {
     "typescript": "^4.9.5"

@@ -510,6 +510,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@polkadot/dev-test@workspace:packages/dev-test":
+  version: 0.0.0-use.local
+  resolution: "@polkadot/dev-test@workspace:packages/dev-test"
+  languageName: unknown
+  linkType: soft
+
+"@polkadot/dev-ts@workspace:packages/dev-ts":
+  version: 0.0.0-use.local
+  resolution: "@polkadot/dev-ts@workspace:packages/dev-ts"
+  languageName: unknown
+  linkType: soft
+
 "@polkadot/dev@workspace:packages/dev":
   version: 0.0.0-use.local
   resolution: "@polkadot/dev@workspace:packages/dev"
@@ -7346,6 +7358,8 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@polkadot/dev": "workspace:packages/dev"
+    "@polkadot/dev-test": "workspace:packages/dev-test"
+    "@polkadot/dev-ts": "workspace:packages/dev-ts"
   languageName: unknown
   linkType: soft
 

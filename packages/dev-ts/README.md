@@ -1,4 +1,4 @@
-# loader-ts
+# @polkadot/dev-ts
 
 This is an Node TS loader, specifically written to cater for the polkadot-js needs, aka it is meant to be used inside polkadot-js projects. It doesn't aim to be a catch-all resolver, although it does cover quite a large spectrum of functionality.
 
@@ -12,5 +12,5 @@ It caters for -
 Usage
 
 ```
-node --loader @polkadot/dev/node/loader-ts ...
+node --loader @polkadot/dev-ts ...
 ```

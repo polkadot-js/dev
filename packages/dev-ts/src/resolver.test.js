@@ -3,13 +3,13 @@
 
 // @ts-check
 
-/// <reference types ="../test/node" />
+/// <reference types ="@polkadot/dev-test/node.d.ts" />
 
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-import { CWD_PATH } from './common.mjs';
-import { resolveAliases, resolveExtBare, resolveExtJs, resolveExtJson, resolveExtTs } from './resolver.mjs';
+import { CWD_PATH } from './common.js';
+import { resolveAlias, resolveExtBare, resolveExtJs, resolveExtJson, resolveExtTs } from './resolver.js';
 
 const ROOT_URL = pathToFileURL(`${CWD_PATH}/`);
 const SRC_PATH = 'packages/dev/src';
@@ -126,7 +126,7 @@ describe('resolveExtBare', () => {
 describe('resolveAliases', () => {
   it('resolves packageInfo', () => {
     expect(
-      resolveAliases('@polkadot/dev/packageInfo', ROOT_URL)
+      resolveAlias('@polkadot/dev/packageInfo', ROOT_URL)
     ).toEqual({
       format: 'module',
       shortCircuit: true,

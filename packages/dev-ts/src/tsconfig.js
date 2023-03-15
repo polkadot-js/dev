@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-import { CWD_PATH, MOD_PATH } from './common.mjs';
+import { CWD_PATH, MOD_PATH } from './common.js';
 
 /** @typedef {{ baseParentUrl: string; filter: string[]; isWildcard?: boolean; path: string }} Alias */
 /** @typedef {{ baseUrl?: string; paths?: Record<string, string[]> }} CompilerOptions */
