@@ -3,6 +3,9 @@
 
 // @ts-check
 
+import crypto from 'node:crypto';
+import fs from 'node:fs';
+import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 
@@ -26,6 +29,25 @@ export async function load (url, context, nextLoad) {
       format: 'module'
     });
 
+    // we use a hash of the source to determine caching
+    const sourceHash = crypto.createHash('sha256').update(source).digest('hex');
+    const compiledFile = fileURLToPath(
+      url
+        .replace(/\.tsx?$/, '.js')
+        .replace('/src/', '/build-loader/')
+    );
+
+    if (fs.existsSync(compiledFile)) {
+      const compiled = fs.readFileSync(compiledFile, 'utf-8');
+
+      if (compiled.includes(`//# sourceHash=${sourceHash}`)) {
+        return {
+          format: 'module',
+          source: compiled
+        };
+      }
+    }
+
     // compile via typescript
     const { outputText } = ts.transpileModule(source.toString(), {
       compilerOptions: {
@@ -43,6 +65,14 @@ export async function load (url, context, nextLoad) {
       },
       fileName: fileURLToPath(url)
     });
+
+    const compiledDir = path.dirname(compiledFile);
+
+    if (!fs.existsSync(compiledDir)) {
+      fs.mkdirSync(compiledDir, { recursive: true });
+    }
+
+    fs.writeFileSync(compiledFile, `${outputText}\n//# sourceHash=${sourceHash}`, 'utf-8');
 
     return {
       format: 'module',
