@@ -9,7 +9,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 
-import { EXT_TS_REGEX } from './common.mjs';
+import { EXT_TS_REGEX } from './common.js';
 
 /** @typedef {{ format: 'commonjs' | 'module'; shortCircuit?: boolean; source: string }} Loaded */
 

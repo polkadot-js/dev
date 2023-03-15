@@ -14,7 +14,7 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.71.11",
+  "version": "0.72.0",
   "versions": {
     "git": "0.71.11",
     "npm": "0.71.11"
@@ -34,7 +34,9 @@
     "test:one": "polkadot-dev-run-test --env browser"
   },
   "devDependencies": {
-    "@polkadot/dev": "workspace:packages/dev"
+    "@polkadot/dev": "workspace:packages/dev",
+    "@polkadot/dev-test": "workspace:packages/dev-test",
+    "@polkadot/dev-ts": "workspace:packages/dev-ts"
   },
   "resolutions": {
     "typescript": "^4.9.5"

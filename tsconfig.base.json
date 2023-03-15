@@ -5,7 +5,8 @@
     "moduleResolution": "nodenext",
     "paths": {
       "@polkadot/dev/types": ["dev/src/types.ts"],
-      "@polkadot/dev/*": ["dev/src/*"]
+      "@polkadot/dev/*": ["dev/src/*"],
+      "@polkadot/dev-test/*": ["dev-test/src/*"]
     },
     "resolveJsonModule": true,
     "skipLibCheck": true

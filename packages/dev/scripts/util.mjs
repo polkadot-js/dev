@@ -112,7 +112,7 @@ export function execSync (cmd, noLog) {
  * @param {boolean} [noLog]
  **/
 export function execNodeTsSync (cmd, noLog) {
-  execSync(`${process.execPath} --no-warnings --enable-source-maps --loader @polkadot/dev/node/ts ${cmd}`, noLog);
+  execSync(`${process.execPath} --no-warnings --enable-source-maps --loader @polkadot/dev-ts ${cmd}`, noLog);
 }
 
 /**

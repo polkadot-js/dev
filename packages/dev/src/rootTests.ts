@@ -1,6 +1,8 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+/// <reference types ="@polkadot/dev-test/node.d.ts" />
+
 import * as testRoot from './root.js';
 
 export function runTests ({ Clazz, TEST_PURE, bigIntExp, dynamic, jsOpExp, json }: typeof testRoot): void {

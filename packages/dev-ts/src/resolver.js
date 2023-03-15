@@ -7,16 +7,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL, URL } from 'node:url';
 
-import { CWD_URL, EXT_JS_REGEX, EXT_JSON_REGEX, EXT_TS_ARRAY, EXT_TS_REGEX } from './common.mjs';
-import { tsAliases } from './tsconfig.mjs';
-
-// TODO When TypeScript 5 is released it would allow for all *.ts imports.
-// The idea is that polkadot-js aligns with the bundler/minimal resolution,
-// which in turn could make this loader much simpler.
-//
-// 1. We certainly don't need the (unused) JS resolution
-// 2. Relative import handling will always have the extension (can be dropped)
-// 3. Aliases would only need directory resolution
+import { CWD_URL, EXT_JS_REGEX, EXT_JSON_REGEX, EXT_TS_ARRAY, EXT_TS_REGEX } from './common.js';
+import { tsAliases } from './tsconfig.js';
 
 /** @typedef {{ parentURL: string }} Context */
 /** @typedef {{ format: 'commonjs' | 'json' | 'module'; shortCircuit?: boolean; url: string }} Resolved */
@@ -174,6 +166,24 @@ export function resolveExtBare (specifier, parentUrl) {
 /**
  * @internal
  *
+ * Resolve anything that is not an alias
+ *
+ * @param {string} specifier
+ * @param {URL | string} parentUrl
+ * @returns {Resolved | undefined}
+ **/
+export function resolveNonAlias (specifier, parentUrl) {
+  return (
+    resolveExtTs(specifier, parentUrl) ||
+    resolveExtJs(specifier, parentUrl) ||
+    resolveExtJson(specifier, parentUrl) ||
+    resolveExtBare(specifier, parentUrl)
+  );
+}
+
+/**
+ * @internal
+ *
  * Resolve TS alias mappings as defined in the tsconfig.json file
  *
  * @param {string} specifier
@@ -181,7 +191,7 @@ export function resolveExtBare (specifier, parentUrl) {
  * @param {typeof tsAliases} [aliases]
  * @returns {Resolved | undefined}
  **/
-export function resolveAliases (specifier, parentUrl, aliases = tsAliases) {
+export function resolveAlias (specifier, parentUrl, aliases = tsAliases) {
   const parts = specifier.split(/[\\/]/);
   const found = aliases
     // return a [filter, [...partIndex]] mapping
@@ -208,15 +218,10 @@ export function resolveAliases (specifier, parentUrl, aliases = tsAliases) {
     .find(({ indexes }) => indexes.length);
 
   if (found) {
-    // get the initial parts
-    const newSpecifier = `./${found.alias.path.replace('*', path.join(...parts.slice(found.alias.filter.length)))}`;
-
-    // do the actual alias resolution
-    return (
-      resolveExtTs(newSpecifier, found.alias.baseParentUrl) ||
-      resolveExtJs(newSpecifier, found.alias.baseParentUrl) ||
-      resolveExtJson(newSpecifier, found.alias.baseParentUrl) ||
-      resolveExtBare(newSpecifier, found.alias.baseParentUrl)
+    // do the actual un-aliased resolution
+    return resolveNonAlias(
+      `./${found.alias.path.replace('*', path.join(...parts.slice(found.alias.filter.length)))}`,
+      found.alias.baseParentUrl
     );
   }
 }
@@ -238,13 +243,8 @@ export function resolve (specifier, context, nextResolve) {
   const parentUrl = context.parentURL || CWD_URL;
 
   return (
-    resolveExtJs(specifier, parentUrl) ||
-    resolveExtJson(specifier, parentUrl) ||
-    resolveAliases(specifier, parentUrl) ||
-    // use internally in aliases, avoided top-level
-    // resolveExtBare(specifier, parentUrl) ||
-    // unused (currently) in source imports
-    // resolveExtTs(specifier, parentUrl) ||
+    resolveNonAlias(specifier, parentUrl) ||
+    resolveAlias(specifier, parentUrl) ||
     nextResolve(specifier, context)
   );
 }

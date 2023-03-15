@@ -510,11 +510,30 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@polkadot/dev-test@^0.72.0, @polkadot/dev-test@workspace:packages/dev-test":
+  version: 0.0.0-use.local
+  resolution: "@polkadot/dev-test@workspace:packages/dev-test"
+  dependencies:
+    tslib: ^2.5.0
+  languageName: unknown
+  linkType: soft
+
+"@polkadot/dev-ts@^0.72.0, @polkadot/dev-ts@workspace:packages/dev-ts":
+  version: 0.0.0-use.local
+  resolution: "@polkadot/dev-ts@workspace:packages/dev-ts"
+  dependencies:
+    tslib: ^2.5.0
+    typescript: ^4.9.5
+  languageName: unknown
+  linkType: soft
+
 "@polkadot/dev@workspace:packages/dev":
   version: 0.0.0-use.local
   resolution: "@polkadot/dev@workspace:packages/dev"
   dependencies:
     "@eslint/js": ^8.36.0
+    "@polkadot/dev-test": ^0.72.0
+    "@polkadot/dev-ts": ^0.72.0
     "@rollup/plugin-alias": ^4.0.3
     "@rollup/plugin-commonjs": ^24.0.1
     "@rollup/plugin-dynamic-import-vars": ^2.0.3
@@ -7346,6 +7365,8 @@ __metadata:
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
     "@polkadot/dev": "workspace:packages/dev"
+    "@polkadot/dev-test": "workspace:packages/dev-test"
+    "@polkadot/dev-ts": "workspace:packages/dev-ts"
   languageName: unknown
   linkType: soft
 
