@@ -514,6 +514,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@polkadot/dev-test@workspace:packages/dev-test"
   dependencies:
+    "@types/jsdom": ^21.1.0
+    jsdom: ^21.1.1
     tslib: ^2.5.0
   languageName: unknown
   linkType: soft
@@ -565,7 +567,6 @@ __metadata:
     eslint-plugin-sort-destructure-keys: ^1.5.0
     gh-pages: ^5.0.0
     gh-release: ^7.0.2
-    jsdom: ^21.1.1
     madge: ^6.0.0
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -904,6 +905,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/jsdom@npm:^21.1.0":
+  version: 21.1.0
+  resolution: "@types/jsdom@npm:21.1.0"
+  dependencies:
+    "@types/node": "*"
+    "@types/tough-cookie": "*"
+    parse5: ^7.0.0
+  checksum: 39d3c580283cb7cc3b2729738fd2cd64344e44c815d08f7b6ee7d9c973f7512eff7e7187408649c9da69b76ec81c118868e8b8787d50320f3e2f9cbbd0b000d4
+  languageName: node
+  linkType: hard
+
 "@types/json-schema@npm:*, @types/json-schema@npm:^7.0.8, @types/json-schema@npm:^7.0.9":
   version: 7.0.11
   resolution: "@types/json-schema@npm:7.0.11"
@@ -1055,6 +1067,13 @@ __metadata:
     "@types/react": "*"
     csstype: ^3.0.2
   checksum: 84f53b3101739b20d1731554fb7735bc2f3f5d050a8b392e9845403c8c8bbd729737d033978649f9195a97b557875b010d46e35a4538564a2d0dbcce661dbf76
+  languageName: node
+  linkType: hard
+
+"@types/tough-cookie@npm:*":
+  version: 4.0.2
+  resolution: "@types/tough-cookie@npm:4.0.2"
+  checksum: e055556ffdaa39ad85ede0af192c93f93f986f4bd9e9426efdc2948e3e2632db3a4a584d4937dbf6d7620527419bc99e6182d3daf2b08685e710f2eda5291905
   languageName: node
   linkType: hard
 
@@ -6597,7 +6616,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"parse5@npm:^7.1.2":
+"parse5@npm:^7.0.0, parse5@npm:^7.1.2":
   version: 7.1.2
   resolution: "parse5@npm:7.1.2"
   dependencies:

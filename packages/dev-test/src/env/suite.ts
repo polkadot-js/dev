@@ -1,15 +1,15 @@
-// Copyright 2017-2023 @polkadot/dev authors & contributors
+// Copyright 2017-2023 @polkadot/dev-test authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// @ts-check
+import { after, afterEach, before, beforeEach, describe, it } from 'node:test';
 
-const { after, afterEach, before, beforeEach, describe, it } = require('node:test');
+import { enhanceObj } from '../util.js';
 
-const { enhanceObj } = require('../util.cjs');
-
-/**
- * @typedef {{ only?: boolean, skip?: boolean, todo?: boolean }} WrapOpts
- */
+interface WrapOpts {
+  only?: boolean;
+  skip?: boolean;
+  todo?: boolean;
+}
 
 /**
  * @internal
@@ -17,11 +17,10 @@ const { enhanceObj } = require('../util.cjs');
  * Wraps either decribe or it with relevant .only, .skip, .todo & .each helpers,
  * shimming it into a Jest-compatible environment.
  *
- * @param {typeof describe | typeof it} fn
+ * @param {} fn
  */
-function createWrapper (fn) {
-  /** @type {(opts: WrapOpts) => (name: string, exec?: (done?: () => void) => unknown, timeout?: number) => void} */
-  const wrap = (opts) => (name, exec, timeout) => fn(name, timeout ? { ...opts, timeout } : opts, exec);
+function createWrapper <T extends typeof describe | typeof it> (fn: T) {
+  const wrap = (opts: WrapOpts) => (name: string, exec: () => unknown, timeout?: number) => fn(name, timeout ? { ...opts, timeout } : opts, exec);
 
   // Ensure that we have consistent helpers on the function
   // (if not already applied)
@@ -36,7 +35,7 @@ function createWrapper (fn) {
  * This ensures that the describe and it functions match our actual usages.
  * This includes .only, .skip, .todo as well as .ech helpers
  **/
-function suite () {
+export function suite () {
   return {
     after,
     afterAll: after,
@@ -48,5 +47,3 @@ function suite () {
     it: createWrapper(it)
   };
 }
-
-module.exports = { suite };

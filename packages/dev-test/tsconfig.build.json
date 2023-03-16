@@ -9,8 +9,7 @@
     "**/mod.ts"
   ],
   "include": [
-    "src/**/*",
-    "src/**/*.json"
+    "src/**/*"
   ],
   "references": []
 }

@@ -1,11 +1,7 @@
-// Copyright 2017-2023 @polkadot/dev authors & contributors
+// Copyright 2017-2023 @polkadot/dev-test authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// @ts-check
-
-/// <reference types ="../node" />
-
-import { browser } from './browser.cjs';
+import { browser } from './browser.js';
 
 const all = browser();
 

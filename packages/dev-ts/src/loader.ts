@@ -1,7 +1,5 @@
-// Copyright 2017-2023 @polkadot/dev authors & contributors
+// Copyright 2017-2023 @polkadot/dev-ts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
-
-// @ts-check
 
 import crypto from 'node:crypto';
 import fs from 'node:fs';
@@ -11,17 +9,18 @@ import ts from 'typescript';
 
 import { EXT_TS_REGEX, loaderOptions } from './common.js';
 
-/** @typedef {{ format: 'commonjs' | 'module'; shortCircuit?: boolean; source: string }} Loaded */
+interface Loaded {
+  format: 'commonjs' | 'module';
+  shortCircuit?: boolean;
+  source: string;
+}
+
+type NexLoad = (url: string, context: Record<string, unknown>) => Promise<Loaded>;
 
 /**
  * Load all TypeScript files, compile via tsc on-the-fly
- *
- * @param {string} url - The url to resolve
- * @param {Record<string, unknown>} context - The context
- * @param {(url: string, context: Record<string, unknown>) => Promise<Loaded>} nextLoad - The next chained loader
- * @returns {Promise<Loaded>}
  **/
-export async function load (url, context, nextLoad) {
+export async function load (url: string, context: Record<string, unknown>, nextLoad: NexLoad): Promise<Loaded> {
   if (EXT_TS_REGEX.test(url)) {
     // used the chained loaders to retrieve
     const { source } = await nextLoad(url, {

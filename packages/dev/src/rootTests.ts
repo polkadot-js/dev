@@ -1,7 +1,7 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-/// <reference types ="@polkadot/dev-test/node.d.ts" />
+/// <reference types="@polkadot/dev-test/globals.d.ts" />
 
 import * as testRoot from './root.js';
 
@@ -22,7 +22,7 @@ export function runTests ({ Clazz, TEST_PURE, bigIntExp, dynamic, jsOpExp, json 
     });
   });
 
-  describe('TEST_ROOT', (): void => {
+  describe('TEST_PURE', (): void => {
     it('should have the correct value', (): void => {
       expect(TEST_PURE).toBe('testRoot');
     });

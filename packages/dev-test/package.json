@@ -18,11 +18,13 @@
   "version": "0.72.6",
   "main": "./index.js",
   "exports": {
-    "./browser": "./src/browser.cjs",
-    "./node": "./src/node.cjs",
-    "./node.d.ts": "./src/node.d.ts"
+    "./globals.d.ts": "./src/globals.d.ts"
   },
   "dependencies": {
+    "jsdom": "^21.1.1",
     "tslib": "^2.5.0"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^21.1.0"
   }
 }
