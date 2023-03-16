@@ -3,7 +3,7 @@
 
 /* eslint-disable no-var */
 
-import type { Describe, It, Jest, Lifecycle, Matchers, Mock } from './types.js';
+import type { Describe, Expect, It, Jest, Lifecycle } from './types.js';
 
 declare global {
   var after: Lifecycle;
