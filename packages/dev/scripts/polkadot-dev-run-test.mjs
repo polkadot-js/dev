@@ -147,7 +147,7 @@ try {
   const allFlags = `${nodeFlags.join(' ')} ${importPath('@polkadot/dev/scripts/polkadot-exec-node-test.mjs')} ${cliArgs}`;
 
   if (isDev) {
-    execNodeTsSync(`--require ./packages/dev-test/build/${testEnv}.cjs ${allFlags}`, false, './packages/dev-ts/build/cached.js');
+    execNodeTsSync(`--require ./packages/dev-test/build/cjs/${testEnv}.js ${allFlags}`, false, './packages/dev-ts/build/cached.js');
   } else {
     execNodeTsSync(`--require @polkadot/dev-test/${testEnv} ${allFlags}`);
   }

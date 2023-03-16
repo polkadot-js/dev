@@ -128,7 +128,7 @@ describe('resolveAliases', () => {
     ).toEqual({
       format: 'module',
       shortCircuit: true,
-      url: pathToFileURL(`${SRC_PATH}/packageInfo.ts`).href
+      url: pathToFileURL('packages/dev-ts/src/packageInfo.ts').href
     });
   });
 });

@@ -4,8 +4,9 @@
     "composite": true,
     "paths": {
       "@polkadot/dev/types": ["dev/src/types.ts"],
-      "@polkadot/dev/*": ["dev/src/*.ts"],
-      "@polkadot/dev-test/*": ["dev-test/src/*"]
+      "@polkadot/dev/*": ["dev/src/*"],
+      "@polkadot/dev-test/*": ["dev-test/src/*"],
+      "@polkadot/dev-ts/*": ["dev-ts/src/*.ts"]
     },
     "resolveJsonModule": true,
     "skipLibCheck": true
