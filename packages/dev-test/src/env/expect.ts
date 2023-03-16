@@ -202,39 +202,7 @@ function assertIncludes (value: string | unknown[], [check, Clazz]: [string, Fun
  * make all polkadot-js usages pass
  **/
 export function expect () {
-  const withBase = (value: unknown) => enhanceObj({
-    not: enhanceObj({
-      toBe: (other: unknown) => assert.notStrictEqual(value, other),
-      toBeDefined: () => assert.ok(value === undefined),
-      toBeNull: (value: unknown) => assert.ok(value !== null),
-      toBeUndefined: () => assert.ok(value !== undefined),
-      toEqual: (other: unknown) => assert.notDeepEqual(value, other),
-      toHaveBeenCalled: () => assert.ok(!(value as Mocked | undefined)?.mock?.calls.length),
-      toThrow: (message?: RegExp | Error | string) => assert.doesNotThrow(value as () => unknown, message && { message } as Error)
-    }, stubExpectFnNot),
-    rejects: enhanceObj({
-      toThrow: (message?: RegExp | Error | string) => assert.rejects(value as Promise<unknown>, message && { message } as Error)
-    }, stubExpectFnRejects),
-    resolves: enhanceObj({}, stubExpectFnResolves),
-    toBe: (other: unknown) => assert.strictEqual(value, other),
-    toBeDefined: () => assert.ok(value !== undefined),
-    toBeFalsy: () => assert.ok(!value),
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    toBeInstanceOf: (Clazz: Function) => assertInstanceOf(value, Clazz),
-    toBeNull: (value: unknown) => assert.ok(value === null),
-    toBeTruthy: () => assert.ok(value),
-    toBeUndefined: () => assert.ok(value === undefined),
-    toEqual: (other: unknown) => assert.deepEqual(value, other),
-    toHaveBeenCalled: () => assert.ok((value as Mocked | undefined)?.mock?.calls.length),
-    toHaveBeenCalledTimes: (count: number) => assert.equal((value as Mocked | undefined)?.mock?.calls.length, count),
-    toHaveBeenCalledWith: (...args: unknown[]) => assertSomeCallHasArgs((value as Mocked | undefined), args),
-    toHaveBeenLastCalledWith: (...args: unknown[]) => assertCallHasArgs((value as Mocked | undefined)?.mock?.calls.at(-1), args),
-    toHaveLength: (length: number) => assert.equal((value as unknown[] | undefined)?.length, length),
-    toMatch: (check: string | RegExp) => assertMatchStr(value, check),
-    toMatchObject: (check: object) => assertMatchObj(value, check),
-    toThrow: (message?: RegExp | Error | string) => assert.throws(value as () => unknown, message && { message } as Error)
-  }, stubExpectFn);
-  const withMatch = enhanceObj(withBase, {
+  const rootMatchers = {
     // eslint-disable-next-line @typescript-eslint/ban-types
     any: (Clazz: Function) => new Matcher(assertInstanceOf, Clazz),
     anything: () => new Matcher(assertNonNullish),
@@ -242,10 +210,41 @@ export function expect () {
     objectContaining: (check: object) => new Matcher(assertMatchObj, check),
     stringContaining: (check: string) => new Matcher(assertIncludes, [check, String]),
     stringMatching: (check: string | RegExp) => new Matcher(assertMatchStr, check)
-  });
-  const withStub = enhanceObj(withMatch, stubExpect);
+  };
 
   return {
-    expect: withStub
+    expect: enhanceObj(enhanceObj((value: unknown) =>
+      enhanceObj({
+        not: enhanceObj({
+          toBe: (other: unknown) => assert.notStrictEqual(value, other),
+          toBeDefined: () => assert.ok(value === undefined),
+          toBeNull: (value: unknown) => assert.ok(value !== null),
+          toBeUndefined: () => assert.ok(value !== undefined),
+          toEqual: (other: unknown) => assert.notDeepEqual(value, other),
+          toHaveBeenCalled: () => assert.ok(!(value as Mocked | undefined)?.mock?.calls.length),
+          toThrow: (message?: RegExp | Error | string) => assert.doesNotThrow(value as () => unknown, message && { message } as Error)
+        }, stubExpectFnNot),
+        rejects: enhanceObj({
+          toThrow: (message?: RegExp | Error | string) => assert.rejects(value as Promise<unknown>, message && { message } as Error)
+        }, stubExpectFnRejects),
+        resolves: enhanceObj({}, stubExpectFnResolves),
+        toBe: (other: unknown) => assert.strictEqual(value, other),
+        toBeDefined: () => assert.ok(value !== undefined),
+        toBeFalsy: () => assert.ok(!value),
+        // eslint-disable-next-line @typescript-eslint/ban-types
+        toBeInstanceOf: (Clazz: Function) => assertInstanceOf(value, Clazz),
+        toBeNull: (value: unknown) => assert.ok(value === null),
+        toBeTruthy: () => assert.ok(value),
+        toBeUndefined: () => assert.ok(value === undefined),
+        toEqual: (other: unknown) => assert.deepEqual(value, other),
+        toHaveBeenCalled: () => assert.ok((value as Mocked | undefined)?.mock?.calls.length),
+        toHaveBeenCalledTimes: (count: number) => assert.equal((value as Mocked | undefined)?.mock?.calls.length, count),
+        toHaveBeenCalledWith: (...args: unknown[]) => assertSomeCallHasArgs((value as Mocked | undefined), args),
+        toHaveBeenLastCalledWith: (...args: unknown[]) => assertCallHasArgs((value as Mocked | undefined)?.mock?.calls.at(-1), args),
+        toHaveLength: (length: number) => assert.equal((value as unknown[] | undefined)?.length, length),
+        toMatch: (check: string | RegExp) => assertMatchStr(value, check),
+        toMatchObject: (check: object) => assertMatchObj(value, check),
+        toThrow: (message?: RegExp | Error | string) => assert.throws(value as () => unknown, message && { message } as Error)
+      }, stubExpectFn), rootMatchers), stubExpect)
   };
 }
