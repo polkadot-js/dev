@@ -9,7 +9,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import ts from 'typescript';
 
-import { EXT_TS_REGEX, WITH_CACHED } from './common.js';
+import { EXT_TS_REGEX, loaderOptions } from './common.js';
 
 /** @typedef {{ format: 'commonjs' | 'module'; shortCircuit?: boolean; source: string }} Loaded */
 
@@ -39,7 +39,7 @@ export async function load (url, context, nextLoad) {
       )
       : null;
 
-    if (WITH_CACHED && compiledFile && fs.existsSync(compiledFile)) {
+    if (loaderOptions.isCached && compiledFile && fs.existsSync(compiledFile)) {
       const compiled = fs.readFileSync(compiledFile, 'utf-8');
 
       if (compiled.includes(sourceHash)) {
@@ -68,7 +68,7 @@ export async function load (url, context, nextLoad) {
       fileName: fileURLToPath(url)
     });
 
-    if (WITH_CACHED && compiledFile) {
+    if (loaderOptions.isCached && compiledFile) {
       const compiledDir = path.dirname(compiledFile);
 
       if (!fs.existsSync(compiledDir)) {
