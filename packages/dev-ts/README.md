@@ -44,4 +44,4 @@ We started off with a basic `swc` loader (after swapping the infrastructure from
 
 Since then we just swapped to using base `tsc` everywhere (for all builds) and may look at changing again (swc, esbuild. etc...) in the future. So effectively having a single loader, while re-inventing the wheel somewhat (since there seems to be a _lot_ of options available) allows us to just keep the loader compiling options fully aligned with what TS -> JS output approach we take.
 
-With all that said - it does what it says on the tin in the polkadot-js environment, aligns fully with the overall configs we use here, compiles to ESM and has minimal dependencies that doesn't add bloat. In most cases you would probably be better off with one of the loaders/registration approaches linked in the first paragraph.
+It meets our requirements: aligns fully with the overall configs we accross polkadot-js, compiles to ESM (no CJS used when testing/running) and has minimal dependencies that doesn't add bloat. In most cases you would probably be better off with one of the loaders/registration approaches linked in the first paragraph.
