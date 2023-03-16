@@ -12,5 +12,11 @@
 // This is a bit of a pain since in dev mode we now need latest-ish Node
 // versions, but at the same time we don't want to build against multiple APIs)
 
+import { loaderOptions } from './common.js';
+
+const url = new URL(import.meta.url);
+
+loaderOptions.isCached = url.searchParams.get('isCached') === 'true';
+
 export { load } from './loader.js';
 export { resolve } from './resolver.js';

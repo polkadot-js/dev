@@ -18,7 +18,8 @@
   "version": "0.72.5",
   "main": "./index.js",
   "exports": {
-    ".": "./src/index.js"
+    ".": "./src/index.js",
+    "./cached": "./src/cached.js"
   },
   "dependencies": {
     "json5": "^2.2.3",
