@@ -4,7 +4,9 @@
     "baseUrl": "./packages"
   },
   "include": [
-    "packages/**/*"
+    "packages/**/src/**/*",
+    "packages/**/config/**/*",
+    "packages/**/scripts/**/*"
   ],
   "exclude": [
     "**/node_modules/**/*"

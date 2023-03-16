@@ -1,9 +1,7 @@
-// Copyright 2017-2023 @polkadot/dev authors & contributors
+// Copyright 2017-2023 @polkadot/dev-ts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// @ts-check
-
-/// <reference types ="@polkadot/dev-test/node.d.ts" />
+/// <reference types="@polkadot/dev-test/globals.d.ts" />
 
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
@@ -126,11 +124,11 @@ describe('resolveExtBare', () => {
 describe('resolveAliases', () => {
   it('resolves packageInfo', () => {
     expect(
-      resolveAlias('@polkadot/dev/packageInfo', ROOT_URL)
+      resolveAlias('@polkadot/dev-ts/packageInfo', ROOT_URL)
     ).toEqual({
       format: 'module',
       shortCircuit: true,
-      url: pathToFileURL(`${SRC_PATH}/packageInfo.ts`).href
+      url: pathToFileURL('packages/dev-ts/src/packageInfo.ts').href
     });
   });
 });

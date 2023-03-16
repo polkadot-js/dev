@@ -1,17 +1,15 @@
-// Copyright 2017-2023 @polkadot/dev authors & contributors
+// Copyright 2017-2023 @polkadot/dev-test authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// @ts-check
-
-/// <reference types ="./node" />
-
-import { enhanceObj, stubObj, warnObj } from './util.cjs';
+import { enhanceObj, stubObj, warnObj } from './util.js';
 
 describe('enhanceObj', () => {
   it('extends objects with non-existing values', () => {
     const test = enhanceObj(
-      { a: () => 1 },
-      { b: () => 2 },
+      enhanceObj(
+        { a: () => 1 },
+        { b: () => 2 }
+      ),
       { c: () => 3 }
     );
 
@@ -22,8 +20,10 @@ describe('enhanceObj', () => {
 
   it('does not override existing values', () => {
     const test = enhanceObj(
-      { a: 0, b: () => 1 },
-      { a: () => 0, b: () => 2 },
+      enhanceObj(
+        { a: 0, b: () => 1 },
+        { a: () => 0, b: () => 2 }
+      ),
       { c: () => 2 }
     );
 
@@ -52,7 +52,7 @@ describe('stubObj', () => {
 });
 
 describe('warnObj', () => {
-  let spy;
+  let spy: ReturnType<typeof jest.spyOn>;
 
   beforeEach(() => {
     spy = jest.spyOn(console, 'warn');

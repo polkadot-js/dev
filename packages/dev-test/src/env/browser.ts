@@ -1,9 +1,7 @@
-// Copyright 2017-2023 @polkadot/dev authors & contributors
+// Copyright 2017-2023 @polkadot/dev-test authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// @ts-check
-
-const { JSDOM } = require('jsdom');
+import { JSDOM } from 'jsdom';
 
 /**
  * Export a very basic JSDom environment - this is just enough so we have
@@ -13,7 +11,7 @@ const { JSDOM } = require('jsdom');
  * using window you should run the tests inside that context, instead of just
  * blindly relying on the globals as we do here
  */
-function browser () {
+export function browser () {
   const { window } = new JSDOM('', { url: 'http://localhost' });
 
   return {
@@ -100,5 +98,3 @@ function browser () {
     window
   };
 }
-
-module.exports = { browser };

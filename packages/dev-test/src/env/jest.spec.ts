@@ -1,13 +1,8 @@
-// Copyright 2017-2023 @polkadot/dev authors & contributors
+// Copyright 2017-2023 @polkadot/dev-test authors & contributors
 // SPDX-License-Identifier: Apache-2.0
-
-// @ts-check
-
-/// <reference types ="../node" />
 
 describe('jest', () => {
   it('has been enhanced', () => {
-    // @ts-expect-error setTimeout is defined with a noop
     expect(jest.setTimeout).toBeDefined();
   });
 
@@ -30,7 +25,7 @@ describe('jest', () => {
     });
 
     it('works with .toHaveBeenCalledWith', () => {
-      const sum = jest.fn((a, b) => a + b);
+      const sum = jest.fn((a: number, b: number) => a + b);
 
       expect(sum(1, 2)).toBe(3);
 
@@ -47,7 +42,7 @@ describe('jest', () => {
     });
 
     it('works with .toHaveBeenCalledWith & expect.objectContaining', () => {
-      const test = jest.fn((a, b) => !!a && !!b);
+      const test = jest.fn((a: unknown, b: unknown) => !!a && !!b);
 
       test({ a: 123, b: 'test' }, null);
 
@@ -97,7 +92,7 @@ describe('jest', () => {
   describe('.spyOn', () => {
     it('works on .toHaveBeenCalled', () => {
       const obj = {
-        add: (a, b) => a + b
+        add: (a: number, b: number) => a + b
       };
       const spy = jest.spyOn(obj, 'add');
 
@@ -108,7 +103,7 @@ describe('jest', () => {
 
     it('allows .mockImplementation', () => {
       const obj = {
-        add: (a, b) => a + b
+        add: (a: number, b: number) => a + b
       };
       const spy = jest.spyOn(obj, 'add');
 
@@ -125,7 +120,7 @@ describe('jest', () => {
 
     it('allows .mockImplementationOnce', () => {
       const obj = {
-        add: (a, b) => a + b
+        add: (a: number, b: number) => a + b
       };
       const spy = jest.spyOn(obj, 'add');
 
@@ -142,7 +137,7 @@ describe('jest', () => {
 
     it('allows resets', () => {
       const obj = {
-        add: (a, b) => a + b
+        add: (a: number, b: number) => a + b
       };
       const spy = jest.spyOn(obj, 'add');
 
@@ -159,7 +154,7 @@ describe('jest', () => {
 
     it('allows restores', () => {
       const obj = {
-        add: (a, b) => a + b
+        add: (a: number, b: number) => a + b
       };
       const spy = jest.spyOn(obj, 'add');
 

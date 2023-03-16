@@ -1,7 +1,7 @@
-// Copyright 2017-2023 @polkadot/dev authors & contributors
+// Copyright 2017-2023 @polkadot/dev-ts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// @ts-check
+import type { LoaderOptions } from './types.js';
 
 import path from 'node:path';
 import process from 'node:process';
@@ -28,9 +28,5 @@ export const EXT_JS_REGEX = /\.jsx?$/;
 /** RegEx for json files (as actually aliassed in polkadot-js) */
 export const EXT_JSON_REGEX = /\.json$/;
 
-/**
- * Options for loader config
- *
- * @type {{ isCached?: boolean }}
- **/
-export const loaderOptions = {};
+/** Options for loader config */
+export const loaderOptions: LoaderOptions = {};

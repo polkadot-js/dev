@@ -1,7 +1,7 @@
-// Copyright 2017-2023 @polkadot/dev authors & contributors
+// Copyright 2017-2023 @polkadot/dev-ts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// @ts-check
+import type { Alias } from './types.js';
 
 import JSON5 from 'json5';
 import fs from 'node:fs';
@@ -10,21 +10,25 @@ import { pathToFileURL } from 'node:url';
 
 import { CWD_PATH, CWD_URL, MOD_PATH } from './common.js';
 
-/** @typedef {{ filter: string[]; isWildcard?: boolean; path: string, url: URL }} Alias */
-/** @typedef {{ compilerOptions?: { baseUrl?: string; paths?: Record<string, string[]> }; extends?: string }} JsonConfig */
-/** @typedef {{ paths: Record<string, string[]>; url?: URL }} PartialConfig */
+interface JsonConfig {
+  compilerOptions?: {
+    baseUrl?: string;
+    paths?: Record<string, string[]>;
+  };
+  extends?: string;
+}
+
+interface PartialConfig {
+  paths: Record<string, string[]>;
+  url?: URL;
+}
 
 /**
  * @internal
  *
  * Extracts the (relevant) tsconfig info, also using extends
- *
- * @param {string} [currentPath]
- * @param {string} [tsconfig]
- * @param {string} [fromFile]
- * @returns {PartialConfig}
  **/
-function readConfigFile (currentPath = CWD_PATH, tsconfig = 'tsconfig.json', fromFile) {
+function readConfigFile (currentPath = CWD_PATH, tsconfig = 'tsconfig.json', fromFile?: string): PartialConfig {
   const configFile = path.join(currentPath, tsconfig);
 
   if (!fs.existsSync(configFile)) {
@@ -34,12 +38,8 @@ function readConfigFile (currentPath = CWD_PATH, tsconfig = 'tsconfig.json', fro
   }
 
   try {
-    /** @type {JsonConfig} */
-    const { compilerOptions, extends: parentConfig } = JSON5.parse(fs.readFileSync(configFile, 'utf8'));
-
-    // ensure that the basePath does point to an actual directory
-    /** @type {URL | undefined} */
-    let url;
+    const { compilerOptions, extends: parentConfig } = JSON5.parse<JsonConfig>(fs.readFileSync(configFile, 'utf8'));
+    let url: URL | undefined;
 
     if (compilerOptions?.baseUrl) {
       const configDir = path.dirname(configFile);
@@ -69,7 +69,7 @@ function readConfigFile (currentPath = CWD_PATH, tsconfig = 'tsconfig.json', fro
 
     return { paths, url };
   } catch (error) {
-    console.error(`FATAL: Error parsing ${configFile}:: ${error.message}`);
+    console.error(`FATAL: Error parsing ${configFile}:: ${(error as Error).message}`);
 
     throw error;
   }
@@ -79,10 +79,8 @@ function readConfigFile (currentPath = CWD_PATH, tsconfig = 'tsconfig.json', fro
  * @internal
  *
  * Retrieves all TS aliases definitions
- *
- * @returns {Alias[]}
  **/
-function extractAliases () {
+function extractAliases (): Alias[] {
   const { paths, url = CWD_URL } = readConfigFile();
 
   return Object

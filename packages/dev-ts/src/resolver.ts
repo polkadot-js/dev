@@ -1,7 +1,5 @@
-// Copyright 2017-2023 @polkadot/dev authors & contributors
+// Copyright 2017-2023 @polkadot/dev-ts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
-
-// @ts-check
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -10,9 +8,17 @@ import { fileURLToPath, pathToFileURL, URL } from 'node:url';
 import { CWD_URL, EXT_JS_REGEX, EXT_JSON_REGEX, EXT_TS_ARRAY, EXT_TS_REGEX } from './common.js';
 import { tsAliases } from './tsconfig.js';
 
-/** @typedef {{ parentURL: string }} Context */
-/** @typedef {{ format: 'commonjs' | 'json' | 'module'; shortCircuit?: boolean; url: string }} Resolved */
-/** @typedef {(specifier: string, context: Context) => Resolved | undefined} Resolver */
+interface Resolved {
+  format: 'commonjs' | 'json' | 'module';
+  shortCircuit?: boolean;
+  url: string;
+}
+
+interface ResolverContext {
+  parentURL?: string;
+}
+
+type Resolver = (specifier: string, context: ResolverContext) => Resolved | undefined;
 
 /**
  * @internal
@@ -20,11 +26,8 @@ import { tsAliases } from './tsconfig.js';
  * From a specified URL, extract the actual full path as well as the
  * directory that this path reflects (either equivalent to path or the
  * root of the file being referenced)
- *
- * @param {URL | string} parentUrl
- * @returns {{ parentDir: string, parentPath: string }}
  */
-function getParentPath (parentUrl) {
+function getParentPath (parentUrl: URL | string): { parentDir: string; parentPath: string; } {
   const parentPath = fileURLToPath(parentUrl);
 
   return {
@@ -39,12 +42,8 @@ function getParentPath (parentUrl) {
  * @internal
  *
  * Resolve fully-specified imports with extensions.
- *
- * @param {string} specifier
- * @param {URL | string} parentUrl
- * @returns {Resolved | undefined}
  **/
-export function resolveExtTs (specifier, parentUrl) {
+export function resolveExtTs (specifier: string, parentUrl: URL | string): Resolved | void {
   // handle .ts extensions directly
   if (EXT_TS_REGEX.test(specifier)) {
     return {
@@ -60,12 +59,8 @@ export function resolveExtTs (specifier, parentUrl) {
  *
  * Resolve fully-specified imports with extensions. Here we cater for the TS
  * mapping of import foo from './bar.js' where only './bar.ts' exists
- *
- * @param {string} specifier
- * @param {URL | string} parentUrl
- * @returns {Resolved | undefined}
  **/
-export function resolveExtJs (specifier, parentUrl) {
+export function resolveExtJs (specifier: string, parentUrl: URL | string): Resolved | void {
   // handle ts imports where import *.js -> *.ts
   // (unlike the ts resolution, we only cater for relative paths)
   if (specifier.startsWith('.') && EXT_JS_REGEX.test(specifier)) {
@@ -92,12 +87,8 @@ export function resolveExtJs (specifier, parentUrl) {
  * @internal
  *
  * Resolution for Json files. Generally these would be via path aliasing.
- *
- * @param {string} specifier
- * @param {URL | string} parentUrl
- * @returns {Resolved | undefined}
  */
-export function resolveExtJson (specifier, parentUrl) {
+export function resolveExtJson (specifier: string, parentUrl: URL | string): Resolved | void {
   if (specifier.startsWith('.') && EXT_JSON_REGEX.test(specifier)) {
     const { parentDir } = getParentPath(parentUrl);
     const jsonPath = path.join(parentDir, specifier);
@@ -123,12 +114,8 @@ export function resolveExtJson (specifier, parentUrl) {
  * ts (recommended) approach for using .js extensions inside the sources.
  * However, since we don't use this in the polkadot-js code, can kick this
  * down the line
- *
- * @param {string} specifier
- * @param {URL | string} parentUrl
- * @returns {Resolved | undefined}
  **/
-export function resolveExtBare (specifier, parentUrl) {
+export function resolveExtBare (specifier: string, parentUrl: URL | string): Resolved | void {
   if (specifier.startsWith('.')) {
     const { parentDir, parentPath } = getParentPath(parentUrl);
     const found = specifier === '.'
@@ -167,12 +154,8 @@ export function resolveExtBare (specifier, parentUrl) {
  * @internal
  *
  * Resolve anything that is not an alias
- *
- * @param {string} specifier
- * @param {URL | string} parentUrl
- * @returns {Resolved | undefined}
  **/
-export function resolveNonAlias (specifier, parentUrl) {
+export function resolveNonAlias (specifier: string, parentUrl: URL | string): Resolved | void {
   return (
     resolveExtTs(specifier, parentUrl) ||
     resolveExtJs(specifier, parentUrl) ||
@@ -185,13 +168,8 @@ export function resolveNonAlias (specifier, parentUrl) {
  * @internal
  *
  * Resolve TS alias mappings as defined in the tsconfig.json file
- *
- * @param {string} specifier
- * @param {URL | string} parentUrl
- * @param {typeof tsAliases} [aliases]
- * @returns {Resolved | undefined}
  **/
-export function resolveAlias (specifier, parentUrl, aliases = tsAliases) {
+export function resolveAlias (specifier: string, parentUrl: URL | string, aliases = tsAliases): Resolved | void {
   const parts = specifier.split(/[\\/]/);
   const found = aliases
     // return a [filter, [...partIndex]] mapping
@@ -234,12 +212,8 @@ export function resolveAlias (specifier, parentUrl, aliases = tsAliases) {
  * 3. The we try to do resolution via TS aliases
  *
  * ... finally, try the next loader in the chain
- *
- * @param {string} specifier
- * @param {Context} context
- * @param {Resolver} nextResolve
  */
-export function resolve (specifier, context, nextResolve) {
+export function resolve (specifier: string, context: ResolverContext, nextResolve: Resolver) {
   const parentUrl = context.parentURL || CWD_URL;
 
   return (

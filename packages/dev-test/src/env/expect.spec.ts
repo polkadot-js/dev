@@ -1,9 +1,5 @@
-// Copyright 2017-2023 @polkadot/dev authors & contributors
+// Copyright 2017-2023 @polkadot/dev-test authors & contributors
 // SPDX-License-Identifier: Apache-2.0
-
-// @ts-check
-
-/// <reference types ="../node" />
 
 describe('expect', () => {
   it('has been decorated', () => {
@@ -12,7 +8,6 @@ describe('expect', () => {
 
   it('throws on unimplemented', () => {
     expect(
-      // @ts-expect-error This is a known unimplemented function
       () => expect(true).not.toReturnWith()
     ).toThrow('expect(...).not.toReturnWith has not been implemented');
   });

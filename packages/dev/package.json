@@ -75,7 +75,6 @@
     "eslint-plugin-sort-destructure-keys": "^1.5.0",
     "gh-pages": "^5.0.0",
     "gh-release": "^7.0.2",
-    "jsdom": "^21.1.1",
     "madge": "^6.0.0",
     "rollup": "^3.19.1",
     "rollup-plugin-cleanup": "^3.2.1",
