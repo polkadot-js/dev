@@ -3,6 +3,7 @@
 
 // @ts-check
 
+import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { pathToFileURL } from 'node:url';
@@ -27,3 +28,17 @@ export const EXT_JS_REGEX = /\.jsx?$/;
 
 /** RegEx for json files (as actually aliassed in polkadot-js) */
 export const EXT_JSON_REGEX = /\.json$/;
+
+let hasPjsDev = false;
+
+try {
+  /** @type {{ devDependencies?: Record<string, string> }} */
+  const { devDependencies } = JSON.parse(fs.readFileSync(path.join(CWD_PATH, 'package.json'), 'utf-8'));
+
+  hasPjsDev = !!devDependencies && Object.keys(devDependencies).some((k) => k === '@polkadot/dev');
+} catch {
+  // ignore, false above
+}
+
+/** This determines whether we should cache results (currently only @polkadot/dev built) */
+export const WITH_CACHED = hasPjsDev;
