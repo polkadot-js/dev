@@ -210,10 +210,10 @@ export function expect () {
       toBeUndefined: () => assert.ok(value !== undefined),
       toEqual: (other: unknown) => assert.notDeepEqual(value, other),
       toHaveBeenCalled: () => assert.ok(!(value as Mocked | undefined)?.mock?.calls.length),
-      toThrow: (message: RegExp | Error | string) => assert.doesNotThrow(value as () => unknown, message && { message } as Error)
+      toThrow: (message?: RegExp | Error | string) => assert.doesNotThrow(value as () => unknown, message && { message } as Error)
     }, stubExpectFnNot),
     rejects: enhanceObj({
-      toThrow: (message: RegExp | Error | string) => assert.rejects(value as Promise<unknown>, message && { message } as Error)
+      toThrow: (message?: RegExp | Error | string) => assert.rejects(value as Promise<unknown>, message && { message } as Error)
     }, stubExpectFnRejects),
     resolves: enhanceObj({}, stubExpectFnResolves),
     toBe: (other: unknown) => assert.strictEqual(value, other),
@@ -232,7 +232,7 @@ export function expect () {
     toHaveLength: (length: number) => assert.equal((value as unknown[] | undefined)?.length, length),
     toMatch: (check: string | RegExp) => assertMatchStr(value, check),
     toMatchObject: (check: object) => assertMatchObj(value, check),
-    toThrow: (message: RegExp | Error | string) => assert.throws(value as () => unknown, message && { message } as Error)
+    toThrow: (message?: RegExp | Error | string) => assert.throws(value as () => unknown, message && { message } as Error)
   }, stubExpectFn);
   const withMatch = enhanceObj(withBase, {
     // eslint-disable-next-line @typescript-eslint/ban-types

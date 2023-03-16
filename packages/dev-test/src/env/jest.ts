@@ -1,7 +1,7 @@
 // Copyright 2017-2023 @polkadot/dev-test authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Mock, MockFn, Spy } from '../types.js';
+/* eslint-disable @typescript-eslint/ban-types */
 
 import { mock } from 'node:test';
 
@@ -25,10 +25,10 @@ const mockStub = stubObj('jest.fn()', MOCK_KEYS_STUB);
  * This adds the mockReset and mockRestore functionality to any
  * spy or mock function
  **/
-function extendMock (spy: MockFn): Spy & Mock {
-  const withMock = enhanceObj(spy, {
-    mockImplementation: (fn: (...args: unknown[]) => unknown) => spy.mock.mockImplementation(fn),
-    mockImplementationOnce: (fn: (...args: unknown[]) => unknown) => spy.mock.mockImplementationOnce(fn),
+function extendMock (spy: ReturnType<typeof mock['fn']>) {
+  const withMock = enhanceObj(spy as Function, {
+    mockImplementation: <F extends Function = Function> (fn: F) => spy.mock.mockImplementation(fn),
+    mockImplementationOnce: <F extends Function = Function> (fn: F) => spy.mock.mockImplementationOnce(fn),
     mockReset: () => spy.mock.resetCalls(),
     mockRestore: () => spy.mock.restore()
   });
@@ -44,9 +44,9 @@ function extendMock (spy: MockFn): Spy & Mock {
  **/
 export function jest () {
   const withBase = {
-    fn: (fn: (...args: unknown[]) => unknown) => extendMock(mock.fn(fn)),
+    fn: <F extends Function = Function> (fn: F) => extendMock(mock.fn(fn)),
     restoreAllMocks: () => mock.reset(),
-    spyOn: (obj: object, key: never) => extendMock(mock.method(obj, key))
+    spyOn: (obj: object, key: string) => extendMock(mock.method(obj, key as never))
   };
   const withWarn = enhanceObj(withBase, jestWarn);
   const withStub = enhanceObj(withWarn, jestStub);

@@ -1,8 +1,9 @@
 // Copyright 2017-2023 @polkadot/dev-test authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type BaseFn = (...args: any[]) => any;
+/* eslint-disable @typescript-eslint/ban-types */
+
+type StubFn = (...args: unknown[]) => unknown;
 
 type BaseObj = Record<string, unknown>;
 
@@ -12,20 +13,20 @@ type BaseObj = Record<string, unknown>;
  * Creates a replacer function which would extends a given object with the
  * named functions if they do not already exist on the object.
  */
-function createStubObjFn <A extends Record<string, string>, N extends readonly string[]> (stubKeyFn: (objName: string, fnName: string, alts?: A) => BaseFn) {
+function createStubObjFn <A extends Record<string, string>, N extends readonly string[]> (stubKeyFn: (objName: string, fnName: string, alts?: A) => StubFn) {
   return (objName: string, fnNames: N, alts?: A) =>
     fnNames.reduce((obj, fnName) => {
-      (obj as unknown as Record<string, BaseFn>)[fnName] ??= stubKeyFn(objName, fnName, alts);
+      (obj as unknown as Record<string, StubFn>)[fnName] ??= stubKeyFn(objName, fnName, alts);
 
       return obj;
-    }, {} as { [K in N[number]]: BaseFn } & { [K in keyof A]: BaseFn });
+    }, {} as { [K in N[number]]: StubFn } & { [K in keyof A]: StubFn });
 }
 
 /**
  * Extends an existing object with the additional function if they
  * are not already existing.
  */
-export function enhanceObj <T extends BaseObj | BaseFn, E extends BaseObj> (obj: T, adds: E): T & E {
+export function enhanceObj <T extends BaseObj | Function, E extends BaseObj> (obj: T, adds: E): T & E {
   Object
     .entries(adds)
     .forEach(([key, value]) => {

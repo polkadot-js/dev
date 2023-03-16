@@ -3,7 +3,6 @@
 
 describe('jest', () => {
   it('has been enhanced', () => {
-    // @ts-expect-error setTimeout is defined with a noop
     expect(jest.setTimeout).toBeDefined();
   });
 
@@ -43,7 +42,7 @@ describe('jest', () => {
     });
 
     it('works with .toHaveBeenCalledWith & expect.objectContaining', () => {
-      const test = jest.fn((a, b) => !!a && !!b);
+      const test = jest.fn((a: unknown, b: unknown) => !!a && !!b);
 
       test({ a: 123, b: 'test' }, null);
 

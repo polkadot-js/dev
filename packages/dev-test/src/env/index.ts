@@ -4,13 +4,14 @@
 import { browser } from './browser.js';
 import { expect } from './expect.js';
 import { jest } from './jest.js';
+import { lifecycle } from './lifecycle.js';
 import { suite } from './suite.js';
 
 /**
  * Exposes the jest-y environment via globals.
  */
 export function exposeEnv (isBrowser: boolean) {
-  [expect, jest, suite, isBrowser && browser].forEach((env) => {
+  [expect, jest, lifecycle, suite, isBrowser && browser].forEach((env) => {
     env && Object
       .entries(env())
       .forEach(([globalName, fn]) => {

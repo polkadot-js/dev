@@ -3,21 +3,32 @@
 
 /* eslint-disable no-var */
 
-import type { Describe, Expect, It, Jest, Lifecycle } from './types.js';
+import type { expect } from './env/expect.js';
+import type { jest } from './env/jest.js';
+import type { lifecycle } from './env/lifecycle.js';
+import type { suite } from './env/suite.js';
+
+type Expect = ReturnType<typeof expect>;
+
+type Jest = ReturnType<typeof jest>;
+
+type Lifecycle = ReturnType<typeof lifecycle>;
+
+type Suite = ReturnType<typeof suite>;
 
 declare global {
-  var after: Lifecycle;
+  var after: Lifecycle['after'];
   /** Jest-compatible alias for before */
-  var afterAll: Lifecycle;
-  var afterEach: Lifecycle;
-  var before: Lifecycle;
+  var afterAll: Lifecycle['afterAll'];
+  var afterEach: Lifecycle['afterEach'];
+  var before: Lifecycle['before'];
   /** Jest-compatible alias for after */
-  var beforeAll: Lifecycle;
-  var beforeEach: Lifecycle;
-  var describe: Describe;
-  var expect: Expect;
-  var it: It;
-  var jest: Jest;
+  var beforeAll: Lifecycle['beforeAll'];
+  var beforeEach: Lifecycle['beforeEach'];
+  var describe: Suite['describe'];
+  var expect: Expect['expect'];
+  var it: Suite['it'];
+  var jest: Jest['jest'];
 }
 
 export {};

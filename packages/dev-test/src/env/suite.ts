@@ -1,7 +1,7 @@
 // Copyright 2017-2023 @polkadot/dev-test authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { after, afterEach, before, beforeEach, describe, it } from 'node:test';
+import { describe, it } from 'node:test';
 
 import { enhanceObj } from '../util.js';
 
@@ -37,12 +37,6 @@ function createWrapper <T extends typeof describe | typeof it> (fn: T) {
  **/
 export function suite () {
   return {
-    after,
-    afterAll: after,
-    afterEach,
-    before,
-    beforeAll: before,
-    beforeEach,
     describe: createWrapper(describe),
     it: createWrapper(it)
   };
