@@ -8,13 +8,16 @@ It provides the following -
 2. `jest` functions, specifically `spyOn` (not comprehensive, some will error, some witll noop)
 3. `expect` functions (not comprehensive, caters for specific polkadot-js usage)
 
-Usage
+
+## Usage
+
+The entry points are different based on the environment you would like to operate in. For a browser-like environment,
 
 ```
 node --require @polkadot/dev-test/browser
 ```
 
-or
+or for a basical describe/expect/jest-only global environment
 
 ```
 node --require @polkadot/dev-test/node
