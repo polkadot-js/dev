@@ -1,4 +1,4 @@
-    1225	Jaco                          	Add missing json5 dep to dev-ts (#978)
+    1226	Jaco                          	Cleanup tsconfig file parsing (#979)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
