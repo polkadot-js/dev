@@ -24,7 +24,7 @@ Internally to the polkadot-js libraries, loader caching is used. This means that
 node --loader @polkadot/dev-ts/cached ...
 ```
 
-This is generally the suggested edafult, but it is only exposed via a different loader endpoint to ensure that users explicitly opt-in and not be suprised by "random output folders" being created.
+This is generally the suggested default, but it is only exposed via a different loader endpoint to ensure that users explicitly opt-in and not be suprised by "random output folders" being created.
 
 
 ## Caveats
