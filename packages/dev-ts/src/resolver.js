@@ -221,7 +221,7 @@ export function resolveAlias (specifier, parentUrl, aliases = tsAliases) {
     // do the actual un-aliased resolution
     return resolveNonAlias(
       `./${found.alias.path.replace('*', path.join(...parts.slice(found.alias.filter.length)))}`,
-      found.alias.baseParentUrl
+      found.alias.url
     );
   }
 }

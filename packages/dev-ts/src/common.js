@@ -11,7 +11,7 @@ import { pathToFileURL } from 'node:url';
 export const CWD_PATH = process.cwd();
 
 /** The cwd path we are being executed from in URL form */
-export const CWD_URL = pathToFileURL(`${CWD_PATH}/`).href;
+export const CWD_URL = pathToFileURL(`${CWD_PATH}/`);
 
 /** The root path to node_modules (assuming it is in the root) */
 export const MOD_PATH = path.join(CWD_PATH, 'node_modules');
