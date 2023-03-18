@@ -8,7 +8,6 @@
       "@polkadot/dev-test/*": ["dev-test/src/*"],
       "@polkadot/dev-ts/*": ["dev-ts/src/*.ts"]
     },
-    "resolveJsonModule": true,
-    "skipLibCheck": true
+    "resolveJsonModule": true
   }
 }

@@ -30,7 +30,9 @@ export function enhanceObj <T extends BaseObj | Function, E, K extends keyof T> 
 export function stubObj <N extends readonly string[], A> (objName: string, fnNames: N, alts?: A) {
   return fnNames.reduce((obj, fnName) => {
     (obj as unknown as Record<string, StubFn>)[fnName] ??= () => {
-      throw new Error(`${objName}.${fnName} has not been implemented${(alts as Record<string, string>)?.[fnName] ? ` (Use ${(alts as Record<string, string>)[fnName]} instead)` : ''}`);
+      const alt = (alts as Record<string, string>)?.[fnName];
+
+      throw new Error(`${objName}.${fnName} has not been implemented${alt ? ` (Use ${alt} instead)` : ''}`);
     };
 
     return obj;

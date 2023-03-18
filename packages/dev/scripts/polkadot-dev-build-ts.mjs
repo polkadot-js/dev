@@ -14,7 +14,7 @@ const RL_CONFIGS = ['js', 'mjs', 'cjs'].map((e) => `rollup.config.${e}`);
 
 console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
-// We need at least es2020 for dynamic imports. Aligns with node/ts/loader & config/tsconfig
+// We need at least es2020 for dynamic imports. Aligns with dev-ts/loader & config/tsconfig
 // Node 14 === es2020, Node 16 === es2021, Node 18 === es2022
 // https://github.com/tsconfig/bases/blob/d699759e29cfd5f6ab0fab9f3365c7767fca9787/bases/node14.json#L8
 const TARGET_TSES = ts.ScriptTarget.ES2020;
