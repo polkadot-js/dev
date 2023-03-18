@@ -27,7 +27,6 @@
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
-    "noPropertyAccessFromIndexSignature": true,
     "noUncheckedIndexedAccess": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
@@ -37,8 +36,9 @@
     /**
      * These appear in strictest, however we don't (yet) use them
      */
-    // "exactOptionalPropertyTypes": true,
     // "checkJs": true,
+    // "exactOptionalPropertyTypes": true,
+    // "noPropertyAccessFromIndexSignature": true,
 
     /**
      * These are deprecated by ts 5.0+, but still appeared in strictest
