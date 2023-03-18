@@ -100,7 +100,8 @@ module.exports = {
       caughtErrors: 'all',
       caughtErrorsIgnorePattern: '^_',
       destructuredArrayIgnorePattern: '^_',
-      vars: 'all'
+      vars: 'all',
+      varsIgnorePattern: '^_'
     }],
     '@typescript-eslint/type-annotation-spacing': 'error',
     'arrow-parens': ['error', 'always'],
