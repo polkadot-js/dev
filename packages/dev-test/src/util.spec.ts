@@ -35,7 +35,7 @@ describe('enhanceObj', () => {
 
 describe('stubObj', () => {
   it('has entries throwing for unimplemented values', () => {
-    const test = stubObj('obj', ['a', 'b']);
+    const test = stubObj('obj', ['a', 'b'] as const);
 
     expect(
       () => test.b()
@@ -43,7 +43,7 @@ describe('stubObj', () => {
   });
 
   it('has entries throwing for unimplemented values (w/ alternatives)', () => {
-    const test = stubObj('obj', ['a', 'b'], { b: 'obj.a' });
+    const test = stubObj('obj', ['a', 'b'] as const, { b: 'obj.a' });
 
     expect(
       () => test.b()
@@ -63,7 +63,7 @@ describe('warnObj', () => {
   });
 
   it('has entries warning on unimplemented', () => {
-    const test = warnObj('obj', ['a', 'b']);
+    const test = warnObj('obj', ['a', 'b'] as const);
 
     test.b();
 

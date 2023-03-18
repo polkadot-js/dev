@@ -85,6 +85,7 @@ function extractAliases (): Alias[] {
 
   return Object
     .entries(paths)
+    .filter((kv): kv is [string, [string, ...string[]]] => !!kv[1].length)
     // TODO The path value is an array - we only handle the first entry in there,
     // this is a possible fix into the future if it is ever an issue... (may have
     // some impacts on the actual loader where only 1 alias is retrieved)
@@ -93,7 +94,7 @@ function extractAliases (): Alias[] {
       const isWildcard = filter.at(-1) === '*';
 
       // ensure that when we have wilcards specified, they always occur in the last position
-      if ((filter.filter((f) => f === '*').length !== (isWildcard ? 1 : 0)) && key) {
+      if (filter.filter((f) => f.includes('*')).length !== (isWildcard ? 1 : 0)) {
         throw new Error(`FATAL: Wildcards in tsconfig.json path entries are only supported in the last position. Invalid ${key}: ${path} mapping`);
       }
 

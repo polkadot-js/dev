@@ -169,7 +169,7 @@ export function resolveNonAlias (specifier: string, parentUrl: URL | string): Re
  *
  * Resolve TS alias mappings as defined in the tsconfig.json file
  **/
-export function resolveAlias (specifier: string, parentUrl: URL | string, aliases = tsAliases): Resolved | void {
+export function resolveAlias (specifier: string, _parentUrl: URL | string, aliases = tsAliases): Resolved | void {
   const parts = specifier.split(/[\\/]/);
   const found = aliases
     // return a [filter, [...partIndex]] mapping
