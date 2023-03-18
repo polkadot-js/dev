@@ -94,7 +94,15 @@ module.exports = {
     // specific overrides
     '@typescript-eslint/no-non-null-assertion': 'error',
     // ts itself checks and ignores those starting with _, align the linting
-    '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+    '@typescript-eslint/no-unused-vars': ['error', {
+      args: 'all',
+      argsIgnorePattern: '^_',
+      caughtErrors: 'all',
+      caughtErrorsIgnorePattern: '^_',
+      destructuredArrayIgnorePattern: '^_',
+      vars: 'all',
+      varsIgnorePattern: '^_'
+    }],
     '@typescript-eslint/type-annotation-spacing': 'error',
     'arrow-parens': ['error', 'always'],
     'brace-style': ['error', '1tbs'],
