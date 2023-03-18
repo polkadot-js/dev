@@ -1,4 +1,4 @@
-    1233	Jaco                          	Cleanup tsconfig base (& align with strictest) (#986)
+    1234	Jaco                          	Disable noPropertyAccessFromIndexSignature (future) (#987)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
