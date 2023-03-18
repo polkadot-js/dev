@@ -80,8 +80,7 @@ function witeJson (path, json) {
   fs.writeFileSync(path, `${JSON.stringify(json, null, 2)}\n`);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function adjustJsPath (pkgCwd, pkgJson, dir, f, isDeclare) {
+function adjustJsPath (_pkgCwd, _pkgJson, dir, f, _isDeclare) {
   if (f.startsWith('.')) {
     if (f.endsWith('.js') || f.endsWith('.json')) {
       // ignore, these are already fully-specified
