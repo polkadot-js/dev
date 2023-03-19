@@ -22,10 +22,8 @@ const TARGET_TSES = ts.ScriptTarget.ES2021;
 const TARGET_NODE = '16';
 
 const IGNORE_IMPORTS = [
-  // node
-  'crypto', 'fs', 'os', 'path', 'process', 'readline', 'util',
   // node (new-style)
-  'node:assert', 'node:child_process', 'node:crypto', 'node:fs', 'node:os', 'node:path', 'node:process', 'node:test', 'node:url', 'node:util',
+  'node:assert', 'node:child_process', 'node:crypto', 'node:fs', 'node:os', 'node:path', 'node:process', 'node:readline', 'node:test', 'node:url', 'node:util',
   // other
   '@testing-library/react',
   'react', 'react-native', 'styled-components'
