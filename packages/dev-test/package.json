@@ -2,8 +2,9 @@
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "bugs": "https://github.com/polkadot-js/dev/issues",
   "description": "A basic test-functions-as-global library on top of node:test",
+  "engine-strict": true,
   "engines": {
-    "node": ">=14"
+    "node": ">=16"
   },
   "homepage": "https://github.com/polkadot-js/dev/tree/master/packages/dev-test#readme",
   "license": "Apache-2.0",

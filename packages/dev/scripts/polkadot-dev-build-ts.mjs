@@ -708,6 +708,7 @@ function orderPackageJson (repoPath, dir, json) {
   json.engines = {
     node: `>=${TARGET_NODE}`
   };
+  json['engine-strict'] = true;
 
   // sort the object
   const sorted = sortJson(json);

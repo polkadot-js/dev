@@ -1,6 +1,7 @@
 {
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "bugs": "https://github.com/polkadot-js/dev/issues",
+  "engine-strict": true,
   "engines": {
     "node": ">=16"
   },

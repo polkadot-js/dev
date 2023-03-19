@@ -2,8 +2,9 @@
   "author": "Jaco Greeff <jacogr@gmail.com>",
   "bugs": "https://github.com/polkadot-js/dev/issues",
   "description": "An TS -> ESM loader for Node >= 16.12",
+  "engine-strict": true,
   "engines": {
-    "node": ">=14"
+    "node": ">=16"
   },
   "homepage": "https://github.com/polkadot-js/dev/tree/master/packages/dev-ts#readme",
   "license": "Apache-2.0",
