@@ -18,6 +18,7 @@ console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 // Node 14 === es2020, Node 16 === es2021, Node 18 === es2022
 // https://github.com/tsconfig/bases/blob/d699759e29cfd5f6ab0fab9f3365c7767fca9787/bases/node16.json#L8
 const TARGET_TSES = ts.ScriptTarget.ES2021;
+// NOTE Technically we need Node 16.12 since we use --loader in our node:test environment
 const TARGET_NODE = '16';
 
 const IGNORE_IMPORTS = [
