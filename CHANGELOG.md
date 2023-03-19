@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.72.1
+
+- Split `@polkadot/dev-ts` & `@polkadot/dev-test` packages
+
+
 ## 0.71.1
 
 - Ensure all `src/*` has `.js` extensions (as per ESM, eslint rules, build updates)

@@ -14,10 +14,10 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.71.6",
+  "version": "0.72.15",
   "versions": {
-    "git": "0.71.6",
-    "npm": "0.71.6"
+    "git": "0.72.15",
+    "npm": "0.72.15"
   },
   "workspaces": [
     "packages/*"
@@ -30,13 +30,14 @@
     "docs": "polkadot-dev-build-docs",
     "lint": "polkadot-dev-run-lint",
     "postinstall": "./packages/dev/scripts/polkadot-dev-yarn-only.mjs",
-    "test": "yarn build && yarn test:one",
-    "test:one": "polkadot-dev-run-test --env browser"
+    "test": "yarn build && polkadot-dev-run-test --dev-packages-build --env browser"
   },
   "devDependencies": {
-    "@polkadot/dev": "workspace:packages/dev"
+    "@polkadot/dev": "workspace:packages/dev",
+    "@polkadot/dev-test": "workspace:packages/dev-test",
+    "@polkadot/dev-ts": "workspace:packages/dev-ts"
   },
   "resolutions": {
-    "typescript": "^4.9.5"
+    "typescript": "^5.0.2"
   }
 }

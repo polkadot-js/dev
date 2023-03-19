@@ -194,7 +194,7 @@ function npmPublish () {
       execSync(`npm publish --quiet --access public ${tag}`);
 
       break;
-    } catch (error) {
+    } catch {
       if (count < 5) {
         const end = Date.now() + 15000;
 

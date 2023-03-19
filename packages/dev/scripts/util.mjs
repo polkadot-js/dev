@@ -28,7 +28,7 @@ export const GITHUB_USER = 'github-actions[bot]';
 export const GITHUB_MAIL = '41898282+github-actions[bot]@users.noreply.github.com';
 
 /** Paths that we generally building to (catch-all for possible usages) */
-export const PATHS_BUILD = ['', '-cjs', '-esm'].reduce((r, a) => r.concat(['', '-babel', '-esbuild', '-swc', '-tsc'].map((b) => `${b}${a}`)), ['-deno', '-docs', '-wasm']).sort();
+export const PATHS_BUILD = ['', '-cjs', '-esm'].reduce((r, a) => r.concat(['', '-babel', '-esbuild', '-swc', '-tsc'].map((b) => `${b}${a}`)), ['-deno', '-docs', '-loader', '-wasm']).sort();
 
 /** Paths that are generally excluded from source operations */
 export const PATHS_EXCL = ['node_modules', ...PATHS_BUILD.map((e) => `build${e}`)];
@@ -110,9 +110,10 @@ export function execSync (cmd, noLog) {
  *
  * @param {string} cmd
  * @param {boolean} [noLog]
+ * @param {string} [loaderPath]
  **/
-export function execNodeTsSync (cmd, noLog) {
-  execSync(`${process.execPath} --no-warnings --enable-source-maps --loader @polkadot/dev/node/ts ${cmd}`, noLog);
+export function execNodeTsSync (cmd, noLog, loaderPath = '@polkadot/dev-ts/cached') {
+  execSync(`${process.execPath} --no-warnings --enable-source-maps --loader ${loaderPath} ${cmd}`, noLog);
 }
 
 /**

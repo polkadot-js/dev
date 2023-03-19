@@ -85,12 +85,24 @@ module.exports = {
     // required as 'off' since typescript-eslint has own versions
     indent: 'off',
     'no-use-before-define': 'off',
+    'no-unused-vars': 'off',
+    // our own indentation
     '@typescript-eslint/indent': ['error', 2],
     // rules from semistandard (don't include it, has standard dep version mismatch)
     semi: [2, 'always'],
     'no-extra-semi': 2,
     // specific overrides
     '@typescript-eslint/no-non-null-assertion': 'error',
+    // ts itself checks and ignores those starting with _, align the linting
+    '@typescript-eslint/no-unused-vars': ['error', {
+      args: 'all',
+      argsIgnorePattern: '^_',
+      caughtErrors: 'all',
+      caughtErrorsIgnorePattern: '^_',
+      destructuredArrayIgnorePattern: '^_',
+      vars: 'all',
+      varsIgnorePattern: '^_'
+    }],
     '@typescript-eslint/type-annotation-spacing': 'error',
     'arrow-parens': ['error', 'always'],
     'brace-style': ['error', '1tbs'],

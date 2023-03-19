@@ -15,7 +15,7 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.71.6",
+  "version": "0.72.15",
   "bin": {
     "polkadot-ci-ghact-build": "./scripts/polkadot-ci-ghact-build.mjs",
     "polkadot-ci-ghact-docs": "./scripts/polkadot-ci-ghact-docs.mjs",
@@ -43,14 +43,13 @@
   },
   "exports": {
     "./config/*": "./config/*",
-    "./node/test/browser": "./src/node/test/browser.cjs",
-    "./node/test/node": "./src/node/test/node.cjs",
-    "./node/ts": "./src/node/ts/index.mjs",
     "./rootJs/dynamic.mjs": "./src/rootJs/dynamic.mjs",
     "./rootJs/testJson.json": "./src/rootJs/testJson.json"
   },
   "dependencies": {
     "@eslint/js": "^8.36.0",
+    "@polkadot/dev-test": "^0.72.15",
+    "@polkadot/dev-ts": "^0.72.15",
     "@rollup/plugin-alias": "^4.0.3",
     "@rollup/plugin-commonjs": "^24.0.1",
     "@rollup/plugin-dynamic-import-vars": "^2.0.3",
@@ -58,8 +57,8 @@
     "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.0.1",
     "@rushstack/eslint-patch": "^1.2.0",
-    "@typescript-eslint/eslint-plugin": "^5.54.1",
-    "@typescript-eslint/parser": "^5.54.1",
+    "@typescript-eslint/eslint-plugin": "^5.55.0",
+    "@typescript-eslint/parser": "^5.55.0",
     "eslint": "^8.36.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-import-resolver-node": "^0.3.7",
@@ -76,28 +75,27 @@
     "eslint-plugin-sort-destructure-keys": "^1.5.0",
     "gh-pages": "^5.0.0",
     "gh-release": "^7.0.2",
-    "jsdom": "^21.1.0",
     "madge": "^6.0.0",
     "rollup": "^3.19.1",
     "rollup-plugin-cleanup": "^3.2.1",
     "tap-parser": "^12.0.1",
     "tslib": "^2.5.0",
-    "typescript": "^4.9.5",
-    "webpack": "^5.76.1",
+    "typescript": "^5.0.2",
+    "webpack": "^5.76.2",
     "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^4.11.1",
+    "webpack-dev-server": "^4.13.0",
     "webpack-merge": "^5.8.0",
     "webpack-subresource-integrity": "^5.2.0-rc.1",
     "yargs": "^17.7.1"
   },
   "devDependencies": {
     "@testing-library/react": "^14.0.0",
-    "@types/node": "^18.15.0",
+    "@types/node": "^18.15.3",
     "@types/react": "^18.0.28",
     "@types/styled-components": "^5.1.26",
     "@types/yargs": "^17.0.22",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "styled-components": "^5.3.8"
+    "styled-components": "^5.3.9"
   }
 }

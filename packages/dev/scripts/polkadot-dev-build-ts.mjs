@@ -14,7 +14,7 @@ const RL_CONFIGS = ['js', 'mjs', 'cjs'].map((e) => `rollup.config.${e}`);
 
 console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
-// We need at least es2020 for dynamic imports. Aligns with node/ts/loader & config/tsconfig
+// We need at least es2020 for dynamic imports. Aligns with dev-ts/loader & config/tsconfig
 // Node 14 === es2020, Node 16 === es2021, Node 18 === es2022
 // https://github.com/tsconfig/bases/blob/d699759e29cfd5f6ab0fab9f3365c7767fca9787/bases/node16-strictest-esm.combined.json#L11
 const TARGET_TSES = ts.ScriptTarget.ES2021;
@@ -80,8 +80,7 @@ function witeJson (path, json) {
   fs.writeFileSync(path, `${JSON.stringify(json, null, 2)}\n`);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function adjustJsPath (pkgCwd, pkgJson, dir, f, isDeclare) {
+function adjustJsPath (_pkgCwd, _pkgJson, dir, f, _isDeclare) {
   if (f.startsWith('.')) {
     if (f.endsWith('.js') || f.endsWith('.json')) {
       // ignore, these are already fully-specified
@@ -954,7 +953,7 @@ async function buildJs (compileType, repoPath, dir, locals) {
     fs.writeFileSync(path.join(process.cwd(), 'src/packageInfo.ts'), `${genHeader}\nexport const packageInfo = { name: '${name}', path: 'auto', type: 'auto', version: '${version}' };\n`);
 
     if (!name.startsWith('@polkadot/x-')) {
-      if (name !== '@polkadot/util' && name !== '@polkadot/dev') {
+      if (name !== '@polkadot/util' && !name.startsWith('@polkadot/dev')) {
         const detectOther = path.join(process.cwd(), 'src/detectOther.ts');
 
         if (!fs.existsSync(detectOther)) {

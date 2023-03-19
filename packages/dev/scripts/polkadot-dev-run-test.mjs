@@ -23,11 +23,17 @@ const filters = [];
 const filtersExcl = {};
 const filtersIncl = {};
 let testEnv = 'node';
+let isDev = false;
 
 for (let i = 0; i < args.length; i++) {
   if (args[i].startsWith('-')) {
     switch (args[i]) {
-      // environment, not passed-htrough
+      // when running inside a dev environment, specifically @polkadot/dev
+      case '--dev-packages-build':
+        isDev = true;
+        break;
+
+      // environment, not passed-through
       case '--env':
         if (!['browser', 'node'].includes(args[++i])) {
           throw new Error(`Invalid --env ${args[i]}, expected 'browser' or 'node'`);
@@ -136,10 +142,15 @@ if (files.length === 0) {
   exitFatal(`No files matching *.{${EXT_A.join(', ')}}.{${EXT_B.join(', ')}} found${filters.length ? ` (filtering on ${filters.join(', ')})` : ''}`);
 }
 
-const cliArgs = [...cmd, ...files].join(' ');
-
 try {
-  execNodeTsSync(`--require @polkadot/dev/node/test/${testEnv} ${nodeFlags.join(' ')} ${importPath('@polkadot/dev/scripts/polkadot-exec-node-test.mjs')} ${cliArgs}`);
+  const cliArgs = [...cmd, ...files].join(' ');
+  const allFlags = `${nodeFlags.join(' ')} ${importPath('@polkadot/dev/scripts/polkadot-exec-node-test.mjs')} ${cliArgs}`;
+
+  if (isDev) {
+    execNodeTsSync(`--require ./packages/dev-test/build/cjs/${testEnv}.js ${allFlags}`, false, './packages/dev-ts/build/cached.js');
+  } else {
+    execNodeTsSync(`--require @polkadot/dev-test/${testEnv} ${allFlags}`);
+  }
 } catch {
   process.exit(1);
 }

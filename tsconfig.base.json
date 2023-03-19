@@ -2,12 +2,12 @@
   "extends": "@polkadot/dev/config/tsconfig.json",
   "compilerOptions": {
     "composite": true,
-    "moduleResolution": "nodenext",
     "paths": {
       "@polkadot/dev/types": ["dev/src/types.ts"],
-      "@polkadot/dev/*": ["dev/src/*"]
+      "@polkadot/dev/*": ["dev/src/*"],
+      "@polkadot/dev-test/*": ["dev-test/src/*"],
+      "@polkadot/dev-ts/*": ["dev-ts/src/*.ts"]
     },
-    "resolveJsonModule": true,
-    "skipLibCheck": true
+    "resolveJsonModule": true
   }
 }

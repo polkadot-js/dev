@@ -1,6 +1,8 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+/// <reference types="@polkadot/dev-test/globals.d.ts" />
+
 import { fireEvent, render, screen } from '@testing-library/react';
 import { strict as assert } from 'node:assert';
 import React from 'react';
