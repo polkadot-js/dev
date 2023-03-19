@@ -570,6 +570,7 @@ __metadata:
     madge: ^6.0.0
     react: ^18.2.0
     react-dom: ^18.2.0
+    react-is: ^18.2.0
     rollup: ^3.19.1
     rollup-plugin-cleanup: ^3.2.1
     styled-components: ^5.3.9
@@ -578,7 +579,7 @@ __metadata:
     typescript: ^5.0.2
     webpack: ^5.76.2
     webpack-cli: ^5.0.1
-    webpack-dev-server: ^4.13.0
+    webpack-dev-server: ^4.13.1
     webpack-merge: ^5.8.0
     webpack-subresource-integrity: ^5.2.0-rc.1
     yargs: ^17.7.1
@@ -7059,6 +7060,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-is@npm:^18.2.0":
+  version: 18.2.0
+  resolution: "react-is@npm:18.2.0"
+  checksum: e72d0ba81b5922759e4aff17e0252bd29988f9642ed817f56b25a3e217e13eea8a7f2322af99a06edb779da12d5d636e9fda473d620df9a3da0df2a74141d53e
+  languageName: node
+  linkType: hard
+
 "react@npm:^18.2.0":
   version: 18.2.0
   resolution: "react@npm:18.2.0"
@@ -8712,9 +8720,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:^4.13.0":
-  version: 4.13.0
-  resolution: "webpack-dev-server@npm:4.13.0"
+"webpack-dev-server@npm:^4.13.1":
+  version: 4.13.1
+  resolution: "webpack-dev-server@npm:4.13.1"
   dependencies:
     "@types/bonjour": ^3.5.9
     "@types/connect-history-api-fallback": ^1.3.5
@@ -8749,11 +8757,13 @@ __metadata:
   peerDependencies:
     webpack: ^4.37.0 || ^5.0.0
   peerDependenciesMeta:
+    webpack:
+      optional: true
     webpack-cli:
       optional: true
   bin:
     webpack-dev-server: bin/webpack-dev-server.js
-  checksum: 7546dd3b5a05f886209caf3c06265c717dea292e5a1a8e392bb8f1c9c58c7f87cc03daa0b92fa6eb56812c8c88304044bef923642e18c54b0a17ea233c02fdf4
+  checksum: f70611544b7d964a31eb3d934d7c2b376b97e6927a89e03b2e21cfa5812bb639625cd18fd350de1604ba6c455b324135523a894032f28c69d90d90682e4f3b7d
   languageName: node
   linkType: hard
 
