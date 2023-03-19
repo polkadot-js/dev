@@ -83,7 +83,7 @@
     "typescript": "^5.0.2",
     "webpack": "^5.76.2",
     "webpack-cli": "^5.0.1",
-    "webpack-dev-server": "^4.13.0",
+    "webpack-dev-server": "^4.13.1",
     "webpack-merge": "^5.8.0",
     "webpack-subresource-integrity": "^5.2.0-rc.1",
     "yargs": "^17.7.1"
@@ -96,6 +96,7 @@
     "@types/yargs": "^17.0.22",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-is": "^18.2.0",
     "styled-components": "^5.3.9"
   }
 }
