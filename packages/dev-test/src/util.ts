@@ -1,24 +1,33 @@
 // Copyright 2017-2023 @polkadot/dev-test authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-/* eslint-disable @typescript-eslint/ban-types */
-
-type StubFn = (...args: unknown[]) => unknown;
-
-type BaseObj = Record<string, unknown>;
+import type { BaseFn, BaseObj, StubFn } from './types.js';
 
 /**
  * Extends an existing object with the additional function if they
  * are not already existing.
  */
-export function enhanceObj <T extends BaseObj | Function, E, K extends keyof T> (obj: T, adds: E): T & Omit<E, K> {
+export function enhanceObj <T extends BaseObj | BaseFn, X> (obj: T, extra: X) {
   Object
-    .entries(adds as Record<string, unknown>)
+    .entries(extra as Record<string, unknown>)
     .forEach(([key, value]) => {
       (obj as Record<string, unknown>)[key] ??= value;
     });
 
-  return obj as T & Omit<E, K>;
+  return obj as T & Omit<X, keyof T>;
+}
+
+/**
+ * @internal
+ *
+ * A helper to create a stub object based wite the stub creator supplied
+ */
+function createStub <N extends readonly string[]> (keys: N, creator: (key: string) => StubFn) {
+  return keys.reduce<Record<string, StubFn>>((obj, key) => {
+    obj[key] ??= creator(key);
+
+    return obj;
+  }, {}) as unknown as { [K in N[number]]: StubFn };
 }
 
 /**
@@ -27,16 +36,12 @@ export function enhanceObj <T extends BaseObj | Function, E, K extends keyof T> 
  *
  * @type {StubObjFn}
  */
-export function stubObj <N extends readonly string[], A> (objName: string, fnNames: N, alts?: A) {
-  return fnNames.reduce((obj, fnName) => {
-    (obj as unknown as Record<string, StubFn>)[fnName] ??= () => {
-      const alt = (alts as Record<string, string>)?.[fnName];
+export function stubObj <N extends readonly string[]> (objName: string, keys: N, alts?: Record<string, string>) {
+  return createStub(keys, (key) => () => {
+    const alt = alts?.[key];
 
-      throw new Error(`${objName}.${fnName} has not been implemented${alt ? ` (Use ${alt} instead)` : ''}`);
-    };
-
-    return obj;
-  }, {} as { [K1 in N[number]]: StubFn });
+    throw new Error(`${objName}.${key} has not been implemented${alt ? ` (Use ${alt} instead)` : ''}`);
+  });
 }
 
 /**
@@ -45,12 +50,8 @@ export function stubObj <N extends readonly string[], A> (objName: string, fnNam
  *
  * @type {StubObjFn}
  */
-export function warnObj <N extends readonly string[]> (objName: string, fnNames: N) {
-  return fnNames.reduce((obj, fnName) => {
-    (obj as unknown as Record<string, StubFn>)[fnName] ??= () => {
-      console.warn(`${objName}.${fnName} has been implemented as a noop`);
-    };
-
-    return obj;
-  }, {} as { [K1 in N[number]]: StubFn });
+export function warnObj <N extends readonly string[]> (objName: string, keys: N) {
+  return createStub(keys, (key) => () => {
+    console.warn(`${objName}.${key} has been implemented as a noop`);
+  });
 }
