@@ -1,4 +1,4 @@
-    1239	Jaco                          	Bump deps (w/ missing react-is peer) (#992)
+    1240	Jaco                          	Bump deps (w/ dev-test cleanups) (#993)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
