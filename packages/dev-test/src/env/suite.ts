@@ -14,7 +14,7 @@ interface WrapOpts {
 /**
  * @internal
  *
- * Wraps either decribe or it with relevant .only, .skip, .todo & .each helpers,
+ * Wraps either describe or it with relevant .only, .skip, .todo & .each helpers,
  * shimming it into a Jest-compatible environment.
  *
  * @param {} fn
@@ -22,8 +22,9 @@ interface WrapOpts {
 function createWrapper <T extends typeof describe | typeof it> (fn: T) {
   const wrap = (opts: WrapOpts) => (name: string, exec: () => unknown, timeout?: number) => fn(name, timeout ? { ...opts, timeout } : opts, exec);
 
-  // Ensure that we have consistent helpers on the function
-  // (if not already applied)
+  // Ensure that we have consistent helpers on the function. These are not consistently
+  // applied accross all node:test versions, latest has all, so always apply ours.
+  // Instead of node:test options for e.g. timeout, we provide a Jest-compatible signature
   return enhanceObj(wrap({}), {
     only: wrap({ only: true }),
     skip: wrap({ skip: true }),
@@ -33,7 +34,7 @@ function createWrapper <T extends typeof describe | typeof it> (fn: T) {
 
 /**
  * This ensures that the describe and it functions match our actual usages.
- * This includes .only, .skip, .todo as well as .ech helpers
+ * This includes .only, .skip and .todo helpers (.each is not applied)
  **/
 export function suite () {
   return {
