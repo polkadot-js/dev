@@ -1,4 +1,4 @@
-    1241	Jaco                          	Apply (some) ts-check (w/ deps bumps) (#994)
+    1242	Jaco                          	Adjust test reporting for Node 18.15+ (#995)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
