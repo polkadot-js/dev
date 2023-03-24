@@ -7,7 +7,6 @@ import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { run } from 'node:test';
-import TapParser from 'tap-parser';
 
 console.time('\t elapsed :');
 
@@ -28,17 +27,10 @@ const stats = {
   total: 0
 };
 let logFile = null;
-let bail = false;
-let format = 'dot';
 let startAt = 0;
 
 for (let i = 0; i < args.length; i++) {
-  if (args[i] === '--bail') {
-    bail = true;
-  } else if (args[i] === '--format') {
-    i++;
-    format = args[i];
-  } else if (args[i] === '--log') {
+  if (args[i] === '--log') {
     i++;
     logFile = args[i];
   } else {
@@ -52,8 +44,11 @@ for (let i = 0; i < args.length; i++) {
  * Prints a single character on-screen with formatting.
  *
  * @param {string} ch
+ * @returns {string}
  */
 function output (ch) {
+  let result = '';
+
   if (stats.total % 100 === 0) {
     const now = performance.now();
 
@@ -65,16 +60,18 @@ function output (ch) {
     const m = (elapsed / 60) | 0;
     const s = (elapsed - (m * 60));
 
-    process.stdout.write(`\n ${`${m}:${s.toFixed(3).padStart(6, '0')}`.padStart(11)}  `);
+    result += `\n ${`${m}:${s.toFixed(3).padStart(6, '0')}`.padStart(11)}  `;
   } else if (stats.total % 10 === 0) {
-    process.stdout.write('  ');
+    result += '  ';
   } else if (stats.total % 5 === 0) {
-    process.stdout.write(' ');
+    result += ' ';
   }
 
   stats.total++;
 
-  process.stdout.write(ch);
+  result += ch;
+
+  return result;
 }
 
 /**
@@ -117,7 +114,7 @@ function indent (count, str = '', start = '') {
   }\n`;
 }
 
-function parseComplete () {
+function complete () {
   process.stdout.write('\n');
 
   let logError = '';
@@ -176,52 +173,67 @@ function parseComplete () {
   process.exit(stats.fail.length);
 }
 
+async function * reporter (source) {
+  for await (const { data, type } of source) {
+    switch (type) {
+      case 'test:coverage': {
+        break;
+      }
+
+      case 'test:diagnostic': {
+        stats.diag.push(
+          typeof data === 'string'
+            // Node v18
+            ? data
+            // Node v19
+            : data.file
+              ? `${data.file}:: ${data.message}`
+              : data.message
+        );
+        break;
+      }
+
+      case 'test:fail': {
+        stats.fail.push(data);
+        yield output('x');
+        break;
+      }
+
+      case 'test:pass': {
+        if (typeof data.skip !== 'undefined') {
+          stats.skip.push(data);
+          yield output('>');
+        } else if (typeof data.todo !== 'undefined') {
+          stats.todo.push(data);
+          yield output('!');
+        } else {
+          stats.pass.push(data);
+          yield output('·');
+        }
+
+        break;
+      }
+
+      case 'test:plan': {
+        break;
+      }
+
+      case 'test:start': {
+        break;
+      }
+
+      default: {
+        // Unhandled - should not gete here at all
+        break;
+      }
+    }
+  }
+
+  complete();
+}
+
 // 1hr default timeout ... just in-case something goes wrong on an
 // CI-like environment, don't expect this to be hit (never say never)
 run({ files, timeout: 3_600_000 })
-  .on('test:diagnostic', (r) => {
-    stats.diag.push(
-      typeof r === 'string'
-        // Node v18
-        ? r
-        // Node v19
-        : r.file
-          ? `${r.file}:: ${r.message}`
-          : r.message
-    );
-  })
-  .pipe(
-    format === 'dot'
-      ? new TapParser({ bail }, parseComplete)
-      // Ignore the comments for now - it is mostly timing and overlaps with
-      // the actual diagnostic information
-      //
-      // .on('comment', (r) => {
-      //   stats.comm.push(r);
-      // })
-      // .on('extra', (r) => {
-      //   stats.extr.push(r);
-      // })
-      //
-      // just in-case, we want these logged
-      //
-      // .on('bailout', (r) => console.error('bailout', r))
-      // .on('plan', (r) => console.error('plan', r))
-        .on('fail', (r) => {
-          stats.fail.push(r);
-          output('x');
-        })
-        .on('pass', (r) => {
-          stats.pass.push(r);
-          output('·');
-        })
-        .on('skip', (r) => {
-          stats.skip.push(r);
-          output('>');
-        })
-        .on('todo', (r) => {
-          stats.todo.push(r);
-          output('!');
-        })
-      : process.stdout
-  );
+  .compose(reporter)
+  .pipe(process.stdout);
