@@ -1,6 +1,8 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+/** @typedef {{ diag: string[]; total: number }} Stats */
+
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
@@ -13,6 +15,8 @@ const WITH_DEBUG = false;
 
 const args = process.argv.slice(2);
 const files = [];
+
+/** @type {Stats} */
 const stats = {
   comm: [],
   diag: [],
@@ -42,6 +46,13 @@ for (let i = 0; i < args.length; i++) {
   }
 }
 
+/**
+ * @internal
+ *
+ * Prints a single character on-screen with formatting.
+ *
+ * @param {string} ch
+ */
 function output (ch) {
   if (stats.total % 100 === 0) {
     const now = performance.now();
@@ -66,6 +77,16 @@ function output (ch) {
   process.stdout.write(ch);
 }
 
+/**
+ * @internal
+ *
+ * Performs an indent of the line (and containing lines) with the specific count
+ *
+ * @param {number} count
+ * @param {string} str
+ * @param {string} start
+ * @returns {string}
+ */
 function indent (count, str = '', start = '') {
   let pre = '\n';
 
