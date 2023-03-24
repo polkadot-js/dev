@@ -11,6 +11,7 @@ const EXT_A = ['spec', 'test'];
 const EXT_B = ['ts', 'tsx', 'js', 'jsx', 'cjs', 'mjs'];
 
 // The actual extensions we are looking for
+/** @type {string[]} */
 const EXTS = EXT_A.reduce((exts, s) => exts.concat(...EXT_B.map((e) => `.${s}.${e}`)), []);
 
 const args = process.argv.slice(2);
