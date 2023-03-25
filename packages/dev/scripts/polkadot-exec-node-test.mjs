@@ -192,6 +192,12 @@ function complete () {
 // 1hr default timeout ... just in-case something goes wrong on an
 // CI-like environment, don't expect this to be hit (never say never)
 run({ files, timeout: 3_600_000 })
+  // this ensures that the stream is switched to flowing mode
+  // (which is needed to ensure the end event actually fires)
+  .on('data', () => undefined)
+  // the stream is done, print the summary and exit
+  .on('end', () => complete())
+  // handlers for all the known TestStream events from Node
   .on('test:coverage', () => undefined)
   .on('test:diagnostic', (data) => {
     stats.diag.push(
@@ -221,18 +227,4 @@ run({ files, timeout: 3_600_000 })
     }
   })
   .on('test:plan', () => undefined)
-  .on('test:start', () => undefined)
-  // eslint-disable-next-line require-yield
-  .compose(async function * reporter (source) {
-    for await (const _ of source) {
-      // nothing handled via events - this is for compat with earlier
-      // than 18.15 versions where the actual handler is actually a
-      // TAP stream, and not an event stream. Via this empty reporter
-      // we cater for both variations (events are used to extract info)
-    }
-
-    // We complete here since both end & close doesn't seem
-    // to be emitted. So we do this after the event stream
-    // completes
-    complete();
-  });
+  .on('test:start', () => undefined);
