@@ -192,7 +192,6 @@ function complete () {
 // 1hr default timeout ... just in-case something goes wrong on an
 // CI-like environment, don't expect this to be hit (never say never)
 run({ files, timeout: 3_600_000 })
-  .on('close', () => complete())
   .on('test:coverage', () => undefined)
   .on('test:diagnostic', (data) => {
     stats.diag.push(
@@ -232,5 +231,8 @@ run({ files, timeout: 3_600_000 })
       // we cater for both variations (events are used to extract info)
     }
 
+    // We complete here since both end & close doesn't seem
+    // to be emitted. So we do this after the event stream
+    // completes
     complete();
   });
