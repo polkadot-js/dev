@@ -138,6 +138,7 @@ function complete () {
 
       process.stdout.write(item);
     } else if (r.diag) {
+      // This for for pre Node 18.15
       item += indent(1, [...r.fullname.split('\n'), r.name].filter((s) => !!s).join('\n'), 'x ');
       item += indent(2, `${r.diag.failureType} / ${r.diag.code}`);
       item += indent(2, r.diag.error);
