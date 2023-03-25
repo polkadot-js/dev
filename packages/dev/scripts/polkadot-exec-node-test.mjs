@@ -44,7 +44,6 @@ for (let i = 0; i < args.length; i++) {
  * Prints a single character on-screen with formatting.
  *
  * @param {string} ch
- * @returns {string}
  */
 function output (ch) {
   let result = '';
@@ -71,7 +70,7 @@ function output (ch) {
 
   result += ch;
 
-  return result;
+  process.stdout.write(result);
 }
 
 /**
@@ -190,67 +189,48 @@ function complete () {
   process.exit(stats.fail.length);
 }
 
-async function * reporter (source) {
-  for await (const { data, type } of source) {
-    switch (type) {
-      case 'test:coverage': {
-        break;
-      }
-
-      case 'test:diagnostic': {
-        stats.diag.push(
-          typeof data === 'string'
-            // Node v18
-            ? data
-            // Node v19
-            : data.file
-              ? `${data.file}:: ${data.message}`
-              : data.message
-        );
-        break;
-      }
-
-      case 'test:fail': {
-        stats.fail.push(data);
-        yield output('x');
-        break;
-      }
-
-      case 'test:pass': {
-        if (typeof data.skip !== 'undefined') {
-          stats.skip.push(data);
-          yield output('>');
-        } else if (typeof data.todo !== 'undefined') {
-          stats.todo.push(data);
-          yield output('!');
-        } else {
-          stats.pass.push(data);
-          yield output('·');
-        }
-
-        break;
-      }
-
-      case 'test:plan': {
-        break;
-      }
-
-      case 'test:start': {
-        break;
-      }
-
-      default: {
-        // Unhandled - should not gete here at all
-        break;
-      }
-    }
-  }
-
-  complete();
-}
-
 // 1hr default timeout ... just in-case something goes wrong on an
 // CI-like environment, don't expect this to be hit (never say never)
 run({ files, timeout: 3_600_000 })
-  .compose(reporter)
-  .pipe(process.stdout);
+  .on('close', () => complete())
+  .on('test:coverage', () => undefined)
+  .on('test:diagnostic', (data) => {
+    stats.diag.push(
+      typeof data === 'string'
+        // Node v18
+        ? data
+        // Node v19
+        : data.file
+          ? `${data.file}:: ${data.message}`
+          : data.message
+    );
+  })
+  .on('test:fail', (data) => {
+    stats.fail.push(data);
+    output('x');
+  })
+  .on('test:pass', (data) => {
+    if (typeof data.skip !== 'undefined') {
+      stats.skip.push(data);
+      output('>');
+    } else if (typeof data.todo !== 'undefined') {
+      stats.todo.push(data);
+      output('!');
+    } else {
+      stats.pass.push(data);
+      output('·');
+    }
+  })
+  .on('test:plan', () => undefined)
+  .on('test:start', () => undefined)
+  // eslint-disable-next-line require-yield
+  .compose(async function * reporter (source) {
+    for await (const _ of source) {
+      // nothing handled via events - this is for compat with earlier
+      // than 18.15 versions where the actual handler is actually a
+      // TAP stream, and not an event stream. Via this empty reporter
+      // we cater for both variations (events are used to extract info)
+    }
+
+    complete();
+  });
