@@ -192,6 +192,8 @@ function complete () {
   process.exit(stats.fail.length);
 }
 
+let lastFilename = '';
+
 // 1hr default timeout ... just in-case something goes wrong on an
 // CI-like environment, don't expect this to be hit (never say never)
 run({ files, timeout: 3_600_000 })
@@ -203,15 +205,24 @@ run({ files, timeout: 3_600_000 })
   // handlers for all the known TestStream events from Node
   .on('test:coverage', () => undefined)
   .on('test:diagnostic', (data) => {
-    stats.diag.push(
-      typeof data === 'string'
-        // Node v18
-        ? data
-        // Node v19
-        : data.file
-          ? `${data.file}:: ${data.message}`
-          : data.message
-    );
+    if (typeof data === 'string') {
+      // Node.js pre 18.15
+      stats.diag.push(data);
+    } else if (data.file && data.file.includes('@polkadot/dev/scripts')) {
+      // ignore, these are internal
+    } else {
+      if (lastFilename !== data.file) {
+        lastFilename = data.file;
+
+        if (lastFilename) {
+          stats.diag.push(`\n${lastFilename}::\n`);
+        } else {
+          stats.diag.push('\n');
+        }
+      }
+
+      stats.diag.push(`\t${data.message.split('\n').join('\n\t')}`);
+    }
   })
   .on('test:fail', (data) => {
     stats.fail.push(data);
