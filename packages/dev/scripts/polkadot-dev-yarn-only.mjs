@@ -2,7 +2,9 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-if (process.env.npm_execpath.includes('yarn')) {
+// @ts-check
+
+if (process.env.npm_execpath?.includes('yarn')) {
   process.exit(0);
 }
 

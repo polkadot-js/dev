@@ -10,12 +10,12 @@ import { suite } from './suite.js';
 /**
  * Exposes the jest-y environment via globals.
  */
-export function exposeEnv (isBrowser: boolean) {
+export function exposeEnv (isBrowser: boolean): void {
   [expect, jest, lifecycle, suite, isBrowser && browser].forEach((env) => {
     env && Object
       .entries(env())
-      .forEach(([globalName, fn]) => {
-        globalThis[globalName as 'undefined'] ??= fn;
+      .forEach(([key, fn]) => {
+        globalThis[key as 'undefined'] ??= fn;
       });
   });
 }

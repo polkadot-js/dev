@@ -16,7 +16,7 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.72.15",
+  "version": "0.72.25",
   "main": "./index.js",
   "exports": {
     "./globals.d.ts": "./src/globals.d.ts"
@@ -26,6 +26,6 @@
     "tslib": "^2.5.0"
   },
   "devDependencies": {
-    "@types/jsdom": "^21.1.0"
+    "@types/jsdom": "^21.1.1"
   }
 }

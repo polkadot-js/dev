@@ -689,6 +689,49 @@ function sortJson (json) {
     .reduce((all, [k, v]) => ({ ...all, [k]: v }), {});
 }
 
+/**
+ * @internal
+ *
+ * Splits a engines version, i.e. >=xx(.yy) into
+ * the major/minor/patch parts
+ *
+ * @param {string} [ver]
+ * @returns {[number, number, number]]
+ */
+function engineVersionSplit (ver) {
+  const parts = (ver || '>=0').replace('>=', '').split('.');
+
+  return [parseInt(parts[0] || '0', 10), parseInt(parts[1] || '0', 10), parseInt(parts[2] || '0', 10)];
+}
+
+/**
+ * @internal
+ *
+ * Adjusts the engine setting, highest of current and requested
+ *
+ * @param {string} [currVer]
+ * @returns {string}
+ */
+function getEnginesVer (currVer) {
+  const nodeVer = engineVersionSplit(TARGET_NODE);
+  const jsonVer = engineVersionSplit(currVer);
+
+  if (
+    (nodeVer[0] > jsonVer[0]) || (
+      (nodeVer[0] === jsonVer[0]) && (
+        (nodeVer[1] > jsonVer[1]) || (
+          (nodeVer[1] === jsonVer[1]) &&
+          (nodeVer[2] > jsonVer[2])
+        )
+      )
+    )
+  ) {
+    return `>=${TARGET_NODE}`;
+  }
+
+  return currVer;
+}
+
 function orderPackageJson (repoPath, dir, json) {
   json.bugs = `https://github.com/${repoPath}/issues`;
   json.homepage = `https://github.com/${repoPath}${dir ? `/tree/master/packages/${dir}` : ''}#readme`;
@@ -705,7 +748,7 @@ function orderPackageJson (repoPath, dir, json) {
   };
   json.sideEffects = json.sideEffects || false;
   json.engines = {
-    node: `>=${TARGET_NODE}`
+    node: getEnginesVer(json.engines?.node)
   };
   json['engine-strict'] = true;
 

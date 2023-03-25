@@ -3,7 +3,7 @@
   "bugs": "https://github.com/polkadot-js/dev/issues",
   "engine-strict": true,
   "engines": {
-    "node": ">=16"
+    "node": ">=18.14"
   },
   "homepage": "https://github.com/polkadot-js/dev#readme",
   "license": "Apache-2.0",
@@ -15,10 +15,10 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.72.15",
+  "version": "0.72.25",
   "versions": {
-    "git": "0.72.15",
-    "npm": "0.72.15"
+    "git": "0.72.25",
+    "npm": "0.72.25"
   },
   "workspaces": [
     "packages/*"

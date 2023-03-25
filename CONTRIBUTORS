@@ -1,4 +1,4 @@
-    1238	Jaco                          	Re-adjust vars ignore pattern (#991)
+    1248	Jaco                          	Don't clobber engines req. > target (#1001)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)

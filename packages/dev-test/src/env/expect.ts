@@ -1,17 +1,15 @@
 // Copyright 2017-2023 @polkadot/dev-test authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import type { AnyFn, WithMock } from '../types.js';
+
 import { strict as assert } from 'node:assert';
 
 import { enhanceObj, stubObj } from '../util.js';
 
 type AssertMatchFn = (value: unknown) => void;
 
-interface Mocked {
-  mock?: {
-    calls: { arguments: unknown[] }[]
-  }
-}
+type Mocked = Partial<WithMock<AnyFn>>;
 
 // logged via Object.keys(expect).sort()
 const EXPECT_KEYS = ['addEqualityTesters', 'addSnapshotSerializer', 'any', 'anything', 'arrayContaining', 'assertions', 'closeTo', 'extend', 'extractExpectedAssertionsErrors', 'getState', 'hasAssertions', 'not', 'objectContaining', 'setState', 'stringContaining', 'stringMatching', 'toMatchInlineSnapshot', 'toMatchSnapshot', 'toThrowErrorMatchingInlineSnapshot', 'toThrowErrorMatchingSnapshot'] as const;

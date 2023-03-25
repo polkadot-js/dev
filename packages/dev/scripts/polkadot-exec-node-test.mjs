@@ -1,11 +1,12 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+/** @typedef {{ diag: string[]; total: number }} Stats */
+
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { run } from 'node:test';
-import TapParser from 'tap-parser';
 
 console.time('\t elapsed :');
 
@@ -13,6 +14,8 @@ const WITH_DEBUG = false;
 
 const args = process.argv.slice(2);
 const files = [];
+
+/** @type {Stats} */
 const stats = {
   comm: [],
   diag: [],
@@ -24,16 +27,12 @@ const stats = {
   total: 0
 };
 let logFile = null;
-let bail = false;
-let format = 'dot';
 let startAt = 0;
+let bail = false;
 
 for (let i = 0; i < args.length; i++) {
   if (args[i] === '--bail') {
     bail = true;
-  } else if (args[i] === '--format') {
-    i++;
-    format = args[i];
   } else if (args[i] === '--log') {
     i++;
     logFile = args[i];
@@ -42,7 +41,16 @@ for (let i = 0; i < args.length; i++) {
   }
 }
 
+/**
+ * @internal
+ *
+ * Prints a single character on-screen with formatting.
+ *
+ * @param {string} ch
+ */
 function output (ch) {
+  let result = '';
+
   if (stats.total % 100 === 0) {
     const now = performance.now();
 
@@ -54,18 +62,30 @@ function output (ch) {
     const m = (elapsed / 60) | 0;
     const s = (elapsed - (m * 60));
 
-    process.stdout.write(`\n ${`${m}:${s.toFixed(3).padStart(6, '0')}`.padStart(11)}  `);
+    result += `\n ${`${m}:${s.toFixed(3).padStart(6, '0')}`.padStart(11)}  `;
   } else if (stats.total % 10 === 0) {
-    process.stdout.write('  ');
+    result += '  ';
   } else if (stats.total % 5 === 0) {
-    process.stdout.write(' ');
+    result += ' ';
   }
 
   stats.total++;
 
-  process.stdout.write(ch);
+  result += ch;
+
+  process.stdout.write(result);
 }
 
+/**
+ * @internal
+ *
+ * Performs an indent of the line (and containing lines) with the specific count
+ *
+ * @param {number} count
+ * @param {string} str
+ * @param {string} start
+ * @returns {string}
+ */
 function indent (count, str = '', start = '') {
   let pre = '\n';
 
@@ -96,7 +116,7 @@ function indent (count, str = '', start = '') {
   }\n`;
 }
 
-function parseComplete () {
+function complete () {
   process.stdout.write('\n');
 
   let logError = '';
@@ -106,7 +126,19 @@ function parseComplete () {
 
     let item = '';
 
-    if (r.diag) {
+    if (r.details) {
+      item += indent(1, [r.file, r.name].filter((s) => !!s).join('\n'), 'x ');
+      item += indent(2, `${r.details.error.failureType} / ${r.details.error.code}`);
+      item += indent(2, r.details.error.cause.message);
+
+      // we don't add the stack to the log-to-file below
+      logError += item;
+
+      item += indent(2, r.details.error.cause.stack);
+
+      process.stdout.write(item);
+    } else if (r.diag) {
+      // This for for pre Node 18.15
       item += indent(1, [...r.fullname.split('\n'), r.name].filter((s) => !!s).join('\n'), 'x ');
       item += indent(2, `${r.diag.failureType} / ${r.diag.code}`);
       item += indent(2, r.diag.error);
@@ -152,55 +184,66 @@ function parseComplete () {
     console.error();
   }
 
+  if (stats.total === 0) {
+    console.error('FATAL: No tests executed');
+    console.error();
+    process.exit(1);
+  }
+
   process.exit(stats.fail.length);
 }
+
+let lastFilename = '';
 
 // 1hr default timeout ... just in-case something goes wrong on an
 // CI-like environment, don't expect this to be hit (never say never)
 run({ files, timeout: 3_600_000 })
-  .on('test:diagnostic', (r) => {
-    stats.diag.push(
-      typeof r === 'string'
-        // Node v18
-        ? r
-        // Node v19
-        : r.file
-          ? `${r.file}:: ${r.message}`
-          : r.message
-    );
+  // this ensures that the stream is switched to flowing mode
+  // (which is needed to ensure the end event actually fires)
+  .on('data', () => undefined)
+  // the stream is done, print the summary and exit
+  .on('end', () => complete())
+  // handlers for all the known TestStream events from Node
+  .on('test:coverage', () => undefined)
+  .on('test:diagnostic', (data) => {
+    if (typeof data === 'string') {
+      // Node.js pre 18.15
+      stats.diag.push(data);
+    } else if (data.file && data.file.includes('@polkadot/dev/scripts')) {
+      // ignore, these are internal
+    } else {
+      if (lastFilename !== data.file) {
+        lastFilename = data.file;
+
+        if (lastFilename) {
+          stats.diag.push(`\n${lastFilename}::\n`);
+        } else {
+          stats.diag.push('\n');
+        }
+      }
+
+      stats.diag.push(`\t${data.message.split('\n').join('\n\t')}`);
+    }
   })
-  .pipe(
-    format === 'dot'
-      ? new TapParser({ bail }, parseComplete)
-      // Ignore the comments for now - it is mostly timing and overlaps with
-      // the actual diagnostic information
-      //
-      // .on('comment', (r) => {
-      //   stats.comm.push(r);
-      // })
-      // .on('extra', (r) => {
-      //   stats.extr.push(r);
-      // })
-      //
-      // just in-case, we want these logged
-      //
-      // .on('bailout', (r) => console.error('bailout', r))
-      // .on('plan', (r) => console.error('plan', r))
-        .on('fail', (r) => {
-          stats.fail.push(r);
-          output('x');
-        })
-        .on('pass', (r) => {
-          stats.pass.push(r);
-          output('·');
-        })
-        .on('skip', (r) => {
-          stats.skip.push(r);
-          output('>');
-        })
-        .on('todo', (r) => {
-          stats.todo.push(r);
-          output('!');
-        })
-      : process.stdout
-  );
+  .on('test:fail', (data) => {
+    stats.fail.push(data);
+    output('x');
+
+    if (bail) {
+      complete();
+    }
+  })
+  .on('test:pass', (data) => {
+    if (typeof data.skip !== 'undefined') {
+      stats.skip.push(data);
+      output('>');
+    } else if (typeof data.todo !== 'undefined') {
+      stats.todo.push(data);
+      output('!');
+    } else {
+      stats.pass.push(data);
+      output('·');
+    }
+  })
+  .on('test:plan', () => undefined)
+  .on('test:start', () => undefined);

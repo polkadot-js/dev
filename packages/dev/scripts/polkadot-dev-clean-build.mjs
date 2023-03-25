@@ -12,6 +12,14 @@ const DIRS = PATHS_BUILD.map((d) => `build${d}`);
 
 console.log('$ polkadot-dev-clean-build', process.argv.slice(2).join(' '));
 
+/**
+ * @internal
+ *
+ * Retrieves all the files containing tsconfig.*.tsbuildinfo contained withing the directory
+ *
+ * @param {string} dir
+ * @returns {string[]}
+ */
 function getPaths (dir) {
   if (!fs.existsSync(dir)) {
     return [];
@@ -28,6 +36,13 @@ function getPaths (dir) {
     }, DIRS.map((p) => path.join(dir, p)));
 }
 
+/**
+ * @internal
+ *
+ * Removes all the specified directories
+ *
+ * @param {string[]} dirs
+ */
 function cleanDirs (dirs) {
   dirs.forEach((d) => rimrafSync(d));
 }
