@@ -700,15 +700,40 @@ function sortJson (json) {
  * @returns {[number, number, number]]
  */
 function engineVersionSplit (ver) {
-  const [major, minor, patch] = (ver || '>=0').replace('>=', '').split('.');
+  const parts = (ver || '>=0').replace('>=', '').split('.');
 
-  return [parseInt(major || '0', 10), parseInt(minor || '0', 10), parseInt(patch || '0', 10)];
+  return [parseInt(parts[0] || '0', 10), parseInt(parts[1] || '0', 10), parseInt(parts[2] || '0', 10)];
+}
+
+/**
+ * @internal
+ *
+ * Adjusts the engine setting, highest of current and requested
+ *
+ * @param {string} [currVer]
+ * @returns {string}
+ */
+function getEnginesVer (currVer) {
+  const nodeVer = engineVersionSplit(TARGET_NODE);
+  const jsonVer = engineVersionSplit(currVer);
+
+  if (
+    (nodeVer[0] > jsonVer[0]) || (
+      (nodeVer[0] === jsonVer[0]) && (
+        (nodeVer[1] > jsonVer[1]) || (
+          (nodeVer[1] === jsonVer[1]) &&
+          (nodeVer[2] > jsonVer[2])
+        )
+      )
+    )
+  ) {
+    return `>=${TARGET_NODE}`;
+  }
+
+  return currVer;
 }
 
 function orderPackageJson (repoPath, dir, json) {
-  const nodeVer = engineVersionSplit(TARGET_NODE);
-  const jsonVer = engineVersionSplit(json.engines?.node);
-
   json.bugs = `https://github.com/${repoPath}/issues`;
   json.homepage = `https://github.com/${repoPath}${dir ? `/tree/master/packages/${dir}` : ''}#readme`;
   json.license = !json.license || json.license === 'Apache-2'
@@ -723,21 +748,9 @@ function orderPackageJson (repoPath, dir, json) {
     url: `https://github.com/${repoPath}.git`
   };
   json.sideEffects = json.sideEffects || false;
-
-  if (
-    (nodeVer[0] > jsonVer[0]) || (
-      (nodeVer[0] === jsonVer[0]) && (
-        (nodeVer[1] > jsonVer[1]) || (
-          (nodeVer[1] === jsonVer[1]) &&
-          (nodeVer[2] > jsonVer[2])
-        )
-      )
-    )
-  ) {
-    json.engines = {
-      node: `>=${TARGET_NODE}`
-    };
-  }
+  json.engines = {
+    node: getEnginesVer(json.engines?.node)
+  };
 
   // sort the object
   const sorted = sortJson(json);

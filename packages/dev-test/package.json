@@ -3,7 +3,7 @@
   "bugs": "https://github.com/polkadot-js/dev/issues",
   "description": "A basic test-functions-as-global library on top of node:test",
   "engines": {
-    "node": ">=14"
+    "node": ">=12"
   },
   "homepage": "https://github.com/polkadot-js/dev/tree/master/packages/dev-test#readme",
   "license": "Apache-2.0",
