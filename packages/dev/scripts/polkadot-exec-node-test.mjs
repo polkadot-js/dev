@@ -128,7 +128,7 @@ function complete () {
 
     if (r.details) {
       item += indent(1, [r.file, r.name].filter((s) => !!s).join('\n'), 'x ');
-      item += indent(2, `${r.details.error.failureType}/ ${r.details.error.code}`);
+      item += indent(2, `${r.details.error.failureType} / ${r.details.error.code}`);
       item += indent(2, r.details.error.cause.message);
 
       // we don't add the stack to the log-to-file below
