@@ -28,9 +28,12 @@ const stats = {
 };
 let logFile = null;
 let startAt = 0;
+let bail = false;
 
 for (let i = 0; i < args.length; i++) {
-  if (args[i] === '--log') {
+  if (args[i] === '--bail') {
+    bail = true;
+  } else if (args[i] === '--log') {
     i++;
     logFile = args[i];
   } else {
@@ -213,6 +216,10 @@ run({ files, timeout: 3_600_000 })
   .on('test:fail', (data) => {
     stats.fail.push(data);
     output('x');
+
+    if (bail) {
+      complete();
+    }
   })
   .on('test:pass', (data) => {
     if (typeof data.skip !== 'undefined') {
