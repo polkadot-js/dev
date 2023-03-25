@@ -11,6 +11,8 @@ interface WrapOpts {
   todo?: boolean;
 }
 
+const MINUTE = 60 * 1000;
+
 /**
  * @internal
  *
@@ -19,8 +21,8 @@ interface WrapOpts {
  *
  * @param {} fn
  */
-function createWrapper <T extends typeof describe | typeof it> (fn: T) {
-  const wrap = (opts: WrapOpts) => (name: string, exec: () => unknown, timeout?: number) => fn(name, timeout ? { ...opts, timeout } : opts, exec);
+function createWrapper <T extends typeof describe | typeof it> (fn: T, defaultTimeout: number) {
+  const wrap = (opts: WrapOpts) => (name: string, exec: () => unknown, timeout?: number) => fn(name, { ...opts, timeout: (timeout || defaultTimeout) }, exec);
 
   // Ensure that we have consistent helpers on the function. These are not consistently
   // applied accross all node:test versions, latest has all, so always apply ours.
@@ -38,7 +40,7 @@ function createWrapper <T extends typeof describe | typeof it> (fn: T) {
  **/
 export function suite () {
   return {
-    describe: createWrapper(describe),
-    it: createWrapper(it)
+    describe: createWrapper(describe, 60 * MINUTE),
+    it: createWrapper(it, 2 * MINUTE)
   };
 }
