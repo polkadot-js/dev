@@ -18,7 +18,7 @@ console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 // Node 14 === es2020, Node 16 === es2021, Node 18 === es2022
 // https://github.com/tsconfig/bases/blob/d699759e29cfd5f6ab0fab9f3365c7767fca9787/bases/node16.json#L8
 const TARGET_TSES = ts.ScriptTarget.ES2021;
-const TARGET_NODE = '16';
+const TARGET_NODE = '>=16';
 
 const IGNORE_IMPORTS = [
   // node (new-style)
@@ -698,7 +698,7 @@ function sortJson (json) {
  * @returns {[number, number, number]]
  */
 function engineVersionSplit (ver) {
-  const parts = (ver || '>=0').replace('>=', '').split('.');
+  const parts = (ver || '>=0').replace('>=', '').split('.').map((e) => e.trim());
 
   return [parseInt(parts[0] || '0', 10), parseInt(parts[1] || '0', 10), parseInt(parts[2] || '0', 10)];
 }
@@ -725,7 +725,7 @@ function getEnginesVer (currVer) {
       )
     )
   ) {
-    return `>=${TARGET_NODE}`;
+    return TARGET_NODE;
   }
 
   return currVer;
