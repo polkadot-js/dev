@@ -1,7 +1,20 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-/** @typedef {{ diag: string[]; total: number }} Stats */
+// For Node 18, earliest usable is 18.14:
+//
+//   - node:test added in 18.0,
+//   - run method exposed in 18.9,
+//   - mock in 18.13,
+//   - diagnostics changed in 18.14
+//
+// Node 16 is not supported:
+//
+//   - node:test added is 16.17,
+//   - run method exposed in 16.19,
+//   - mock not available
+
+/** @typedef {{ diag: unknown[]; fail: unknown[]; pass: unknown[]; skip: unknown[]; todo: unknown[]; total: number }} Stats */
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -13,21 +26,23 @@ console.time('\t elapsed :');
 const WITH_DEBUG = false;
 
 const args = process.argv.slice(2);
+/** @type {string[]} */
 const files = [];
 
 /** @type {Stats} */
 const stats = {
-  comm: [],
   diag: [],
-  extr: [],
   fail: [],
   pass: [],
   skip: [],
   todo: [],
   total: 0
 };
+/** @type {string | null} */
 let logFile = null;
+/** @type {number} */
 let startAt = 0;
+/** @type {boolean} */
 let bail = false;
 
 for (let i = 0; i < args.length; i++) {
@@ -122,34 +137,25 @@ function complete () {
   let logError = '';
 
   stats.fail.forEach((r) => {
-    WITH_DEBUG && console.error(r);
+    WITH_DEBUG && console.error(JSON.stringify(r, null, 2));
 
     let item = '';
 
-    if (r.details) {
-      item += indent(1, [r.file, r.name].filter((s) => !!s).join('\n'), 'x ');
-      item += indent(2, `${r.details.error.failureType} / ${r.details.error.code}`);
+    item += indent(1, [r.file, r.name].filter((s) => !!s).join('\n'), 'x ');
+    item += indent(2, `${r.details.error.failureType} / ${r.details.error.code}${r.details.error.cause.code && r.details.error.cause.code !== r.details.error.code ? ` / ${r.details.error.cause.code}` : ''}`);
+
+    if (r.details.error.cause.message) {
       item += indent(2, r.details.error.cause.message);
-
-      // we don't add the stack to the log-to-file below
-      logError += item;
-
-      item += indent(2, r.details.error.cause.stack);
-
-      process.stdout.write(item);
-    } else if (r.diag) {
-      // This for for pre Node 18.15
-      item += indent(1, [...r.fullname.split('\n'), r.name].filter((s) => !!s).join('\n'), 'x ');
-      item += indent(2, `${r.diag.failureType} / ${r.diag.code}`);
-      item += indent(2, r.diag.error);
-
-      // we don't add the stack to the log-to-file below
-      logError += item;
-
-      item += indent(2, r.diag.stack);
-
-      process.stdout.write(item);
     }
+
+    // we don't add the stack to the log-to-file below
+    logError += item;
+
+    if (r.details.error.cause.stack) {
+      item += indent(2, r.details.error.cause.stack);
+    }
+
+    process.stdout.write(item);
   });
 
   if (logFile && logError) {
@@ -159,13 +165,6 @@ function complete () {
       console.error(e);
     }
   }
-
-  [stats.comm, stats.extr].forEach((s) => {
-    if (s.length) {
-      console.log();
-      s.forEach((r) => console.log(r.replaceAll('\n', ' ')));
-    }
-  });
 
   console.log();
   console.log('\t  passed ::', stats.pass.length);
@@ -180,7 +179,30 @@ function complete () {
   // failures, i.e. when Node itself has an internal error before even executing
   // a single test
   if (stats.fail.length && stats.diag.length) {
-    stats.diag.forEach((e) => console.error(e));
+    let lastFilename = '';
+
+    stats.diag.forEach((r) => {
+      WITH_DEBUG && console.error(JSON.stringify(r, null, 2));
+
+      if (typeof r === 'string') {
+        // Node.js <= 18.14
+        console.error(r);
+      } else if (r.file && r.file.includes('@polkadot/dev/scripts')) {
+        // ignore, these are internal
+      } else {
+        if (lastFilename !== r.file) {
+          lastFilename = r.file;
+
+          if (lastFilename) {
+            console.error(`\n${lastFilename}::\n`);
+          } else {
+            console.error('\n');
+          }
+        }
+
+        console.error(`\t${r.message.split('\n').join('\n\t')}`);
+      }
+    });
     console.error();
   }
 
@@ -193,8 +215,6 @@ function complete () {
   process.exit(stats.fail.length);
 }
 
-let lastFilename = '';
-
 // 1hr default timeout ... just in-case something goes wrong on an
 // CI-like environment, don't expect this to be hit (never say never)
 run({ files, timeout: 3_600_000 })
@@ -206,24 +226,7 @@ run({ files, timeout: 3_600_000 })
   // handlers for all the known TestStream events from Node
   .on('test:coverage', () => undefined)
   .on('test:diagnostic', (data) => {
-    if (typeof data === 'string') {
-      // Node.js pre 18.15
-      stats.diag.push(data);
-    } else if (data.file && data.file.includes('@polkadot/dev/scripts')) {
-      // ignore, these are internal
-    } else {
-      if (lastFilename !== data.file) {
-        lastFilename = data.file;
-
-        if (lastFilename) {
-          stats.diag.push(`\n${lastFilename}::\n`);
-        } else {
-          stats.diag.push('\n');
-        }
-      }
-
-      stats.diag.push(`\t${data.message.split('\n').join('\n\t')}`);
-    }
+    stats.diag.push(data);
   })
   .on('test:fail', (data) => {
     stats.fail.push(data);
