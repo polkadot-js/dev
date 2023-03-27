@@ -749,13 +749,12 @@ function orderPackageJson (repoPath, dir, json) {
   json.engines = {
     node: getEnginesVer(json.engines?.node)
   };
-  json['engine-strict'] = true;
 
   // sort the object
   const sorted = sortJson(json);
 
-  // remove empties (may be re-added at some point)
-  ['contributors', 'maintainers'].forEach((d) => {
+  // remove fields we don't want to publish (may be re-added at some point)
+  ['contributors', 'engine-strict', 'maintainers'].forEach((d) => {
     delete sorted[d];
   });
 
