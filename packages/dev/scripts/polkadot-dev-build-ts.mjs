@@ -756,7 +756,7 @@ function orderPackageJson (repoPath, dir, json) {
   const sorted = sortJson(json);
 
   // remove empties (may be re-added at some point)
-  ['contributors', 'maintainers'].forEach((d) => {
+  ['contributors', 'engine-strict', 'maintainers'].forEach((d) => {
     delete sorted[d];
   });
 
