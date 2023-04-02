@@ -14,12 +14,11 @@
      */
     "declaration": true,
     "emitDeclarationOnly": true,
-    "isolatedModules": true,
     "jsx": "preserve",
 
     /**
      * Strictest tsconfig settings, as per
-     * https://github.com/tsconfig/bases/blob/a606a8dd27b31d76603f076d7602ddf8506d1102/bases/strictest.json
+     * https://github.com/tsconfig/bases/blob/7db25a41bc5a9c0f66d91f6f3aa28438afcb2f18/bases/strictest.json
      */
     "allowUnusedLabels": false,
     "allowUnreachableCode": false,
@@ -32,6 +31,7 @@
     "noUnusedParameters": true,
     "skipLibCheck": true,
     "strict": true,
+    "verbatimModuleSyntax": true,
 
     /**
      * These appear in strictest, however we don't (yet) use them. For the most part it means
@@ -41,10 +41,5 @@
     // "exactOptionalPropertyTypes": true,
     // "noPropertyAccessFromIndexSignature": true,
     // "noUncheckedIndexedAccess": true,
-
-    /**
-     * These are deprecated by ts 5.0+, but still appeared in strictest
-     */
-    // "importsNotUsedAsValues": "error",
   }
 }
