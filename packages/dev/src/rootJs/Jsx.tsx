@@ -3,10 +3,11 @@
 
 // Adapted from https://github.com/testing-library/react-testing-library#basic-example
 
+import type { StyledInterface } from 'styled-components';
 import type { Props } from './JsxChild.js';
 
 import React, { useCallback, useState } from 'react';
-import styledComponents, { StyledInterface } from 'styled-components';
+import styledComponents from 'styled-components';
 
 import Child from './JsxChild.js';
 
