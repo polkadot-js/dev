@@ -125,12 +125,29 @@ describe('as-built output checks', (): void => {
 
   describe('deno', (): void => {
     const denoRoot = path.join(process.cwd(), 'packages/dev/build-deno');
+    const denoMod = fs.readFileSync(path.join(denoRoot, 'mod.ts'), 'utf-8');
 
     it('has *.ts imports', (): void => {
       expect(
-        fs
-          .readFileSync(path.join(denoRoot, 'mod.ts'))
-          .includes("import './index.ts';")
+        denoMod.includes("import './index.ts';")
+      ).toBe(true);
+    });
+
+    it('has node: imports', (): void => {
+      expect(
+        denoMod.includes("import nodeCrypto from 'node:crypto';")
+      ).toBe(true);
+    });
+
+    it('has npm: imports', (): void => {
+      expect(
+        /import rollupAlias from 'npm:@rollup\/plugin-alias@\^\d\d?\.\d\d?\.\d\d?';/.test(denoMod)
+      ).toBe(true);
+    });
+
+    it('has npm: imports with paths', (): void => {
+      expect(
+        /import eslint from 'npm:eslint@\^\d\d?\.\d\d?\.\d\d?\/use-at-your-own-risk';/.test(denoMod)
       ).toBe(true);
     });
 
