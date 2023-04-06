@@ -14,17 +14,17 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.72.33",
+  "version": "0.72.34",
   "versions": {
-    "git": "0.72.33",
-    "npm": "0.72.33"
+    "git": "0.72.34",
+    "npm": "0.72.34"
   },
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
     "build": "polkadot-dev-build-ts",
-    "build:before": "(cd packages/dev && polkadot-dev-copy-dir config build/config && polkadot-dev-copy-dir scripts build/scripts)",
+    "build:before": "polkadot-dev-copy-dir --cd packages/dev config scripts build",
     "build:release": "polkadot-ci-ghact-build --skip-beta",
     "clean": "polkadot-dev-clean-build",
     "docs": "polkadot-dev-build-docs",
