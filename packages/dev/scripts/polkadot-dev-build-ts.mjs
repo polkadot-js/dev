@@ -211,19 +211,22 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
 
     // fully-specified file, keep it as-is (linting picks up invalids)
     return null;
+  } else if (f.startsWith('node:')) {
+    // Since Deno 1.28 the node: specifiers is supported out-of-the-box
+    // so we just return and use these as-is
+    return f;
   }
 
   const depParts = f.split('/');
-  const depName = depParts.slice(0, 2).join('/');
-  let depPath = depParts.length > 2
-    ? '/' + depParts.slice(2).join('/')
+  const depNameLen = f.startsWith('@')
+    ? 2
+    : 1;
+  const depName = depParts.slice(0, depNameLen).join('/');
+  let depPath = depParts.length > depNameLen
+    ? '/' + depParts.slice(depNameLen).join('/')
     : null;
 
-  if (depPath) {
-    depPath += '.js';
-  }
-
-  let version = pkgJson.dependencies && pkgJson.dependencies[depName] && pkgJson.dependencies[depName] !== '*'
+  const depVersion = pkgJson.dependencies && pkgJson.dependencies[depName] && pkgJson.dependencies[depName] !== '*'
     ? pkgJson.dependencies[depName]
     : pkgJson.peerDependencies && pkgJson.peerDependencies[depName]
       ? pkgJson.peerDependencies[depName]
@@ -232,9 +235,10 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
         : pkgJson.devDependencies
           ? pkgJson.devDependencies[depName]
           : null;
+  let version = null;
 
-  if (version) {
-    version = version.replace('^', '').replace('~', '');
+  if (depVersion) {
+    version = depVersion.replace('^', '').replace('~', '');
   } else if (isDeclare) {
     return f;
   }
@@ -243,9 +247,12 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
     ? pkgJson.denoDependencies[depName].split('/')
     : [null];
 
-  if (!denoDep && !version) {
-    if (!f.startsWith('node:')) {
-      console.warn(`warning: Replacing unknown versioned package '${f}' inside ${pkgJson.name}, possibly missing an alias`);
+  if (!denoDep) {
+    // Here we use the npm: specifier (available since Deno 1.28)
+    if (depVersion) {
+      return `npm:${depName}@${depVersion}${depPath || ''}`;
+    } else {
+      exitFatal(`Unknown versioned package '${f}' inside ${pkgJson.name}, possibly missing an alias`);
     }
   } else if (denoDep === 'x') {
     denoDep = `x/${denoPath[0]}`;
@@ -256,6 +263,11 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
     } else if (denoDep.includes('{{VERSION}}')) {
       denoDep = denoDep.replace('{{VERSION}}', version);
     }
+  }
+
+  // Add JS specifier if required
+  if (depPath) {
+    depPath += '.js';
   }
 
   return denoDep

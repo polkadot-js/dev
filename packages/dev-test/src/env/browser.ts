@@ -7,7 +7,7 @@ import { JSDOM } from 'jsdom';
  * Export a very basic JSDom environment - this is just enough so we have
  * @testing-environment/react tests passing in this repo
  *
- * FIXME: This apporach is actually _explicitly_ discouraged by JSDOM - when
+ * FIXME: This approach is actually _explicitly_ discouraged by JSDOM - when
  * using window you should run the tests inside that context, instead of just
  * blindly relying on the globals as we do here
  */

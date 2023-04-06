@@ -7,8 +7,8 @@ import pluginDynamicImportVars from '@rollup/plugin-dynamic-import-vars';
 import pluginInject from '@rollup/plugin-inject';
 import pluginJson from '@rollup/plugin-json';
 import { nodeResolve as pluginResolve } from '@rollup/plugin-node-resolve';
-import fs from 'fs';
-import path from 'path';
+import fs from 'node:fs';
+import path from 'node:path';
 import pluginCleanup from 'rollup-plugin-cleanup';
 
 function sanitizePkg (pkg) {
