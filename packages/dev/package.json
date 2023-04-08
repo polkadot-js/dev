@@ -47,7 +47,7 @@
     "./rootJs/testJson.json": "./src/rootJs/testJson.json"
   },
   "dependencies": {
-    "@eslint/js": "^8.37.0",
+    "@eslint/js": "^8.38.0",
     "@polkadot/dev-test": "^0.72.35",
     "@polkadot/dev-ts": "^0.72.35",
     "@rollup/plugin-alias": "^5.0.0",
@@ -59,7 +59,7 @@
     "@rushstack/eslint-patch": "^1.2.0",
     "@typescript-eslint/eslint-plugin": "^5.57.1",
     "@typescript-eslint/parser": "^5.57.1",
-    "eslint": "^8.37.0",
+    "eslint": "^8.38.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-import-resolver-node": "^0.3.7",
     "eslint-plugin-deprecation": "^1.4.1",
@@ -79,7 +79,7 @@
     "rollup": "^3.20.2",
     "rollup-plugin-cleanup": "^3.2.1",
     "tslib": "^2.5.0",
-    "typescript": "^5.0.3",
+    "typescript": "^5.0.4",
     "webpack": "^5.78.0",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.13.2",
