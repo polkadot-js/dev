@@ -237,10 +237,10 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
           : null;
   let version = null;
 
-  if (isDeclare) {
-    return f;
-  } else if (depVersion) {
+  if (depVersion) {
     version = depVersion.replace('^', '').replace('~', '');
+  } else if (isDeclare) {
+    return f;
   }
 
   let [denoDep, ...denoPath] = pkgJson.denoDependencies && pkgJson.denoDependencies[depName]
