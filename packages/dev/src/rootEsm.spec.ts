@@ -139,13 +139,14 @@ describe('as-built output checks', (): void => {
       ).toBe(true);
     });
 
-    it('has npm: imports', (): void => {
+    // Due to issues with @zonda + git imports, unused
+    it.skip('has npm: imports', (): void => {
       expect(
         /import rollupAlias from 'npm:@rollup\/plugin-alias@\^\d\d?\.\d\d?\.\d\d?';/.test(denoMod)
       ).toBe(true);
     });
 
-    it('has npm: imports with paths', (): void => {
+    it.skip('has npm: imports with paths', (): void => {
       expect(
         /import eslint from 'npm:eslint@\^\d\d?\.\d\d?\.\d\d?\/use-at-your-own-risk';/.test(denoMod)
       ).toBe(true);
