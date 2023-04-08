@@ -237,10 +237,10 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
           : null;
   let version = null;
 
-  if (depVersion) {
-    version = depVersion.replace('^', '').replace('~', '');
-  } else if (isDeclare) {
+  if (isDeclare) {
     return f;
+  } else if (depVersion) {
+    version = depVersion.replace('^', '').replace('~', '');
   }
 
   let [denoDep, ...denoPath] = pkgJson.denoDependencies && pkgJson.denoDependencies[depName]
@@ -251,8 +251,11 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
     // Here we use the npm: specifier (available since Deno 1.28)
     if (depVersion) {
       return `npm:${depName}@${depVersion}${depPath || ''}`;
+    } else if (IGNORE_IMPORTS.includes(depName)) {
+      // ignore, we handle this below
+      console.warn(`WARN: Ambient Deno import ${f} inside ${pkgJson.name}, possibly missing an alias`);
     } else {
-      exitFatal(`Unknown versioned package '${f}' inside ${pkgJson.name}, possibly missing an alias`);
+      exitFatal(`Unknown Deno versioned package '${f}' inside ${pkgJson.name}`);
     }
   } else if (denoDep === 'x') {
     denoDep = `x/${denoPath[0]}`;
