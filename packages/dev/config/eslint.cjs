@@ -108,6 +108,11 @@ module.exports = {
     'brace-style': ['error', '1tbs'],
     curly: ['error', 'all'],
     'default-param-last': [0], // conflicts with TS version (this one doesn't allow TS ?)
+    'func-style': ['error', 'declaration', { allowArrowFunctions: true }],
+    // this does help with declarations, but also
+    // applies to invocations, which is an issue...
+    // 'function-paren-newline': ['error', 'never'],
+    'function-call-argument-newline': ['error', 'consistent'],
     'header/header': [2, 'line', [
       { pattern: ` Copyright 20(17|18|19|20|21|22)(-${new Date().getFullYear()})? @polkadot/` },
       ' SPDX-License-Identifier: Apache-2.0'
@@ -116,10 +121,14 @@ module.exports = {
       json: 'always',
       jsx: 'never'
     }],
-    'import-newlines/enforce': ['error', 2048],
+    'import-newlines/enforce': ['error', {
+      forceSingleLine: true,
+      items: 2048
+    }],
     'jsx-quotes': ['error', 'prefer-single'],
     'react/prop-types': [0], // this is a completely broken rule
     'object-curly-newline': ['error', {
+      ExportDeclaration: 'never',
       ImportDeclaration: 'never',
       ObjectPattern: 'never'
     }],
