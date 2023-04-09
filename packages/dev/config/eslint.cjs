@@ -128,9 +128,9 @@ module.exports = {
     'jsx-quotes': ['error', 'prefer-single'],
     'react/prop-types': [0], // this is a completely broken rule
     'object-curly-newline': ['error', {
-      ExportDeclaration: 'never',
-      ImportDeclaration: 'never',
-      ObjectPattern: 'never'
+      ExportDeclaration: { minProperties: 2048 },
+      ImportDeclaration: { minProperties: 2048 },
+      ObjectPattern: { minProperties: 2048 }
     }],
     'padding-line-between-statements': [
       'error',
