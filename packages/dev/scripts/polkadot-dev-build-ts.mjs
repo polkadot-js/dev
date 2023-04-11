@@ -252,7 +252,11 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
       // ignore, we handle this below
     } else if (depVersion) {
       // Here we use the npm: specifier (available since Deno 1.28)
-      return `npm:${depName}@${depVersion}${depPath || ''}`;
+      //
+      // FIXME We cannot enable this until there is support for git deps
+      // https://github.com/denoland/deno/issues/18557
+      // This is used by @zondax/ledger-substrate
+      // return `npm:${depName}@${depVersion}${depPath || ''}`;
     } else {
       exitFatal(`Unknown Deno versioned package '${f}' inside ${pkgJson.name}`);
     }
