@@ -252,7 +252,7 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
       // ignore, we handle this below
     } else if (depVersion) {
       // Here we use the npm: specifier (available since Deno 1.28)
-      // return `npm:${depName}@${depVersion}${depPath || ''}`;
+      return `npm:${depName}@${depVersion}${depPath || ''}`;
     } else {
       exitFatal(`Unknown Deno versioned package '${f}' inside ${pkgJson.name}`);
     }
