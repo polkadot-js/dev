@@ -52,12 +52,14 @@ export async function load (url: string, context: Record<string, unknown>, nextL
     // compile via typescript
     const { outputText } = ts.transpileModule(source.toString(), {
       compilerOptions: {
+        ...(
+          url.endsWith('.tsx')
+            ? { jsx: ts.JsxEmit.ReactJSX }
+            : {}
+        ),
         esModuleInterop: true,
         importHelpers: true,
         inlineSourceMap: true,
-        jsx: url.endsWith('.tsx')
-          ? ts.JsxEmit.ReactJSX
-          : undefined,
         module: ts.ModuleKind.ESNext,
         moduleResolution: ts.ModuleResolutionKind.NodeNext,
         skipLibCheck: true,

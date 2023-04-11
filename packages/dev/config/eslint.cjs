@@ -1,9 +1,6 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// ordering here important (at least from a rule maintenance pov)
-/* eslint-disable sort-keys */
-
 require('@rushstack/eslint-patch/modern-module-resolution');
 
 const path = require('node:path');
@@ -14,6 +11,13 @@ module.exports = {
     jest: true,
     node: true
   },
+  extends: [
+    path.join(__dirname, './eslint-recommended.cjs'),
+    require.resolve('eslint-config-standard'),
+    'plugin:@typescript-eslint/recommended',
+    'plugin:@typescript-eslint/recommended-requiring-type-checking',
+    'plugin:react/recommended'
+  ],
   ignorePatterns: [
     '**/build/*',
     '**/build-*/*',
@@ -32,24 +36,17 @@ module.exports = {
     '/rollup.config.js',
     '/rollup.config.mjs'
   ],
-  extends: [
-    path.join(__dirname, './eslint-recommended.cjs'),
-    require.resolve('eslint-config-standard'),
-    'plugin:@typescript-eslint/recommended',
-    'plugin:@typescript-eslint/recommended-requiring-type-checking',
-    'plugin:react/recommended'
-  ],
   overrides: [
     {
       files: ['*.js', '*.cjs', '*.mjs'],
       rules: {
         '@typescript-eslint/explicit-function-return-type': 'off',
-        '@typescript-eslint/no-var-requires': 'off',
         '@typescript-eslint/no-unsafe-argument': 'off',
         '@typescript-eslint/no-unsafe-assignment': 'off',
         '@typescript-eslint/no-unsafe-call': 'off',
         '@typescript-eslint/no-unsafe-member-access': 'off',
         '@typescript-eslint/no-unsafe-return': 'off',
+        '@typescript-eslint/no-var-requires': 'off',
         '@typescript-eslint/restrict-plus-operands': 'off',
         '@typescript-eslint/restrict-template-expressions': 'off'
       }
@@ -81,17 +78,7 @@ module.exports = {
     'sort-destructure-keys'
   ],
   rules: {
-    'deprecation/deprecation': 'error',
-    // required as 'off' since typescript-eslint has own versions
-    indent: 'off',
-    'no-use-before-define': 'off',
-    'no-unused-vars': 'off',
-    // our own indentation
     '@typescript-eslint/indent': ['error', 2],
-    // rules from semistandard (don't include it, has standard dep version mismatch)
-    semi: [2, 'always'],
-    'no-extra-semi': 2,
-    // specific overrides
     '@typescript-eslint/no-non-null-assertion': 'error',
     // ts itself checks and ignores those starting with _, align the linting
     '@typescript-eslint/no-unused-vars': ['error', {
@@ -107,26 +94,30 @@ module.exports = {
     'arrow-parens': ['error', 'always'],
     'brace-style': ['error', '1tbs'],
     curly: ['error', 'all'],
-    'default-param-last': [0], // conflicts with TS version (this one doesn't allow TS ?)
+    'default-param-last': ['off'], // conflicts with TS version (this one doesn't allow TS ?)
+    'deprecation/deprecation': 'error',
     'func-style': ['error', 'declaration', { allowArrowFunctions: true }],
     // this does help with declarations, but also
     // applies to invocations, which is an issue...
     // 'function-paren-newline': ['error', 'never'],
     'function-call-argument-newline': ['error', 'consistent'],
-    'header/header': [2, 'line', [
+    'header/header': ['error', 'line', [
       { pattern: ` Copyright 20(17|18|19|20|21|22)(-${new Date().getFullYear()})? @polkadot/` },
       ' SPDX-License-Identifier: Apache-2.0'
     ], 2],
-    'import/extensions': ['error', 'ignorePackages', {
-      json: 'always',
-      jsx: 'never'
-    }],
     'import-newlines/enforce': ['error', {
       forceSingleLine: true,
       items: 2048
     }],
+    'import/extensions': ['error', 'ignorePackages', {
+      json: 'always',
+      jsx: 'never'
+    }],
+    indent: 'off', // required as 'off' since typescript-eslint has own versions
     'jsx-quotes': ['error', 'prefer-single'],
-    'react/prop-types': [0], // this is a completely broken rule
+    'no-extra-semi': 'error',
+    'no-unused-vars': 'off',
+    'no-use-before-define': 'off',
     'object-curly-newline': ['error', {
       ExportDeclaration: { minProperties: 2048 },
       ImportDeclaration: { minProperties: 2048 },
@@ -134,46 +125,45 @@ module.exports = {
     }],
     'padding-line-between-statements': [
       'error',
-      { blankLine: 'always', prev: ['const', 'let', 'var'], next: '*' },
-      { blankLine: 'any', prev: ['const', 'let', 'var'], next: ['const', 'let', 'var'] },
-      { blankLine: 'always', prev: '*', next: 'block-like' },
-      { blankLine: 'always', prev: 'block-like', next: '*' },
-      { blankLine: 'always', prev: '*', next: 'function' },
-      { blankLine: 'always', prev: 'function', next: '*' },
-      { blankLine: 'always', prev: '*', next: 'try' },
-      { blankLine: 'always', prev: 'try', next: '*' },
-      { blankLine: 'always', prev: '*', next: 'return' },
-      { blankLine: 'always', prev: '*', next: 'import' },
-      { blankLine: 'always', prev: 'import', next: '*' },
-      { blankLine: 'any', prev: 'import', next: 'import' }
+      { blankLine: 'always', next: '*', prev: ['const', 'let', 'var'] },
+      { blankLine: 'any', next: ['const', 'let', 'var'], prev: ['const', 'let', 'var'] },
+      { blankLine: 'always', next: 'block-like', prev: '*' },
+      { blankLine: 'always', next: '*', prev: 'block-like' },
+      { blankLine: 'always', next: 'function', prev: '*' },
+      { blankLine: 'always', next: '*', prev: 'function' },
+      { blankLine: 'always', next: 'try', prev: '*' },
+      { blankLine: 'always', next: '*', prev: 'try' },
+      { blankLine: 'always', next: 'return', prev: '*' },
+      { blankLine: 'always', next: 'import', prev: '*' },
+      { blankLine: 'always', next: '*', prev: 'import' },
+      { blankLine: 'any', next: 'import', prev: 'import' }
     ],
-    'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'error',
-    'react/jsx-closing-bracket-location': [1, 'tag-aligned'],
-    'react/jsx-first-prop-new-line': [1, 'multiline-multiprop'],
+    'react-hooks/rules-of-hooks': 'error',
+    'react/jsx-closing-bracket-location': ['warn', 'tag-aligned'],
+    'react/jsx-first-prop-new-line': ['warn', 'multiline-multiprop'],
     'react/jsx-fragments': 'error',
-    'react/jsx-max-props-per-line': [1, {
+    'react/jsx-max-props-per-line': ['warn', {
       maximum: 1,
       when: 'always'
     }],
-    'react/jsx-newline': [2, {
+    'react/jsx-newline': ['error', {
       prevent: true
     }],
-    'react/jsx-no-bind': 2,
-    'react/jsx-props-no-multi-spaces': 2,
-    'react/jsx-sort-props': [1, {
+    'react/jsx-no-bind': 'error',
+    'react/jsx-props-no-multi-spaces': 'error',
+    'react/jsx-sort-props': ['warn', {
       noSortAlphabetically: false
     }],
-    'react/jsx-tag-spacing': [2, {
-      closingSlash: 'never',
-      beforeSelfClosing: 'always',
+    'react/jsx-tag-spacing': ['error', {
       afterOpening: 'never',
-      beforeClosing: 'never'
+      beforeClosing: 'never',
+      beforeSelfClosing: 'always',
+      closingSlash: 'never'
     }],
-    'sort-destructure-keys/sort-destructure-keys': [2, {
-      caseSensitive: true
-    }],
-    'simple-import-sort/imports': [2, {
+    'react/prop-types': ['off'], // this is a completely broken rule
+    semi: ['error', 'always'],
+    'simple-import-sort/imports': ['error', {
       groups: [
         ['^\u0000'], // all side-effects (0 at start)
         ['\u0000$', '^@polkadot.*\u0000$', '^\\..*\u0000$'], // types (0 at end)
@@ -181,6 +171,9 @@ module.exports = {
         ['^@polkadot'], // polkadot
         ['^\\.\\.(?!/?$)', '^\\.\\./?$', '^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'] // local (. last)
       ]
+    }],
+    'sort-destructure-keys/sort-destructure-keys': ['error', {
+      caseSensitive: true
     }],
     'sort-keys': 'error',
     'spaced-comment': ['error', 'always', {

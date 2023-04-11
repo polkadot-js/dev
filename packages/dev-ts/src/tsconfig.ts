@@ -67,7 +67,9 @@ function readConfigFile (currentPath = CWD_PATH, tsconfig = 'tsconfig.json', fro
       url = url || extConfig.url;
     }
 
-    return { paths, url };
+    return url
+      ? { paths, url }
+      : { paths };
   } catch (error) {
     console.error(`FATAL: Error parsing ${configFile}:: ${(error as Error).message}`);
 
