@@ -1,6 +1,13 @@
 {
-  /** https://github.com/tsconfig/bases/blob/f96211418bc5b68c8fed636eaf4020486eb26a8a/bases/strictest.json */
-  "extends": "@tsconfig/strictest/tsconfig.json",
+  /**
+   * There is a split between strictest & esm configs as the base
+   * https://github.com/tsconfig/bases/blob/f674fa6cbca17062ff02511b02872f8729a597ec/bases/strictest.json
+   * https://github.com/tsconfig/bases/blob/f674fa6cbca17062ff02511b02872f8729a597ec/bases/esm.json
+   */
+  "extends": [
+    "@tsconfig/strictest/tsconfig.json",
+    "@tsconfig/esm/tsconfig.json"
+  ],
   "compilerOptions": {
     /**
      * This needs to align with scripts/polkadot-dev-build-ts & dev-ts/loader
