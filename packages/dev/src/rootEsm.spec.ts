@@ -5,6 +5,8 @@
 // NOTE: The build out tests here (describe block) is not duplicated
 // above
 
+import type * as testRoot from './root.js';
+
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -14,7 +16,6 @@ import path from 'node:path';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore This should only run against the compiled ouput, where this should exist
 import * as testRootBuild from '../build/root.js';
-import * as testRoot from './root.js';
 import { runTests } from './rootTests.js';
 
 runTests(testRootBuild as unknown as typeof testRoot);
@@ -125,12 +126,30 @@ describe('as-built output checks', (): void => {
 
   describe('deno', (): void => {
     const denoRoot = path.join(process.cwd(), 'packages/dev/build-deno');
+    const denoMod = fs.readFileSync(path.join(denoRoot, 'mod.ts'), 'utf-8');
 
     it('has *.ts imports', (): void => {
       expect(
-        fs
-          .readFileSync(path.join(denoRoot, 'mod.ts'))
-          .includes("import './index.ts';")
+        denoMod.includes("import './index.ts';")
+      ).toBe(true);
+    });
+
+    it('has node: imports', (): void => {
+      expect(
+        denoMod.includes("import nodeCrypto from 'node:crypto';")
+      ).toBe(true);
+    });
+
+    // Due to issues with @zonda + git imports, unused
+    it.skip('has npm: imports', (): void => {
+      expect(
+        /import rollupAlias from 'npm:@rollup\/plugin-alias@\^\d\d?\.\d\d?\.\d\d?';/.test(denoMod)
+      ).toBe(true);
+    });
+
+    it.skip('has npm: imports with paths', (): void => {
+      expect(
+        /import eslint from 'npm:eslint@\^\d\d?\.\d\d?\.\d\d?\/use-at-your-own-risk';/.test(denoMod)
       ).toBe(true);
     });
 

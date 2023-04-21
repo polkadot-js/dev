@@ -15,7 +15,7 @@ interface JsonConfig {
     baseUrl?: string;
     paths?: Record<string, string[]>;
   };
-  extends?: string;
+  extends?: string | string[];
 }
 
 interface PartialConfig {
@@ -52,22 +52,30 @@ function readConfigFile (currentPath = CWD_PATH, tsconfig = 'tsconfig.json', fro
     let paths = compilerOptions?.paths || {};
 
     if (parentConfig) {
-      const extRoot = parentConfig.startsWith('.')
-        ? currentPath
-        : MOD_PATH;
-      const extSubs = parentConfig.split(/[\\/]/);
-      const extPath = path.join(extRoot, ...extSubs.slice(0, -1));
-      const extConfig = readConfigFile(extPath, extSubs.at(-1), configFile);
+      const allExtends = Array.isArray(parentConfig)
+        ? parentConfig
+        : [parentConfig];
 
-      // base configs are overridden by later configs, order here matters
-      // FIXME The paths would be relative to the baseUrl at that point... for
-      // now we don't care much since we define these 2 together in all @polkadot
-      // configs, but it certainly _may_ create and issue at some point (for others)
-      paths = { ...extConfig.paths, ...paths };
-      url = url || extConfig.url;
+      for (const extendsPath of allExtends) {
+        const extRoot = extendsPath.startsWith('.')
+          ? currentPath
+          : MOD_PATH;
+        const extSubs = extendsPath.split(/[\\/]/);
+        const extPath = path.join(extRoot, ...extSubs.slice(0, -1));
+        const extConfig = readConfigFile(extPath, extSubs.at(-1), configFile);
+
+        // base configs are overridden by later configs, order here matters
+        // FIXME The paths would be relative to the baseUrl at that point... for
+        // now we don't care much since we define these 2 together in all @polkadot
+        // configs, but it certainly _may_ create and issue at some point (for others)
+        paths = { ...extConfig.paths, ...paths };
+        url = url || extConfig.url;
+      }
     }
 
-    return { paths, url };
+    return url
+      ? { paths, url }
+      : { paths };
   } catch (error) {
     console.error(`FATAL: Error parsing ${configFile}:: ${(error as Error).message}`);
 

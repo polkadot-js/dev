@@ -1,4 +1,4 @@
-    1253	Jaco                          	Switch on TS isolatedModules (#1007)
+    1271	Jaco                          	Add @typescript-eslint/consistent-type-imports (#1024)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
