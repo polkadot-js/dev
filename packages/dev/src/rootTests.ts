@@ -3,7 +3,7 @@
 
 /// <reference types="@polkadot/dev-test/globals.d.ts" />
 
-import * as testRoot from './root.js';
+import type * as testRoot from './root.js';
 
 export function runTests ({ Clazz, TEST_PURE, bigIntExp, dynamic, jsOpExp, json }: typeof testRoot): void {
   describe('Clazz', (): void => {

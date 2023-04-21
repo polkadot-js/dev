@@ -8,8 +8,9 @@
 //
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore This should only run against the compiled ouput, where this should exist
+import type * as testRoot from './root.js';
+
 import testRootBuild from '../build/cjs/root.js';
-import * as testRoot from './root.js';
 import { runTests } from './rootTests.js';
 
 runTests(testRootBuild as unknown as typeof testRoot);
