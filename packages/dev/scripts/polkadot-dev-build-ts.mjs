@@ -16,15 +16,13 @@ console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
 // We need at least es2020 for dynamic imports. Aligns with dev-ts/loader & config/tsconfig
 // Node 14 === es2020, Node 16 === es2021, Node 18 === es2022
-// https://github.com/tsconfig/bases/blob/d699759e29cfd5f6ab0fab9f3365c7767fca9787/bases/node14.json#L8
-const TARGET_TSES = ts.ScriptTarget.ES2020;
-const TARGET_NODE = '14';
+// https://github.com/tsconfig/bases/blob/d699759e29cfd5f6ab0fab9f3365c7767fca9787/bases/node16.json#L8
+const TARGET_TSES = ts.ScriptTarget.ES2021;
+const TARGET_NODE = '>=16';
 
 const IGNORE_IMPORTS = [
-  // node
-  'crypto', 'fs', 'os', 'path', 'process', 'readline', 'util',
   // node (new-style)
-  'node:assert', 'node:child_process', 'node:crypto', 'node:fs', 'node:os', 'node:path', 'node:process', 'node:test', 'node:url', 'node:util',
+  'node:assert', 'node:child_process', 'node:crypto', 'node:fs', 'node:os', 'node:path', 'node:process', 'node:readline', 'node:test', 'node:url', 'node:util',
   // other
   '@testing-library/react',
   'react', 'react-native', 'styled-components'
@@ -718,7 +716,7 @@ function sortJson (json) {
  * @returns {[number, number, number]]
  */
 function engineVersionSplit (ver) {
-  const parts = (ver || '>=0').replace('>=', '').split('.');
+  const parts = (ver || '>=0').replace('>=', '').split('.').map((e) => e.trim());
 
   return [parseInt(parts[0] || '0', 10), parseInt(parts[1] || '0', 10), parseInt(parts[2] || '0', 10)];
 }
@@ -745,7 +743,7 @@ function getEnginesVer (currVer) {
       )
     )
   ) {
-    return `>=${TARGET_NODE}`;
+    return TARGET_NODE;
   }
 
   return currVer;
@@ -773,7 +771,7 @@ function orderPackageJson (repoPath, dir, json) {
   // sort the object
   const sorted = sortJson(json);
 
-  // remove empties (may be re-added at some point)
+  // remove fields we don't want to publish (may be re-added at some point)
   ['contributors', 'engine-strict', 'maintainers'].forEach((d) => {
     delete sorted[d];
   });

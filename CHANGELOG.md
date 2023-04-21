@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.73.1
+
+- Drop support for Node 14
+
+
 ## 0.72.1
 
 - Split `@polkadot/dev-ts` & `@polkadot/dev-test` packages

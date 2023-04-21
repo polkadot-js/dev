@@ -15,7 +15,7 @@
      */
     "module": "esnext",
     "moduleResolution": "nodenext",
-    "target": "es2020",
+    "target": "es2021",
 
     /**
      * Specific compilation configs for polkadot-js projects as it is used
