@@ -5,6 +5,8 @@
 // NOTE: The build out tests here (describe block) is not duplicated
 // above
 
+import type * as testRoot from './root.js';
+
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -14,7 +16,6 @@ import path from 'node:path';
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore This should only run against the compiled ouput, where this should exist
 import * as testRootBuild from '../build/root.js';
-import * as testRoot from './root.js';
 import { runTests } from './rootTests.js';
 
 runTests(testRootBuild as unknown as typeof testRoot);

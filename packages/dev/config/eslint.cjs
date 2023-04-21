@@ -78,6 +78,7 @@ module.exports = {
     'sort-destructure-keys'
   ],
   rules: {
+    '@typescript-eslint/consistent-type-imports': 'error',
     '@typescript-eslint/indent': ['error', 2],
     '@typescript-eslint/no-non-null-assertion': 'error',
     // ts itself checks and ignores those starting with _, align the linting
