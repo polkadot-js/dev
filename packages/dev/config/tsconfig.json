@@ -1,13 +1,9 @@
 {
   /**
-   * There is a split between strictest & esm configs as the base
+   * There uses the strictest configs as the base
    * https://github.com/tsconfig/bases/blob/f674fa6cbca17062ff02511b02872f8729a597ec/bases/strictest.json
-   * https://github.com/tsconfig/bases/blob/f674fa6cbca17062ff02511b02872f8729a597ec/bases/esm.json
    */
-  "extends": [
-    "@tsconfig/strictest/tsconfig.json",
-    "@tsconfig/esm/tsconfig.json"
-  ],
+  "extends": "@tsconfig/strictest/tsconfig.json",
   "compilerOptions": {
     /**
      * This needs to align with scripts/polkadot-dev-build-ts & dev-ts/loader
@@ -24,6 +20,7 @@
     "declaration": true,
     "emitDeclarationOnly": true,
     "jsx": "preserve",
+    "verbatimModuleSyntax": true,
 
     /**
      * These appear in strictest, however we don't (yet) use them. For the most part it means
