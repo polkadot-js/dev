@@ -1,4 +1,4 @@
-    1272	Jaco                          	Adjust target for Node 16+ (14 EOL 30 Apr 2023) (#969)
+    1273	Jaco                          	Adjust tsconfig base (no array extends) (#1025)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
