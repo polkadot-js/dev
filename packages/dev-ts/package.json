@@ -15,7 +15,7 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.73.2",
+  "version": "0.73.3",
   "main": "./index.js",
   "exports": {
     "./globals.d.ts": "./src/globals.d.ts"
