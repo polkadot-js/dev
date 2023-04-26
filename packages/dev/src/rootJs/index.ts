@@ -34,8 +34,21 @@ export function json (): string {
 
 /** Check support for the ?? operator */
 export function jsOpExp (a?: number): number {
-  return a ?? 42;
+  const defaults = {
+    a: 42,
+    b: 43,
+    c: 44
+  };
+
+  return a ?? defaults.a;
 }
 
 /** This is an actual check to ensure PURE is all-happy */
 export const pureOpExp = /*#__PURE__*/ jsOpExp();
+
+const fooA = 1;
+const fooB = 2;
+const fooC = 3;
+const fooD = 4;
+
+export { fooA, fooB, fooC, fooD };
