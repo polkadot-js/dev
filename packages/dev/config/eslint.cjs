@@ -78,6 +78,8 @@ module.exports = {
     'sort-destructure-keys'
   ],
   rules: {
+    // the next 2 enforce isolatedModules & verbatimModuleSyntax
+    '@typescript-eslint/consistent-type-exports': 'error',
     '@typescript-eslint/consistent-type-imports': 'error',
     '@typescript-eslint/indent': ['error', 2],
     '@typescript-eslint/no-non-null-assertion': 'error',
@@ -97,7 +99,9 @@ module.exports = {
     curly: ['error', 'all'],
     'default-param-last': ['off'], // conflicts with TS version (this one doesn't allow TS ?)
     'deprecation/deprecation': 'error',
-    'func-style': ['error', 'declaration', { allowArrowFunctions: true }],
+    'func-style': ['error', 'declaration', {
+      allowArrowFunctions: true
+    }],
     // this does help with declarations, but also
     // applies to invocations, which is an issue...
     // 'function-paren-newline': ['error', 'never'],
@@ -110,10 +114,15 @@ module.exports = {
       forceSingleLine: true,
       items: 2048
     }],
+    'import/export': 'error',
     'import/extensions': ['error', 'ignorePackages', {
       json: 'always',
       jsx: 'never'
     }],
+    'import/first': 'error',
+    'import/newline-after-import': 'error',
+    'import/no-duplicates': 'error',
+    'import/order': 'off', // conflicts with simple-import-sort
     indent: 'off', // required as 'off' since typescript-eslint has own versions
     'jsx-quotes': ['error', 'prefer-single'],
     'no-extra-semi': 'error',
@@ -164,10 +173,12 @@ module.exports = {
     }],
     'react/prop-types': ['off'], // this is a completely broken rule
     semi: ['error', 'always'],
+    'simple-import-sort/exports': 'error',
     'simple-import-sort/imports': ['error', {
       groups: [
         ['^\u0000'], // all side-effects (0 at start)
         ['\u0000$', '^@polkadot.*\u0000$', '^\\..*\u0000$'], // types (0 at end)
+        // ['^node:'], // node
         ['^[^/\\.]'], // non-polkadot
         ['^@polkadot'], // polkadot
         ['^\\.\\.(?!/?$)', '^\\.\\./?$', '^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'] // local (. last)
