@@ -81,16 +81,16 @@
     "rollup-plugin-cleanup": "^3.2.1",
     "tslib": "^2.5.0",
     "typescript": "^5.0.4",
-    "webpack": "^5.80.0",
+    "webpack": "^5.81.0",
     "webpack-cli": "^5.0.2",
     "webpack-dev-server": "^4.13.3",
     "webpack-merge": "^5.8.0",
     "webpack-subresource-integrity": "^5.2.0-rc.1",
-    "yargs": "^17.7.1"
+    "yargs": "^17.7.2"
   },
   "devDependencies": {
     "@testing-library/react": "^14.0.0",
-    "@types/node": "^18.16.1",
+    "@types/node": "^18.16.2",
     "@types/react": "^18.2.0",
     "@types/styled-components": "^5.1.26",
     "@types/yargs": "^17.0.24",
