@@ -27,88 +27,80 @@ let testEnv = 'node';
 let isDev = false;
 
 for (let i = 0; i < args.length; i++) {
-  if (args[i].startsWith('-')) {
-    switch (args[i]) {
-      // when running inside a dev environment, specifically @polkadot/dev
-      case '--dev-packages-build':
-        isDev = true;
-        break;
+  switch (args[i]) {
+    // when running inside a dev environment, specifically @polkadot/dev
+    case '--dev-packages-build':
+      isDev = true;
+      break;
 
-      // environment, not passed-through
-      case '--env':
-        if (!['browser', 'node'].includes(args[++i])) {
-          throw new Error(`Invalid --env ${args[i]}, expected 'browser' or 'node'`);
-        }
-
-        testEnv = args[i];
-        break;
-
-      // internal flags with no params
-      case '--bail':
-      case '--console':
-        cmd.push(args[i]);
-        break;
-
-      // node flags without additional params
-      case '--experimental-vm-modules':
-      case '--no-warnings':
-        nodeFlags.push(args[i]);
-        break;
-
-      // node flags that could have additional params
-      case '--experimental-specifier-resolution':
-      case '--es-module-specifier-resolution':
-      case '--import':
-      case '--loader':
-      case '--require':
-        nodeFlags.push(args[i]);
-
-        if (!args[i].includes('=')) {
-          nodeFlags.push(args[++i]);
-        }
-
-        break;
-
-      // -- means that all following args are passed-through as-is
-      case '--':
-        while (++i < args.length) {
-          cmd.push(args[i]);
-        }
-
-        break;
-
-      // any other arguments are passed-through (check of skipping here)
-      default:
-        cmd.push(args[i]);
-
-        // for --<param> we only push when no = is included (self-contained)
-        if (!args[i].startsWith('--') || !args[i].includes('=')) {
-          cmd.push(args[++i]);
-        }
-
-        break;
-    }
-  } else {
-    // no "-"" found, so we use these as path filters
-    filters.push(args[i]);
-
-    if (args[i].startsWith('^')) {
-      const key = args[i].slice(1);
-
-      if (filtersIncl[key]) {
-        delete filtersIncl[key];
-      } else {
-        filtersExcl[key] = key.split(/[\\/]/);
+    // environment, not passed-through
+    case '--env':
+      if (!['browser', 'node'].includes(args[++i])) {
+        throw new Error(`Invalid --env ${args[i]}, expected 'browser' or 'node'`);
       }
-    } else {
-      const key = args[i];
 
-      if (filtersExcl[key]) {
-        delete filtersExcl[key];
-      } else {
-        filtersIncl[key] = key.split(/[\\/]/);
+      testEnv = args[i];
+      break;
+
+    // internal flags with no params
+    case '--bail':
+    case '--console':
+      cmd.push(args[i]);
+      break;
+
+    // internal flags, with params
+    case '--logfile':
+      cmd.push(args[i]);
+      cmd.push(args[++i]);
+      break;
+
+    // node flags without additional params
+    case '--experimental-vm-modules':
+    case '--no-warnings':
+      nodeFlags.push(args[i]);
+      break;
+
+    // node flags that could have additional params
+    case '--experimental-specifier-resolution':
+    case '--es-module-specifier-resolution':
+    case '--import':
+    case '--loader':
+    case '--require':
+      nodeFlags.push(args[i]);
+
+      if (!args[i].includes('=')) {
+        nodeFlags.push(args[++i]);
       }
-    }
+
+      break;
+
+    // any other non-flag arguments are passed-through
+    default:
+      if (args[i].startsWith('-')) {
+        throw new Error(`Uknown flag ${args[i]} found`);
+      }
+
+      filters.push(args[i]);
+
+      if (args[i].startsWith('^')) {
+        const key = args[i].slice(1);
+
+        if (filtersIncl[key]) {
+          delete filtersIncl[key];
+        } else {
+          filtersExcl[key] = key.split(/[\\/]/);
+        }
+      } else {
+        const key = args[i];
+
+        if (filtersExcl[key]) {
+          delete filtersExcl[key];
+        } else {
+          filtersIncl[key] = key.split(/[\\/]/);
+        }
+      }
+
+      break;
   }
 }
 

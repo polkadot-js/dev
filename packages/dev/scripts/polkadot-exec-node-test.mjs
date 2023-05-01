@@ -52,9 +52,8 @@ for (let i = 0; i < args.length; i++) {
     bail = true;
   } else if (args[i] === '--console') {
     toConsole = true;
-  } else if (args[i] === '--log') {
-    i++;
-    logFile = args[i];
+  } else if (args[i] === '--logfile') {
+    logFile = args[++i];
   } else {
     files.push(args[i]);
   }
