@@ -43,6 +43,32 @@ for (let i = 0; i < args.length; i++) {
         testEnv = args[i];
         break;
 
+      // internal flags with no params
+      case '--bail':
+      case '--console':
+        cmd.push(args[i]);
+        break;
+
+      // node flags without additional params
+      case '--experimental-vm-modules':
+      case '--no-warnings':
+        nodeFlags.push(args[i]);
+        break;
+
+      // node flags that could have additional params
+      case '--experimental-specifier-resolution':
+      case '--es-module-specifier-resolution':
+      case '--import':
+      case '--loader':
+      case '--require':
+        nodeFlags.push(args[i]);
+
+        if (!args[i].includes('=')) {
+          nodeFlags.push(args[++i]);
+        }
+
+        break;
+
       // -- means that all following args are passed-through as-is
       case '--':
         while (++i < args.length) {
@@ -53,23 +79,11 @@ for (let i = 0; i < args.length; i++) {
 
       // any other arguments are passed-through (check of skipping here)
       default:
-        if (['--experimental-specifier-resolution', '--es-module-specifier-resolution', '--import', '--loader', '--require'].some((f) => args[i].startsWith(f))) {
-          // additional node flags (with args)
-          nodeFlags.push(args[i]);
+        cmd.push(args[i]);
 
-          if (!args[i].includes('=')) {
-            nodeFlags.push(args[++i]);
-          }
-        } else if (['--experimental-vm-modules', '--no-warnings'].some((f) => args[i].startsWith(f))) {
-          // node flags without additional params
-          nodeFlags.push(args[i]);
-        } else {
-          cmd.push(args[i]);
-
-          // for --<param> we only push when no = is included (self-contained)
-          if (!args[i].startsWith('--') || !args[i].includes('=')) {
-            cmd.push(args[++i]);
-          }
+        // for --<param> we only push when no = is included (self-contained)
+        if (!args[i].startsWith('--') || !args[i].includes('=')) {
+          cmd.push(args[++i]);
         }
 
         break;

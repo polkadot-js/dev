@@ -44,10 +44,14 @@ let logFile = null;
 let startAt = 0;
 /** @type {boolean} */
 let bail = false;
+/** @type {boolean} */
+let toConsole = false;
 
 for (let i = 0; i < args.length; i++) {
   if (args[i] === '--bail') {
     bail = true;
+  } else if (args[i] === '--console') {
+    toConsole = true;
   } else if (args[i] === '--log') {
     i++;
     logFile = args[i];
@@ -178,7 +182,7 @@ function complete () {
   // The full error information can be quite useful in the case of overall
   // failures, i.e. when Node itself has an internal error before even executing
   // a single test
-  if (stats.fail.length && stats.diag.length) {
+  if ((stats.fail.length || toConsole) && stats.diag.length) {
     let lastFilename = '';
 
     stats.diag.forEach((r) => {
@@ -186,7 +190,7 @@ function complete () {
 
       if (typeof r === 'string') {
         // Node.js <= 18.14
-        console.error(r);
+        console.log(r);
       } else if (r.file && r.file.includes('@polkadot/dev/scripts')) {
         // ignore, these are internal
       } else {
@@ -194,16 +198,16 @@ function complete () {
           lastFilename = r.file;
 
           if (lastFilename) {
-            console.error(`\n${lastFilename}::\n`);
+            console.log(`\n${lastFilename}::\n`);
           } else {
-            console.error('\n');
+            console.log('\n');
           }
         }
 
-        console.error(`\t${r.message.split('\n').join('\n\t')}`);
+        console.log(`\t${r.message.split('\n').join('\n\t')}`);
       }
     });
-    console.error();
+    console.log();
   }
 
   if (stats.total === 0) {
