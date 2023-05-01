@@ -54,15 +54,7 @@ for (let i = 0; i < args.length; i++) {
       cmd.push(args[++i]);
       break;
 
-    // node flags without additional params
-    case '--experimental-vm-modules':
-    case '--no-warnings':
-      nodeFlags.push(args[i]);
-      break;
-
     // node flags that could have additional params
-    case '--experimental-specifier-resolution':
-    case '--es-module-specifier-resolution':
     case '--import':
     case '--loader':
     case '--require':
