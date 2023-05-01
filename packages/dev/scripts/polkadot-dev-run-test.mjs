@@ -77,7 +77,7 @@ for (let i = 0; i < args.length; i++) {
     // any other non-flag arguments are passed-through
     default:
       if (args[i].startsWith('-')) {
-        throw new Error(`Uknown flag ${args[i]} found`);
+        throw new Error(`Unknown flag ${args[i]} found`);
       }
 
       filters.push(args[i]);
