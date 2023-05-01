@@ -77,7 +77,7 @@
     "gh-pages": "^5.0.0",
     "gh-release": "^7.0.2",
     "madge": "^6.0.0",
-    "rollup": "^3.21.0",
+    "rollup": "^3.21.2",
     "rollup-plugin-cleanup": "^3.2.1",
     "tslib": "^2.5.0",
     "typescript": "^5.0.4",
@@ -90,7 +90,7 @@
   },
   "devDependencies": {
     "@testing-library/react": "^14.0.0",
-    "@types/node": "^18.16.2",
+    "@types/node": "^18.16.3",
     "@types/react": "^18.2.0",
     "@types/styled-components": "^5.1.26",
     "@types/yargs": "^17.0.24",
