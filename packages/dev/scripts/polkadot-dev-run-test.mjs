@@ -67,11 +67,7 @@ for (let i = 0; i < args.length; i++) {
     case '--loader':
     case '--require':
       nodeFlags.push(args[i]);
-
-      if (!args[i].includes('=')) {
-        nodeFlags.push(args[++i]);
-      }
-
+      nodeFlags.push(args[++i]);
       break;
 
     // any other non-flag arguments are passed-through
@@ -150,13 +146,12 @@ if (files.length === 0) {
 }
 
 try {
-  const cliArgs = [...cmd, ...files].join(' ');
-  const allFlags = `${nodeFlags.join(' ')} ${importPath('@polkadot/dev/scripts/polkadot-exec-node-test.mjs')} ${cliArgs}`;
+  const allFlags = `${importPath('@polkadot/dev/scripts/polkadot-exec-node-test.mjs')} ${[...cmd, ...files].join(' ')}`;
 
   if (isDev) {
-    execNodeTsSync(`--require ./packages/dev-test/build/cjs/${testEnv}.js ${allFlags}`, false, './packages/dev-ts/build/cached.js');
+    execNodeTsSync(`--require ./packages/dev-test/build/cjs/${testEnv}.js ${allFlags}`, nodeFlags, false, './packages/dev-ts/build/cached.js');
   } else {
-    execNodeTsSync(`--require @polkadot/dev-test/${testEnv} ${allFlags}`);
+    execNodeTsSync(`--require @polkadot/dev-test/${testEnv} ${allFlags}`, nodeFlags);
   }
 } catch {
   process.exit(1);

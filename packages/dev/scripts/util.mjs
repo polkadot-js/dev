@@ -112,8 +112,8 @@ export function execSync (cmd, noLog) {
  * @param {boolean} [noLog]
  * @param {string} [loaderPath]
  **/
-export function execNodeTsSync (cmd, noLog, loaderPath = '@polkadot/dev-ts/cached') {
-  execSync(`${process.execPath} --no-warnings --enable-source-maps --loader ${loaderPath} ${cmd}`, noLog);
+export function execNodeTsSync (cmd, nodeFlags = [], noLog, loaderPath = '@polkadot/dev-ts/cached') {
+  execSync(`${process.execPath} ${nodeFlags.join(' ')}${nodeFlags.length ? ' ' : ''}--no-warnings --enable-source-maps --loader ${loaderPath} ${cmd}`, noLog);
 }
 
 /**
