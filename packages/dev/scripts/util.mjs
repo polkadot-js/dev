@@ -113,7 +113,29 @@ export function execSync (cmd, noLog) {
  * @param {string} [loaderPath]
  **/
 export function execNodeTsSync (cmd, nodeFlags = [], noLog, loaderPath = '@polkadot/dev-ts/cached') {
-  execSync(`${process.execPath} ${nodeFlags.join(' ')}${nodeFlags.length ? ' ' : ''}--no-warnings --enable-source-maps --loader ${loaderPath} ${cmd}`, noLog);
+  const loadersGlo = [];
+  const loadersLoc = [];
+  const otherFlags = [];
+
+  for (let i = 0; i < nodeFlags.length; i++) {
+    const flag = nodeFlags[i];
+
+    if (['--import', '--loader', '--require'].includes(flag)) {
+      const arg = nodeFlags[++i];
+
+      if (arg.startsWith('./')) {
+        loadersLoc.push(flag);
+        loadersLoc.push(arg);
+      } else {
+        loadersGlo.push(flag);
+        loadersGlo.push(arg);
+      }
+    } else {
+      otherFlags.push(flag);
+    }
+  }
+
+  execSync(`${process.execPath} ${otherFlags.join(' ')} --no-warnings --enable-source-maps ${loadersGlo.join(' ')} --loader ${loaderPath} ${loadersLoc.join(' ')} ${cmd}`.split(' ').map((w) => w.trim()).filter((w) => !!w).join(' '), noLog);
 }
 
 /**
