@@ -141,9 +141,9 @@ try {
   const allFlags = `${importPath('@polkadot/dev/scripts/polkadot-exec-node-test.mjs')} ${[...cmd, ...files].join(' ')}`;
 
   if (isDev) {
-    execNodeTsSync(`--require ./packages/dev-test/build/cjs/${testEnv}.js ${allFlags}`, nodeFlags, false, './packages/dev-ts/build/cached.js');
+    execNodeTsSync(allFlags, nodeFlags.concat('--require', `./packages/dev-test/build/cjs/${testEnv}.js`), false, './packages/dev-ts/build/cached.js');
   } else {
-    execNodeTsSync(`--require @polkadot/dev-test/${testEnv} ${allFlags}`, nodeFlags);
+    execNodeTsSync(allFlags, nodeFlags.concat('--require', `@polkadot/dev-test/${testEnv}`));
   }
 } catch {
   process.exit(1);
