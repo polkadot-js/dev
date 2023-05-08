@@ -4,7 +4,7 @@
 
 import process from 'node:process';
 
-import { execNodeTsSync, exitFatal, importPath, readdirSync } from './util.mjs';
+import { execNodeTsSync, exitFatal, exitFatalEngine, importPath, readdirSync } from './util.mjs';
 
 // A & B are just helpers here and in the errors below
 const EXT_A = ['spec', 'test'];
@@ -17,6 +17,8 @@ const EXTS = EXT_A.reduce((exts, s) => exts.concat(...EXT_B.map((e) => `.${s}.${
 const args = process.argv.slice(2);
 
 console.log('$ polkadot-dev-run-test', args.join(' '));
+
+exitFatalEngine();
 
 const cmd = [];
 const nodeFlags = [];
