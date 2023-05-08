@@ -94,6 +94,49 @@ export function denoCreateDir (name) {
 }
 
 /**
+ * @internal
+ *
+ * Adjusts the engine setting, highest of current and requested
+ *
+ * @param {string} [a]
+ * @param {string} [b]
+ * @returns {number}
+ */
+export function engineVersionCmp (a, b) {
+  const aVer = engineVersionSplit(a);
+  const bVer = engineVersionSplit(b);
+
+  for (let i = 0; i < 3; i++) {
+    if (aVer[i] < bVer[i]) {
+      return -1;
+    } else if (aVer[i] > bVer[i]) {
+      return 1;
+    }
+  }
+
+  return 0;
+}
+
+/**
+ * @internal
+ *
+ * Splits a engines version, i.e. >=xx(.yy) into
+ * the major/minor/patch parts
+ *
+ * @param {string} [ver]
+ * @returns {[number, number, number]}
+ */
+export function engineVersionSplit (ver) {
+  const parts = (ver || '>=0')
+    .replace('v', '') // process.version rerurns v18.14.0
+    .replace('>=', '') // engines have >= prefix
+    .split('.')
+    .map((e) => e.trim());
+
+  return [parseInt(parts[0] || '0', 10), parseInt(parts[1] || '0', 10), parseInt(parts[2] || '0', 10)];
+}
+
+/**
  * Process execution
  *
  * @param {string} cmd
