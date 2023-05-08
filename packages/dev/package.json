@@ -82,8 +82,8 @@
     "tslib": "^2.5.0",
     "typescript": "^5.0.4",
     "webpack": "^5.82.0",
-    "webpack-cli": "^5.0.2",
-    "webpack-dev-server": "^4.13.3",
+    "webpack-cli": "^5.1.0",
+    "webpack-dev-server": "^4.15.0",
     "webpack-merge": "^5.8.0",
     "webpack-subresource-integrity": "^5.2.0-rc.1",
     "yargs": "^17.7.2"
@@ -91,7 +91,7 @@
   "devDependencies": {
     "@testing-library/react": "^14.0.0",
     "@types/node": "^20.1.0",
-    "@types/react": "^18.2.5",
+    "@types/react": "^18.2.6",
     "@types/styled-components": "^5.1.26",
     "@types/yargs": "^17.0.24",
     "react": "^18.2.0",

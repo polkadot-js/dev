@@ -7,7 +7,7 @@ import path from 'node:path';
 import process from 'node:process';
 import ts from 'typescript';
 
-import { copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_LND_PRE, DENO_POL_PRE, execSync, exitFatal, mkdirpSync, PATHS_BUILD, readdirSync, rimrafSync } from './util.mjs';
+import { copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_LND_PRE, DENO_POL_PRE, engineVersionCmp, execSync, exitFatal, mkdirpSync, PATHS_BUILD, readdirSync, rimrafSync } from './util.mjs';
 
 const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
 const RL_CONFIGS = ['js', 'mjs', 'cjs'].map((e) => `rollup.config.${e}`);
@@ -723,44 +723,15 @@ function sortJson (json) {
 /**
  * @internal
  *
- * Splits a engines version, i.e. >=xx(.yy) into
- * the major/minor/patch parts
- *
- * @param {string} [ver]
- * @returns {[number, number, number]]
- */
-function engineVersionSplit (ver) {
-  const parts = (ver || '>=0').replace('>=', '').split('.').map((e) => e.trim());
-
-  return [parseInt(parts[0] || '0', 10), parseInt(parts[1] || '0', 10), parseInt(parts[2] || '0', 10)];
-}
-
-/**
- * @internal
- *
  * Adjusts the engine setting, highest of current and requested
  *
  * @param {string} [currVer]
  * @returns {string}
  */
 function getEnginesVer (currVer) {
-  const nodeVer = engineVersionSplit(TARGET_NODE);
-  const jsonVer = engineVersionSplit(currVer);
-
-  if (
-    (nodeVer[0] > jsonVer[0]) || (
-      (nodeVer[0] === jsonVer[0]) && (
-        (nodeVer[1] > jsonVer[1]) || (
-          (nodeVer[1] === jsonVer[1]) &&
-          (nodeVer[2] > jsonVer[2])
-        )
-      )
-    )
-  ) {
-    return TARGET_NODE;
-  }
-
-  return currVer;
+  return engineVersionCmp(currVer, TARGET_NODE) === 1
+    ? currVer
+    : TARGET_NODE;
 }
 
 function orderPackageJson (repoPath, dir, json) {
