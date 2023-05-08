@@ -661,7 +661,11 @@ function buildExports () {
   pkg.exports = listRoot
     .filter(([path, config]) =>
       // we handle the CJS path at the root below
-      path !== './cjs/package.json' && (
+      path !== './cjs/package.json' &&
+      // we don't export ./deno/* paths (e.g. wasm)
+      !path.startsWith('./deno/') &&
+      // others
+      (
         typeof config === 'object' ||
         !listRoot.some(([, c]) =>
           typeof c === 'object' &&
