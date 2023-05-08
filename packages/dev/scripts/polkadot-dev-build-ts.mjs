@@ -378,9 +378,16 @@ function createMapEntry (rootDir, jsPath, noTypes) {
   const hasTypes = !noTypes && jsPath.endsWith('.js') && fs.existsSync(path.join(rootDir, typesPath));
   const field = hasCjs
     ? {
+      // As per TS, the types key needs to be first
       ...(
         hasTypes
           ? { types: typesPath }
+          : {}
+      ),
+      // bundler-specific path, eg. webpack & rollup
+      ...(
+        jsPath.endsWith('.js')
+          ? { module: jsPath }
           : {}
       ),
       require: cjsPath,
