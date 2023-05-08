@@ -681,11 +681,20 @@ function buildExports () {
             ...config
           })
           .sort(([a], [b]) =>
+            // types (first), module (first-ish), default (last)
             a === 'types'
               ? -1
               : b === 'types'
                 ? 1
-                : 0
+                : a === 'module'
+                  ? -1
+                  : b === 'module'
+                    ? 1
+                    : a === 'default'
+                      ? 1
+                      : b === 'default'
+                        ? -1
+                        : 0
           )
           .reduce((all, [key, value]) => ({
             ...all,
