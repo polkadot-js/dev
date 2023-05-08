@@ -1,4 +1,4 @@
-    1285	Jaco                          	Add module key to export map (#1037)
+    1286	Jaco                          	Be explicit on export oredring (#1038)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
