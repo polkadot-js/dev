@@ -527,7 +527,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/dev-test@^0.73.13, @polkadot/dev-test@workspace:packages/dev-test":
+"@polkadot/dev-test@^0.73.14, @polkadot/dev-test@workspace:packages/dev-test":
   version: 0.0.0-use.local
   resolution: "@polkadot/dev-test@workspace:packages/dev-test"
   dependencies:
@@ -537,7 +537,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@polkadot/dev-ts@^0.73.13, @polkadot/dev-ts@workspace:packages/dev-ts":
+"@polkadot/dev-ts@^0.73.14, @polkadot/dev-ts@workspace:packages/dev-ts":
   version: 0.0.0-use.local
   resolution: "@polkadot/dev-ts@workspace:packages/dev-ts"
   dependencies:
@@ -552,8 +552,8 @@ __metadata:
   resolution: "@polkadot/dev@workspace:packages/dev"
   dependencies:
     "@eslint/js": ^8.40.0
-    "@polkadot/dev-test": ^0.73.13
-    "@polkadot/dev-ts": ^0.73.13
+    "@polkadot/dev-test": ^0.73.14
+    "@polkadot/dev-ts": ^0.73.14
     "@rollup/plugin-alias": ^5.0.0
     "@rollup/plugin-commonjs": ^24.1.0
     "@rollup/plugin-dynamic-import-vars": ^2.0.3
