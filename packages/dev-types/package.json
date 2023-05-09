@@ -1,0 +1,28 @@
+{
+  "author": "Jaco Greeff <jacogr@gmail.com>",
+  "bugs": "https://github.com/polkadot-js/dev/issues",
+  "description": "A types-on meta package to align all used @types/*",
+  "engines": {
+    "node": ">=16.12"
+  },
+  "homepage": "https://github.com/polkadot-js/dev/tree/master/packages/dev-types#readme",
+  "license": "Apache-2.0",
+  "name": "@polkadot/dev-types",
+  "repository": {
+    "directory": "packages/dev-types",
+    "type": "git",
+    "url": "https://github.com/polkadot-js/dev.git"
+  },
+  "sideEffects": false,
+  "type": "module",
+  "version": "0.73.16",
+  "main": "./index.js",
+  "dependencies": {
+    "@types/node": "^20.1.1",
+    "@types/react": "^18.2.6",
+    "@types/react-dom": "^18.2.4",
+    "@types/styled-components": "^5.1.26",
+    "@types/yargs": "^17.0.24",
+    "tslib": "^2.5.0"
+  }
+}

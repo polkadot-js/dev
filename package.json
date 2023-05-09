@@ -35,7 +35,8 @@
   "devDependencies": {
     "@polkadot/dev": "workspace:packages/dev",
     "@polkadot/dev-test": "workspace:packages/dev-test",
-    "@polkadot/dev-ts": "workspace:packages/dev-ts"
+    "@polkadot/dev-ts": "workspace:packages/dev-ts",
+    "@polkadot/dev-types": "workspace:packages/dev-types"
   },
   "resolutions": {
     "typescript": "^5.0.4"

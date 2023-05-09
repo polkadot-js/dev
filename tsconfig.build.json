@@ -6,6 +6,7 @@
   "references": [
     { "path": "./packages/dev/tsconfig.build.json" },
     { "path": "./packages/dev-test/tsconfig.build.json" },
-    { "path": "./packages/dev-ts/tsconfig.build.json" }
+    { "path": "./packages/dev-ts/tsconfig.build.json" },
+    { "path": "./packages/dev-types/tsconfig.build.json" }
   ]
 }
