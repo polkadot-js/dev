@@ -12,10 +12,6 @@ import { copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_LND_PRE, DENO_POL_PRE, en
 const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
 const RL_CONFIGS = ['js', 'mjs', 'cjs'].map((e) => `rollup.config.${e}`);
 
-console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
-
-exitFatalEngine();
-
 // We need at least es2020 for dynamic imports. Aligns with dev-ts/loader & config/tsconfig
 // Node 14 === es2020, Node 16 === es2021, Node 18 === es2022
 // https://github.com/tsconfig/bases/blob/d699759e29cfd5f6ab0fab9f3365c7767fca9787/bases/node16.json#L8
@@ -30,6 +26,19 @@ const IGNORE_IMPORTS = [
   'react', 'react-native', 'styled-components'
 ];
 
+console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
+
+exitFatalEngine();
+
+const args = process.argv.slice(2);
+let compileType = 'tsc';
+
+for (let i = 0; i < args.length; i++) {
+  if (args[i] === '--compiler') {
+    compileType = args[++i];
+  }
+}
+
 // webpack build
 function buildWebpack () {
   const config = WP_CONFIGS.find((c) => fs.existsSync(path.join(process.cwd(), c)));
@@ -38,7 +47,7 @@ function buildWebpack () {
 }
 
 // compile via tsc, either via supplied config or default
-async function compileJs (compileType, type) {
+async function compileJs (type) {
   const buildDir = path.join(process.cwd(), `build-${compileType}-${type}`);
 
   mkdirpSync(buildDir);
@@ -54,11 +63,11 @@ async function compileJs (compileType, type) {
         const outFile = path.join(buildDir, filename.split(/[\\/]/).slice(1).join('/').replace(/\.tsx?$/, '.js'));
 
         // Until we hit the es2022 target, all private fields are compiled to using
-        // WeakMap with less than stellar performannce of get/set on the polyfill. We
+        // WeakMap. This has less than stellar performannce on get/set of fields. We
         // replace usages of these with TS-only private fields.
         //
-        // As used these are internal-only, completely hidden fields should be done via
-        // closures, see e.g. the common keypairs where this is done
+        // As used these are internal-only, completely hidden fields should be done
+        // via closures, see e.g. the common keypairs where this is done
         const source = fs
           .readFileSync(filename, 'utf-8')
           .replace(/(this|other|source)\.#/g, '$1.__internal__')
@@ -414,7 +423,7 @@ function createMapEntry (rootDir, jsPath, noTypes) {
 }
 
 // copies all output files into the build directory
-function copyBuildFiles (compileType, dir) {
+function copyBuildFiles (dir) {
   mkdirpSync('build/cjs');
 
   // copy package info stuff
@@ -537,7 +546,7 @@ function tweakCjsPaths () {
   });
 }
 
-function tweakPackageInfo (compileType) {
+function tweakPackageInfo () {
   // Hack around some bundler issues, in this case Vite which has import.meta.url
   // as undefined in production contexts (and subsequently makes URL fail)
   // See https://github.com/vitejs/vite/issues/5558
@@ -913,7 +922,7 @@ function getReferences (config) {
   return [[], false];
 }
 
-function lintDependencies (compileType, dir, locals) {
+function lintDependencies (dir, locals) {
   const { dependencies = {}, devDependencies = {}, name, optionalDependencies = {}, peerDependencies = {}, private: isPrivate } = JSON.parse(fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf-8'));
 
   if (isPrivate) {
@@ -998,7 +1007,7 @@ async function timeIt (label, fn) {
   console.log(`${label} (${Date.now() - start}ms)`);
 }
 
-async function buildJs (compileType, repoPath, dir, locals) {
+async function buildJs (repoPath, dir, locals) {
   const pkgJson = JSON.parse(fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf-8'));
   const { name, version } = pkgJson;
 
@@ -1039,8 +1048,8 @@ async function buildJs (compileType, repoPath, dir, locals) {
     if (fs.existsSync(path.join(process.cwd(), 'public'))) {
       buildWebpack();
     } else {
-      await compileJs(compileType, 'cjs');
-      await compileJs(compileType, 'esm');
+      await compileJs('cjs');
+      await compileJs('esm');
 
       // Deno
       await timeIt('Successfully compiled deno', () => {
@@ -1059,10 +1068,10 @@ async function buildJs (compileType, repoPath, dir, locals) {
 
       await timeIt('Successfully combined build', () => {
         // adjust all packageInfo.js files for the correct usage
-        tweakPackageInfo(compileType);
+        tweakPackageInfo();
 
         // copy output files (after import rewriting)
-        copyBuildFiles(compileType, dir);
+        copyBuildFiles(dir);
       });
 
       await timeIt('Successfully built exports', () => {
@@ -1075,7 +1084,7 @@ async function buildJs (compileType, repoPath, dir, locals) {
 
       await timeIt('Successfully linted configs', () => {
         lintOutput(dir);
-        lintDependencies(compileType, dir, locals);
+        lintDependencies(dir, locals);
       });
     }
   }
@@ -1084,15 +1093,6 @@ async function buildJs (compileType, repoPath, dir, locals) {
 }
 
 async function main () {
-  const args = process.argv.slice(2);
-  let compileType = 'tsc';
-
-  for (let i = 0; i < args.length; i++) {
-    if (args[i] === '--compiler') {
-      compileType = args[++i];
-    }
-  }
-
   execSync('yarn polkadot-dev-clean-build');
 
   const pkg = JSON.parse(fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf-8'));
@@ -1134,7 +1134,7 @@ async function main () {
   for (const dir of dirs) {
     process.chdir(dir);
 
-    await buildJs(compileType, repoPath, dir, locals);
+    await buildJs(repoPath, dir, locals);
 
     process.chdir('..');
   }
