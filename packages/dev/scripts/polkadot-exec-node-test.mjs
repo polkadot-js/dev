@@ -1,6 +1,8 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// @ts-check
+
 // For Node 18, earliest usable is 18.14:
 //
 //   - node:test added in 18.0,
@@ -14,7 +16,8 @@
 //   - run method exposed in 16.19,
 //   - mock not available
 
-/** @typedef {{ diag: unknown[]; fail: unknown[]; pass: unknown[]; skip: unknown[]; todo: unknown[]; total: number }} Stats */
+// NOTE error should be defined as "Error", however the @types/node definitions doesn't include all
+/** @typedef {{ diag: { file?: string; message?: string; }[]; fail: { details: { error: object }; file?: string; name: string }[]; pass: unknown[]; skip: unknown[]; todo: unknown[]; total: number }} Stats */
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -182,6 +185,7 @@ function complete () {
   // failures, i.e. when Node itself has an internal error before even executing
   // a single test
   if ((stats.fail.length || toConsole) && stats.diag.length) {
+    /** @type {string | undefined} */
     let lastFilename = '';
 
     stats.diag.forEach((r) => {
@@ -203,7 +207,7 @@ function complete () {
           }
         }
 
-        console.log(`\t${r.message.split('\n').join('\n\t')}`);
+        console.log(`\t${r.message?.split('\n').join('\n\t')}`);
       }
     });
     console.log();

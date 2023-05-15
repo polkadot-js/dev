@@ -2,6 +2,8 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// @ts-check
+
 import fs from 'node:fs';
 
 import { DENO_POL_PRE } from './util.mjs';
@@ -10,7 +12,7 @@ const [e, i] = fs
   .readdirSync('packages')
   .filter((p) => fs.existsSync(`packages/${p}/src/mod.ts`))
   .sort()
-  .reduce(([e, i], p) => {
+  .reduce((/** @type {[string[], Record<String, string>]} */ [e, i], p) => {
     e.push(`export * as ${p.replace(/-/g, '_')} from '${DENO_POL_PRE}/${p}/mod.ts';`);
     i[`${DENO_POL_PRE}/${p}/`] = `./packages/${p}/build-deno/`;
 
