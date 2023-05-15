@@ -2,6 +2,8 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// @ts-check
+
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -56,6 +58,6 @@ if (fs.existsSync(PKGS)) {
       .readdirSync(PKGS)
       .map((f) => path.join(PKGS, f))
       .filter((f) => fs.statSync(f).isDirectory())
-      .reduce((res, d) => res.concat(getPaths(d)), [])
+      .reduce((/** @type {string[]} */ res, d) => res.concat(getPaths(d)), [])
   );
 }
