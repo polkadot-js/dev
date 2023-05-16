@@ -2,8 +2,6 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// @ts-check
-
 import process from 'node:process';
 
 import { execNodeTsSync, exitFatal, exitFatalEngine, importPath, readdirSync } from './util.mjs';

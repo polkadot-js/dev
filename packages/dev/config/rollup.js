@@ -1,8 +1,6 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// @ts-check
-
 import pluginAlias from '@rollup/plugin-alias';
 import pluginCommonjs from '@rollup/plugin-commonjs';
 import pluginDynamicImportVars from '@rollup/plugin-dynamic-import-vars';
