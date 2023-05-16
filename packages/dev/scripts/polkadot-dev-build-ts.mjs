@@ -10,7 +10,7 @@ import ts from 'typescript';
 import { copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_LND_PRE, DENO_POL_PRE, engineVersionCmp, execSync, exitFatal, exitFatalEngine, mkdirpSync, PATHS_BUILD, readdirSync, rimrafSync } from './util.mjs';
 
 /** @typedef {'babel' | 'swc' | 'tsc'} CompileType */
-/** @typedef {{ bin?: Record<string, string>; bugs?: string; denoDependencies?: Record<string, string>; dependencies?: Record<string, string>; devDependencies?: Record<string, string>; engines?: Record<string, string>; exports?: Record<string, unknown>; license?: string; homepage?: string; main?: string; mdouled?: string; name?: string; optionalDependencies?: Record<string, string>; peerDependencies?: Record<string, string>; repository?: { directory?: string; type: 'git'; url: string; }; resolutions?: Record<string, string>; sideEffects?: boolean; scripts?: Record<string, string>; type?: 'module' | 'commonjs'; types?: string; version?: string; }} PkgJson */
+/** @typedef {{ bin?: Record<string, string>; browser?: string; bugs?: string; deno?: string; denoDependencies?: Record<string, string>; dependencies?: Record<string, string>; devDependencies?: Record<string, string>; electron?: string; engines?: Record<string, string>; exports?: Record<string, unknown>; license?: string; homepage?: string; main?: string; module?: string; name?: string; optionalDependencies?: Record<string, string>; peerDependencies?: Record<string, string>; repository?: { directory?: string; type: 'git'; url: string; }; 'react-native'?: string; resolutions?: Record<string, string>; sideEffects?: boolean | string[]; scripts?: Record<string, string>; type?: 'module' | 'commonjs'; types?: string; version?: string; }} PkgJson */
 
 const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
 const RL_CONFIGS = ['js', 'mjs', 'cjs'].map((e) => `rollup.config.${e}`);
@@ -411,19 +411,23 @@ function buildDeno () {
   rimrafSync('build-deno/cjs');
 }
 
+/**
+ * @param {string} [value]
+ * @returns {string}
+ */
 function relativePath (value) {
-  return `${value.startsWith('.') ? value : './'}${value}`.replace(/\/\//g, '/');
+  return `${value && value.startsWith('.') ? value : './'}${value}`.replace(/\/\//g, '/');
 }
 
 /**
  * creates an entry for the cjs/esm name
  *
  * @param {string} rootDir
- * @param {string} jsPath
+ * @param {string} [jsPath]
  * @param {boolean} [noTypes]
  * @returns {[string, Record<string, unknown> | string]}
  */
-function createMapEntry (rootDir, jsPath, noTypes) {
+function createMapEntry (rootDir, jsPath = '', noTypes) {
   jsPath = relativePath(jsPath);
 
   const cjsPath = jsPath.replace('./', './cjs/');
@@ -467,7 +471,12 @@ function createMapEntry (rootDir, jsPath, noTypes) {
   return [jsPath, field];
 }
 
-// copies all output files into the build directory
+/**
+ * copies all output files into the build directory
+ *
+ * @param {CompileType} compileType
+ * @param {string} dir
+ */
 function copyBuildFiles (compileType, dir) {
   mkdirpSync('build/cjs');
 
@@ -660,7 +669,7 @@ function tweakPackageInfo (compileType) {
 /**
  * Adjusts the order of fiels in the package.json
  *
- * @param {PkgJson} pkgJson
+ * @param {Record<string, unknown>} pkgJson
  * @param {string[]} fields
  */
 function moveFields (pkgJson, fields) {
@@ -685,6 +694,8 @@ function buildExports () {
   tweakCjsPaths();
 
   const pkgPath = path.join(buildDir, 'package.json');
+
+  /** @type {PkgJson} */
   const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
   const listRoot = findFiles(buildDir, '', ['cjs', 'README.md', 'LICENSE']);
 
@@ -720,11 +731,13 @@ function buildExports () {
   }
 
   // Ensure the top-level entries always points to the CJS version
-  ['browser', 'react-native'].forEach((k) => {
-    if (typeof pkg[k] === 'string') {
-      const entry = pkg[k].startsWith('./')
-        ? pkg[k]
-        : `./${pkg[k]}`;
+  (/** @type {const} */ (['browser', 'react-native'])).forEach((k) => {
+    const value = pkg[k];
+
+    if (typeof value === 'string') {
+      const entry = value.startsWith('./')
+        ? value
+        : `./${value}`;
 
       pkg[k] = entry.replace(/^\.\//, './cjs/');
     }
@@ -820,8 +833,8 @@ function buildExports () {
 /**
  * Sorts a JSON file (typically package.json) by key
  *
- * @param {PkgJson} json
- * @returns {PkgJson}
+ * @param {Record<string, unknown>} json
+ * @returns {Record<string, unknown>}
  */
 function sortJson (json) {
   return Object
@@ -877,7 +890,7 @@ function orderPackageJson (repoPath, dir, json) {
   });
 
   // move the different entry points to the (almost) end
-  ['browser', 'deno', 'electron', 'main', 'module', 'react-native'].forEach((d) => {
+  (/** @type {const} */ (['browser', 'deno', 'electron', 'main', 'module', 'react-native'])).forEach((d) => {
     delete sorted[d];
 
     if (json[d]) {
@@ -886,11 +899,13 @@ function orderPackageJson (repoPath, dir, json) {
   });
 
   // move bin, scripts & dependencies to the end
-  ['bin', 'scripts', 'exports', 'dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies', 'denoDependencies', 'resolutions'].forEach((d) => {
+  (/** @type {const} */ (['bin', 'scripts', 'exports', 'dependencies', 'devDependencies', 'optionalDependencies', 'peerDependencies', 'denoDependencies', 'resolutions'])).forEach((d) => {
     delete sorted[d];
 
-    if (json[d] && Object.keys(json[d]).length) {
-      sorted[d] = sortJson(json[d]);
+    const value = json[d];
+
+    if (value && Object.keys(value).length) {
+      sorted[d] = sortJson(value);
     }
   });
 
@@ -1013,15 +1028,15 @@ function getReferences (config) {
 
   if (fs.existsSync(configPath)) {
     try {
+      /** @type {{ path: string }[]} */
+      const references = JSON.parse(fs.readFileSync(configPath, 'utf-8')).references;
+
       return [
-        JSON
-          .parse(fs.readFileSync(configPath, 'utf-8'))
-          .references
-          .map(({ path }) =>
-            path
-              .replace('../', '')
-              .replace('/tsconfig.build.json', '')
-          ),
+        references.map(({ path }) =>
+          path
+            .replace('../', '')
+            .replace('/tsconfig.build.json', '')
+        ),
         true
       ];
     } catch (error) {
@@ -1069,6 +1084,8 @@ function lintDependencies (compileType, dir, locals) {
   ];
   const [references] = getReferences('tsconfig.build.json');
   const [devRefs, hasDevConfig] = getReferences('tsconfig.spec.json');
+
+  /** @type {string[]} */
   const refsFound = [];
 
   throwOnErrors(
@@ -1103,9 +1120,9 @@ function lintDependencies (compileType, dir, locals) {
             }
           }
         }
-
-        return null;
       }
+
+      return null;
     })
   );
 

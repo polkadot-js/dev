@@ -9,7 +9,7 @@ import yargs from 'yargs';
 
 import { copyDirSync, copyFileSync, denoCreateDir, execSync, exitFatal, gitSetup, mkdirpSync, rimrafSync } from './util.mjs';
 
-/** @typedef {object} ChangelogMap */
+/** @typedef {Record<string, any>} ChangelogMap */
 
 console.log('$ polkadot-ci-ghact-build', process.argv.slice(2).join(' '));
 
@@ -214,7 +214,7 @@ function npmPublish () {
  *
  * @param {string[][]} parts
  * @param {ChangelogMap} result
- * @returns
+ * @returns {ChangelogMap}
  */
 function createChangelogMap (parts, result = {}) {
   for (let i = 0; i < parts.length; i++) {
@@ -436,6 +436,7 @@ function verBump () {
   const [,, patch] = version.split('.');
   const lastVersion = (versions && versions.npm) || currentVersion;
 
+  // @ts-expect-error yargs may return a promise, but we _should_ be ok based on usage
   if (argv['skip-beta'] || patch === '0') {
     // don't allow beta versions
     execSync('yarn polkadot-dev-version patch');

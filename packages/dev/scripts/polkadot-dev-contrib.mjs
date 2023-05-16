@@ -23,7 +23,7 @@ fs.writeFileSync(
         .split('\n')
         .map((l) => l.trim())
         .filter((l) => !!l)
-        .reduce((all, line) => {
+        .reduce((/** @type {Record<string, { count: number; name: string; }>} */ all, line) => {
           const [c, e] = line.split('\t');
           const count = parseInt(c, 10);
           const [name, rest] = e.split(' <');

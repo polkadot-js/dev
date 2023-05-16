@@ -15,7 +15,7 @@
 //   - mock not available
 
 // NOTE error should be defined as "Error", however the @types/node definitions doesn't include all
-/** @typedef {{ diag: { file?: string; message?: string; }[]; fail: { details: { error: object }; file?: string; name: string }[]; pass: unknown[]; skip: unknown[]; todo: unknown[]; total: number }} Stats */
+/** @typedef {{ diag: { file?: string; message?: string; }[]; fail: { details: { error: { failureType: unknown; cause: { code: number; message: string; stack: string; }; code: number; } }; file?: string; name: string }[]; pass: unknown[]; skip: unknown[]; todo: unknown[]; total: number }} Stats */
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -233,7 +233,7 @@ run({ files, timeout: 3_600_000 })
   .on('test:diagnostic', (data) => {
     stats.diag.push(data);
   })
-  .on('test:fail', (data) => {
+  .on('test:fail', (/** @type {any} */ data) => {
     stats.fail.push(data);
     output('x');
 
