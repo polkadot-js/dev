@@ -16,7 +16,7 @@ jobs:
     - uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node }}
-    - name: ${{ matrix.step }} ${{ matrix.node }}
+    - name: ${{ matrix.step }}
       run: |
         yarn install --immutable
         yarn ${{ matrix.step }}
