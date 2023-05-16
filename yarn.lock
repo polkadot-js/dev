@@ -527,7 +527,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@polkadot/dev-test@^0.73.19, @polkadot/dev-test@workspace:packages/dev-test":
+"@polkadot/dev-test@^0.73.20, @polkadot/dev-test@workspace:packages/dev-test":
   version: 0.0.0-use.local
   resolution: "@polkadot/dev-test@workspace:packages/dev-test"
   dependencies:
@@ -537,7 +537,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@polkadot/dev-ts@^0.73.19, @polkadot/dev-ts@workspace:packages/dev-ts":
+"@polkadot/dev-ts@^0.73.20, @polkadot/dev-ts@workspace:packages/dev-ts":
   version: 0.0.0-use.local
   resolution: "@polkadot/dev-ts@workspace:packages/dev-ts"
   dependencies:
@@ -552,8 +552,8 @@ __metadata:
   resolution: "@polkadot/dev@workspace:packages/dev"
   dependencies:
     "@eslint/js": ^8.40.0
-    "@polkadot/dev-test": ^0.73.19
-    "@polkadot/dev-ts": ^0.73.19
+    "@polkadot/dev-test": ^0.73.20
+    "@polkadot/dev-ts": ^0.73.20
     "@rollup/plugin-alias": ^5.0.0
     "@rollup/plugin-commonjs": ^25.0.0
     "@rollup/plugin-dynamic-import-vars": ^2.0.3
@@ -590,7 +590,7 @@ __metadata:
     react: ^18.2.0
     react-dom: ^18.2.0
     react-is: ^18.2.0
-    rollup: ^3.21.7
+    rollup: ^3.21.8
     rollup-plugin-cleanup: ^3.2.1
     styled-components: ^5.3.10
     tslib: ^2.5.0
@@ -7317,9 +7317,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^3.21.7":
-  version: 3.21.7
-  resolution: "rollup@npm:3.21.7"
+"rollup@npm:^3.21.8":
+  version: 3.21.8
+  resolution: "rollup@npm:3.21.8"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -7327,7 +7327,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 44372a1e6fbd1941d6cb230b2a3de6d86861ca7523792757c9fe1d254ae4cd645f5dae27d93c7b1e02c60945d2eadd8c74a99033bd8328eda84949086330d804
+  checksum: f749443af3560aba26f5d45dab98f5657bb29d6698f5a8665932b93e8963ba0d9d54283a25cc2b48b4f47d3dc042acfaae1d2947f02c767d28b87aa11f9e148f
   languageName: node
   linkType: hard
 
