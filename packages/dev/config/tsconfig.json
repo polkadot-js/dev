@@ -26,7 +26,6 @@
      * These appear in strictest, however we don't (yet) use them. For the most part it means
      * that we actually do have a large number of these lurking (especially on index checks)
      */
-    "checkJs": false,
     "exactOptionalPropertyTypes": false,
     "noPropertyAccessFromIndexSignature": false,
     "noUncheckedIndexedAccess": false,

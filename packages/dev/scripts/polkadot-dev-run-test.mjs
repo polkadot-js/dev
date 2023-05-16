@@ -2,6 +2,8 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// @ts-check
+
 import process from 'node:process';
 
 import { execNodeTsSync, exitFatal, exitFatalEngine, importPath, readdirSync } from './util.mjs';
@@ -11,8 +13,7 @@ const EXT_A = ['spec', 'test'];
 const EXT_B = ['ts', 'tsx', 'js', 'jsx', 'cjs', 'mjs'];
 
 // The actual extensions we are looking for
-/** @type {string[]} */
-const EXTS = EXT_A.reduce((exts, s) => exts.concat(...EXT_B.map((e) => `.${s}.${e}`)), []);
+const EXTS = EXT_A.reduce((/** @type {string[]} */ exts, s) => exts.concat(...EXT_B.map((e) => `.${s}.${e}`)), []);
 
 const args = process.argv.slice(2);
 

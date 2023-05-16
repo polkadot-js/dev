@@ -2,6 +2,8 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// @ts-check
+
 import fs from 'node:fs';
 import path from 'node:path';
 import yargs from 'yargs';
@@ -10,6 +12,7 @@ import { execSync, exitFatal } from './util.mjs';
 
 const TYPES = ['major', 'minor', 'patch', 'pre'];
 
+// @ts-expect-error We don't expect a Promise here, so _should_ be ok
 const [type] = yargs(process.argv.slice(2)).demandCommand(1).argv._;
 
 if (!TYPES.includes(type)) {

@@ -14,14 +14,18 @@ const paths = [];
 let updated = 0;
 
 /**
+ * Returns the path of the package.json inside the supplied directory
+ *
  * @param {string} dir
  * @returns {string}
  */
-function packageJson (dir) {
+function packageJsonPath (dir) {
   return path.join(dir, 'package.json');
 }
 
 /**
+ * Update the supplied dependency map with the latest (version map) versions
+ *
  * @param {string} dir
  * @param {Record<string, string>} dependencies
  * @returns {Record<string, string>}
@@ -55,24 +59,30 @@ function updateDependencies (dir, dependencies) {
 }
 
 /**
+ * Returns a parsed package.json
+ *
  * @param {string} dir
  * @returns {PkgJson}
  */
 function parsePackage (dir) {
   return JSON.parse(
-    fs.readFileSync(packageJson(dir), 'utf-8')
+    fs.readFileSync(packageJsonPath(dir), 'utf-8')
   );
 }
 
 /**
+ * Outputs the supplied package.json
+ *
  * @param {string} dir
  * @param {Record<string, unknown>} json
  */
 function writePackage (dir, json) {
-  fs.writeFileSync(packageJson(dir), `${JSON.stringify(json, null, 2)}\n`);
+  fs.writeFileSync(packageJsonPath(dir), `${JSON.stringify(json, null, 2)}\n`);
 }
 
 /**
+ * Rerite the package.json with updated dependecies
+ *
  * @param {string} dir
  */
 function updatePackage (dir) {
@@ -91,16 +101,8 @@ function updatePackage (dir) {
 }
 
 /**
- * @param {string} dir
- * @param {string} versionNpm
- */
-function extractVersion (dir, versionNpm) {
-  const { name } = parsePackage(dir);
-
-  versions[name] = `^${versionNpm}`;
-}
-
-/**
+ * Loop through package/*, extracting the package names and their versions
+ *
  * @param {string} dir
  */
 function findPackages (dir) {
@@ -125,9 +127,10 @@ function findPackages (dir) {
     })
     .forEach((dir) => {
       const full = path.join(pkgsDir, dir);
+      const { name } = parsePackage(full);
 
       paths.push(full);
-      extractVersion(full, lastVersion);
+      versions[name] = `^${lastVersion}`;
     });
 }
 
@@ -135,9 +138,10 @@ console.log('Extracting ...');
 
 fs
   .readdirSync('.')
-  .filter((name) => {
-    return !['.', '..'].includes(name) && fs.existsSync(packageJson(name));
-  })
+  .filter((name) =>
+    !['.', '..'].includes(name) &&
+    fs.existsSync(packageJsonPath(name))
+  )
   .sort()
   .forEach(findPackages);
 
