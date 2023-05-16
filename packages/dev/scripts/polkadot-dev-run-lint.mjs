@@ -8,6 +8,8 @@ import { __dirname, execSync } from './util.mjs';
 
 console.log('$ polkadot-dev-run-lint', process.argv.slice(2).join(' '));
 
+// Since yargs can also be a promise, we just relax the type here completely
+/** @type {*} */
 const argv = yargs(process.argv.slice(2))
   .options({
     'skip-eslint': {

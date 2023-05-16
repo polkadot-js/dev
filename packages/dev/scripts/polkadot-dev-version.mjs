@@ -8,6 +8,8 @@ import yargs from 'yargs';
 
 import { execSync, exitFatal } from './util.mjs';
 
+/** @typedef {{ dependencies?: Record<string, string>; devDependencies?: Record<string, string>; peerDependencies?: Record<string, string>; optionalDependencies?: Record<string, string>; resolutions?: Record<string, string>; name?: string; stableVersion?: string; version: string; }} PkgJson */
+
 const TYPES = ['major', 'minor', 'patch', 'pre'];
 
 // @ts-expect-error We don't expect a Promise here, so _should_ be ok
@@ -17,11 +19,17 @@ if (!TYPES.includes(type)) {
   exitFatal(`Invalid version bump "${type}", expected one of ${TYPES.join(', ')}`);
 }
 
+/**
+ * @param {Record<string, string>} dependencies
+ * @param {string[]} others
+ * @param {string} version
+ * @returns {Record<string, string>}
+ */
 function updateDependencies (dependencies, others, version) {
   return Object
     .entries(dependencies)
     .sort((a, b) => a[0].localeCompare(b[0]))
-    .reduce((result, [key, value]) => {
+    .reduce((/** @type {Record<string, string>} */ result, [key, value]) => {
       result[key] = others.includes(key) && value !== '*'
         ? value.startsWith('^')
           ? `^${version}`
@@ -32,6 +40,9 @@ function updateDependencies (dependencies, others, version) {
     }, {});
 }
 
+/**
+ * @returns {[string, PkgJson]}
+ */
 function readRootPkgJson () {
   const rootPath = path.join(process.cwd(), 'package.json');
   const rootJson = JSON.parse(fs.readFileSync(rootPath, 'utf8'));
@@ -39,22 +50,35 @@ function readRootPkgJson () {
   return [rootPath, rootJson];
 }
 
+/**
+ * @param {string} path
+ * @param {unknown} json
+ */
 function writePkgJson (path, json) {
   fs.writeFileSync(path, `${JSON.stringify(json, null, 2)}\n`);
 }
 
+/**
+ *
+ * @param {string} version
+ * @param {string[]} others
+ * @param {string} pkgPath
+ * @param {Record<String, any>} json
+ */
 function updatePackage (version, others, pkgPath, json) {
-  const updated = Object.keys(json).reduce((result, key) => {
-    if (key === 'version') {
-      result[key] = version;
-    } else if (['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies', 'resolutions'].includes(key)) {
-      result[key] = updateDependencies(json[key], others, version);
-    } else if (key !== 'stableVersion') {
-      result[key] = json[key];
-    }
+  const updated = Object
+    .keys(json)
+    .reduce((/** @type {Record<String, unknown>} */ result, key) => {
+      if (key === 'version') {
+        result[key] = version;
+      } else if (['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies', 'resolutions'].includes(key)) {
+        result[key] = updateDependencies(json[key], others, version);
+      } else if (key !== 'stableVersion') {
+        result[key] = json[key];
+      }
 
-    return result;
-  }, {});
+      return result;
+    }, {});
 
   writePkgJson(pkgPath, updated);
 }
@@ -62,7 +86,7 @@ function updatePackage (version, others, pkgPath, json) {
 function removeX () {
   const [rootPath, json] = readRootPkgJson();
 
-  if (!json.version.endsWith('-x')) {
+  if (!json.version?.endsWith('-x')) {
     return false;
   }
 

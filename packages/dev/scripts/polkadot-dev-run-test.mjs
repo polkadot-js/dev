@@ -22,8 +22,12 @@ exitFatalEngine();
 const cmd = [];
 const nodeFlags = [];
 const filters = [];
+
+/** @type {Record<string, string[]>} */
 const filtersExcl = {};
+/** @type {Record<string, string[]>} */
 const filtersIncl = {};
+
 let testEnv = 'node';
 let isDev = false;
 
@@ -93,8 +97,13 @@ for (let i = 0; i < args.length; i++) {
   }
 }
 
-const applyFilters = (parts, filters) =>
-  Object
+/**
+ * @param {string[]} parts
+ * @param {Record<string, string[]>} filters
+ * @returns {boolean}
+ */
+function applyFilters (parts, filters) {
+  return Object
     .values(filters)
     .some((filter) =>
       parts
@@ -118,6 +127,7 @@ const applyFilters = (parts, filters) =>
           )
         )
     );
+}
 
 const files = readdirSync('packages', EXTS).filter((file) => {
   const parts = file.split(/[\\/]/);

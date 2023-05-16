@@ -153,6 +153,7 @@ export function execSync (cmd, noLog) {
  * Node execution with ts support
  *
  * @param {string} cmd
+ * @param {string[]} [nodeFlags]
  * @param {boolean} [noLog]
  * @param {string} [loaderPath]
  **/
@@ -231,7 +232,7 @@ export async function importDirect (bin, req) {
     const mod = await import(req);
 
     return mod;
-  } catch (error) {
+  } catch (/** @type {any} */ error) {
     exitFatal(`Error importing ${req}`, error);
   }
 }

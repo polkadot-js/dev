@@ -2,6 +2,7 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+// @ts-expect-error For scripts we don't include @types/* definitions
 import madge from 'madge';
 
 import { exitFatal } from './util.mjs';
@@ -9,6 +10,8 @@ import { exitFatal } from './util.mjs';
 console.log('$ polkadot-dev-circular', process.argv.slice(2).join(' '));
 
 const res = await madge('./', { fileExtensions: ['ts', 'tsx'] });
+
+/** @type {string[][]} */
 const circular = res.circular();
 
 if (!circular.length) {
