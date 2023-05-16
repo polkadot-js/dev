@@ -9,6 +9,9 @@ import ts from 'typescript';
 
 import { copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_LND_PRE, DENO_POL_PRE, engineVersionCmp, execSync, exitFatal, exitFatalEngine, mkdirpSync, PATHS_BUILD, readdirSync, rimrafSync } from './util.mjs';
 
+/** @typedef {'babel' | 'swc' | 'tsc'} CompileType */
+/** @typedef {{ bin?: Record<string, string>; bugs?: string; denoDependencies?: Record<string, string>; dependencies?: Record<string, string>; devDependencies?: Record<string, string>; engines?: Record<string, string>; exports?: Record<string, unknown>; license?: string; homepage?: string; main?: string; mdouled?: string; name?: string; optionalDependencies?: Record<string, string>; peerDependencies?: Record<string, string>; repository?: { directory?: string; type: 'git'; url: string; }; resolutions?: Record<string, string>; sideEffects?: boolean; scripts?: Record<string, string>; type?: 'module' | 'commonjs'; types?: string; version?: string; }} PkgJson */
+
 const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
 const RL_CONFIGS = ['js', 'mjs', 'cjs'].map((e) => `rollup.config.${e}`);
 
@@ -30,14 +33,21 @@ const IGNORE_IMPORTS = [
   'react', 'react-native', 'styled-components'
 ];
 
-// webpack build
+/**
+ * webpack build
+ */
 function buildWebpack () {
   const config = WP_CONFIGS.find((c) => fs.existsSync(path.join(process.cwd(), c)));
 
   execSync(`yarn polkadot-exec-webpack --config ${config} --mode production`);
 }
 
-// compile via tsc, either via supplied config or default
+/**
+ * compile via tsc, either via supplied config or default
+ *
+ * @param {CompileType} compileType
+ * @param {'cjs' | 'esm'} type
+ */
 async function compileJs (compileType, type) {
   const buildDir = path.join(process.cwd(), `build-${compileType}-${type}`);
 
@@ -90,10 +100,26 @@ async function compileJs (compileType, type) {
   }
 }
 
+/**
+ * Writes a package.json file
+ *
+ * @param {string} path
+ * @param {PkgJson} json
+ */
 function witeJson (path, json) {
   fs.writeFileSync(path, `${JSON.stringify(json, null, 2)}\n`);
 }
 
+/**
+ * Adjust all imports to have .js extensions
+ *
+ * @param {string} _pkgCwd
+ * @param {PkgJson} _pkgJson
+ * @param {string} dir
+ * @param {string} f
+ * @param {boolean} [_isDeclare]
+ * @returns {string | null}
+ */
 function adjustJsPath (_pkgCwd, _pkgJson, dir, f, _isDeclare) {
   if (f.startsWith('.')) {
     if (f.endsWith('.js') || f.endsWith('.json')) {
@@ -118,6 +144,16 @@ function adjustJsPath (_pkgCwd, _pkgJson, dir, f, _isDeclare) {
   return null;
 }
 
+/**
+ * Adjust all @polkadot imports to have .ts extensions (for Deno)
+ *
+ * @param {string} pkgCwd
+ * @param {PkgJson} pkgJson
+ * @param {string} dir
+ * @param {string} f
+ * @param {boolean} [isDeclare]
+ * @returns {string | null}
+ */
 function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
   if (f.startsWith('@polkadot')) {
     const parts = f.split('/');
@@ -281,6 +317,10 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
     if (!denoDep.includes('@')) {
       denoDep = `${denoDep}@${version}`;
     } else if (denoDep.includes('{{VERSION}}')) {
+      if (!version) {
+        throw new Error(`Unable to extract version for deno.land/${denoDep}`);
+      }
+
       denoDep = denoDep.replace('{{VERSION}}', version);
     }
   }
@@ -295,6 +335,13 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
     : `${DENO_EXT_PRE}/${depName}${version ? `@${version}` : ''}${depPath || ''}`;
 }
 
+/**
+ * @param {string} dir
+ * @param {string} pkgCwd
+ * @param {PkgJson} pkgJson
+ * @param {(pkgCwd: string, pkgJson: PkgJson, f: string, dir: string, isDeclare?: boolean) => string | null} replacer
+ * @returns {void}
+ */
 function rewriteImports (dir, pkgCwd, pkgJson, replacer) {
   if (!fs.existsSync(dir)) {
     return;
@@ -368,7 +415,14 @@ function relativePath (value) {
   return `${value.startsWith('.') ? value : './'}${value}`.replace(/\/\//g, '/');
 }
 
-// creates an entry for the cjs/esm name
+/**
+ * creates an entry for the cjs/esm name
+ *
+ * @param {string} rootDir
+ * @param {string} jsPath
+ * @param {boolean} [noTypes]
+ * @returns {[string, Record<string, unknown> | string]}
+ */
 function createMapEntry (rootDir, jsPath, noTypes) {
   jsPath = relativePath(jsPath);
 
@@ -434,7 +488,12 @@ function copyBuildFiles (compileType, dir) {
   copyDirSync(`build-${compileType}-cjs`, 'build/cjs', ['.js']);
 }
 
-// remove all extra files that were generated as part of the build
+/**
+ * remove all extra files that were generated as part of the build
+ *
+ * @param {string} [extra]
+ * @param {string[]} [exclude]
+ */
 function deleteBuildFiles (extra = '', exclude = []) {
   const buildDir = 'build';
   const currDir = extra
@@ -491,7 +550,14 @@ function deleteBuildFiles (extra = '', exclude = []) {
     }, []);
 }
 
-// find the names of all the files in a certain directory
+/**
+ * find the names of all the files in a certain directory
+ *
+ * @param {string} buildDir
+ * @param {string} [extra]
+ * @param {string[]} [exclude]
+ * @returns {[string, Record<String, unknown> | string][]}
+ */
 function findFiles (buildDir, extra = '', exclude = []) {
   const currDir = extra
     ? path.join(buildDir, extra)
@@ -500,7 +566,7 @@ function findFiles (buildDir, extra = '', exclude = []) {
   return fs
     .readdirSync(currDir)
     .filter((f) => !exclude.includes(f))
-    .reduce((all, jsName) => {
+    .reduce((/** @type {[string, Record<String, unknown> | string][]} */ all, jsName) => {
       const jsPath = `${extra}/${jsName}`;
       const fullPathEsm = path.join(buildDir, jsPath);
 
@@ -515,6 +581,9 @@ function findFiles (buildDir, extra = '', exclude = []) {
     }, []);
 }
 
+/**
+ * Tweak any CJS imports to import from the actual cjs path
+ */
 function tweakCjsPaths () {
   readdirSync('build/cjs', ['.js']).forEach((thisPath) => {
     fs.writeFileSync(
@@ -537,6 +606,11 @@ function tweakCjsPaths () {
   });
 }
 
+/**
+ * Adjusts the packageInfo.js files for the target output
+ *
+ * @param {CompileType} compileType
+ */
 function tweakPackageInfo (compileType) {
   // Hack around some bundler issues, in this case Vite which has import.meta.url
   // as undefined in production contexts (and subsequently makes URL fail)
@@ -583,19 +657,27 @@ function tweakPackageInfo (compileType) {
   }
 }
 
-function moveFields (pkg, fields) {
+/**
+ * Adjusts the order of fiels in the package.json
+ *
+ * @param {PkgJson} pkgJson
+ * @param {string[]} fields
+ */
+function moveFields (pkgJson, fields) {
   fields.forEach((k) => {
-    if (typeof pkg[k] !== 'undefined') {
-      const value = pkg[k];
+    if (typeof pkgJson[k] !== 'undefined') {
+      const value = pkgJson[k];
 
-      delete pkg[k];
+      delete pkgJson[k];
 
-      pkg[k] = value;
+      pkgJson[k] = value;
     }
   });
 }
 
-// iterate through all the files that have been built, creating an exports map
+/**
+ * iterate through all the files that have been built, creating an exports map
+ */
 function buildExports () {
   const buildDir = path.join(process.cwd(), 'build');
 
@@ -735,6 +817,12 @@ function buildExports () {
   witeJson(pkgPath, pkg);
 }
 
+/**
+ * Sorts a JSON file (typically package.json) by key
+ *
+ * @param {PkgJson} json
+ * @returns {PkgJson}
+ */
 function sortJson (json) {
   return Object
     .entries(json)
@@ -751,11 +839,16 @@ function sortJson (json) {
  * @returns {string}
  */
 function getEnginesVer (currVer) {
-  return engineVersionCmp(currVer, TARGET_NODE) === 1
+  return currVer && engineVersionCmp(currVer, TARGET_NODE) === 1
     ? currVer
     : TARGET_NODE;
 }
 
+/**
+ * @param {string} repoPath
+ * @param {string | null} dir
+ * @param {PkgJson} json
+ */
 function orderPackageJson (repoPath, dir, json) {
   json.bugs = `https://github.com/${repoPath}/issues`;
   json.homepage = `https://github.com/${repoPath}${dir ? `/tree/master/packages/${dir}` : ''}#readme`;
@@ -804,50 +897,71 @@ function orderPackageJson (repoPath, dir, json) {
   witeJson(path.join(process.cwd(), 'package.json'), sorted);
 }
 
+/**
+ * @param {string} full
+ * @param {string} line
+ * @param {number} lineNumber
+ * @param {string} error
+ * @returns {string}
+ */
 function createError (full, line, lineNumber, error) {
   return `${full}:: ${lineNumber >= 0 ? `line ${lineNumber + 1}:: ` : ''}${error}:: \n\n\t${line}\n`;
 }
 
+/**
+ * @param {string[]} errors
+ */
 function throwOnErrors (errors) {
   if (errors.length) {
     exitFatal(errors.join('\n'));
   }
 }
 
+/**
+ * @param {string[]} exts
+ * @param {string} dir
+ * @param {string} sub
+ * @param {(path: string, line: string, lineNumber: number) => string | null | undefined} fn
+ * @param {boolean} [allowComments]
+ * @returns {string[]}
+ */
 function loopFiles (exts, dir, sub, fn, allowComments = false) {
   return fs
     .readdirSync(sub)
-    .reduce((errors, inner) => {
+    .reduce((/** @type {string[]} */ errors, inner) => {
       const full = path.join(sub, inner);
 
       if (fs.statSync(full).isDirectory()) {
         return errors.concat(loopFiles(exts, dir, full, fn, allowComments));
       } else if (exts.some((e) => full.endsWith(e))) {
-        return errors.concat(
-          fs
-            .readFileSync(full, 'utf-8')
-            .split('\n')
-            .map((l, n) => {
-              const t = l
-                // no leading/trailing whitespace
-                .trim()
-                // anything starting with * (multi-line comments)
-                .replace(/^\*.*/, '')
-                // anything between /* ... */
-                .replace(/\/\*.*\*\//g, '')
-                // single line comments with // ...
-                .replace(allowComments ? /--------------------/ : /\/\/.*/, '');
+        fs
+          .readFileSync(full, 'utf-8')
+          .split('\n')
+          .forEach((l, n) => {
+            const t = l
+              // no leading/trailing whitespace
+              .trim()
+              // anything starting with * (multi-line comments)
+              .replace(/^\*.*/, '')
+              // anything between /* ... */
+              .replace(/\/\*.*\*\//g, '')
+              // single line comments with // ...
+              .replace(allowComments ? /--------------------/ : /\/\/.*/, '');
+            const r = fn(`${dir}/${full}`, t, n);
 
-              return fn(`${dir}/${full}`, t, n);
-            })
-            .filter((e) => !!e)
-        );
+            if (r) {
+              errors.push(r);
+            }
+          });
       }
 
       return errors;
     }, []);
 }
 
+/**
+ * @param {string} dir
+ */
 function lintOutput (dir) {
   throwOnErrors(
     loopFiles(['.d.ts', '.js', '.cjs'], dir, 'build', (full, l, n) => {
@@ -869,6 +983,9 @@ function lintOutput (dir) {
   );
 }
 
+/**
+ * @param {string} dir
+ */
 function lintInput (dir) {
   throwOnErrors(
     loopFiles(['.ts', '.tsx'], dir, 'src', (full, l, n) => {
@@ -887,6 +1004,10 @@ function lintInput (dir) {
   );
 }
 
+/**
+ * @param {string} config
+ * @returns {[string[], boolean]}
+ */
 function getReferences (config) {
   const configPath = path.join(process.cwd(), config);
 
@@ -913,6 +1034,13 @@ function getReferences (config) {
   return [[], false];
 }
 
+/**
+ *
+ * @param {CompileType} compileType
+ * @param {string} dir
+ * @param {[string, string][]} locals
+ * @returns
+ */
 function lintDependencies (compileType, dir, locals) {
   const { dependencies = {}, devDependencies = {}, name, optionalDependencies = {}, peerDependencies = {}, private: isPrivate } = JSON.parse(fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf-8'));
 
@@ -990,6 +1118,10 @@ function lintDependencies (compileType, dir, locals) {
   }
 }
 
+/**
+ * @param {string} label
+ * @param {() => unknown} fn
+ */
 async function timeIt (label, fn) {
   const start = Date.now();
 
@@ -998,6 +1130,13 @@ async function timeIt (label, fn) {
   console.log(`${label} (${Date.now() - start}ms)`);
 }
 
+/**
+ * @param {CompileType} compileType
+ * @param {string} repoPath
+ * @param {string} dir
+ * @param {[string, string][]} locals
+ * @returns {Promise<void>}
+ */
 async function buildJs (compileType, repoPath, dir, locals) {
   const pkgJson = JSON.parse(fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf-8'));
   const { name, version } = pkgJson;
@@ -1044,7 +1183,7 @@ async function buildJs (compileType, repoPath, dir, locals) {
 
       // Deno
       await timeIt('Successfully compiled deno', () => {
-        buildDeno(pkgJson);
+        buildDeno();
       });
 
       await timeIt('Successfully rewrote imports', () => {
@@ -1083,13 +1222,24 @@ async function buildJs (compileType, repoPath, dir, locals) {
   console.log();
 }
 
+/**
+ * Main entry point
+ */
 async function main () {
   const args = process.argv.slice(2);
+
+  /** @type {CompileType} */
   let compileType = 'tsc';
 
   for (let i = 0; i < args.length; i++) {
     if (args[i] === '--compiler') {
-      compileType = args[++i];
+      const type = args[++i];
+
+      if (type === 'tsc') {
+        compileType = type;
+      } else {
+        throw new Error(`Invalid --compiler ${type}`);
+      }
     }
   }
 
@@ -1119,6 +1269,8 @@ async function main () {
   const dirs = fs
     .readdirSync('.')
     .filter((dir) => fs.statSync(dir).isDirectory() && fs.existsSync(path.join(process.cwd(), dir, 'src')));
+
+  /** @type {[string, string][]} */
   const locals = [];
 
   // get all package names

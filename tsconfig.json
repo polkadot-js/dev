@@ -5,7 +5,9 @@
     "composite": false
   },
   "include": [
-    "packages/**/src/**/*"
+    "packages/**/src/**/*",
+    "packages/**/config/**/*",
+    "packages/**/scripts/**/*"
   ],
   "exclude": [
     "**/node_modules/**/*"
