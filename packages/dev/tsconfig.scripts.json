@@ -3,14 +3,12 @@
   "compilerOptions": {
     "baseUrl": "..",
     "outDir": "./build",
-    "rootDir": "./src"
+    "rootDir": "./scripts",
+    "emitDeclarationOnly": false,
+    "noEmit": true
   },
-  "exclude": [
-    "**/mod.ts",
-    "src/**/*.spec.ts"
-  ],
   "include": [
-    "src/**/*"
+    "scripts/**/*"
   ],
   "references": []
 }

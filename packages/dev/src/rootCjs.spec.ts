@@ -1,8 +1,6 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// Effectively duplicated in testRootEsm (just first import different)
-
 import type * as testRoot from './root.js';
 
 // NOTE We don't use ts-expect-error here since the build folder may or may

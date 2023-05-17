@@ -302,6 +302,7 @@ export function readdirSync (src, extensions, files = []) {
  *
  * @param {string} message
  * @param {Error} [error]
+ * @returns {never}
  **/
 export function exitFatal (message, error) {
   console.error();

@@ -2,6 +2,7 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import JSON5 from 'json5';
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
@@ -9,7 +10,7 @@ import ts from 'typescript';
 
 import { copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_LND_PRE, DENO_POL_PRE, engineVersionCmp, execSync, exitFatal, exitFatalEngine, mkdirpSync, PATHS_BUILD, readdirSync, rimrafSync } from './util.mjs';
 
-/** @typedef {'babel' | 'swc' | 'tsc'} CompileType */
+/** @typedef {'babel' | 'esbuild' | 'swc' | 'tsc'} CompileType */
 /** @typedef {{ bin?: Record<string, string>; browser?: string; bugs?: string; deno?: string; denoDependencies?: Record<string, string>; dependencies?: Record<string, string>; devDependencies?: Record<string, string>; electron?: string; engines?: Record<string, string>; exports?: Record<string, unknown>; license?: string; homepage?: string; main?: string; module?: string; name?: string; optionalDependencies?: Record<string, string>; peerDependencies?: Record<string, string>; repository?: { directory?: string; type: 'git'; url: string; }; 'react-native'?: string; resolutions?: Record<string, string>; sideEffects?: boolean | string[]; scripts?: Record<string, string>; type?: 'module' | 'commonjs'; types?: string; version?: string; }} PkgJson */
 
 const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
@@ -1028,11 +1029,13 @@ function getReferences (config) {
 
   if (fs.existsSync(configPath)) {
     try {
-      /** @type {{ path: string }[]} */
-      const references = JSON.parse(fs.readFileSync(configPath, 'utf-8')).references;
+      // We use the JSON5 parser here since we may have comments
+      // (as allowed, per spec) in the actual tsconfig files
+      /** @type {{ references: { path: string }[] }} */
+      const tsconfig = JSON5.parse(fs.readFileSync(configPath, 'utf-8'));
 
       return [
-        references.map(({ path }) =>
+        tsconfig.references.map(({ path }) =>
           path
             .replace('../', '')
             .replace('/tsconfig.build.json', '')
@@ -1067,9 +1070,11 @@ function lintDependencies (compileType, dir, locals) {
     ? '@babel/runtime'
     : compileType === 'swc'
       ? '@swc/helpers'
-      : 'tslib';
+      : compileType === 'esbuild'
+        ? null
+        : 'tslib';
 
-  if (!dependencies[checkDep]) {
+  if (checkDep && !dependencies[checkDep]) {
     throw new Error(`${name} does not include the ${checkDep} dependency`);
   }
 

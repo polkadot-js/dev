@@ -2,15 +2,17 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import process from 'node:process';
 import yargs from 'yargs';
 
 import { __dirname, execSync } from './util.mjs';
 
+const TS_CONFIG_BUILD = true;
+
 console.log('$ polkadot-dev-run-lint', process.argv.slice(2).join(' '));
 
 // Since yargs can also be a promise, we just relax the type here completely
-/** @type {*} */
-const argv = yargs(process.argv.slice(2))
+const argv = await yargs(process.argv.slice(2))
   .options({
     'skip-eslint': {
       description: 'Skips running eslint',
@@ -34,5 +36,5 @@ if (!argv['skip-eslint']) {
 }
 
 if (!argv['skip-tsc']) {
-  execSync('yarn polkadot-exec-tsc --noEmit --emitDeclarationOnly false --pretty --project tsconfig.build.json');
+  execSync(`yarn polkadot-exec-tsc --noEmit --emitDeclarationOnly false --pretty${TS_CONFIG_BUILD ? ' --project tsconfig.build.json' : ''}`);
 }
