@@ -5,7 +5,12 @@
   "files": [],
   "references": [
     { "path": "./packages/dev/tsconfig.build.json" },
+    { "path": "./packages/dev/tsconfig.config.json" },
+    { "path": "./packages/dev/tsconfig.scripts.json" },
+    { "path": "./packages/dev/tsconfig.spec.json" },
     { "path": "./packages/dev-test/tsconfig.build.json" },
-    { "path": "./packages/dev-ts/tsconfig.build.json" }
+    { "path": "./packages/dev-test/tsconfig.spec.json" },
+    { "path": "./packages/dev-ts/tsconfig.build.json" },
+    { "path": "./packages/dev-ts/tsconfig.spec.json" }
   ]
 }

@@ -31,7 +31,7 @@ const shouldDeno = [];
 /** @type {string[]} */
 const shouldBund = [];
 
-const argv = yargs(process.argv.slice(2))
+const argv = await yargs(process.argv.slice(2))
   .options({
     'skip-beta': {
       description: 'Do not increment as beta',
@@ -436,7 +436,6 @@ function verBump () {
   const [,, patch] = version.split('.');
   const lastVersion = (versions && versions.npm) || currentVersion;
 
-  // @ts-expect-error yargs may return a promise, but we _should_ be ok based on usage
   if (argv['skip-beta'] || patch === '0') {
     // don't allow beta versions
     execSync('yarn polkadot-dev-version patch');

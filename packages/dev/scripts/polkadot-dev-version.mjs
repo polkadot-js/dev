@@ -12,10 +12,13 @@ import { execSync, exitFatal } from './util.mjs';
 
 const TYPES = ['major', 'minor', 'patch', 'pre'];
 
-// @ts-expect-error We don't expect a Promise here, so _should_ be ok
-const [type] = yargs(process.argv.slice(2)).demandCommand(1).argv._;
+const [type] = (
+  await yargs(process.argv.slice(2))
+    .demandCommand(1)
+    .argv
+)._;
 
-if (!TYPES.includes(type)) {
+if (typeof type !== 'string' || !TYPES.includes(type)) {
   exitFatal(`Invalid version bump "${type}", expected one of ${TYPES.join(', ')}`);
 }
 

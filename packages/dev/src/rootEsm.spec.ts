@@ -1,9 +1,7 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-// Effectively duplicated in testRootCjs (just first import different)
-// NOTE: The build out tests here (describe block) is not duplicated
-// above
+/// <reference types="@polkadot/dev-test/globals.d.ts" />
 
 import type * as testRoot from './root.js';
 

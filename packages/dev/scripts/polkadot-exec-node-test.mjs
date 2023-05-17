@@ -14,13 +14,13 @@
 //   - run method exposed in 16.19,
 //   - mock not available
 
-// NOTE error should be defined as "Error", however the @types/node definitions doesn't include all
-/** @typedef {{ diag: { file?: string; message?: string; }[]; fail: { details: { error: { failureType: unknown; cause: { code: number; message: string; stack: string; }; code: number; } }; file?: string; name: string }[]; pass: unknown[]; skip: unknown[]; todo: unknown[]; total: number }} Stats */
-
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
 import { run } from 'node:test';
+
+// NOTE error should be defined as "Error", however the @types/node definitions doesn't include all
+/** @typedef {{ diag: { file?: string; message?: string; }[]; fail: { details: { error: { failureType: unknown; cause: { code: number; message: string; stack: string; }; code: number; } }; file?: string; name: string }[]; pass: unknown[]; skip: unknown[]; todo: unknown[]; total: number }} Stats */
 
 console.time('\t elapsed :');
 
