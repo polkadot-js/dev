@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.74.1
+
+- Ensure correct structures for `tsconfig.*.json`
+
+
 ## 0.73.1
 
 - Drop support for Node 14
