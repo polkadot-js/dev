@@ -54,9 +54,11 @@ async function compileJs (compileType, type) {
 
   mkdirpSync(buildDir);
 
-  const files = readdirSync('src', ['.ts', '.tsx']).filter((f) => ![
-    '.d.ts', '.manual.ts', '.spec.ts', '.spec.tsx', '.test.ts', '.test.tsx', 'mod.ts'
-  ].some((e) => f.endsWith(e)));
+  const files = readdirSync('src', ['.ts', '.tsx']).filter((f) =>
+    !['.d.ts', '.manual.ts', '.spec.ts', '.spec.tsx', '.test.ts', '.test.tsx', 'mod.ts'].some((e) =>
+      f.endsWith(e)
+    )
+  );
 
   if (compileType === 'tsc') {
     await timeIt(`Successfully compiled ${compileType} ${type}`, () => {
@@ -502,62 +504,86 @@ function copyBuildFiles (compileType, dir) {
  * remove all extra files that were generated as part of the build
  *
  * @param {string} [extra]
- * @param {string[]} [exclude]
+ * @param {string[][]} [invalids]
  */
-function deleteBuildFiles (extra = '', exclude = []) {
+function deleteBuildFiles (extra = '', invalids) {
+  const isTopLevel = !invalids;
+
+  invalids ??= [];
+
   const buildDir = 'build';
   const currDir = extra
     ? path.join('build', extra)
     : buildDir;
-
-  fs
+  const allFiles = fs
     .readdirSync(currDir)
-    .filter((f) => !exclude.includes(f))
-    .forEach((jsName) => {
+    .map((jsName) => {
       const jsPath = `${extra}/${jsName}`;
       const fullPathEsm = path.join(buildDir, jsPath);
-      const toDelete = (
-        // no test paths (w/ hack for this repo loaders...)
-        (jsPath.includes('/test/') && !jsPath.includes('/node/test/')) ||
-        // no rust files
-        ['.rs'].some((e) => jsName.endsWith(e)) ||
-        // no tests
-        ['.manual.', '.spec.', '.test.'].some((t) => jsName.includes(t)) ||
-        // no .d.ts compiled outputs
-        ['.d.js', '.d.cjs', '.d.mjs'].some((e) => jsName.endsWith(e)) ||
-        // no deno mod.ts compiles
-        ['mod.js', 'mod.d.ts'].some((e) => jsName === e) ||
-        (
-          // .d.ts without .js as an output
-          jsName.endsWith('.d.ts') &&
-          !['.js', '.cjs', '.mjs'].some((e) =>
-            fs.existsSync(path.join(buildDir, jsPath.replace('.d.ts', e)))
-          )
+
+      return [jsName, jsPath, fullPathEsm];
+    });
+
+  // We want the build config tweaked to not allow these, so error-out
+  // when they are found (it indicates a config failure)
+  invalids.push(...allFiles.filter(([jsName, jsPath]) =>
+    // no tests
+    (
+      ['.manual.', '.spec.', '.test.'].some((t) => jsName.includes(t)) &&
+      // we explicitly exclude test paths, just treat as artifacts
+      !jsPath.includes('/test/')
+    ) ||
+    // no deno mod.ts compiles
+    ['mod.js', 'mod.d.ts', 'mod.ts'].some((e) => jsName === e)
+  ));
+
+  allFiles.forEach(([jsName, jsPath, fullPathEsm]) => {
+    const toDelete = (
+      // no test paths
+      jsPath.includes('/test/') ||
+      // no rust files
+      ['.rs'].some((e) => jsName.endsWith(e)) ||
+      // no tests
+      ['.manual.', '.spec.', '.test.'].some((t) => jsName.includes(t)) ||
+      // no .d.ts compiled outputs
+      ['.d.js', '.d.cjs', '.d.mjs'].some((e) => jsName.endsWith(e)) ||
+      // no deno mod.ts compiles
+      ['mod.js', 'mod.d.ts', 'mod.ts'].some((e) => jsName === e) ||
+      (
+        // .d.ts without .js as an output
+        jsName.endsWith('.d.ts') &&
+        !['.js', '.cjs', '.mjs'].some((e) =>
+          fs.existsSync(path.join(buildDir, jsPath.replace('.d.ts', e)))
         )
-      );
+      )
+    );
 
-      if (fs.statSync(fullPathEsm).isDirectory()) {
-        deleteBuildFiles(jsPath);
+    if (fs.statSync(fullPathEsm).isDirectory()) {
+      deleteBuildFiles(jsPath, invalids);
 
-        PATHS_BUILD.forEach((b) => {
-          // remove all empty directories
-          const otherPath = path.join(`${buildDir}${b}`, jsPath);
+      PATHS_BUILD.forEach((b) => {
+        // remove all empty directories
+        const otherPath = path.join(`${buildDir}${b}`, jsPath);
 
-          if (fs.existsSync(otherPath) && fs.readdirSync(otherPath).length === 0) {
-            rimrafSync(otherPath);
-          }
-        });
-      } else if (toDelete) {
-        PATHS_BUILD.forEach((b) => {
-          // check in the other build outputs and remove
-          // (for deno we also want the spec copies)
-          const otherPath = path.join(`${buildDir}${b}`, jsPath);
-          const otherTs = otherPath.replace(/.spec.js$/, '.spec.ts');
+        if (fs.existsSync(otherPath) && fs.readdirSync(otherPath).length === 0) {
+          rimrafSync(otherPath);
+        }
+      });
+    } else if (toDelete) {
+      PATHS_BUILD.forEach((b) => {
+        // check in the other build outputs and remove
+        // (for deno we also want the spec copies)
+        const otherPath = path.join(`${buildDir}${b}`, jsPath);
+        const otherTs = otherPath.replace(/.spec.js$/, '.spec.ts');
 
-          [otherPath, otherTs].forEach((f) => rimrafSync(f));
-        });
-      }
-    }, []);
+        [otherPath, otherTs].forEach((f) => rimrafSync(f));
+      });
+    }
+  }, []);
+
+  if (isTopLevel && invalids.length) {
+    throw new Error(`Invalid build outputs found in ${process.cwd()}: ${invalids.map(([,, p]) => p).join(', ')} (These should be excluded via a noEmit option in the project config)`);
+  }
 }
 
 /**
@@ -1022,7 +1048,7 @@ function lintInput (dir) {
 
 /**
  * @param {string} config
- * @returns {[string[], boolean]}
+ * @returns {[string[], boolean, string[]]}
  */
 function getReferences (config) {
   const configPath = path.join(process.cwd(), config);
@@ -1033,14 +1059,16 @@ function getReferences (config) {
       // (as allowed, per spec) in the actual tsconfig files
       /** @type {{ references: { path: string }[] }} */
       const tsconfig = JSON5.parse(fs.readFileSync(configPath, 'utf-8'));
+      const paths = tsconfig.references.map(({ path }) => path);
 
       return [
-        tsconfig.references.map(({ path }) =>
+        paths.map((path) =>
           path
             .replace('../', '')
             .replace('/tsconfig.build.json', '')
         ),
-        true
+        true,
+        paths
       ];
     } catch (error) {
       console.error(`Unable to parse ${configPath}`);
@@ -1049,7 +1077,7 @@ function getReferences (config) {
     }
   }
 
-  return [[], false];
+  return [[], false, []];
 }
 
 /**
@@ -1245,6 +1273,39 @@ async function buildJs (compileType, repoPath, dir, locals) {
 }
 
 /**
+ * Finds any tsconfig.*.json files that are not included in the root
+ * tsconfig.build.json
+ */
+function findUnusedTsConfig () {
+  const [,, allPaths] = getReferences('tsconfig.build.json');
+  const allPkgs = fs
+    .readdirSync('packages')
+    .filter((dir) =>
+      fs.statSync(path.join(process.cwd(), 'packages', dir)).isDirectory() &&
+      fs.existsSync(path.join(process.cwd(), 'packages', dir, 'src'))
+    );
+  /** @type {string[]} */
+  const allConfigs = [];
+
+  for (const pkg of allPkgs) {
+    allConfigs.push(...fs
+      .readdirSync(`packages/${pkg}`)
+      .filter((f) =>
+        f.startsWith('tsconfig.') &&
+        f.endsWith('.json')
+      )
+      .map((f) => `./packages/${pkg}/${f}`)
+    );
+  }
+
+  const missing = allConfigs.filter((c) => !allPaths.includes(c));
+
+  if (missing.length) {
+    throw new Error(`Not reflected in the root tsconfig.build.json: ${missing.join(', ')}`);
+  }
+}
+
+/**
  * Main entry point
  */
 async function main () {
@@ -1290,7 +1351,10 @@ async function main () {
 
   const dirs = fs
     .readdirSync('.')
-    .filter((dir) => fs.statSync(dir).isDirectory() && fs.existsSync(path.join(process.cwd(), dir, 'src')));
+    .filter((dir) =>
+      fs.statSync(dir).isDirectory() &&
+      fs.existsSync(path.join(process.cwd(), dir, 'src'))
+    );
 
   /** @type {[string, string][]} */
   const locals = [];
@@ -1314,6 +1378,8 @@ async function main () {
   }
 
   process.chdir('..');
+
+  findUnusedTsConfig();
 
   if (RL_CONFIGS.some((c) => fs.existsSync(path.join(process.cwd(), c)))) {
     execSync('yarn polkadot-exec-rollup --config');
