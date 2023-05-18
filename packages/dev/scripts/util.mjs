@@ -129,7 +129,7 @@ export function engineVersionCmp (a, b) {
  */
 export function engineVersionSplit (ver) {
   const parts = (ver || '>=0')
-    .replace('v', '') // process.version rerurns v18.14.0
+    .replace('v', '') // process.version returns v18.14.0
     .replace('>=', '') // engines have >= prefix
     .split('.')
     .map((e) => e.trim());
@@ -144,9 +144,15 @@ export function engineVersionSplit (ver) {
  * @param {boolean} [noLog]
  **/
 export function execSync (cmd, noLog) {
-  !noLog && console.log(`$ ${cmd.replace(/ {2}/g, ' ')}`);
+  const exec = cmd
+    .replace(/ {2}/g, ' ')
+    .trim();
 
-  cp.execSync(cmd, { stdio: 'inherit' });
+  if (!noLog) {
+    console.log(`$ ${exec}`);
+  }
+
+  cp.execSync(exec, { stdio: 'inherit' });
 }
 
 /**
@@ -168,7 +174,17 @@ export function execNodeTsSync (cmd, nodeFlags = [], noLog, loaderPath = '@polka
     if (['--import', '--loader', '--require'].includes(flag)) {
       const arg = nodeFlags[++i];
 
-      if (arg.startsWith('./')) {
+      // We split the loader arguments based on type in execSync. The
+      // split here is to extract the various provided types:
+      //
+      // 1. Global loaders are added first, then
+      // 2. Our specific dev-ts loader is added, then
+      // 3. Any provided local loaders are added
+      //
+      // The ordering requirement here is driven from the use of global
+      // loaders inside the apps repo (specifically extensionless), while
+      // ensuring we don't break local loader usage in the wasm repo
+      if (arg.startsWith('.')) {
         loadersLoc.push(flag);
         loadersLoc.push(arg);
       } else {
@@ -180,7 +196,7 @@ export function execNodeTsSync (cmd, nodeFlags = [], noLog, loaderPath = '@polka
     }
   }
 
-  execSync(`${process.execPath} ${otherFlags.join(' ')} --no-warnings --enable-source-maps ${loadersGlo.join(' ')} --loader ${loaderPath} ${loadersLoc.join(' ')} ${cmd}`.split(' ').map((w) => w.trim()).filter((w) => !!w).join(' '), noLog);
+  execSync(`${process.execPath} ${otherFlags.join(' ')} --no-warnings --enable-source-maps ${loadersGlo.join(' ')} --loader ${loaderPath} ${loadersLoc.join(' ')} ${cmd}`, noLog);
 }
 
 /**
@@ -192,9 +208,9 @@ export function execNodeTsSync (cmd, nodeFlags = [], noLog, loaderPath = '@polka
 export function execViaNode (name, cmd) {
   const args = process.argv.slice(2).join(' ');
 
-  console.log(`$ ${name}${args ? ` ${args}` : ''}`);
+  console.log(`$ ${name} ${args}`.replace(/ {2}/g, ' ').trim());
 
-  return execSync(`${importPath(cmd)}${args ? ` ${args}` : ''}`, true);
+  return execSync(`${importPath(cmd)} ${args}`, true);
 }
 
 /** A consistent setup for git variables */
@@ -209,7 +225,8 @@ export function gitSetup () {
 }
 
 /**
- * Do an import from a <this module> path
+ * Create an absolute import path into node_modules from a
+ * <this module> module name
  *
  * @param {string} req
  * @returns {string}
