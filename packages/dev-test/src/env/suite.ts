@@ -22,7 +22,7 @@ const MINUTE = 60 * 1000;
  * @param {} fn
  */
 function createWrapper <T extends typeof describe | typeof it> (fn: T, defaultTimeout: number) {
-  const wrap = (opts: WrapOpts) => (name: string, exec: () => unknown, timeout?: number) => fn(name, { ...opts, timeout: (timeout || defaultTimeout) }, exec);
+  const wrap = (opts: WrapOpts) => (name: string, exec: () => unknown, timeout?: number) => (fn as (...args: unknown[]) => void)(name, { ...opts, timeout: (timeout || defaultTimeout) }, exec);
 
   // Ensure that we have consistent helpers on the function. These are not consistently
   // applied accross all node:test versions, latest has all, so always apply ours.
