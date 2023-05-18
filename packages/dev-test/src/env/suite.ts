@@ -11,6 +11,8 @@ interface WrapOpts {
   todo?: boolean;
 }
 
+type WrapFn = (name: string, options: { only?: boolean; skip?: boolean; timeout?: number; todo?: boolean; }, fn: () => unknown) => void;
+
 const MINUTE = 60 * 1000;
 
 /**
@@ -21,7 +23,7 @@ const MINUTE = 60 * 1000;
  *
  * @param {} fn
  */
-function createWrapper <T extends typeof describe | typeof it> (fn: T, defaultTimeout: number) {
+function createWrapper <T extends WrapFn> (fn: T, defaultTimeout: number) {
   const wrap = (opts: WrapOpts) => (name: string, exec: () => unknown, timeout?: number) => fn(name, { ...opts, timeout: (timeout || defaultTimeout) }, exec);
 
   // Ensure that we have consistent helpers on the function. These are not consistently

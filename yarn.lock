@@ -533,7 +533,7 @@ __metadata:
   dependencies:
     "@types/jsdom": ^21.1.1
     jsdom: ^22.0.0
-    tslib: ^2.5.0
+    tslib: ^2.5.1
   languageName: unknown
   linkType: soft
 
@@ -542,7 +542,7 @@ __metadata:
   resolution: "@polkadot/dev-ts@workspace:packages/dev-ts"
   dependencies:
     json5: ^2.2.3
-    tslib: ^2.5.0
+    tslib: ^2.5.1
     typescript: ^5.0.4
   languageName: unknown
   linkType: soft
@@ -563,7 +563,7 @@ __metadata:
     "@rushstack/eslint-patch": ^1.2.0
     "@testing-library/react": ^14.0.0
     "@tsconfig/strictest": ^2.0.1
-    "@types/node": ^20.1.5
+    "@types/node": ^20.2.0
     "@types/react": ^18.2.6
     "@types/react-dom": ^18.2.4
     "@types/styled-components": ^5.1.26
@@ -591,12 +591,12 @@ __metadata:
     react: ^18.2.0
     react-dom: ^18.2.0
     react-is: ^18.2.0
-    rollup: ^3.21.8
+    rollup: ^3.22.0
     rollup-plugin-cleanup: ^3.2.1
     styled-components: ^5.3.10
-    tslib: ^2.5.0
+    tslib: ^2.5.1
     typescript: ^5.0.4
-    webpack: ^5.82.1
+    webpack: ^5.83.1
     webpack-cli: ^5.1.1
     webpack-dev-server: ^4.15.0
     webpack-merge: ^5.8.0
@@ -974,10 +974,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^20.1.5":
-  version: 20.1.5
-  resolution: "@types/node@npm:20.1.5"
-  checksum: 0d073ed7b9cc51e2354dcf3a8ccca84d08c7d513fa8fac9462cabc164435b30f2ad296e9f2f911e6ce72da837b704f1075379be84a93bb24f76d328a2d9e8561
+"@types/node@npm:*, @types/node@npm:^20.2.0":
+  version: 20.2.0
+  resolution: "@types/node@npm:20.2.0"
+  checksum: 9b937367448a07482af14e3518125ae531bff99e16d51e0945f4f93dbd7051d8a270811bdeb57f0b52c629fb0c9c401a238a7352dfbc87e26495b6f0f59cbdb6
   languageName: node
   linkType: hard
 
@@ -7318,9 +7318,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^3.21.8":
-  version: 3.21.8
-  resolution: "rollup@npm:3.21.8"
+"rollup@npm:^3.22.0":
+  version: 3.22.0
+  resolution: "rollup@npm:3.22.0"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -7328,7 +7328,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: f749443af3560aba26f5d45dab98f5657bb29d6698f5a8665932b93e8963ba0d9d54283a25cc2b48b4f47d3dc042acfaae1d2947f02c767d28b87aa11f9e148f
+  checksum: 6da2bfe1eb16714ccd4bf56ca92430309dc71b4492a3c38502f68f645433dcc789fb79f3761fc2269aa0cf20ece7821c4d7c95b860b7343c2ed52ed1c36c9a90
   languageName: node
   linkType: hard
 
@@ -8265,10 +8265,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.1.0, tslib@npm:^2.3.1, tslib@npm:^2.5.0":
-  version: 2.5.0
-  resolution: "tslib@npm:2.5.0"
-  checksum: ae3ed5f9ce29932d049908ebfdf21b3a003a85653a9a140d614da6b767a93ef94f460e52c3d787f0e4f383546981713f165037dc2274df212ea9f8a4541004e1
+"tslib@npm:^2.1.0, tslib@npm:^2.3.1, tslib@npm:^2.5.1":
+  version: 2.5.1
+  resolution: "tslib@npm:2.5.1"
+  checksum: 535e41e956b32d21aeff007a2c74989d1a6bf3fecb2b0141d80e5b9920bf90e23b4f0cd3772704bc03637c762dbdc1a314d75a407dd7189afbe3e83d80df9392
   languageName: node
   linkType: hard
 
@@ -8729,9 +8729,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5.82.1":
-  version: 5.82.1
-  resolution: "webpack@npm:5.82.1"
+"webpack@npm:^5.83.1":
+  version: 5.83.1
+  resolution: "webpack@npm:5.83.1"
   dependencies:
     "@types/eslint-scope": ^3.7.3
     "@types/estree": ^1.0.0
@@ -8762,7 +8762,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 747ee7ebd238c15249c2652060e3c6ca6d62cc66dcf7e4e2824ecd4875b7ea5e01fce8f4179080a3e84dfdb3c8d0992700444c7c5a05ef47b38c0623d3ac76de
+  checksum: 219d5ef50380bc0fd3702ed17feddf13819d8173b78f7a5b857dc74ac177e63d1f79c050792754411cc088bbc02e0971b989efddadbb8e393cf27d64c0ad9ff8
   languageName: node
   linkType: hard
 

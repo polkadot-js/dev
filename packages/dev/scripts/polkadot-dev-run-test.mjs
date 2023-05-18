@@ -34,7 +34,7 @@ let isDev = false;
 for (let i = 0; i < args.length; i++) {
   switch (args[i]) {
     // when running inside a dev environment, specifically @polkadot/dev
-    case '--dev-packages-build':
+    case '--dev-build':
       isDev = true;
       break;
 
@@ -151,11 +151,14 @@ if (files.length === 0) {
 try {
   const allFlags = `${importPath('@polkadot/dev/scripts/polkadot-exec-node-test.mjs')} ${[...cmd, ...files].join(' ')}`;
 
-  if (isDev) {
-    execNodeTsSync(allFlags, nodeFlags.concat('--require', `./packages/dev-test/build/cjs/${testEnv}.js`), false, './packages/dev-ts/build/cached.js');
-  } else {
-    execNodeTsSync(allFlags, nodeFlags.concat('--require', `@polkadot/dev-test/${testEnv}`));
-  }
+  nodeFlags.push('--require');
+  nodeFlags.push(
+    isDev
+      ? `./packages/dev-test/build/cjs/${testEnv}.js`
+      : `@polkadot/dev-test/${testEnv}`
+  );
+
+  execNodeTsSync(allFlags, nodeFlags, false, isDev ? './packages/dev-ts/build/cached.js' : undefined);
 } catch {
   process.exit(1);
 }
