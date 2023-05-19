@@ -533,7 +533,7 @@ __metadata:
   dependencies:
     "@types/jsdom": ^21.1.1
     jsdom: ^22.0.0
-    tslib: ^2.5.1
+    tslib: ^2.5.2
   languageName: unknown
   linkType: soft
 
@@ -542,7 +542,7 @@ __metadata:
   resolution: "@polkadot/dev-ts@workspace:packages/dev-ts"
   dependencies:
     json5: ^2.2.3
-    tslib: ^2.5.1
+    tslib: ^2.5.2
     typescript: ^5.0.4
   languageName: unknown
   linkType: soft
@@ -563,7 +563,7 @@ __metadata:
     "@rushstack/eslint-patch": ^1.2.0
     "@testing-library/react": ^14.0.0
     "@tsconfig/strictest": ^2.0.1
-    "@types/node": ^20.2.0
+    "@types/node": ^20.2.1
     "@types/react": ^18.2.6
     "@types/react-dom": ^18.2.4
     "@types/styled-components": ^5.1.26
@@ -594,7 +594,7 @@ __metadata:
     rollup: ^3.22.0
     rollup-plugin-cleanup: ^3.2.1
     styled-components: ^5.3.10
-    tslib: ^2.5.1
+    tslib: ^2.5.2
     typescript: ^5.0.4
     webpack: ^5.83.1
     webpack-cli: ^5.1.1
@@ -974,10 +974,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^20.2.0":
-  version: 20.2.0
-  resolution: "@types/node@npm:20.2.0"
-  checksum: 9b937367448a07482af14e3518125ae531bff99e16d51e0945f4f93dbd7051d8a270811bdeb57f0b52c629fb0c9c401a238a7352dfbc87e26495b6f0f59cbdb6
+"@types/node@npm:*, @types/node@npm:^20.2.1":
+  version: 20.2.1
+  resolution: "@types/node@npm:20.2.1"
+  checksum: ed774afa6e9b4ad7868ed0182a8ca40ad0dd54815a70d3051b23fa850f3bca6bea4d0cb55e1fc769666786ac2cc4c1b37aeade313cb4c4634133f18ebcded496
   languageName: node
   linkType: hard
 
@@ -8265,10 +8265,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.1.0, tslib@npm:^2.3.1, tslib@npm:^2.5.1":
-  version: 2.5.1
-  resolution: "tslib@npm:2.5.1"
-  checksum: 535e41e956b32d21aeff007a2c74989d1a6bf3fecb2b0141d80e5b9920bf90e23b4f0cd3772704bc03637c762dbdc1a314d75a407dd7189afbe3e83d80df9392
+"tslib@npm:^2.1.0, tslib@npm:^2.3.1, tslib@npm:^2.5.2":
+  version: 2.5.2
+  resolution: "tslib@npm:2.5.2"
+  checksum: 4d3c1e238b94127ed0e88aa0380db3c2ddae581dc0f4bae5a982345e9f50ee5eda90835b8bfba99b02df10a5734470be197158c36f9129ac49fdc14a6a9da222
   languageName: node
   linkType: hard
 

@@ -84,7 +84,7 @@
     "rollup": "^3.22.0",
     "rollup-plugin-cleanup": "^3.2.1",
     "styled-components": "^5.3.10",
-    "tslib": "^2.5.1",
+    "tslib": "^2.5.2",
     "typescript": "^5.0.4",
     "webpack": "^5.83.1",
     "webpack-cli": "^5.1.1",
@@ -95,7 +95,7 @@
   },
   "devDependencies": {
     "@testing-library/react": "^14.0.0",
-    "@types/node": "^20.2.0",
+    "@types/node": "^20.2.1",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
     "@types/styled-components": "^5.1.26",
