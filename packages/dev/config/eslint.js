@@ -60,7 +60,6 @@ export default [
     languageOptions: {
       globals: {
         ...globals.browser,
-        ...globals.jest,
         ...globals.node
       },
       parser: tsParser,
@@ -123,6 +122,13 @@ export default [
       '**/*.spec.ts',
       '**/*.spec.tsx'
     ],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.jest,
+        ...globals.node
+      }
+    },
     plugins: {
       jest: jestPlugin
     },
