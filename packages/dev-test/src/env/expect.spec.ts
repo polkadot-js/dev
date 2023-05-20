@@ -9,7 +9,7 @@ describe('expect', () => {
   it('throws on unimplemented', () => {
     expect(
       () => expect(true).not.toHaveReturnedWith()
-    ).toThrow('expect(...).not.toReturnWith has not been implemented');
+    ).toThrow('expect(...).not.toHaveReturnedWith has not been implemented');
   });
 
   it('throws on unimplemented (with alternative)', () => {
