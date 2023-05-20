@@ -85,7 +85,10 @@ export default [
       ...tsPlugin.configs.recommended.rules,
       ...tsPlugin.configs['recommended-requiring-type-checking'].rules,
       ...reactPlugin.configs.recommended.rules,
-      ...promisePlugin.configs.recommended.rules,
+      // We may want to enable this is the future. As of May 2023, we do
+      // have a number of issues in your polkadot-js projects (since it is
+      // new), hence keeping it disabled
+      // ...promisePlugin.configs.recommended.rules,
       ...standardConfig.rules,
       ...allRules
     },
