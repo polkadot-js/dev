@@ -8,8 +8,8 @@ describe('expect', () => {
 
   it('throws on unimplemented', () => {
     expect(
-      () => expect(true).not.toReturnWith()
-    ).toThrow('expect(...).not.toReturnWith has not been implemented');
+      () => expect(true).not.toHaveReturnedWith()
+    ).toThrow('expect(...).not.toHaveReturnedWith has not been implemented');
   });
 
   it('throws on unimplemented (with alternative)', () => {
