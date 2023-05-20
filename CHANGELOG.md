@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.75.1
+
+- Swap eslint to flat config
+
+
 ## 0.74.1
 
 - Ensure correct structures for `tsconfig.*.json`

@@ -9,7 +9,7 @@ describe('describe()', () => {
     });
   });
 
-  // does not work as expected...
+  // does not work as expected... (needs flags passed to execute)
   // describe('.only (none)', () => {
   //   it('skips alongside .only', () => {
   //     throw new Error('FATAL: This should not run');
@@ -17,8 +17,11 @@ describe('describe()', () => {
   // });
 
   describe('.skip', () => {
+    // eslint-disable-next-line jest/no-disabled-tests
     describe.skip('.only (.skip)', () => {
       it('skips inside .only', () => {
+        expect(true).toBe(true);
+
         throw new Error('FATAL: This should not run');
       });
     });
@@ -41,7 +44,10 @@ describe('it()', () => {
       expect(true).toBe(true);
     });
 
+    // eslint-disable-next-line jest/no-disabled-tests
     it.skip('skips when .skip is used', () => {
+      expect(true).toBe(true);
+
       throw new Error('FATAL: This should not run');
     });
 
@@ -52,7 +58,10 @@ describe('it()', () => {
   });
 
   describe('.skip', () => {
+    // eslint-disable-next-line jest/no-disabled-tests
     it.skip('skips when .skip is used', () => {
+      expect(true).toBe(true);
+
       throw new Error('FATAL: This should not run');
     });
   });

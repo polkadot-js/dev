@@ -6,7 +6,10 @@
   "include": [
     "packages/**/src/**/*",
     "packages/**/config/**/*",
-    "packages/**/scripts/**/*"
+    "packages/**/scripts/**/*",
+    ".prettierrc.cjs",
+    "all-deps.js",
+    "eslint.config.js"
   ],
   "exclude": [
     "**/node_modules/**/*"
