@@ -3,6 +3,8 @@
 
 /// <reference types="@polkadot/dev-test/globals.d.ts" />
 
+/* global describe, expect, it */
+
 import type * as testRoot from './root.js';
 
 export function runTests ({ Clazz, TEST_PURE, bigIntExp, dynamic, jsOpExp, json }: typeof testRoot): void {

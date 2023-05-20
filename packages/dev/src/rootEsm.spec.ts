@@ -138,25 +138,27 @@ describe('as-built output checks', (): void => {
       ).toBe(true);
     });
 
-    // Due to issues with @zonda + git imports, unused
-    it.skip('has npm: imports', (): void => {
-      expect(
-        /import rollupAlias from 'npm:@rollup\/plugin-alias@\^\d\d?\.\d\d?\.\d\d?';/.test(denoMod)
-      ).toBe(true);
-    });
-
-    it.skip('has npm: imports with paths', (): void => {
-      expect(
-        /import eslint from 'npm:eslint@\^\d\d?\.\d\d?\.\d\d?\/use-at-your-own-risk';/.test(denoMod)
-      ).toBe(true);
-    });
-
     it('has deno.land/x imports', (): void => {
       expect(
         fs
           .readFileSync(path.join(denoRoot, 'rootJs/augmented.ts'))
           .includes("declare module 'https://deno.land/x/polkadot/dev/types.ts' {")
       ).toBe(true);
+    });
+
+    // See https://github.com/denoland/deno/issues/18557
+    describe.skip('npm: prefixes', (): void => {
+      it('has npm: imports', (): void => {
+        expect(
+          /import rollupAlias from 'npm:@rollup\/plugin-alias@\^\d\d?\.\d\d?\.\d\d?';/.test(denoMod)
+        ).toBe(true);
+      });
+
+      it('has npm: imports with paths', (): void => {
+        expect(
+          /import eslint from 'npm:eslint@\^\d\d?\.\d\d?\.\d\d?\/use-at-your-own-risk';/.test(denoMod)
+        ).toBe(true);
+      });
     });
   });
 });

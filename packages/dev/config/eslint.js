@@ -31,7 +31,7 @@ import sortDestructureKeysPlugin from 'eslint-plugin-sort-destructure-keys';
 import globals from 'globals';
 import { createRequire } from 'node:module';
 
-import rules from './eslint.rules.cjs';
+import { allRules, jsRules, specRules } from './eslint.rules.js';
 
 const require = createRequire(import.meta.url);
 
@@ -44,12 +44,7 @@ export default [
       '**/.yarn/',
       '**/build/',
       '**/build-*/',
-      '**/coverage/',
-      '.prettierrc.cjs',
-      'eslint.config.js',
-      'mod.ts',
-      'rollup.config.js',
-      'rollup.config.mjs'
+      '**/coverage/'
     ]
   },
   {
@@ -65,11 +60,11 @@ export default [
     languageOptions: {
       globals: {
         ...globals.browser,
-        ...globals.jest,
         ...globals.node
       },
       parser: tsParser,
       parserOptions: {
+        project: './tsconfig.eslint.json',
         warnOnUnsupportedTypeScriptVersion: false
       }
     },
@@ -92,7 +87,7 @@ export default [
       ...reactPlugin.configs.recommended.rules,
       ...promisePlugin.configs.recommended.rules,
       ...standardConfig.rules,
-      ...rules.all
+      ...allRules
     },
     settings: {
       'import/extensions': [
@@ -119,7 +114,7 @@ export default [
       '**/*.js'
     ],
     rules: {
-      ...rules.js
+      ...jsRules
     }
   },
   {
@@ -127,12 +122,19 @@ export default [
       '**/*.spec.ts',
       '**/*.spec.tsx'
     ],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.jest,
+        ...globals.node
+      }
+    },
     plugins: {
       jest: jestPlugin
     },
     rules: {
       ...jestPlugin.configs.recommended.rules,
-      ...rules.spec
+      ...specRules
     },
     settings: {
       jest: {
