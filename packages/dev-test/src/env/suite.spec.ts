@@ -1,7 +1,8 @@
 // Copyright 2017-2023 @polkadot/dev-test authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-describe('describe', () => {
+describe('describe()', () => {
+  // eslint-disable-next-line jest/no-focused-tests
   describe.only('.only', () => {
     it('runs this one', () => {
       expect(true).toBe(true);
@@ -24,7 +25,7 @@ describe('describe', () => {
   });
 });
 
-describe('it', () => {
+describe('it()', () => {
   it('has been enhanced', () => {
     expect(it.todo).toBeDefined();
   });
@@ -35,6 +36,7 @@ describe('it', () => {
     //   throw new Error('FATAL: This should not run');
     // });
 
+    // eslint-disable-next-line jest/no-focused-tests
     it.only('runs this test when .only is used', () => {
       expect(true).toBe(true);
     });

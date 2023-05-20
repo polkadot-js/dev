@@ -131,7 +131,13 @@ export default [
       jest: jestPlugin
     },
     rules: {
+      ...jestPlugin.configs.recommended.rules,
       ...rules.spec
+    },
+    settings: {
+      jest: {
+        version: 27
+      }
     }
   }
 ];
