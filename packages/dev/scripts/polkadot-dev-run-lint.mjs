@@ -2,6 +2,7 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import fs from 'node:fs';
 import process from 'node:process';
 import yargs from 'yargs';
 
@@ -32,7 +33,11 @@ if (!argv['skip-eslint']) {
     ? ''
     : '--fix';
 
-  execSync(`yarn polkadot-exec-eslint ${extra} --resolve-plugins-relative-to ${__dirname} --ext .js,.cjs,.mjs,.ts,.tsx ${process.cwd()}`);
+  if (fs.existsSync('eslint.config.js')) {
+    execSync(`yarn polkadot-exec-eslint ${extra} ${process.cwd()}`);
+  } else {
+    execSync(`yarn polkadot-exec-eslint ${extra} --resolve-plugins-relative-to ${__dirname} --ext .js,.cjs,.mjs,.ts,.tsx ${process.cwd()}`);
+  }
 }
 
 if (!argv['skip-tsc']) {
