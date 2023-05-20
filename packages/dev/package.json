@@ -47,7 +47,7 @@
     "./rootJs/testJson.json": "./src/rootJs/testJson.json"
   },
   "dependencies": {
-    "@eslint/js": "^8.40.0",
+    "@eslint/js": "^8.41.0",
     "@polkadot/dev-test": "^0.74.2",
     "@polkadot/dev-ts": "^0.74.2",
     "@rollup/plugin-alias": "^5.0.0",
@@ -60,7 +60,7 @@
     "@tsconfig/strictest": "^2.0.1",
     "@typescript-eslint/eslint-plugin": "^5.59.6",
     "@typescript-eslint/parser": "^5.59.6",
-    "eslint": "^8.40.0",
+    "eslint": "^8.41.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-import-resolver-node": "^0.3.7",
     "eslint-plugin-deprecation": "^1.4.1",
