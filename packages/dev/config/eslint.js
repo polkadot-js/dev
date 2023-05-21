@@ -29,34 +29,12 @@ import simpleImportSortPlugin from 'eslint-plugin-simple-import-sort';
 // @ts-expect-error No definition for this one
 import sortDestructureKeysPlugin from 'eslint-plugin-sort-destructure-keys';
 import globals from 'globals';
-import { createRequire } from 'node:module';
 
 import { allRules, jsRules, specRules } from './eslint.rules.js';
-
-const require = createRequire(import.meta.url);
 
 export default [
   eslintJs.configs.recommended,
   {
-    ignores: [
-      '**/.github/',
-      '**/.vscode/',
-      '**/.yarn/',
-      '**/build/',
-      '**/build-*/',
-      '**/coverage/'
-    ]
-  },
-  {
-    files: [
-      '**/*.cjs',
-      '**/*.mjs',
-      '**/*.js',
-      '**/*.spec.ts',
-      '**/*.spec.tsx',
-      '**/*.ts',
-      '**/*.tsx'
-    ],
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -64,7 +42,9 @@ export default [
       },
       parser: tsParser,
       parserOptions: {
+        ecmaVersion: 'latest',
         project: './tsconfig.eslint.json',
+        sourceType: 'module',
         warnOnUnsupportedTypeScriptVersion: false
       }
     },
@@ -81,20 +61,11 @@ export default [
       'simple-import-sort': simpleImportSortPlugin,
       'sort-destructure-keys': sortDestructureKeysPlugin
     },
-    rules: {
-      ...tsPlugin.configs.recommended.rules,
-      ...tsPlugin.configs['recommended-requiring-type-checking'].rules,
-      ...reactPlugin.configs.recommended.rules,
-      // We may want to enable this is the future. As of May 2023, we do
-      // have a number of issues in your polkadot-js projects (since it is
-      // new), hence keeping it disabled
-      // ...promisePlugin.configs.recommended.rules,
-      ...standardConfig.rules,
-      ...allRules
-    },
     settings: {
       'import/extensions': [
+        '.cjs',
         '.js',
+        '.mjs',
         '.ts',
         '.tsx'
       ],
@@ -102,19 +73,64 @@ export default [
         '@typescript-eslint/parser': [
           '.ts',
           '.tsx'
+        ],
+        espree: [
+          '.cjs',
+          '.js',
+          '.mjs'
         ]
       },
-      'import/resolver': require.resolve('eslint-import-resolver-node'),
+      'import/resolver': {
+        node: {
+          extensions: [
+            '.cjs',
+            '.js',
+            '.mjs',
+            '.ts',
+            '.tsx'
+          ]
+        },
+        typescript: {
+          project: './tsconfig.eslint.json'
+        }
+      },
       react: {
         version: 'detect'
       }
     }
   },
   {
+    ignores: [
+      '**/.github/',
+      '**/.vscode/',
+      '**/.yarn/',
+      '**/build/',
+      '**/build-*/',
+      '**/coverage/'
+    ]
+  },
+  {
     files: [
       '**/*.cjs',
+      '**/*.js',
       '**/*.mjs',
-      '**/*.js'
+      '**/*.ts',
+      '**/*.tsx'
+    ],
+    rules: {
+      ...standardConfig.rules,
+      // ...promisePlugin.configs.recommended.rules,
+      ...reactPlugin.configs.recommended.rules,
+      ...tsPlugin.configs.recommended.rules,
+      ...tsPlugin.configs['recommended-requiring-type-checking'].rules,
+      ...allRules
+    }
+  },
+  {
+    files: [
+      '**/*.cjs',
+      '**/*.js',
+      '**/*.mjs'
     ],
     rules: {
       ...jsRules
@@ -127,9 +143,7 @@ export default [
     ],
     languageOptions: {
       globals: {
-        ...globals.browser,
-        ...globals.jest,
-        ...globals.node
+        ...globals.jest
       }
     },
     plugins: {

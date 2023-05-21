@@ -9,13 +9,6 @@ describe('describe()', () => {
     });
   });
 
-  // does not work as expected... (needs flags passed to execute)
-  // describe('.only (none)', () => {
-  //   it('skips alongside .only', () => {
-  //     throw new Error('FATAL: This should not run');
-  //   });
-  // });
-
   describe('.skip', () => {
     // eslint-disable-next-line jest/no-disabled-tests
     describe.skip('.only (.skip)', () => {
@@ -34,11 +27,6 @@ describe('it()', () => {
   });
 
   describe('.only', () => {
-    // does not work as expected
-    // it('skips alongside .only', () => {
-    //   throw new Error('FATAL: This should not run');
-    // });
-
     // eslint-disable-next-line jest/no-focused-tests
     it.only('runs this test when .only is used', () => {
       expect(true).toBe(true);
@@ -50,11 +38,6 @@ describe('it()', () => {
 
       throw new Error('FATAL: This should not run');
     });
-
-    // Ummm... this doesn't match my expectation for actually passing...
-    // it.todo('skips when .todo is used', () => {
-    //   throw new Error('FATAL: This should not run');
-    // });
   });
 
   describe('.skip', () => {
