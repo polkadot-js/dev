@@ -574,7 +574,6 @@ __metadata:
     "@rollup/plugin-inject": ^5.0.3
     "@rollup/plugin-json": ^6.0.0
     "@rollup/plugin-node-resolve": ^15.0.2
-    "@rushstack/eslint-patch": ^1.2.0
     "@testing-library/react": ^14.0.0
     "@tsconfig/strictest": ^2.0.1
     "@types/node": ^20.2.1
@@ -599,6 +598,7 @@ __metadata:
     eslint-plugin-react-hooks: ^4.6.0
     eslint-plugin-simple-import-sort: ^10.0.0
     eslint-plugin-sort-destructure-keys: ^1.5.0
+    espree: ^9.5.2
     gh-pages: ^5.0.0
     gh-release: ^7.0.2
     globals: ^13.20.0
@@ -757,13 +757,6 @@ __metadata:
     rollup:
       optional: true
   checksum: edea15e543bebc7dcac3b0ac8bc7b8e8e6dbd46e2864dbe5dd28072de1fbd5b0e10d545a610c0edaa178e8a7ac432e2a2a52e547ece1308471412caba47db8ce
-  languageName: node
-  linkType: hard
-
-"@rushstack/eslint-patch@npm:^1.2.0":
-  version: 1.2.0
-  resolution: "@rushstack/eslint-patch@npm:1.2.0"
-  checksum: faa749faae0e83c26ae9eb00ad36a897ac78f3cf27da8e8ff21c00bcf7973b598d823d8f2b3957ef66079288bcf577f94df831eae2d65f3f68d8ca32f18b6aff
   languageName: node
   linkType: hard
 
