@@ -35,25 +35,6 @@ import { allRules, jsRules, specRules } from './eslint.rules.js';
 export default [
   eslintJs.configs.recommended,
   {
-    ignores: [
-      '**/.github/',
-      '**/.vscode/',
-      '**/.yarn/',
-      '**/build/',
-      '**/build-*/',
-      '**/coverage/'
-    ]
-  },
-  {
-    files: [
-      '**/*.cjs',
-      '**/*.mjs',
-      '**/*.js',
-      '**/*.spec.ts',
-      '**/*.spec.tsx',
-      '**/*.ts',
-      '**/*.tsx'
-    ],
     languageOptions: {
       globals: {
         ...globals.browser,
@@ -61,7 +42,9 @@ export default [
       },
       parser: tsParser,
       parserOptions: {
+        ecmaVersion: 'latest',
         project: './tsconfig.eslint.json',
+        sourceType: 'module',
         warnOnUnsupportedTypeScriptVersion: false
       }
     },
@@ -77,14 +60,6 @@ export default [
       'react-hooks': reactHooksPlugin,
       'simple-import-sort': simpleImportSortPlugin,
       'sort-destructure-keys': sortDestructureKeysPlugin
-    },
-    rules: {
-      // ...promisePlugin.configs.recommended.rules,
-      ...reactPlugin.configs.recommended.rules,
-      ...standardConfig.rules,
-      ...tsPlugin.configs.recommended.rules,
-      ...tsPlugin.configs['recommended-requiring-type-checking'].rules,
-      ...allRules
     },
     settings: {
       'import/extensions': [
@@ -125,10 +100,37 @@ export default [
     }
   },
   {
+    ignores: [
+      '**/.github/',
+      '**/.vscode/',
+      '**/.yarn/',
+      '**/build/',
+      '**/build-*/',
+      '**/coverage/'
+    ]
+  },
+  {
     files: [
       '**/*.cjs',
+      '**/*.js',
       '**/*.mjs',
-      '**/*.js'
+      '**/*.ts',
+      '**/*.tsx'
+    ],
+    rules: {
+      // ...promisePlugin.configs.recommended.rules,
+      ...reactPlugin.configs.recommended.rules,
+      ...standardConfig.rules,
+      ...tsPlugin.configs.recommended.rules,
+      ...tsPlugin.configs['recommended-requiring-type-checking'].rules,
+      ...allRules
+    }
+  },
+  {
+    files: [
+      '**/*.cjs',
+      '**/*.js',
+      '**/*.mjs'
     ],
     rules: {
       ...jsRules
@@ -141,9 +143,7 @@ export default [
     ],
     languageOptions: {
       globals: {
-        ...globals.browser,
-        ...globals.jest,
-        ...globals.node
+        ...globals.jest
       }
     },
     plugins: {
