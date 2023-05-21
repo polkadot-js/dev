@@ -40,8 +40,13 @@ export const allRules = {
   }],
   'import/export': 'error',
   'import/extensions': ['error', 'ignorePackages', {
+    cjs: 'always',
+    js: 'always',
     json: 'always',
-    jsx: 'never'
+    jsx: 'never',
+    mjs: 'always',
+    ts: 'never',
+    tsx: 'never'
   }],
   'import/first': 'error',
   'import/newline-after-import': 'error',

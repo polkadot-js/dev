@@ -147,17 +147,18 @@ describe('as-built output checks', (): void => {
     });
 
     // See https://github.com/denoland/deno/issues/18557
-    describe.skip('npm: prefixes', (): void => {
+    // NOTE: When available, the toBe(false) should be toBe(true)
+    describe.todo('npm: prefixes', (): void => {
       it('has npm: imports', (): void => {
         expect(
           /import rollupAlias from 'npm:@rollup\/plugin-alias@\^\d\d?\.\d\d?\.\d\d?';/.test(denoMod)
-        ).toBe(true);
+        ).toBe(false); // true);
       });
 
       it('has npm: imports with paths', (): void => {
         expect(
           /import eslint from 'npm:eslint@\^\d\d?\.\d\d?\.\d\d?\/use-at-your-own-risk';/.test(denoMod)
-        ).toBe(true);
+        ).toBe(false); // true);
       });
     });
   });

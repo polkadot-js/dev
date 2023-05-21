@@ -28,7 +28,7 @@ const TARGET_NODE = '>=16';
 
 const IGNORE_IMPORTS = [
   // node (new-style)
-  'node:assert', 'node:child_process', 'node:crypto', 'node:fs', 'node:os', 'node:path', 'node:process', 'node:readline', 'node:test', 'node:url', 'node:util',
+  ...['assert', 'child_process', 'crypto', 'fs', 'module', 'os', 'path', 'process', 'readline', 'test', 'url', 'util'].map((m) => `node:${m}`),
   // other
   '@testing-library/react',
   'react', 'react-native', 'styled-components'
