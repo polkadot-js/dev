@@ -118,9 +118,9 @@ export default [
       '**/*.tsx'
     ],
     rules: {
+      ...standardConfig.rules,
       // ...promisePlugin.configs.recommended.rules,
       ...reactPlugin.configs.recommended.rules,
-      ...standardConfig.rules,
       ...tsPlugin.configs.recommended.rules,
       ...tsPlugin.configs['recommended-requiring-type-checking'].rules,
       ...allRules
