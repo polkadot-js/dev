@@ -95,7 +95,10 @@ export default [
         }
       },
       react: {
-        version: 'detect'
+        // We don't want to use "detect" since some packages does not
+        // include react, but we want the latest.
+        // See https://github.com/jsx-eslint/eslint-plugin-react/issues/1955
+        version: '999.999'
       }
     }
   },

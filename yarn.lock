@@ -576,7 +576,7 @@ __metadata:
     "@rollup/plugin-node-resolve": ^15.0.2
     "@testing-library/react": ^14.0.0
     "@tsconfig/strictest": ^2.0.1
-    "@types/node": ^20.2.1
+    "@types/node": ^20.2.3
     "@types/react": ^18.2.6
     "@types/react-dom": ^18.2.4
     "@types/styled-components": ^5.1.26
@@ -607,7 +607,7 @@ __metadata:
     react: ^18.2.0
     react-dom: ^18.2.0
     react-is: ^18.2.0
-    rollup: ^3.22.0
+    rollup: ^3.23.0
     rollup-plugin-cleanup: ^3.2.1
     styled-components: ^5.3.10
     tslib: ^2.5.2
@@ -983,10 +983,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^20.2.1":
-  version: 20.2.1
-  resolution: "@types/node@npm:20.2.1"
-  checksum: ed774afa6e9b4ad7868ed0182a8ca40ad0dd54815a70d3051b23fa850f3bca6bea4d0cb55e1fc769666786ac2cc4c1b37aeade313cb4c4634133f18ebcded496
+"@types/node@npm:*, @types/node@npm:^20.2.3":
+  version: 20.2.3
+  resolution: "@types/node@npm:20.2.3"
+  checksum: 576065e8fc1fa45798c8f59a6bf809169582d04abc2e25fab1a048ffc734975b9992ae31be0d960cf705a21fb37112f7fcde11aa322beddf7491e73d5a5a988c
   languageName: node
   linkType: hard
 
@@ -7514,9 +7514,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^3.22.0":
-  version: 3.22.0
-  resolution: "rollup@npm:3.22.0"
+"rollup@npm:^3.23.0":
+  version: 3.23.0
+  resolution: "rollup@npm:3.23.0"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -7524,7 +7524,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 6da2bfe1eb16714ccd4bf56ca92430309dc71b4492a3c38502f68f645433dcc789fb79f3761fc2269aa0cf20ece7821c4d7c95b860b7343c2ed52ed1c36c9a90
+  checksum: 0721065cf725c5611815be61d2b01f20b4d0027e17035f6e76384d38396b56cf6ed21a3db78eb004d9db4d24c8a6a19da4563b4ff96b5dd36f0a0f7a3baf85e8
   languageName: node
   linkType: hard
 
