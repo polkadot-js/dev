@@ -30,7 +30,7 @@ import simpleImportSortPlugin from 'eslint-plugin-simple-import-sort';
 import sortDestructureKeysPlugin from 'eslint-plugin-sort-destructure-keys';
 import globals from 'globals';
 
-import { allRules, jsRules, specRules } from './eslint.rules.js';
+import { allRules, jsRules, jsxRules, specRules } from './eslint.rules.js';
 
 export default [
   eslintJs.configs.recommended,
@@ -56,8 +56,6 @@ export default [
       'import-newlines': importNewlinesPlugin,
       n: nPlugin,
       promise: promisePlugin,
-      react: reactPlugin,
-      'react-hooks': reactHooksPlugin,
       'simple-import-sort': simpleImportSortPlugin,
       'sort-destructure-keys': sortDestructureKeysPlugin
     },
@@ -93,9 +91,6 @@ export default [
         typescript: {
           project: './tsconfig.eslint.json'
         }
-      },
-      react: {
-        version: 'detect'
       }
     }
   },
@@ -120,7 +115,6 @@ export default [
     rules: {
       ...standardConfig.rules,
       // ...promisePlugin.configs.recommended.rules,
-      ...reactPlugin.configs.recommended.rules,
       ...tsPlugin.configs.recommended.rules,
       ...tsPlugin.configs['recommended-requiring-type-checking'].rules,
       ...allRules
@@ -134,6 +128,24 @@ export default [
     ],
     rules: {
       ...jsRules
+    }
+  },
+  {
+    files: [
+      '**/*.tsx'
+    ],
+    plugins: {
+      react: reactPlugin,
+      'react-hooks': reactHooksPlugin
+    },
+    rules: {
+      ...reactPlugin.configs.recommended.rules,
+      ...jsxRules
+    },
+    settings: {
+      react: {
+        version: 'detect'
+      }
     }
   },
   {

@@ -53,7 +53,6 @@ export const allRules = {
   'import/no-duplicates': 'error',
   'import/order': 'off', // conflicts with simple-import-sort
   indent: 'off', // required as 'off' since typescript-eslint has own versions
-  'jsx-quotes': ['error', 'prefer-single'],
   'no-extra-semi': 'error',
   'no-unused-vars': 'off',
   'no-use-before-define': 'off',
@@ -77,30 +76,6 @@ export const allRules = {
     { blankLine: 'always', next: '*', prev: 'import' },
     { blankLine: 'any', next: 'import', prev: 'import' }
   ],
-  'react-hooks/exhaustive-deps': 'error',
-  'react-hooks/rules-of-hooks': 'error',
-  'react/jsx-closing-bracket-location': ['warn', 'tag-aligned'],
-  'react/jsx-first-prop-new-line': ['warn', 'multiline-multiprop'],
-  'react/jsx-fragments': 'error',
-  'react/jsx-max-props-per-line': ['warn', {
-    maximum: 1,
-    when: 'always'
-  }],
-  'react/jsx-newline': ['error', {
-    prevent: true
-  }],
-  'react/jsx-no-bind': 'error',
-  'react/jsx-props-no-multi-spaces': 'error',
-  'react/jsx-sort-props': ['warn', {
-    noSortAlphabetically: false
-  }],
-  'react/jsx-tag-spacing': ['error', {
-    afterOpening: 'never',
-    beforeClosing: 'never',
-    beforeSelfClosing: 'always',
-    closingSlash: 'never'
-  }],
-  'react/prop-types': ['off'], // this is a completely broken rule
   semi: ['error', 'always'],
   'simple-import-sort/exports': 'error',
   'simple-import-sort/imports': ['error', {
@@ -127,6 +102,34 @@ export const allRules = {
       markers: ['/ <reference']
     }
   }]
+};
+
+export const jsxRules = {
+  'jsx-quotes': ['error', 'prefer-single'],
+  'react-hooks/exhaustive-deps': 'error',
+  'react-hooks/rules-of-hooks': 'error',
+  'react/jsx-closing-bracket-location': ['warn', 'tag-aligned'],
+  'react/jsx-first-prop-new-line': ['warn', 'multiline-multiprop'],
+  'react/jsx-fragments': 'error',
+  'react/jsx-max-props-per-line': ['warn', {
+    maximum: 1,
+    when: 'always'
+  }],
+  'react/jsx-newline': ['error', {
+    prevent: true
+  }],
+  'react/jsx-no-bind': 'error',
+  'react/jsx-props-no-multi-spaces': 'error',
+  'react/jsx-sort-props': ['warn', {
+    noSortAlphabetically: false
+  }],
+  'react/jsx-tag-spacing': ['error', {
+    afterOpening: 'never',
+    beforeClosing: 'never',
+    beforeSelfClosing: 'always',
+    closingSlash: 'never'
+  }],
+  'react/prop-types': ['off'] // this is a completely broken rule
 };
 
 export const jsRules = {

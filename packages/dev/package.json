@@ -42,7 +42,9 @@
     "polkadot-exec-webpack": "./scripts/polkadot-exec-webpack.mjs"
   },
   "exports": {
-    "./config/*": "./config/*",
+    "./config/eslint": "./config/eslint.js",
+    "./config/prettier.cjs": "./config/prettier.cjs",
+    "./config/tsconfig.json": "./config/tsconfig.json",
     "./rootJs/dynamic.mjs": "./src/rootJs/dynamic.mjs",
     "./rootJs/testJson.json": "./src/rootJs/testJson.json"
   },
@@ -80,12 +82,8 @@
     "globals": "^13.20.0",
     "json5": "^2.2.3",
     "madge": "^6.0.0",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-is": "^18.2.0",
-    "rollup": "^3.22.0",
+    "rollup": "^3.23.0",
     "rollup-plugin-cleanup": "^3.2.1",
-    "styled-components": "^5.3.10",
     "tslib": "^2.5.2",
     "typescript": "^5.0.4",
     "webpack": "^5.83.1",
@@ -97,10 +95,14 @@
   },
   "devDependencies": {
     "@testing-library/react": "^14.0.0",
-    "@types/node": "^20.2.1",
+    "@types/node": "^20.2.3",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
     "@types/styled-components": "^5.1.26",
-    "@types/yargs": "^17.0.24"
+    "@types/yargs": "^17.0.24",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-is": "^18.2.0",
+    "styled-components": "^5.3.10"
   }
 }
