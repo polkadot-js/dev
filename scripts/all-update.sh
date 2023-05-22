@@ -37,7 +37,7 @@ done
 echo ""
 echo "*** Updating inter-package-deps"
 
-./dev/all-deps.js
+./dev/scripts/all-deps.js
 
 echo ""
 echo "*** Installing updated packages"
