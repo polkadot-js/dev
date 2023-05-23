@@ -106,8 +106,8 @@ export const allRules = {
 
 export const jsxRules = {
   'jsx-quotes': ['error', 'prefer-single'],
+  // swap from recommended warning to error
   'react-hooks/exhaustive-deps': 'error',
-  'react-hooks/rules-of-hooks': 'error',
   'react/jsx-closing-bracket-location': ['warn', 'tag-aligned'],
   'react/jsx-first-prop-new-line': ['warn', 'multiline-multiprop'],
   'react/jsx-fragments': 'error',
