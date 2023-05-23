@@ -132,7 +132,8 @@ export default [
   },
   {
     files: [
-      '**/*.tsx'
+      '**/*.tsx',
+      '**/use*.ts'
     ],
     plugins: {
       react: reactPlugin,
@@ -140,6 +141,7 @@ export default [
     },
     rules: {
       ...reactPlugin.configs.recommended.rules,
+      ...reactHooksPlugin.configs.recommended.rules,
       ...jsxRules
     },
     settings: {
