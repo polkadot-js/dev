@@ -576,7 +576,7 @@ __metadata:
     "@rollup/plugin-node-resolve": ^15.0.2
     "@testing-library/react": ^14.0.0
     "@tsconfig/strictest": ^2.0.1
-    "@types/node": ^20.2.3
+    "@types/node": ^20.2.4
     "@types/react": ^18.2.7
     "@types/react-dom": ^18.2.4
     "@types/styled-components": ^5.1.26
@@ -609,10 +609,10 @@ __metadata:
     react-is: ^18.2.0
     rollup: ^3.23.0
     rollup-plugin-cleanup: ^3.2.1
-    styled-components: ^5.3.10
+    styled-components: ^5.3.11
     tslib: ^2.5.2
     typescript: ^5.0.4
-    webpack: ^5.84.0
+    webpack: ^5.84.1
     webpack-cli: ^5.1.1
     webpack-dev-server: ^4.15.0
     webpack-merge: ^5.9.0
@@ -983,10 +983,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^20.2.3":
-  version: 20.2.3
-  resolution: "@types/node@npm:20.2.3"
-  checksum: 576065e8fc1fa45798c8f59a6bf809169582d04abc2e25fab1a048ffc734975b9992ae31be0d960cf705a21fb37112f7fcde11aa322beddf7491e73d5a5a988c
+"@types/node@npm:*, @types/node@npm:^20.2.4":
+  version: 20.2.4
+  resolution: "@types/node@npm:20.2.4"
+  checksum: 6bc45fdc1c1c0c0e03ca9aded926a5ce0f5e8154ae476a996f22832c530a8c909cfa2979b0b08c506477e836910f8b888bbe6eb9ebb698c4cd6f1f602456a9d4
   languageName: node
   linkType: hard
 
@@ -8212,9 +8212,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:^5.3.10":
-  version: 5.3.10
-  resolution: "styled-components@npm:5.3.10"
+"styled-components@npm:^5.3.11":
+  version: 5.3.11
+  resolution: "styled-components@npm:5.3.11"
   dependencies:
     "@babel/helper-module-imports": ^7.0.0
     "@babel/traverse": ^7.4.5
@@ -8230,7 +8230,7 @@ __metadata:
     react: ">= 16.8.0"
     react-dom: ">= 16.8.0"
     react-is: ">= 16.8.0"
-  checksum: 46dfea6c435516b22aae25798cf01f9b08423cfb517cfea9db760a18c941bddf79abaad9bedb9b3cca6faad24bd7eb4ef4dd21ae84b356ae29d279b2d571f7b7
+  checksum: 10edd4dae3b0231ec02d86bdd09c88e894eedfa7e9d4f8e562b09fb69c67a27d586cbcf35c785002d59b3bf11e6c0940b0efce40d13ae9ed148b26b1dc8f3284
   languageName: node
   linkType: hard
 
@@ -8965,9 +8965,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5.84.0":
-  version: 5.84.0
-  resolution: "webpack@npm:5.84.0"
+"webpack@npm:^5.84.1":
+  version: 5.84.1
+  resolution: "webpack@npm:5.84.1"
   dependencies:
     "@types/eslint-scope": ^3.7.3
     "@types/estree": ^1.0.0
@@ -8998,7 +8998,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: 5837983d81d55edf621317f23de3a7ae49bbf24c9f8605beeba35ea62be5cc4b3b63ace0ec9785912b9ffe70fd969e613597fae21b2334a3913054c41189ef75
+  checksum: 646b645df5badf2dac2ddd0193c9e9a177d51283d18f918eead36a0cdf7b750c4111d9ac11d9825c1334cbd0a6fb8f82628fbfb90d0066f927265dd11b47b192
   languageName: node
   linkType: hard
 
