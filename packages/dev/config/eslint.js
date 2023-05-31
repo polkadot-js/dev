@@ -32,6 +32,20 @@ import globals from 'globals';
 
 import { allRules, jsRules, jsxRules, specRules } from './eslint.rules.js';
 
+const EXT_JS = ['.cjs', '.js', '.mjs'];
+const EXT_TS = ['.ts', '.tsx'];
+const EXT_ALL = [...EXT_JS, ...EXT_TS];
+
+/**
+ * @internal
+ * Converts a list of EXT_* defined above to globs
+ * @param {string[]} exts
+ * @returns {string[]}
+ */
+function extsToGlobs (exts) {
+  return exts.map((e) => `**/*${e}`);
+}
+
 export default [
   eslintJs.configs.recommended,
   {
@@ -60,33 +74,14 @@ export default [
       'sort-destructure-keys': sortDestructureKeysPlugin
     },
     settings: {
-      'import/extensions': [
-        '.cjs',
-        '.js',
-        '.mjs',
-        '.ts',
-        '.tsx'
-      ],
+      'import/extensions': EXT_ALL,
       'import/parsers': {
-        '@typescript-eslint/parser': [
-          '.ts',
-          '.tsx'
-        ],
-        espree: [
-          '.cjs',
-          '.js',
-          '.mjs'
-        ]
+        '@typescript-eslint/parser': EXT_TS,
+        espree: EXT_JS
       },
       'import/resolver': {
         node: {
-          extensions: [
-            '.cjs',
-            '.js',
-            '.mjs',
-            '.ts',
-            '.tsx'
-          ]
+          extensions: EXT_ALL
         },
         typescript: {
           project: './tsconfig.eslint.json'
@@ -105,13 +100,7 @@ export default [
     ]
   },
   {
-    files: [
-      '**/*.cjs',
-      '**/*.js',
-      '**/*.mjs',
-      '**/*.ts',
-      '**/*.tsx'
-    ],
+    files: extsToGlobs(EXT_ALL),
     rules: {
       ...standardConfig.rules,
       // ...promisePlugin.configs.recommended.rules,
@@ -121,11 +110,7 @@ export default [
     }
   },
   {
-    files: [
-      '**/*.cjs',
-      '**/*.js',
-      '**/*.mjs'
-    ],
+    files: extsToGlobs(EXT_JS),
     rules: {
       ...jsRules
     }
