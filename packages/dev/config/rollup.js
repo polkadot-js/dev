@@ -92,16 +92,19 @@ export function createBundle ({ entries = {}, external, globals = {}, index, inj
     external,
     input: createInput(pkg, index),
     output: createOutput(pkg, external, globals),
+    // NOTE The expect-error directives are due to rollup plugins, see
+    // - https://github.com/rollup/plugins/issues/1488
+    // - https://github.com/rollup/plugins/issues/1329
     plugins: [
-      // @ts-expect-error Something is weird with JS and the defs
+      // @ts-expect-error See the linked rollup issues above
       pluginAlias({ entries }),
-      // @ts-expect-error Something is weird with JS and the defs
+      // @ts-expect-error See the linked rollup issues above
       pluginJson(),
-      // @ts-expect-error Something is weird with JS and the defs
+      // @ts-expect-error See the linked rollup issues above
       pluginCommonjs(),
-      // @ts-expect-error Something is weird with JS and the defs
+      // @ts-expect-error See the linked rollup issues above
       pluginDynamicImportVars(),
-      // @ts-expect-error Something is weird with JS and the defs
+      // @ts-expect-error See the linked rollup issues above
       pluginInject(inject),
       pluginResolve({ browser: true }),
       pluginCleanup()
