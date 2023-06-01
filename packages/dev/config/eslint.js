@@ -30,7 +30,7 @@ import simpleImportSortPlugin from 'eslint-plugin-simple-import-sort';
 import sortDestructureKeysPlugin from 'eslint-plugin-sort-destructure-keys';
 import globals from 'globals';
 
-import { allRules, jsRules, jsxRules, specRules } from './eslint.rules.js';
+import { overrideAll, overrideJs, overrideJsx, overrideSpec } from './eslint.rules.js';
 
 const EXT_JS = ['.cjs', '.js', '.mjs'];
 const EXT_TS = ['.ts', '.tsx'];
@@ -47,7 +47,16 @@ function extsToGlobs (exts) {
 }
 
 export default [
-  eslintJs.configs.recommended,
+  {
+    ignores: [
+      '**/.github/',
+      '**/.vscode/',
+      '**/.yarn/',
+      '**/build/',
+      '**/build-*/',
+      '**/coverage/'
+    ]
+  },
   {
     languageOptions: {
       globals: {
@@ -90,29 +99,19 @@ export default [
     }
   },
   {
-    ignores: [
-      '**/.github/',
-      '**/.vscode/',
-      '**/.yarn/',
-      '**/build/',
-      '**/build-*/',
-      '**/coverage/'
-    ]
-  },
-  {
     files: extsToGlobs(EXT_ALL),
     rules: {
+      ...eslintJs.configs.recommended.rules,
       ...standardConfig.rules,
-      // ...promisePlugin.configs.recommended.rules,
       ...tsPlugin.configs.recommended.rules,
       ...tsPlugin.configs['recommended-requiring-type-checking'].rules,
-      ...allRules
+      ...overrideAll
     }
   },
   {
     files: extsToGlobs(EXT_JS),
     rules: {
-      ...jsRules
+      ...overrideJs
     }
   },
   {
@@ -127,7 +126,7 @@ export default [
     rules: {
       ...reactPlugin.configs.recommended.rules,
       ...reactHooksPlugin.configs.recommended.rules,
-      ...jsxRules
+      ...overrideJsx
     },
     settings: {
       react: {
@@ -150,7 +149,7 @@ export default [
     },
     rules: {
       ...jestPlugin.configs.recommended.rules,
-      ...specRules
+      ...overrideSpec
     },
     settings: {
       jest: {

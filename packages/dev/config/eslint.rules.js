@@ -1,7 +1,7 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-export const allRules = {
+export const overrideAll = {
   // the next 2 enforce isolatedModules & verbatimModuleSyntax
   '@typescript-eslint/consistent-type-exports': 'error',
   '@typescript-eslint/consistent-type-imports': 'error',
@@ -104,7 +104,7 @@ export const allRules = {
   }]
 };
 
-export const jsxRules = {
+export const overrideJsx = {
   'jsx-quotes': ['error', 'prefer-single'],
   // swap from recommended warning to error
   'react-hooks/exhaustive-deps': 'error',
@@ -132,7 +132,7 @@ export const jsxRules = {
   'react/prop-types': ['off'] // this is a completely broken rule
 };
 
-export const jsRules = {
+export const overrideJs = {
   '@typescript-eslint/explicit-function-return-type': 'off',
   '@typescript-eslint/no-unsafe-argument': 'off',
   '@typescript-eslint/no-unsafe-assignment': 'off',
@@ -144,8 +144,9 @@ export const jsRules = {
   '@typescript-eslint/restrict-template-expressions': 'off'
 };
 
-export const specRules = {
-  // not sure why ... these started popping up
+export const overrideSpec = {
+  // in the specs we are a little less worried about
+  // specific correctness, i.e. we can have dangling bits
   '@typescript-eslint/no-unsafe-call': 'off',
   '@typescript-eslint/no-unsafe-member-access': 'off',
   'jest/expect-expect': ['warn', {
