@@ -38,6 +38,6 @@
     "@polkadot/dev-ts": "workspace:packages/dev-ts"
   },
   "resolutions": {
-    "typescript": "^5.0.4"
+    "typescript": "^5.1.3"
   }
 }
