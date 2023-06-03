@@ -22,7 +22,7 @@
   },
   "dependencies": {
     "jsdom": "^22.1.0",
-    "tslib": "^2.5.2"
+    "tslib": "^2.5.3"
   },
   "devDependencies": {
     "@types/jsdom": "^21.1.1"
