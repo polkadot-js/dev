@@ -5,6 +5,7 @@ export const overrideAll = {
   // the next 2 enforce isolatedModules & verbatimModuleSyntax
   '@typescript-eslint/consistent-type-exports': 'error',
   '@typescript-eslint/consistent-type-imports': 'error',
+  '@typescript-eslint/dot-notation': 'error',
   '@typescript-eslint/indent': ['error', 2],
   '@typescript-eslint/no-non-null-assertion': 'error',
   // ts itself checks and ignores those starting with _, align the linting
@@ -21,8 +22,9 @@ export const overrideAll = {
   'arrow-parens': ['error', 'always'],
   'brace-style': ['error', '1tbs'],
   curly: ['error', 'all'],
-  'default-param-last': ['off'], // conflicts with TS version (this one doesn't allow TS ?)
+  'default-param-last': 'off', // conflicts with TS version
   'deprecation/deprecation': 'error',
+  'dot-notation': 'off', // conflicts with TS version
   'func-style': ['error', 'declaration', {
     allowArrowFunctions: true
   }],
@@ -129,7 +131,7 @@ export const overrideJsx = {
     beforeSelfClosing: 'always',
     closingSlash: 'never'
   }],
-  'react/prop-types': ['off'] // this is a completely broken rule
+  'react/prop-types': 'off' // this is a completely broken rule
 };
 
 export const overrideJs = {

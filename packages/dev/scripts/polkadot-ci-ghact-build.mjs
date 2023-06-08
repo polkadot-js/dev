@@ -16,9 +16,9 @@ console.log('$ polkadot-ci-ghact-build', process.argv.slice(2).join(' '));
 const DENO_REPO = 'polkadot-js/build-deno.land';
 const BUND_REPO = 'polkadot-js/build-bundle';
 
-const repo = `https://${process.env.GH_PAT}@github.com/${process.env.GITHUB_REPOSITORY}.git`;
-const denoRepo = `https://${process.env.GH_PAT}@github.com/${DENO_REPO}.git`;
-const bundRepo = `https://${process.env.GH_PAT}@github.com/${BUND_REPO}.git`;
+const repo = `https://${process.env['GH_PAT']}@github.com/${process.env['GITHUB_REPOSITORY']}.git`;
+const denoRepo = `https://${process.env['GH_PAT']}@github.com/${DENO_REPO}.git`;
+const bundRepo = `https://${process.env['GH_PAT']}@github.com/${BUND_REPO}.git`;
 const bundClone = 'build-bundle-clone';
 const denoClone = 'build-deno-clone';
 
@@ -165,7 +165,7 @@ function npmSetVersionFields () {
 function npmSetup () {
   const registry = 'registry.npmjs.org';
 
-  fs.writeFileSync(path.join(os.homedir(), '.npmrc'), `//${registry}/:_authToken=${process.env.NPM_TOKEN}`);
+  fs.writeFileSync(path.join(os.homedir(), '.npmrc'), `//${registry}/:_authToken=${process.env['NPM_TOKEN']}`);
 }
 
 /**
@@ -470,7 +470,7 @@ function gitPush () {
   const version = npmGetVersion();
   let doGHRelease = false;
 
-  if (process.env.GH_RELEASE_GITHUB_API_TOKEN) {
+  if (process.env['GH_RELEASE_GITHUB_API_TOKEN']) {
     const changes = fs.readFileSync('CHANGELOG.md', 'utf8');
 
     if (changes.includes(`## ${version}`)) {
@@ -492,11 +492,11 @@ function gitPush () {
 
 skip-checks: true"`);
 
-  execSync(`git push ${repo} HEAD:${process.env.GITHUB_REF}`, true);
+  execSync(`git push ${repo} HEAD:${process.env['GITHUB_REF']}`, true);
 
   if (doGHRelease) {
-    const files = process.env.GH_RELEASE_FILES
-      ? `--assets ${process.env.GH_RELEASE_FILES}`
+    const files = process.env['GH_RELEASE_FILES']
+      ? `--assets ${process.env['GH_RELEASE_FILES']}`
       : '';
 
     execSync(`yarn polkadot-exec-ghrelease --draft ${files} --yes`);

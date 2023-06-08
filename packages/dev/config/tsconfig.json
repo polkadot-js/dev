@@ -27,7 +27,6 @@
      * that we actually do have a large number of these lurking (especially on index checks)
      */
     "exactOptionalPropertyTypes": false,
-    "noPropertyAccessFromIndexSignature": false,
     "noUncheckedIndexedAccess": false,
   }
 }

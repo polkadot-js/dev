@@ -364,7 +364,7 @@ export function exitFatalEngine () {
  * Checks for yarn usage with a fatal exit code
  */
 export function exitFatalYarn () {
-  if (!process.env.npm_execpath?.includes('yarn')) {
+  if (!process.env['npm_execpath']?.includes('yarn')) {
     console.error(
       `${BLANK}\n   FATAL: The use of yarn is required, install via npm is not supported.\n${BLANK}`
     );
