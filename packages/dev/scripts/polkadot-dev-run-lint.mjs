@@ -28,7 +28,7 @@ const argv = await yargs(process.argv.slice(2))
 
 if (!argv['skip-eslint']) {
   // We don't want to run with fix on CI
-  const extra = process.env.GITHUB_REPOSITORY
+  const extra = process.env['GITHUB_REPOSITORY']
     ? ''
     : '--fix';
 
