@@ -5,9 +5,10 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import process from 'node:process';
 import yargs from 'yargs';
 
-import { copyDirSync, copyFileSync, denoCreateDir, execSync, exitFatal, gitSetup, mkdirpSync, rimrafSync } from './util.mjs';
+import { copyDirSync, copyFileSync, denoCreateDir, execSync, exitFatal, GITHUB_REPO, GITHUB_TOKEN_URL, gitSetup, mkdirpSync, rimrafSync } from './util.mjs';
 
 /** @typedef {Record<string, any>} ChangelogMap */
 
@@ -16,9 +17,9 @@ console.log('$ polkadot-ci-ghact-build', process.argv.slice(2).join(' '));
 const DENO_REPO = 'polkadot-js/build-deno.land';
 const BUND_REPO = 'polkadot-js/build-bundle';
 
-const repo = `https://${process.env['GH_PAT']}@github.com/${process.env['GITHUB_REPOSITORY']}.git`;
-const denoRepo = `https://${process.env['GH_PAT']}@github.com/${DENO_REPO}.git`;
-const bundRepo = `https://${process.env['GH_PAT']}@github.com/${BUND_REPO}.git`;
+const repo = `${GITHUB_TOKEN_URL}/${GITHUB_REPO}.git`;
+const denoRepo = `${GITHUB_TOKEN_URL}/${DENO_REPO}.git`;
+const bundRepo = `${GITHUB_TOKEN_URL}/${BUND_REPO}.git`;
 const bundClone = 'build-bundle-clone';
 const denoClone = 'build-deno-clone';
 

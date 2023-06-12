@@ -5,7 +5,7 @@
 import process from 'node:process';
 import yargs from 'yargs';
 
-import { __dirname, execSync } from './util.mjs';
+import { __dirname, execSync, GITHUB_REPO } from './util.mjs';
 
 const TS_CONFIG_BUILD = true;
 
@@ -28,7 +28,7 @@ const argv = await yargs(process.argv.slice(2))
 
 if (!argv['skip-eslint']) {
   // We don't want to run with fix on CI
-  const extra = process.env['GITHUB_REPOSITORY']
+  const extra = GITHUB_REPO
     ? ''
     : '--fix';
 

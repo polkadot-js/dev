@@ -28,6 +28,15 @@ export const GITHUB_USER = 'github-actions[bot]';
 /** The GH email for actions */
 export const GITHUB_MAIL = '41898282+github-actions[bot]@users.noreply.github.com';
 
+/** The GH repo link */
+export const GITHUB_REPO = process.env['GITHUB_REPOSITORY'];
+
+/** The GH token */
+export const GITHUB_TOKEN = process.env['GH_PAT'];
+
+/** The GH repo URL */
+export const GITHUB_TOKEN_URL = `https://${GITHUB_TOKEN}@github.com`;
+
 /** Paths that we generally building to (catch-all for possible usages) */
 export const PATHS_BUILD = ['', '-cjs', '-esm'].reduce((r, a) => r.concat(['', '-babel', '-esbuild', '-swc', '-tsc'].map((b) => `${b}${a}`)), ['-deno', '-docs', '-loader', '-wasm']).sort();
 
