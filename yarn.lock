@@ -577,7 +577,7 @@ __metadata:
     "@testing-library/react": ^14.0.0
     "@tsconfig/strictest": ^2.0.1
     "@types/node": ^20.3.1
-    "@types/react": ^18.2.13
+    "@types/react": ^18.2.14
     "@types/react-dom": ^18.2.6
     "@types/styled-components": ^5.1.26
     "@types/yargs": ^17.0.24
@@ -592,7 +592,7 @@ __metadata:
     eslint-plugin-import: ^2.27.5
     eslint-plugin-import-newlines: ^1.3.1
     eslint-plugin-jest: ^27.2.2
-    eslint-plugin-n: ^16.0.0
+    eslint-plugin-n: ^16.0.1
     eslint-plugin-promise: ^6.1.1
     eslint-plugin-react: ^7.32.2
     eslint-plugin-react-hooks: ^4.6.0
@@ -607,12 +607,12 @@ __metadata:
     react: ^18.2.0
     react-dom: ^18.2.0
     react-is: ^18.2.0
-    rollup: ^3.25.1
+    rollup: ^3.25.2
     rollup-plugin-cleanup: ^3.2.1
     styled-components: ^5.3.11
     tslib: ^2.5.3
     typescript: ^5.1.3
-    webpack: ^5.87.0
+    webpack: ^5.88.0
     webpack-cli: ^5.1.4
     webpack-dev-server: ^4.15.1
     webpack-merge: ^5.9.0
@@ -1020,14 +1020,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^18.2.13":
-  version: 18.2.13
-  resolution: "@types/react@npm:18.2.13"
+"@types/react@npm:*, @types/react@npm:^18.2.14":
+  version: 18.2.14
+  resolution: "@types/react@npm:18.2.14"
   dependencies:
     "@types/prop-types": "*"
     "@types/scheduler": "*"
     csstype: ^3.0.2
-  checksum: f7c15f19c164a29262993ea2aae2085fa38cddd9b8359fd8fefabfced91010b515a3abe2042b2b7f2f86e6b38a25b191415aa9313a9027175e3a000883c858cc
+  checksum: a6a5e8cc78f486b9020d1ad009aa6c56943c68c7c6376e0f8399e9cbcd950b7b8f5d73f00200f5379f5e58d31d57d8aed24357f301d8e86108cd438ce6c8b3dd
   languageName: node
   linkType: hard
 
@@ -3477,15 +3477,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-es-x@npm:^6.1.0":
-  version: 6.1.0
-  resolution: "eslint-plugin-es-x@npm:6.1.0"
+"eslint-plugin-es-x@npm:^7.1.0":
+  version: 7.1.0
+  resolution: "eslint-plugin-es-x@npm:7.1.0"
   dependencies:
     "@eslint-community/eslint-utils": ^4.1.2
     "@eslint-community/regexpp": ^4.5.0
   peerDependencies:
     eslint: ">=8"
-  checksum: b347d34655fef18b20cbc4a9e362b65aa547a3703fff4162342ee987d4804f2607d2e3f21f140b6c005e3b790e09b4a0fabd0b87eb7c89918654fc5d4b2b510c
+  checksum: a19924313ce28214cc1b25fb749e3d977688f23c7fc9f01c3447b5853528b82b63586d94060924b49072b005314695af3b073dcd8f6b965ad1923a2cabf3e9f7
   languageName: node
   linkType: hard
 
@@ -3552,21 +3552,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-plugin-n@npm:^16.0.0":
-  version: 16.0.0
-  resolution: "eslint-plugin-n@npm:16.0.0"
+"eslint-plugin-n@npm:^16.0.1":
+  version: 16.0.1
+  resolution: "eslint-plugin-n@npm:16.0.1"
   dependencies:
     "@eslint-community/eslint-utils": ^4.4.0
     builtins: ^5.0.1
-    eslint-plugin-es-x: ^6.1.0
-    ignore: ^5.1.1
-    is-core-module: ^2.12.0
+    eslint-plugin-es-x: ^7.1.0
+    ignore: ^5.2.4
+    is-core-module: ^2.12.1
     minimatch: ^3.1.2
     resolve: ^1.22.2
-    semver: ^7.5.0
+    semver: ^7.5.3
   peerDependencies:
     eslint: ">=7.0.0"
-  checksum: 77bb74747ee021cd33d6027a1e13620a910a05755e42e29b4f810ef52800ae62bd21057c5e7de66dc3b8cbc9bc8332eeea4c9e14ed889284e549278d1520fe3e
+  checksum: 407002bb06c2e4cefd5b1fb582a5e000ed190a47144edc7d7910afc32b4b0e76e4a72773207837ab73b0797f4a84f9ea83f8979d0bcab0225bfe672cd7e0e295
   languageName: node
   linkType: hard
 
@@ -4858,7 +4858,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ignore@npm:^5.1.1, ignore@npm:^5.2.0":
+"ignore@npm:^5.2.0, ignore@npm:^5.2.4":
   version: 5.2.4
   resolution: "ignore@npm:5.2.4"
   checksum: 3d4c309c6006e2621659311783eaea7ebcd41fe4ca1d78c91c473157ad6666a57a2df790fe0d07a12300d9aac2888204d7be8d59f9aaf665b1c7fcdb432517ef
@@ -5112,12 +5112,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"is-core-module@npm:^2.11.0, is-core-module@npm:^2.12.0, is-core-module@npm:^2.9.0":
-  version: 2.12.0
-  resolution: "is-core-module@npm:2.12.0"
+"is-core-module@npm:^2.11.0, is-core-module@npm:^2.12.0, is-core-module@npm:^2.12.1, is-core-module@npm:^2.9.0":
+  version: 2.12.1
+  resolution: "is-core-module@npm:2.12.1"
   dependencies:
     has: ^1.0.3
-  checksum: f7f7eb2ab71fd769ee9fb2385c095d503aa4b5ce0028c04557de03f1e67a87c85e5bac1f215945fc3c955867a139a415a3ec4c4234a0bffdf715232660f440a6
+  checksum: f04ea30533b5e62764e7b2e049d3157dc0abd95ef44275b32489ea2081176ac9746ffb1cdb107445cf1ff0e0dfcad522726ca27c27ece64dadf3795428b8e468
   languageName: node
   linkType: hard
 
@@ -7519,9 +7519,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^3.25.1":
-  version: 3.25.1
-  resolution: "rollup@npm:3.25.1"
+"rollup@npm:^3.25.2":
+  version: 3.25.2
+  resolution: "rollup@npm:3.25.2"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -7529,7 +7529,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: f483b28a0605097a725b080c088262b0fa21f7bce66f741df73d9ff0be6a3baaf2927916b094ce95412f4f15cc59bb5eae020f59cae3d3a6993d123faceb5b41
+  checksum: 80034ec8d71022b816cd31c24455d7b06ab8d8ff49ab9e583ceb03e2ebd0f6ad00824c6257fa4f8d12a12c2dceda999cec9509c1fff956e8a707b0add1bf2d9c
   languageName: node
   linkType: hard
 
@@ -7702,14 +7702,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"semver@npm:^7.0.0, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.7, semver@npm:^7.5.0":
-  version: 7.5.1
-  resolution: "semver@npm:7.5.1"
+"semver@npm:^7.0.0, semver@npm:^7.3.4, semver@npm:^7.3.5, semver@npm:^7.3.7, semver@npm:^7.5.3":
+  version: 7.5.3
+  resolution: "semver@npm:7.5.3"
   dependencies:
     lru-cache: ^6.0.0
   bin:
     semver: bin/semver.js
-  checksum: d16dbedad53c65b086f79524b9ef766bf38670b2395bdad5c957f824dcc566b624988013564f4812bcace3f9d405355c3635e2007396a39d1bffc71cfec4a2fc
+  checksum: 9d58db16525e9f749ad0a696a1f27deabaa51f66e91d2fa2b0db3de3e9644e8677de3b7d7a03f4c15bc81521e0c3916d7369e0572dbde250d9bedf5194e2a8a7
   languageName: node
   linkType: hard
 
@@ -8970,9 +8970,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5.87.0":
-  version: 5.87.0
-  resolution: "webpack@npm:5.87.0"
+"webpack@npm:^5.88.0":
+  version: 5.88.0
+  resolution: "webpack@npm:5.88.0"
   dependencies:
     "@types/eslint-scope": ^3.7.3
     "@types/estree": ^1.0.0
@@ -9003,7 +9003,7 @@ __metadata:
       optional: true
   bin:
     webpack: bin/webpack.js
-  checksum: b7d0e390f9d30627e303d54b17cb87b62f49ecffe2d35481f830679904993bae208e23748ffe0e6091b6dd4810562b2f2e88bb0f23b96515d74fb1e3c2898210
+  checksum: 9fd1568b34ec2e99ba97c8509a15ab2576ec80c396e7015551ec814b24cfc11de173acba3e114dafe95f1a6d460781b09d6201e6a1fb15110e1d01a09f61a283
   languageName: node
   linkType: hard
 
