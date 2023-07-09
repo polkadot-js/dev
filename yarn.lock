@@ -1931,13 +1931,13 @@ __metadata:
     "@polkadot/dev-ts": ^0.75.26
     "@rollup/plugin-alias": ^5.0.0
     "@rollup/plugin-commonjs": ^25.0.2
-    "@rollup/plugin-dynamic-import-vars": ^2.0.3
+    "@rollup/plugin-dynamic-import-vars": ^2.0.4
     "@rollup/plugin-inject": ^5.0.3
     "@rollup/plugin-json": ^6.0.0
     "@rollup/plugin-node-resolve": ^15.1.0
     "@testing-library/react": ^14.0.0
     "@tsconfig/strictest": ^2.0.1
-    "@types/node": ^20.4.0
+    "@types/node": ^20.4.1
     "@types/react": ^18.2.14
     "@types/react-dom": ^18.2.6
     "@types/yargs": ^17.0.24
@@ -1967,9 +1967,9 @@ __metadata:
     react: ^18.2.0
     react-dom: ^18.2.0
     react-is: ^18.2.0
-    rollup: ^3.26.1
+    rollup: ^3.26.2
     rollup-plugin-cleanup: ^3.2.1
-    styled-components: ^6.0.2
+    styled-components: ^6.0.3
     tslib: ^2.6.0
     typescript: ^5.1.6
     webpack: ^5.88.1
@@ -2038,9 +2038,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-dynamic-import-vars@npm:^2.0.3":
-  version: 2.0.3
-  resolution: "@rollup/plugin-dynamic-import-vars@npm:2.0.3"
+"@rollup/plugin-dynamic-import-vars@npm:^2.0.4":
+  version: 2.0.4
+  resolution: "@rollup/plugin-dynamic-import-vars@npm:2.0.4"
   dependencies:
     "@rollup/pluginutils": ^5.0.1
     estree-walker: ^2.0.2
@@ -2051,7 +2051,7 @@ __metadata:
   peerDependenciesMeta:
     rollup:
       optional: true
-  checksum: 53d4ed4c3c5cc78804eb38584d844983ea7f9af7e445a60814f865994f222d079f4ac5f73424ca5acb5f719340fd0a1c161a9cbd80c6d9ed9e778472972d839d
+  checksum: 8775ff85762c124e98e766533a02e7a3f7e6a729bf5c8c4f6746efe72cf7b1138b167aebf080783b687470edd5c36a635a27c2caa3ef1ef3f023bf980e3fe175
   languageName: node
   linkType: hard
 
@@ -2333,10 +2333,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:^20.4.0":
-  version: 20.4.0
-  resolution: "@types/node@npm:20.4.0"
-  checksum: 8ad632ee131611651fc5f4ac3a47427640e2492ab314fe1c4d0c3b97af71784ef48c53221d5f9922aab4724375dcb4f33137b3107ba2c356d9366216a31678aa
+"@types/node@npm:*, @types/node@npm:^20.4.1":
+  version: 20.4.1
+  resolution: "@types/node@npm:20.4.1"
+  checksum: 22cbcc792f2eb636fe4188778ed0f32658ab872aa7fcb9847b3fa289a42b14b9f5e30c6faec50ef3c7adbc6c2a246926e5858136bb8b10c035a3fcaa6afbeed2
   languageName: node
   linkType: hard
 
@@ -8992,9 +8992,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^3.26.1":
-  version: 3.26.1
-  resolution: "rollup@npm:3.26.1"
+"rollup@npm:^3.26.2":
+  version: 3.26.2
+  resolution: "rollup@npm:3.26.2"
   dependencies:
     fsevents: ~2.3.2
   dependenciesMeta:
@@ -9002,7 +9002,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 3fd4f88510ec1b54b07309ee63b7b363a1cd4ed6d05e93ec0e883a73df1ffe8bb88169538cb4f2c1ec2d4a7340216f9a8b4b8ce7c2ee054ded725f39d9e3ba36
+  checksum: 7186beeba0e6fd33b37aa33ede7157e77af0a0be4b75d345a51dab4be5962a8e7a1c5ec8868e7c4cd361b456eb1b47bdb75e5db32ab37a546bed383d06b40384
   languageName: node
   linkType: hard
 
@@ -9706,9 +9706,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"styled-components@npm:^6.0.2":
-  version: 6.0.2
-  resolution: "styled-components@npm:6.0.2"
+"styled-components@npm:^6.0.3":
+  version: 6.0.3
+  resolution: "styled-components@npm:6.0.3"
   dependencies:
     "@babel/cli": ^7.21.0
     "@babel/core": ^7.21.0
@@ -9736,7 +9736,7 @@ __metadata:
   peerDependenciesMeta:
     babel-plugin-styled-components:
       optional: true
-  checksum: 3fedf429fb0c1e2973b5e86acd27b26e8f5a3fb2576ea1ecd00d554f3f2544c6257d0f738fc705210df76ab680ab1430f55e6c1f7cb3995fd7635f04a6f96e5e
+  checksum: e02e6a38a7d484ed8ce1fa1f36b7934c1c1f57195d9c173853adc8cb89a209c23c79cf9f979ffff22829de5e817fb95aab04038c1270110956dfef168c480b13
   languageName: node
   linkType: hard
 
