@@ -803,7 +803,7 @@ function buildExports () {
         // so we merge, sort and re-assemble
         : Object
           .entries({
-            ...(pkg.exports?.[path] || {}),
+            ...(pkg.exports?.[path] ?? {}),
             ...config
           })
           .sort(([a], [b]) =>
