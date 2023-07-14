@@ -82,7 +82,7 @@ export function copyDirSync (src, dest, include, exclude) {
 
         if (fs.statSync(srcPath).isDirectory()) {
           copyDirSync(srcPath, path.join(dest, file), include, exclude);
-        } else if (!include || !include.length || include.some((e) => file.endsWith(e))) {
+        } else if (!include?.length || include.some((e) => file.endsWith(e))) {
           if (!exclude || !exclude.some((e) => file.endsWith(e))) {
             copyFileSync(srcPath, dest);
           }

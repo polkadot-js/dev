@@ -1,7 +1,14 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+const FIXME = {
+  // This is in the new 6.0.0 and we should switch this on
+  // at some point. For a first iteration we keep as-is
+  '@typescript-eslint/prefer-nullish-coalescing': 'off'
+};
+
 export const overrideAll = {
+  ...FIXME,
   // the next 2 enforce isolatedModules & verbatimModuleSyntax
   '@typescript-eslint/consistent-type-exports': 'error',
   '@typescript-eslint/consistent-type-imports': 'error',

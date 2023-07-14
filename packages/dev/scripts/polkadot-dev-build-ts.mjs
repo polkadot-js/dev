@@ -279,11 +279,11 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
     ? '/' + depParts.slice(depNameLen).join('/')
     : null;
 
-  const depVersion = pkgJson.dependencies && pkgJson.dependencies[depName] && pkgJson.dependencies[depName] !== '*'
+  const depVersion = pkgJson.dependencies?.[depName] && pkgJson.dependencies[depName] !== '*'
     ? pkgJson.dependencies[depName]
-    : pkgJson.peerDependencies && pkgJson.peerDependencies[depName]
+    : pkgJson.peerDependencies?.[depName]
       ? pkgJson.peerDependencies[depName]
-      : pkgJson.optionalDependencies && pkgJson.optionalDependencies[depName]
+      : pkgJson.optionalDependencies?.[depName]
         ? pkgJson.optionalDependencies[depName]
         : pkgJson.devDependencies
           ? pkgJson.devDependencies[depName]
@@ -296,7 +296,7 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
     return f;
   }
 
-  let [denoDep, ...denoPath] = pkgJson.denoDependencies && pkgJson.denoDependencies[depName]
+  let [denoDep, ...denoPath] = pkgJson.denoDependencies?.[depName]
     ? pkgJson.denoDependencies[depName].split('/')
     : [null];
 
@@ -803,7 +803,7 @@ function buildExports () {
         // so we merge, sort and re-assemble
         : Object
           .entries({
-            ...((pkg.exports && pkg.exports[path]) || {}),
+            ...(pkg.exports?.[path] || {}),
             ...config
           })
           .sort(([a], [b]) =>

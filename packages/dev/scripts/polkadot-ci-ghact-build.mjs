@@ -218,7 +218,7 @@ function npmPublish () {
  * @returns {ChangelogMap}
  */
 function createChangelogMap (parts, result = {}) {
-  for (let i = 0; i < parts.length; i++) {
+  for (let i = 0, count = parts.length; i < count; i++) {
     const [n, ...e] = parts[i];
 
     if (!result[n]) {
@@ -249,7 +249,7 @@ function createChangelogArr (map) {
   const result = [];
   const entries = Object.entries(map);
 
-  for (let i = 0; i < entries.length; i++) {
+  for (let i = 0, count = entries.length; i < count; i++) {
     const [name, imap] = entries[i];
 
     if (name) {
@@ -435,7 +435,7 @@ function verBump () {
   const { version: currentVersion, versions } = npmGetJson();
   const [version, tag] = currentVersion.split('-');
   const [,, patch] = version.split('.');
-  const lastVersion = (versions && versions.npm) || currentVersion;
+  const lastVersion = versions?.npm || currentVersion;
 
   if (argv['skip-beta'] || patch === '0') {
     // don't allow beta versions
