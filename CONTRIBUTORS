@@ -1,4 +1,4 @@
-    1329	Jaco                          	Bump dev deps (#1082)
+    1330	Jaco                          	Bump typescript eslint (#1083)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
