@@ -36,7 +36,7 @@ function updateDependencies (dir, dependencies) {
     .sort()
     .reduce((result, name) => {
       const current = dependencies[name];
-      const version = current[0] !== '^' || current.endsWith('-x')
+      const version = !current.startsWith('^') || current.endsWith('-x')
         ? current
         : versions[name] || current;
 

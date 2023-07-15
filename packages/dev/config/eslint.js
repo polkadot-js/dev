@@ -103,8 +103,8 @@ export default [
     rules: {
       ...eslintJs.configs.recommended.rules,
       ...standardConfig.rules,
-      ...tsPlugin.configs['recommended'].rules,
-      ...tsPlugin.configs['recommended-requiring-type-checking'].rules,
+      ...tsPlugin.configs['recommended-type-checked'].rules,
+      ...tsPlugin.configs['stylistic-type-checked'].rules,
       ...overrideAll
     }
   },

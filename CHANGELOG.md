@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.76.1
+
+- Update to latest typescript-eslint (incl. new rulesets)
+
+
 ## 0.75.1
 
 - Swap eslint to flat config

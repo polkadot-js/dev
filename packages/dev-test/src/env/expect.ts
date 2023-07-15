@@ -106,7 +106,7 @@ function assertSomeCallHasArgs (value: Mocked | undefined, args: unknown[]) {
  *
  * Asserts that the value is either (equal deep) or matches the matcher (if supplied)
  */
-function assertMatch (value: unknown, check: Matcher | unknown): void {
+function assertMatch (value: unknown, check: unknown): void {
   check instanceof Matcher
     ? check.assertMatch(value)
     : Array.isArray(check)
