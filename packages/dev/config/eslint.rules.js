@@ -1,11 +1,59 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import fs from 'node:fs';
+import path from 'node:path';
+import process from 'node:process';
+
 const FIXME = {
   // This is in the new 6.0.0 and we should switch this on
   // at some point. For a first iteration we keep as-is
   '@typescript-eslint/prefer-nullish-coalescing': 'off'
 };
+
+/**
+ * Returns a copyright header pattern (using tsconfig.base.json)
+ *
+ * @returns {string}
+ */
+function getHeaderPattern () {
+  const tsPath = path.join(process.cwd(), 'tsconfig.base.json');
+
+  if (!fs.existsSync(tsPath)) {
+    throw new Error(`Unable to load ${tsPath}`);
+  }
+
+  const tsConfig = JSON.parse(fs.readFileSync(tsPath, 'utf-8'));
+
+  if (!tsConfig?.compilerOptions?.paths) {
+    throw new Error(`Unable to extract compilerOptions.paths from ${tsPath}`);
+  }
+
+  const parts = Object
+    .keys(tsConfig.compilerOptions.paths)
+    .reduce((/** @type {string[]} */ all, k) => {
+      const [pd, pk] = k.split('/');
+
+      if (pd !== '@polkadot' || !pk) {
+        throw new Error(`Non @polkadot path in ${tsPath}`);
+      }
+
+      all.push(pk);
+
+      return all;
+    }, []);
+  const packages = parts.length
+    ? `(${parts.join('|')})`
+    : '';
+  const fullyear = new Date().getFullYear();
+  const years = [];
+
+  for (let i = 17, last = fullyear - 2000; i < last; i++) {
+    years.push(`${i}`);
+  }
+
+  return ` Copyright 20(${years.join('|')})(-${fullyear})? @polkadot/${packages}`;
+}
 
 export const overrideAll = {
   ...FIXME,
@@ -40,7 +88,7 @@ export const overrideAll = {
   // 'function-paren-newline': ['error', 'never'],
   'function-call-argument-newline': ['error', 'consistent'],
   'header/header': ['error', 'line', [
-    { pattern: ` Copyright 20(17|18|19|20|21|22)(-${new Date().getFullYear()})? @polkadot/` },
+    { pattern: getHeaderPattern() },
     ' SPDX-License-Identifier: Apache-2.0'
   ], 2],
   'import-newlines/enforce': ['error', {
