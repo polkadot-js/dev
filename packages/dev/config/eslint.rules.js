@@ -26,22 +26,26 @@ function getHeaderPattern () {
   const tsConfig = JSON.parse(fs.readFileSync(tsPath, 'utf-8'));
 
   if (!tsConfig?.compilerOptions?.paths) {
-    throw new Error(`Unable to extract compilerOptions.paths from ${tsPath}`);
+    throw new Error(`Unable to extract compilerOptions.paths structure from ${tsPath}`);
   }
 
-  const packages = Object
-    .keys(tsConfig.compilerOptions.paths)
-    .reduce((packages, k) => {
-      const [pd, pk] = k.split('/');
+  const paths = Object.keys(tsConfig.compilerOptions.paths);
 
-      if (pd !== '@polkadot' || !pk) {
-        throw new Error(`Non @polkadot path in ${tsPath}`);
-      }
+  if (!paths.length) {
+    throw new Error(`No keys found in compilerOptions.paths from ${tsPath}`);
+  }
 
-      return packages.length
-        ? `${packages}|${pk}`
-        : pk;
-    }, '');
+  const packages = paths.reduce((packages, k) => {
+    const [pd, pk] = k.split('/');
+
+    if (pd !== '@polkadot' || !pk) {
+      throw new Error(`Non @polkadot path in ${tsPath}`);
+    }
+
+    return packages.length
+      ? `${packages}|${pk}`
+      : pk;
+  }, '');
   const fullyear = new Date().getFullYear();
   const years = [];
 
@@ -49,7 +53,7 @@ function getHeaderPattern () {
     years.push(`${i}`);
   }
 
-  return ` Copyright 20(${years.join('|')})(-${fullyear})? @polkadot/${packages.length ? `(${packages})` : ''}`;
+  return ` Copyright 20(${years.join('|')})(-${fullyear})? @polkadot/(${packages})`;
 }
 
 export const overrideAll = {
