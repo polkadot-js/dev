@@ -49,7 +49,7 @@ function getHeaderPattern () {
     years.push(`${i}`);
   }
 
-  return ` Copyright 20(${years.join('|')})(-${fullyear})? @polkadot/${packages}`;
+  return ` Copyright 20(${years.join('|')})(-${fullyear})? @polkadot/${packages.length ? `(${packages})` : ''}`;
 }
 
 export const overrideAll = {
