@@ -29,22 +29,19 @@ function getHeaderPattern () {
     throw new Error(`Unable to extract compilerOptions.paths from ${tsPath}`);
   }
 
-  const parts = Object
+  const packages = Object
     .keys(tsConfig.compilerOptions.paths)
-    .reduce((/** @type {string[]} */ all, k) => {
+    .reduce((packages, k) => {
       const [pd, pk] = k.split('/');
 
       if (pd !== '@polkadot' || !pk) {
         throw new Error(`Non @polkadot path in ${tsPath}`);
       }
 
-      all.push(pk);
-
-      return all;
-    }, []);
-  const packages = parts.length
-    ? `(${parts.join('|')})`
-    : '';
+      return packages.length
+        ? `${packages}|${pk}`
+        : pk;
+    }, '');
   const fullyear = new Date().getFullYear();
   const years = [];
 
