@@ -1,6 +1,7 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
+import JSON5 from 'json5';
 import fs from 'node:fs';
 import path from 'node:path';
 import process from 'node:process';
@@ -23,7 +24,7 @@ function getHeaderPattern () {
     throw new Error(`Unable to load ${tsPath}`);
   }
 
-  const tsConfig = JSON.parse(fs.readFileSync(tsPath, 'utf-8'));
+  const tsConfig = JSON5.parse(fs.readFileSync(tsPath, 'utf-8'));
 
   if (!tsConfig?.compilerOptions?.paths) {
     throw new Error(`Unable to extract compilerOptions.paths structure from ${tsPath}`);
