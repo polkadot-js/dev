@@ -7,6 +7,9 @@ import path from 'node:path';
 
 /** @typedef {{ dependencies: Record<string, string>; devDependencies: Record<string, string>; peerDependencies: Record<string, string>; optionalDependencies: Record<string, string>; resolutions: Record<string, string>; name: string; version: string; versions: { git: string; npm: string; } }} PkgJson */
 
+// The keys to look for in package.json
+const PKG_PATHS = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies', 'resolutions'];
+
 const versions = {};
 const paths = [];
 let updated = 0;
@@ -25,13 +28,14 @@ function packageJsonPath (dir) {
  * Update the supplied dependency map with the latest (version map) versions
  *
  * @param {string} dir
+ * @param {boolean} hasDirLogged
+ * @param {string} key
  * @param {Record<string, string>} dependencies
- * @returns {Record<string, string>}
+ * @returns {[number, Record<string, string>]}
  */
-function updateDependencies (dir, dependencies) {
-  let hasLogged = false;
-
-  return Object
+function updateDependencies (dir, hasDirLogged, key, dependencies) {
+  let count = 0;
+  const adjusted = Object
     .keys(dependencies)
     .sort()
     .reduce((result, name) => {
@@ -41,12 +45,16 @@ function updateDependencies (dir, dependencies) {
         : versions[name] || current;
 
       if (version !== current) {
-        if (!hasLogged) {
-          console.log('\t', dir);
-          hasLogged = true;
+        if (count === 0) {
+          if (!hasDirLogged) {
+            console.log('\t', dir);
+          }
+
+          console.log('\t\t', key);
         }
 
-        console.log('\t\t', name, '->', version);
+        console.log('\t\t\t', name.padStart(30), '\t', current.padStart(8), '->', version);
+        count++;
         updated++;
       }
 
@@ -54,6 +62,8 @@ function updateDependencies (dir, dependencies) {
 
       return result;
     }, {});
+
+  return [count, adjusted];
 }
 
 /**
@@ -85,13 +95,22 @@ function writePackage (dir, json) {
  */
 function updatePackage (dir) {
   const json = parsePackage(dir);
+  let hasDirLogged = false;
 
   writePackage(dir, Object
     .keys(json)
     .reduce((result, key) => {
-      result[key] = ['dependencies', 'devDependencies', 'peerDependencies', 'optionalDependencies', 'resolutions'].includes(key)
-        ? updateDependencies(dir, json[key])
-        : json[key];
+      if (PKG_PATHS.includes(key)) {
+        const [count, adjusted] = updateDependencies(dir, hasDirLogged, key, json[key]);
+
+        result[key] = adjusted;
+
+        if (count) {
+          hasDirLogged = true;
+        }
+      } else {
+        result[key] = json[key];
+      }
 
       return result;
     }, {})
@@ -125,10 +144,23 @@ function findPackages (dir) {
     })
     .forEach((dir) => {
       const full = path.join(pkgsDir, dir);
-      const { name } = parsePackage(full);
+      const pkgJson = parsePackage(full);
 
       paths.push(full);
-      versions[name] = `^${lastVersion}`;
+      versions[pkgJson.name] = `^${lastVersion}`;
+
+      // for dev we want to pull through the additionals, i.e. we want to
+      // align deps found in dev/others with those in dev as master
+      if (pkgJson.name === '@polkadot/dev') {
+        PKG_PATHS.forEach((depPath) => {
+          Object
+            .entries(pkgJson[depPath] || {})
+            .filter(([, version]) => version.startsWith('^'))
+            .forEach(([pkg, version]) => {
+              versions[pkg] ??= version;
+            });
+        });
+      }
     });
 }
 
