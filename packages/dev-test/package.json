@@ -25,6 +25,6 @@
     "tslib": "^2.6.2"
   },
   "devDependencies": {
-    "@types/jsdom": "^21.1.1"
+    "@types/jsdom": "^21.1.2"
   }
 }
