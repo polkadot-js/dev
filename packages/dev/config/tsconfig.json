@@ -9,7 +9,7 @@
      * This needs to align with scripts/polkadot-dev-build-ts & dev-ts/loader
      * (target here is specifically tied to the minimum supported version)
      */
-    "module": "esnext",
+    "module": "nodenext",
     "moduleResolution": "nodenext",
     "target": "es2021",
 
