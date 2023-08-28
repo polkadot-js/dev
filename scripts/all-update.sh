@@ -56,7 +56,7 @@ for REPO in "${DIRECTORIES[@]}"; do
     else
       echo "*** Installing $REPO"
 
-      yarn install | grep -v 'YN0013'
+      yarn install
       yarn dedupe
     fi
 
