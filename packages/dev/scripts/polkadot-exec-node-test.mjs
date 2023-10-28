@@ -26,7 +26,7 @@ import { run } from 'node:test';
 
 console.time('\t elapsed :');
 
-const WITH_DEBUG = true;
+const WITH_DEBUG = false;
 
 const args = process.argv.slice(2);
 /** @type {string[]} */
