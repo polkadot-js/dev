@@ -21,7 +21,8 @@ import process from 'node:process';
 import { run } from 'node:test';
 
 // NOTE error should be defined as "Error", however the @types/node definitions doesn't include all
-/** @typedef {{ diag: { file?: string; message?: string; }[]; fail: { details: { error: { failureType: unknown; cause: { code: number; message: string; stack: string; }; code: number; } }; file?: string; name: string }[]; pass: unknown[]; skip: unknown[]; todo: unknown[]; total: number }} Stats */
+/** @typedef  {{ details: { error: { failureType: unknown; cause: { code: number; message: string; stack: string; }; code: number; } }; file?: string; name: string }} FailStat */
+/** @typedef {{ diag: { file?: string; message?: string; }[]; fail: FailStat[]; pass: unknown[]; skip: unknown[]; todo: unknown[]; total: number }} Stats */
 
 console.time('\t elapsed :');
 
@@ -136,6 +137,31 @@ function indent (count, str = '', start = '') {
   }\n`;
 }
 
+/**
+ * @param {FailStat} r
+ * @return {string | undefined}
+ */
+function getFilename (r) {
+  if (r.file?.includes('.spec.') || r.file?.includes('.test.')) {
+    return r.file;
+  }
+
+  if (r.details.error.cause.stack) {
+    const stack = r.details.error.cause.stack
+      .split('\n')
+      .map((l) => l.trim())
+      .filter((l) => l.startsWith('at ') && (l.includes('.spec.') || l.includes('.test.')))
+      .map((l) => l.match(/\(.*:\d\d?:\d\d?\)$/)?.[0])
+      .map((l) => l?.replace('(', '')?.replace(')', ''));
+
+    if (stack.length) {
+      return stack[0];
+    }
+  }
+
+  return r.file;
+}
+
 function complete () {
   process.stdout.write('\n');
 
@@ -146,7 +172,7 @@ function complete () {
 
     let item = '';
 
-    item += indent(1, [r.file, r.name].filter((s) => !!s).join('\n'), 'x ');
+    item += indent(1, [getFilename(r), r.name].filter((s) => !!s).join('\n'), 'x ');
     item += indent(2, `${r.details.error.failureType} / ${r.details.error.code}${r.details.error.cause.code && r.details.error.cause.code !== r.details.error.code ? ` / ${r.details.error.cause.code}` : ''}`);
 
     if (r.details.error.cause.message) {
