@@ -142,7 +142,7 @@ function indent (count, str = '', start = '') {
  * @return {string | undefined}
  */
 function getFilename (r) {
-  if (r.file?.includes('.spec.') || r.file?.includes('.test')) {
+  if (r.file?.includes('.spec.') || r.file?.includes('.test.')) {
     return r.file;
   }
 
