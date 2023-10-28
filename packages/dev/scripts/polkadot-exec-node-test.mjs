@@ -150,7 +150,7 @@ function getFilename (r) {
     const stack = r.details.error.cause.stack
       .split('\n')
       .map((l) => l.trim())
-      .filter((l) => l.startsWith('at ') && l.includes('.spec.'))
+      .filter((l) => l.startsWith('at ') && (l.includes('.spec.') || l.includes('.test.')))
       .map((l) => l.match(/\(.*:\d\d?:\d\d?\)$/)?.[0])
       .map((l) => l?.replace('(', '')?.replace(')', ''));
 
