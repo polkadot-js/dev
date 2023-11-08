@@ -94,14 +94,14 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
-    "@testing-library/react": "^14.0.0",
-    "@types/node": "^20.8.10",
-    "@types/react": "^18.2.36",
-    "@types/react-dom": "^18.2.14",
-    "@types/yargs": "^17.0.30",
+    "@testing-library/react": "^14.1.0",
+    "@types/node": "^20.9.0",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "@types/yargs": "^17.0.31",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
-    "styled-components": "^6.1.0"
+    "styled-components": "^6.1.1"
   }
 }
