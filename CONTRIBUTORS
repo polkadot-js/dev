@@ -1,4 +1,4 @@
-    1367	Jaco                          	Bump deps (#1118)
+    1368	Jaco                          	Update deps (#1119)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
