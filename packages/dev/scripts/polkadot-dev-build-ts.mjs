@@ -20,11 +20,16 @@ console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
 
 exitFatalEngine();
 
-// We need at least es2020 for dynamic imports. Aligns with dev-ts/loader & config/tsconfig
-// Node 14 === es2020, Node 16 === es2021, Node 18 === es2022
-// https://github.com/tsconfig/bases/blob/d699759e29cfd5f6ab0fab9f3365c7767fca9787/bases/node16.json#L8
-const TARGET_TSES = ts.ScriptTarget.ES2021;
-const TARGET_NODE = '>=16';
+// We need at least es2020 for dynamic imports. Settings here needs to align with
+// those in packages/dev-ts/src/loader & packages/dev/config/tsconfig
+//
+// Node 14 === es2020 (w/ dynamic imports)
+// Node 16 === es2021
+// Node 18/20 === es2022 (w/ private fields)
+//
+// https://github.com/tsconfig/bases/tree/main/bases
+const TARGET_TSES = ts.ScriptTarget.ES2022;
+const TARGET_NODE = '>=18';
 
 const IGNORE_IMPORTS = [
   // node (new-style)

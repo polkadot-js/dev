@@ -3,7 +3,7 @@
   "bugs": "https://github.com/polkadot-js/dev/issues",
   "description": "An TS -> ESM loader for Node >= 16.12",
   "engines": {
-    "node": ">=16.12"
+    "node": ">=18"
   },
   "homepage": "https://github.com/polkadot-js/dev/tree/master/packages/dev-ts#readme",
   "license": "Apache-2.0",
@@ -15,7 +15,7 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.76.38",
+  "version": "0.77.0",
   "main": "./index.js",
   "exports": {
     "./globals.d.ts": "./src/globals.d.ts"

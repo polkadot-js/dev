@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.77.1
+
+- Drop support for Node 16
+
+
 ## 0.76.1
 
 - Update to latest typescript-eslint (incl. new rulesets)

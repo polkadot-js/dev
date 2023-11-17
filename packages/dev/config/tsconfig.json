@@ -6,12 +6,12 @@
   "extends": "@tsconfig/strictest/tsconfig.json",
   "compilerOptions": {
     /**
-     * This needs to align with scripts/polkadot-dev-build-ts & dev-ts/loader
-     * (target here is specifically tied to the minimum supported version)
+     * Aligns with packages/dev/scripts/polkadot-dev-build-ts & packages/dev-ts/src/loader
+     * (target here is specifically tied to the minimum supported Node version)
      */
     "module": "nodenext",
     "moduleResolution": "nodenext",
-    "target": "es2021",
+    "target": "es2022",
 
     /**
      * Specific compilation configs for polkadot-js projects as it is used
