@@ -4,18 +4,18 @@
 
 import fs from 'node:fs';
 
-import { execSync } from './util.mjs';
+import { execGit } from './util.mjs';
 
 console.log('$ polkadot-ci-ghpages-force', process.argv.slice(2).join(' '));
 
 // ensure we are on master
-execSync('git checkout master');
+execGit('checkout master');
 
 // checkout latest
-execSync('git fetch');
-execSync('git checkout gh-pages');
-execSync('git pull');
-execSync('git checkout --orphan gh-pages-temp');
+execGit('fetch');
+execGit('checkout gh-pages');
+execGit('pull');
+execGit('checkout --orphan gh-pages-temp');
 
 // ignore relevant files
 fs.writeFileSync('.gitignore', `
@@ -31,13 +31,13 @@ NOTES.md
 `);
 
 // add
-execSync('git add -A');
-execSync('git commit -am "refresh history"');
+execGit('add -A');
+execGit('commit -am "refresh history"');
 
 // danger, force new
-execSync('git branch -D gh-pages');
-execSync('git branch -m gh-pages');
-execSync('git push -f origin gh-pages');
+execGit('branch -D gh-pages');
+execGit('branch -m gh-pages');
+execGit('push -f origin gh-pages');
 
 // switch to master
-execSync('git checkout master');
+execGit('checkout master');

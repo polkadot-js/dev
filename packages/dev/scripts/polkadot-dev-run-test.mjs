@@ -4,7 +4,7 @@
 
 import process from 'node:process';
 
-import { execNodeTsSync, exitFatal, exitFatalEngine, importPath, readdirSync } from './util.mjs';
+import { execNodeTs, exitFatal, exitFatalEngine, importPath, readdirSync } from './util.mjs';
 
 // A & B are just helpers here and in the errors below
 const EXT_A = ['spec', 'test'];
@@ -158,7 +158,7 @@ try {
       : `@polkadot/dev-test/${testEnv}`
   );
 
-  execNodeTsSync(allFlags, nodeFlags, false, isDev ? './packages/dev-ts/build/cached.js' : undefined);
+  execNodeTs(allFlags, nodeFlags, false, isDev ? './packages/dev-ts/build/cached.js' : undefined);
 } catch {
   process.exit(1);
 }
