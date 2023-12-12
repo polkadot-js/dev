@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import yargs from 'yargs';
 
-import { execSync, exitFatal } from './util.mjs';
+import { execPm, exitFatal } from './util.mjs';
 
 /** @typedef {{ dependencies?: Record<string, string>; devDependencies?: Record<string, string>; peerDependencies?: Record<string, string>; optionalDependencies?: Record<string, string>; resolutions?: Record<string, string>; name?: string; stableVersion?: string; version: string; }} PkgJson */
 
@@ -116,7 +116,7 @@ console.log('$ polkadot-dev-version', process.argv.slice(2).join(' '));
 
 const isX = removeX();
 
-execSync(`yarn version ${type === 'pre' ? 'prerelease' : type}`);
+execPm(`version ${type === 'pre' ? 'prerelease' : type}`);
 
 if (isX && type === 'pre') {
   addX();
@@ -140,4 +140,4 @@ if (fs.existsSync('packages')) {
   });
 }
 
-execSync('yarn');
+execPm('');

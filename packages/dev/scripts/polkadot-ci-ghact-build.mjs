@@ -8,7 +8,7 @@ import path from 'node:path';
 import process from 'node:process';
 import yargs from 'yargs';
 
-import { copyDirSync, copyFileSync, denoCreateDir, execSync, exitFatal, GITHUB_REPO, GITHUB_TOKEN_URL, gitSetup, mkdirpSync, rimrafSync } from './util.mjs';
+import { copyDirSync, copyFileSync, denoCreateDir, execGit, execPm, execSync, exitFatal, GITHUB_REPO, GITHUB_TOKEN_URL, gitSetup, mkdirpSync, rimrafSync } from './util.mjs';
 
 /** @typedef {Record<string, any>} ChangelogMap */
 
@@ -44,22 +44,22 @@ const argv = await yargs(process.argv.slice(2))
 
 /** Runs the clean command */
 function runClean () {
-  execSync('yarn polkadot-dev-clean-build');
+  execPm('polkadot-dev-clean-build');
 }
 
 /** Runs the lint command */
 function runLint () {
-  execSync('yarn lint');
+  execPm('lint');
 }
 
 /** Runs the test command */
 function runTest () {
-  execSync('yarn test');
+  execPm('test');
 }
 
 /** Runs the build command */
 function runBuild () {
-  execSync('yarn build');
+  execPm('build');
 }
 
 /**
@@ -316,9 +316,9 @@ function commitClone (repo, clone, names) {
     const entry = addChangelog(names);
 
     gitSetup();
-    execSync('git add --all .');
-    execSync(`git commit --no-status --quiet -m "${entry}"`);
-    execSync(`git push ${repo}`, true);
+    execGit('add --all .');
+    execGit(`commit --no-status --quiet -m "${entry}"`);
+    execGit(`push ${repo}`, true);
 
     process.chdir('..');
   }
@@ -364,7 +364,7 @@ function bundlePublish () {
     return;
   }
 
-  execSync(`git clone ${bundRepo} ${bundClone}`, true);
+  execGit(`clone ${bundRepo} ${bundClone}`, true);
 
   loopFunc(bundlePublishPkg);
 
@@ -412,7 +412,7 @@ function denoPublish () {
     return;
   }
 
-  execSync(`git clone ${denoRepo} ${denoClone}`, true);
+  execGit(`clone ${denoRepo} ${denoClone}`, true);
 
   loopFunc(denoPublishPkg);
 
@@ -439,7 +439,7 @@ function verBump () {
 
   if (argv['skip-beta'] || patch === '0') {
     // don't allow beta versions
-    execSync('yarn polkadot-dev-version patch');
+    execPm('polkadot-dev-version patch');
     withNpm = true;
   } else if (tag || currentVersion === lastVersion) {
     // if we don't want to publish, add an X before passing
@@ -450,7 +450,7 @@ function verBump () {
     }
 
     // beta version, just continue the stream of betas
-    execSync('yarn polkadot-dev-version pre');
+    execPm('polkadot-dev-version pre');
   } else {
     // manually set, got for publish
     withNpm = true;
@@ -460,8 +460,8 @@ function verBump () {
   npmSetVersionFields();
   rmFile('.123trigger');
 
-  execSync('yarn polkadot-dev-contrib');
-  execSync('git add --all .');
+  execPm('polkadot-dev-contrib');
+  execGit('add --all .');
 }
 
 /**
@@ -481,26 +481,26 @@ function gitPush () {
     }
   }
 
-  execSync('git add --all .');
+  execGit('add --all .');
 
   if (fs.existsSync('docs/README.md')) {
-    execSync('git add --all -f docs');
+    execGit('add --all -f docs');
   }
 
   // add the skip checks for GitHub ...
-  execSync(`git commit --no-status --quiet -m "[CI Skip] ${version.includes('-x') ? 'bump' : 'release'}/${version.includes('-') ? 'beta' : 'stable'} ${version}
+  execGit(`commit --no-status --quiet -m "[CI Skip] ${version.includes('-x') ? 'bump' : 'release'}/${version.includes('-') ? 'beta' : 'stable'} ${version}
 
 
 skip-checks: true"`);
 
-  execSync(`git push ${repo} HEAD:${process.env['GITHUB_REF']}`, true);
+  execGit(`push ${repo} HEAD:${process.env['GITHUB_REF']}`, true);
 
   if (doGHRelease) {
     const files = process.env['GH_RELEASE_FILES']
       ? `--assets ${process.env['GH_RELEASE_FILES']}`
       : '';
 
-    execSync(`yarn polkadot-exec-ghrelease --draft ${files} --yes`);
+    execPm(`polkadot-exec-ghrelease --draft ${files} --yes`);
   }
 }
 

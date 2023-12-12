@@ -172,7 +172,7 @@ export function execSync (cmd, noLog) {
  * @param {boolean} [noLog]
  * @param {string} [loaderPath]
  **/
-export function execNodeTsSync (cmd, nodeFlags = [], noLog, loaderPath = '@polkadot/dev-ts/cached') {
+export function execNodeTs (cmd, nodeFlags = [], noLog, loaderPath = '@polkadot/dev-ts/cached') {
   const loadersGlo = [];
   const loadersLoc = [];
   const otherFlags = [];
@@ -209,6 +209,26 @@ export function execNodeTsSync (cmd, nodeFlags = [], noLog, loaderPath = '@polka
 }
 
 /**
+ * Execute the git command
+ *
+ * @param {string} cmd
+ * @param {boolean} [noLog]
+ **/
+export function execGit (cmd, noLog) {
+  return execSync(`git ${cmd}`, noLog);
+}
+
+/**
+ * Execute the package manager (yarn by default)
+ *
+ * @param {string} cmd
+ * @param {boolean} [noLog]
+ **/
+export function execPm (cmd, noLog) {
+  return execSync(`yarn ${cmd}`, noLog);
+}
+
+/**
  * Node binary execution
  *
  * @param {string} name
@@ -224,13 +244,13 @@ export function execViaNode (name, cmd) {
 
 /** A consistent setup for git variables */
 export function gitSetup () {
-  execSync(`git config user.name "${GITHUB_USER}"`);
-  execSync(`git config user.email "${GITHUB_MAIL}"`);
+  execGit(`config user.name "${GITHUB_USER}"`);
+  execGit(`config user.email "${GITHUB_MAIL}"`);
 
-  execSync('git config push.default simple');
-  execSync('git config merge.ours.driver true');
+  execGit('config push.default simple');
+  execGit('config merge.ours.driver true');
 
-  execSync('git checkout master');
+  execGit('checkout master');
 }
 
 /**
@@ -379,8 +399,7 @@ export function exitFatalYarn () {
     );
     console.error(`
         Technical explanation: All the projects in the @polkadot' family use
-        yarn workspaces, along with hoisting of dependencies. Currently only
-        yarn supports package.json workspaces, hence the limitation.
+        yarn specific configs and assume yarn for build operations and locks.
 
         If yarn is not available, you can get it from https://yarnpkg.com/
 

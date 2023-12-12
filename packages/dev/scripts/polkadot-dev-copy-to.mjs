@@ -5,7 +5,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { copyDirSync, execSync, exitFatal, mkdirpSync, rimrafSync } from './util.mjs';
+import { copyDirSync, execPm, exitFatal, mkdirpSync, rimrafSync } from './util.mjs';
 
 const args = process.argv.slice(2);
 
@@ -22,7 +22,7 @@ if (!fs.existsSync(dest)) {
 }
 
 // build to ensure we actually have latest
-execSync('yarn build');
+execPm('build');
 
 // map across what is available and copy it
 fs

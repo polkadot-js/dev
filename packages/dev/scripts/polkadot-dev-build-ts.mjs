@@ -8,7 +8,7 @@ import path from 'node:path';
 import process from 'node:process';
 import ts from 'typescript';
 
-import { copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_LND_PRE, DENO_POL_PRE, engineVersionCmp, execSync, exitFatal, exitFatalEngine, mkdirpSync, PATHS_BUILD, readdirSync, rimrafSync } from './util.mjs';
+import { copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_LND_PRE, DENO_POL_PRE, engineVersionCmp, execPm, exitFatal, exitFatalEngine, mkdirpSync, PATHS_BUILD, readdirSync, rimrafSync } from './util.mjs';
 
 /** @typedef {'babel' | 'esbuild' | 'swc' | 'tsc'} CompileType */
 /** @typedef {{ bin?: Record<string, string>; browser?: string; bugs?: string; deno?: string; denoDependencies?: Record<string, string>; dependencies?: Record<string, string>; devDependencies?: Record<string, string>; electron?: string; engines?: { node?: string }; exports?: Record<string, unknown>; license?: string; homepage?: string; main?: string; module?: string; name?: string; optionalDependencies?: Record<string, string>; peerDependencies?: Record<string, string>; repository?: { directory?: string; type: 'git'; url: string; }; 'react-native'?: string; resolutions?: Record<string, string>; sideEffects?: boolean | string[]; scripts?: Record<string, string>; type?: 'module' | 'commonjs'; types?: string; version?: string; }} PkgJson */
@@ -45,7 +45,7 @@ const IGNORE_IMPORTS = [
 function buildWebpack () {
   const config = WP_CONFIGS.find((c) => fs.existsSync(path.join(process.cwd(), c)));
 
-  execSync(`yarn polkadot-exec-webpack --config ${config} --mode production`);
+  execPm(`polkadot-exec-webpack --config ${config} --mode production`);
 }
 
 /**
@@ -1331,7 +1331,7 @@ async function main () {
     }
   }
 
-  execSync('yarn polkadot-dev-clean-build');
+  execPm('polkadot-dev-clean-build');
 
   const pkg = JSON.parse(fs.readFileSync(path.join(process.cwd(), './package.json'), 'utf-8'));
 
@@ -1341,7 +1341,7 @@ async function main () {
     }
 
     if (pkg.scripts['build:before']) {
-      execSync('yarn build:before');
+      execPm('build:before');
     }
   }
 
@@ -1350,7 +1350,7 @@ async function main () {
     .split('.git')[0];
 
   orderPackageJson(repoPath, null, pkg);
-  execSync('yarn polkadot-exec-tsc --build tsconfig.build.json');
+  execPm('polkadot-exec-tsc --build tsconfig.build.json');
 
   process.chdir('packages');
 
@@ -1387,12 +1387,12 @@ async function main () {
   findUnusedTsConfig();
 
   if (RL_CONFIGS.some((c) => fs.existsSync(path.join(process.cwd(), c)))) {
-    execSync('yarn polkadot-exec-rollup --config');
+    execPm('polkadot-exec-rollup --config');
   }
 
   if (pkg.scripts) {
     if (pkg.scripts['build:after']) {
-      execSync('yarn build:after');
+      execPm('build:after');
     }
   }
 }

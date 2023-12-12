@@ -4,7 +4,7 @@
 
 import fs from 'node:fs';
 
-import { execSync, mkdirpSync } from './util.mjs';
+import { execGit, mkdirpSync } from './util.mjs';
 
 const tmpDir = 'packages/build';
 const tmpFile = `${tmpDir}/CONTRIBUTORS`;
@@ -12,7 +12,7 @@ const tmpFile = `${tmpDir}/CONTRIBUTORS`;
 console.log('$ polkadot-dev-contrib', process.argv.slice(2).join(' '));
 
 mkdirpSync(tmpDir);
-execSync(`git shortlog master -e -n -s > ${tmpFile}`);
+execGit(`shortlog master -e -n -s > ${tmpFile}`);
 
 fs.writeFileSync(
   'CONTRIBUTORS',
@@ -61,7 +61,7 @@ fs.writeFileSync(
         : diff;
     })
     .map(([email, { count, name }], i) => {
-      execSync(`git log master -1 --author=${email} > ${tmpFile}-${i}`);
+      execGit(`log master -1 --author=${email} > ${tmpFile}-${i}`);
 
       const commit = fs
         .readFileSync(`${tmpFile}-${i}`, 'utf-8')

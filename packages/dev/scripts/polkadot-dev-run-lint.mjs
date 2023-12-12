@@ -5,7 +5,7 @@
 import process from 'node:process';
 import yargs from 'yargs';
 
-import { __dirname, execSync, GITHUB_REPO } from './util.mjs';
+import { __dirname, execPm, GITHUB_REPO } from './util.mjs';
 
 const TS_CONFIG_BUILD = true;
 
@@ -32,9 +32,9 @@ if (!argv['skip-eslint']) {
     ? ''
     : '--fix';
 
-  execSync(`yarn polkadot-exec-eslint ${extra} ${process.cwd()}`);
+  execPm(`polkadot-exec-eslint ${extra} ${process.cwd()}`);
 }
 
 if (!argv['skip-tsc']) {
-  execSync(`yarn polkadot-exec-tsc --noEmit --emitDeclarationOnly false --pretty${TS_CONFIG_BUILD ? ' --project tsconfig.build.json' : ''}`);
+  execPm(`polkadot-exec-tsc --noEmit --emitDeclarationOnly false --pretty${TS_CONFIG_BUILD ? ' --project tsconfig.build.json' : ''}`);
 }
