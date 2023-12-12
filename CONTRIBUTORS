@@ -1,4 +1,4 @@
-    1370	Jaco                          	Just drop Node 16 support (#1121)
+    1371	Jaco                          	Bump deps (w/ TS 5.3.3) (#1123)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
