@@ -215,7 +215,7 @@ export function execNodeTs (cmd, nodeFlags = [], noLog, loaderPath = '@polkadot/
  * @param {boolean} [noLog]
  **/
 export function execGit (cmd, noLog) {
-  return execGit(`${cmd}`, noLog);
+  return execSync(`git ${cmd}`, noLog);
 }
 
 /**
