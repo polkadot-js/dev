@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## master
+## 0.78.1
 
 - Update internal scripts to dedupe git & yarn commands
 - Update to latest yarn berry 4.0.2
