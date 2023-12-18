@@ -4,7 +4,7 @@
 
 import process from 'node:process';
 
-import { execNodeTs, exitFatal, exitFatalEngine, importPath, readdirSync } from './util.mjs';
+import { execNodeTs, exitFatal, exitFatalEngine, importPath, logBin, readdirSync } from './util.mjs';
 
 // A & B are just helpers here and in the errors below
 const EXT_A = ['spec', 'test'];
@@ -13,9 +13,7 @@ const EXT_B = ['ts', 'tsx', 'js', 'jsx', 'cjs', 'mjs'];
 // The actual extensions we are looking for
 const EXTS = EXT_A.reduce((/** @type {string[]} */ exts, s) => exts.concat(...EXT_B.map((e) => `.${s}.${e}`)), []);
 
-const args = process.argv.slice(2);
-
-console.log('$ polkadot-dev-run-test', args.join(' '));
+logBin('polkadot-dev-run-test');
 
 exitFatalEngine();
 
@@ -28,6 +26,7 @@ const filtersExcl = {};
 /** @type {Record<string, string[]>} */
 const filtersIncl = {};
 
+const args = process.argv.slice(2);
 let testEnv = 'node';
 let isDev = false;
 

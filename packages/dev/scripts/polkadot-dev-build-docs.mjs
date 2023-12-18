@@ -5,9 +5,9 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { copyDirSync, rimrafSync } from './util.mjs';
+import { copyDirSync, logBin, rimrafSync } from './util.mjs';
 
-console.log('$ polkadot-dev-build-docs', process.argv.slice(2).join(' '));
+logBin('polkadot-dev-build-docs');
 
 let docRoot = path.join(process.cwd(), 'docs');
 

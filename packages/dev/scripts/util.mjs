@@ -158,7 +158,7 @@ export function execSync (cmd, noLog) {
     .trim();
 
   if (!noLog) {
-    console.log(`$ ${exec}`);
+    logBin(exec, true);
   }
 
   cp.execSync(exec, { stdio: 'inherit' });
@@ -215,7 +215,7 @@ export function execNodeTs (cmd, nodeFlags = [], noLog, loaderPath = '@polkadot/
  * @param {boolean} [noLog]
  **/
 export function execGit (cmd, noLog) {
-  return execSync(`git ${cmd}`, noLog);
+  execSync(`git ${cmd}`, noLog);
 }
 
 /**
@@ -225,7 +225,18 @@ export function execGit (cmd, noLog) {
  * @param {boolean} [noLog]
  **/
 export function execPm (cmd, noLog) {
-  return execSync(`yarn ${cmd}`, noLog);
+  // It could be possible to extends this to npm/pnpm, but the package manager
+  // arguments are not quite the same between them, so we may need to do mangling
+  // and adjust to convert yarn-isms to the specific target.
+  //
+  // Instead of defaulting here, we could possibly use process.env['npm_execpath']
+  // to determine the package manager which would work in most (???) cases where the
+  // top-level has been executed via a package manager and the env is set - no bets
+  // atm for what happens when execSync/fork is used
+  //
+  // TL;DR Not going to spend effort on this, but quite possibly there is an avenue
+  // to support other package managers, aka pick-your-poison
+  execSync(`yarn ${cmd}`, noLog);
 }
 
 /**
@@ -235,11 +246,9 @@ export function execPm (cmd, noLog) {
  * @param {string} cmd
  **/
 export function execViaNode (name, cmd) {
-  const args = process.argv.slice(2).join(' ');
+  logBin(name);
 
-  console.log(`$ ${name} ${args}`.replace(/ {2}/g, ' ').trim());
-
-  return execSync(`${importPath(cmd)} ${args}`, true);
+  execSync(`${importPath(cmd)} ${process.argv.slice(2).join(' ')}`, true);
 }
 
 /** A consistent setup for git variables */
@@ -272,7 +281,7 @@ export function importPath (req) {
  * @returns {Promise<any>}
  **/
 export async function importDirect (bin, req) {
-  console.log(`$ ${bin} ${process.argv.slice(2).join(' ')}`);
+  logBin(bin);
 
   try {
     const mod = await import(req);
@@ -292,6 +301,20 @@ export async function importDirect (bin, req) {
  **/
 export function importRelative (bin, req) {
   return importDirect(bin, importPath(req));
+}
+
+/**
+ * Logs the binary name with the calling args
+ *
+ * @param {string} bin
+ * @param {boolean} [noArgs]
+ */
+export function logBin (bin, noArgs) {
+  const extra = noArgs
+    ? ''
+    : process.argv.slice(2).join(' ');
+
+  console.log(`$ ${bin} ${extra}`.replace(/ {2}/g, ' ').trim());
 }
 
 /**

@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## master
+
+- Update internal scripts to dedupe git & yarn commands
+- Update to latest yarn berry 4.0.2
+
+
 ## 0.77.1
 
 - Drop support for Node 16

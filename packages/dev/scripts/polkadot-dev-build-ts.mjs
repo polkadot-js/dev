@@ -8,7 +8,7 @@ import path from 'node:path';
 import process from 'node:process';
 import ts from 'typescript';
 
-import { copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_LND_PRE, DENO_POL_PRE, engineVersionCmp, execPm, exitFatal, exitFatalEngine, mkdirpSync, PATHS_BUILD, readdirSync, rimrafSync } from './util.mjs';
+import { copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_LND_PRE, DENO_POL_PRE, engineVersionCmp, execPm, exitFatal, exitFatalEngine, logBin, mkdirpSync, PATHS_BUILD, readdirSync, rimrafSync } from './util.mjs';
 
 /** @typedef {'babel' | 'esbuild' | 'swc' | 'tsc'} CompileType */
 /** @typedef {{ bin?: Record<string, string>; browser?: string; bugs?: string; deno?: string; denoDependencies?: Record<string, string>; dependencies?: Record<string, string>; devDependencies?: Record<string, string>; electron?: string; engines?: { node?: string }; exports?: Record<string, unknown>; license?: string; homepage?: string; main?: string; module?: string; name?: string; optionalDependencies?: Record<string, string>; peerDependencies?: Record<string, string>; repository?: { directory?: string; type: 'git'; url: string; }; 'react-native'?: string; resolutions?: Record<string, string>; sideEffects?: boolean | string[]; scripts?: Record<string, string>; type?: 'module' | 'commonjs'; types?: string; version?: string; }} PkgJson */
@@ -16,7 +16,7 @@ import { copyDirSync, copyFileSync, DENO_EXT_PRE, DENO_LND_PRE, DENO_POL_PRE, en
 const WP_CONFIGS = ['js', 'cjs'].map((e) => `webpack.config.${e}`);
 const RL_CONFIGS = ['js', 'mjs', 'cjs'].map((e) => `rollup.config.${e}`);
 
-console.log('$ polkadot-dev-build-ts', process.argv.slice(2).join(' '));
+logBin('polkadot-dev-build-ts');
 
 exitFatalEngine();
 
@@ -1036,8 +1036,12 @@ function lintOutput (dir) {
 function lintInput (dir) {
   throwOnErrors(
     loopFiles(['.ts', '.tsx'], dir, 'src', (full, l, n) => {
-      // Sadly, we have people copying and just changing all the headers without giving attribution -
-      // we certainly like forks, contributions, building on stuff, but doing this rebrand is not cool
+      // Sadly, we have people copying and just changing all the headers without
+      // giving attribution - we certainly like forks, contributions, building on
+      // stuff, but doing this type of rebrand is not cool
+      //
+      // This does have negative effects - proper forks that add their own source
+      // file will also be caught in the net, i.e. we expect all files to conform
       if (n === 0 && (
         !/\/\/ Copyright .* @polkadot\//.test(l) &&
         !/\/\/ Auto-generated via `/.test(l) &&

@@ -2,7 +2,16 @@
 # Copyright 2017-2023 @polkadot/dev authors & contributors
 # SPDX-License-Identifier: Apache-2.0
 
-DIRECTORIES=( "dev" "wasm" "common" "api" "docs" "ui" "phishing" "extension" "tools" "apps" ) # "client" )
+# This scripts updates all the inter polkadot-js dependencies. To do so it
+# creates a list of all the packages available and then loops through the
+# package.json files in the various repos, upgrading the dependecies as found.
+#
+# In this upgrading step is uses the local all-deps.js script
+#
+# In addition it also cleans old stale local branches, and performs an overall
+# dedupe - all maintenence operations.
+
+DIRECTORIES=( "dev" "wasm" "common" "api" "docs" "ui" "phishing" "extension" "tools" "apps" )
 
 for REPO in "${DIRECTORIES[@]}"; do
   if [ "$REPO" != "" ] && [ -d "./$REPO/.git" ]; then

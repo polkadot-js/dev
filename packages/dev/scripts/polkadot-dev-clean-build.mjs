@@ -5,12 +5,12 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { PATHS_BUILD, rimrafSync } from './util.mjs';
+import { logBin, PATHS_BUILD, rimrafSync } from './util.mjs';
 
 const PKGS = path.join(process.cwd(), 'packages');
 const DIRS = PATHS_BUILD.map((d) => `build${d}`);
 
-console.log('$ polkadot-dev-clean-build', process.argv.slice(2).join(' '));
+logBin('polkadot-dev-clean-build');
 
 /**
  * @internal

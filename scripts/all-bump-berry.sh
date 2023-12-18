@@ -2,6 +2,14 @@
 # Copyright 2017-2023 @polkadot/dev authors & contributors
 # SPDX-License-Identifier: Apache-2.0
 
+# This scripts updates and aligns the version of yarn berry used. It follows
+# the following approach -
+#
+# 1. Updates the version of yarn berry in the dev project
+# 2. Performs an install in dev to upgrade the locks/plugins
+# 3. Loops through each of the polkadot-js projects, copying the
+#    config from dev
+
 DIRECTORIES=( "wasm" "common" "api" "docs" "ui" "phishing" "extension" "tools" "apps" )
 
 # update to latest inside dev
@@ -9,9 +17,6 @@ cd dev
 echo "*** Updating yarn in dev"
 git pull
 yarn set version berry
-# NOTE: For yarn 4.0 the plugin imports should be removed
-yarn plugin import @yarnpkg/plugin-interactive-tools
-yarn plugin import @yarnpkg/plugin-version
 yarn
 cd ..
 
