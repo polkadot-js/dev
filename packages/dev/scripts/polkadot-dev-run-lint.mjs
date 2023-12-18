@@ -5,11 +5,11 @@
 import process from 'node:process';
 import yargs from 'yargs';
 
-import { __dirname, execPm, GITHUB_REPO } from './util.mjs';
+import { __dirname, execPm, GITHUB_REPO, logBin } from './util.mjs';
 
 const TS_CONFIG_BUILD = true;
 
-console.log('$ polkadot-dev-run-lint', process.argv.slice(2).join(' '));
+logBin('polkadot-dev-run-lint');
 
 // Since yargs can also be a promise, we just relax the type here completely
 const argv = await yargs(process.argv.slice(2))

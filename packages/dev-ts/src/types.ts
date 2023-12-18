@@ -1,7 +1,7 @@
 // Copyright 2017-2023 @polkadot/dev-ts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-export interface Alias {
+export interface TsAlias {
   filter: string[];
   isWildcard?: boolean;
   path: string;

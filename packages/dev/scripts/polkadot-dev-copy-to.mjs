@@ -5,11 +5,11 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { copyDirSync, execPm, exitFatal, mkdirpSync, rimrafSync } from './util.mjs';
+import { copyDirSync, execPm, exitFatal, logBin, mkdirpSync, rimrafSync } from './util.mjs';
 
 const args = process.argv.slice(2);
 
-console.log('$ polkadot-dev-copy-to', args.join(' '));
+logBin('polkadot-dev-copy-to');
 
 if (args.length !== 1) {
   exitFatal('Expected one <destination> argument');

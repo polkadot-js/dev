@@ -11,7 +11,7 @@ interface WrapOpts {
   todo?: boolean;
 }
 
-type WrapFn = (name: string, options: { only?: boolean; skip?: boolean; timeout?: number; todo?: boolean; }, fn: () => void | Promise<void>) => void;
+type WrapFn = (name: string, options: { only?: boolean; skip?: boolean; timeout?: number; todo?: boolean; }, fn: () => void | Promise<void>) => void | Promise<void>;
 
 const MINUTE = 60 * 1000;
 
@@ -24,7 +24,7 @@ const MINUTE = 60 * 1000;
  * @param {} fn
  */
 function createWrapper <T extends WrapFn> (fn: T, defaultTimeout: number) {
-  const wrap = (opts: WrapOpts) => (name: string, exec: () => void | Promise<void>, timeout?: number) => fn(name, { ...opts, timeout: (timeout || defaultTimeout) }, exec);
+  const wrap = (opts: WrapOpts) => (name: string, exec: () => void | Promise<void>, timeout?: number) => fn(name, { ...opts, timeout: (timeout || defaultTimeout) }, exec) as unknown as void;
 
   // Ensure that we have consistent helpers on the function. These are not consistently
   // applied accross all node:test versions, latest has all, so always apply ours.
@@ -42,9 +42,7 @@ function createWrapper <T extends WrapFn> (fn: T, defaultTimeout: number) {
  **/
 export function suite () {
   return {
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     describe: createWrapper(describe, 60 * MINUTE),
-    // eslint-disable-next-line @typescript-eslint/no-misused-promises
     it: createWrapper(it, 2 * MINUTE)
   };
 }

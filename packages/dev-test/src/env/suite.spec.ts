@@ -26,6 +26,10 @@ describe('it()', () => {
     expect(it.todo).toBeDefined();
   });
 
+  it('allows promises', async () => {
+    expect(await Promise.resolve(true)).toBe(true);
+  });
+
   describe('.only', () => {
     // eslint-disable-next-line jest/no-focused-tests
     it.only('runs this test when .only is used', () => {

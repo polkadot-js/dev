@@ -1,7 +1,7 @@
 // Copyright 2017-2023 @polkadot/dev-ts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import type { Alias } from './types.js';
+import type { TsAlias } from './types.js';
 
 import JSON5 from 'json5';
 import fs from 'node:fs';
@@ -88,7 +88,7 @@ function readConfigFile (currentPath = CWD_PATH, tsconfig = 'tsconfig.json', fro
  *
  * Retrieves all TS aliases definitions
  **/
-function extractAliases (): Alias[] {
+function extractAliases (): TsAlias[] {
   const { paths, url = CWD_URL } = readConfigFile();
 
   return Object

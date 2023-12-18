@@ -2,10 +2,8 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { execNodeTs } from './util.mjs';
+import { execNodeTs, logBin } from './util.mjs';
 
-const cmd = process.argv.slice(2).join(' ');
+logBin('polkadot-run-node-ts');
 
-console.log('$ polkadot-run-node-ts', cmd);
-
-execNodeTs(cmd);
+execNodeTs(process.argv.slice(2).join(' '));

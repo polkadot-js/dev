@@ -2,11 +2,11 @@
 // Copyright 2017-2023 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import { execPm, GITHUB_REPO, GITHUB_TOKEN_URL, gitSetup } from './util.mjs';
+import { execPm, GITHUB_REPO, GITHUB_TOKEN_URL, gitSetup, logBin } from './util.mjs';
 
 const repo = `${GITHUB_TOKEN_URL}/${GITHUB_REPO}.git`;
 
-console.log('$ polkadot-ci-ghact-docs', process.argv.slice(2).join(' '));
+logBin('polkadot-ci-ghact-docs');
 
 gitSetup();
 

@@ -4,9 +4,9 @@
 
 import fs from 'node:fs';
 
-import { execGit } from './util.mjs';
+import { execGit, logBin } from './util.mjs';
 
-console.log('$ polkadot-ci-ghpages-force', process.argv.slice(2).join(' '));
+logBin('polkadot-ci-ghpages-force');
 
 // ensure we are on master
 execGit('checkout master');

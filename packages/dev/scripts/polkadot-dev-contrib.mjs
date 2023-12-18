@@ -4,12 +4,12 @@
 
 import fs from 'node:fs';
 
-import { execGit, mkdirpSync } from './util.mjs';
+import { execGit, logBin, mkdirpSync } from './util.mjs';
 
 const tmpDir = 'packages/build';
 const tmpFile = `${tmpDir}/CONTRIBUTORS`;
 
-console.log('$ polkadot-dev-contrib', process.argv.slice(2).join(' '));
+logBin('polkadot-dev-contrib');
 
 mkdirpSync(tmpDir);
 execGit(`shortlog master -e -n -s > ${tmpFile}`);

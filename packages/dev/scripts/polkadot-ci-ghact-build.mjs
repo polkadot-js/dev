@@ -8,11 +8,11 @@ import path from 'node:path';
 import process from 'node:process';
 import yargs from 'yargs';
 
-import { copyDirSync, copyFileSync, denoCreateDir, execGit, execPm, execSync, exitFatal, GITHUB_REPO, GITHUB_TOKEN_URL, gitSetup, mkdirpSync, rimrafSync } from './util.mjs';
+import { copyDirSync, copyFileSync, denoCreateDir, execGit, execPm, execSync, exitFatal, GITHUB_REPO, GITHUB_TOKEN_URL, gitSetup, logBin, mkdirpSync, rimrafSync } from './util.mjs';
 
 /** @typedef {Record<string, any>} ChangelogMap */
 
-console.log('$ polkadot-ci-ghact-build', process.argv.slice(2).join(' '));
+logBin('polkadot-ci-ghact-build');
 
 const DENO_REPO = 'polkadot-js/build-deno.land';
 const BUND_REPO = 'polkadot-js/build-bundle';
@@ -41,26 +41,6 @@ const argv = await yargs(process.argv.slice(2))
   })
   .strict()
   .argv;
-
-/** Runs the clean command */
-function runClean () {
-  execPm('polkadot-dev-clean-build');
-}
-
-/** Runs the lint command */
-function runLint () {
-  execPm('lint');
-}
-
-/** Runs the test command */
-function runTest () {
-  execPm('test');
-}
-
-/** Runs the build command */
-function runBuild () {
-  execPm('build');
-}
 
 /**
  * Removes a specific file, returning true if found, false otherwise
@@ -539,11 +519,11 @@ npmSetup();
 getFlags();
 verBump();
 
-// perform the actual CI ops
-runClean();
-runLint();
-runTest();
-runBuild();
+// perform the actual CI build
+execPm('polkadot-dev-clean-build');
+execPm('lint');
+execPm('test');
+execPm('build');
 
 // publish to all GH repos
 gitPush();

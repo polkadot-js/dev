@@ -6,7 +6,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import yargs from 'yargs';
 
-import { execPm, exitFatal } from './util.mjs';
+import { execPm, exitFatal, logBin } from './util.mjs';
 
 /** @typedef {{ dependencies?: Record<string, string>; devDependencies?: Record<string, string>; peerDependencies?: Record<string, string>; optionalDependencies?: Record<string, string>; resolutions?: Record<string, string>; name?: string; stableVersion?: string; version: string; }} PkgJson */
 
@@ -46,7 +46,7 @@ function updateDependencies (dependencies, others, version) {
 /**
  * @returns {[string, PkgJson]}
  */
-function readRootPkgJson () {
+function readCurrentPkgJson () {
   const rootPath = path.join(process.cwd(), 'package.json');
   const rootJson = JSON.parse(fs.readFileSync(rootPath, 'utf8'));
 
@@ -87,7 +87,7 @@ function updatePackage (version, others, pkgPath, json) {
 }
 
 function removeX () {
-  const [rootPath, json] = readRootPkgJson();
+  const [rootPath, json] = readCurrentPkgJson();
 
   if (!json.version?.endsWith('-x')) {
     return false;
@@ -100,7 +100,7 @@ function removeX () {
 }
 
 function addX () {
-  const [rootPath, json] = readRootPkgJson();
+  const [rootPath, json] = readCurrentPkgJson();
 
   if (json.version.endsWith('-x')) {
     return false;
@@ -112,7 +112,7 @@ function addX () {
   return true;
 }
 
-console.log('$ polkadot-dev-version', process.argv.slice(2).join(' '));
+logBin('polkadot-dev-version');
 
 const isX = removeX();
 
@@ -122,7 +122,7 @@ if (isX && type === 'pre') {
   addX();
 }
 
-const [rootPath, rootJson] = readRootPkgJson();
+const [rootPath, rootJson] = readCurrentPkgJson();
 
 updatePackage(rootJson.version, [], rootPath, rootJson);
 
@@ -140,4 +140,4 @@ if (fs.existsSync('packages')) {
   });
 }
 
-execPm('');
+execPm('install');

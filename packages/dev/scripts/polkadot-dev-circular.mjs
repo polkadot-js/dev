@@ -5,9 +5,9 @@
 // @ts-expect-error For scripts we don't include @types/* definitions
 import madge from 'madge';
 
-import { exitFatal } from './util.mjs';
+import { exitFatal, logBin } from './util.mjs';
 
-console.log('$ polkadot-dev-circular', process.argv.slice(2).join(' '));
+logBin('polkadot-dev-circular');
 
 const res = await madge('./', { fileExtensions: ['ts', 'tsx'] });
 
