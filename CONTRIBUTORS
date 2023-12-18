@@ -1,4 +1,4 @@
-    1373	Jaco                          	Bump yarn berry, log bin, bump deps (#1125)
+    1374	Jaco                          	Add yarn .keep files (#1126)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
