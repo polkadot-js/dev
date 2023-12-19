@@ -1260,8 +1260,9 @@ async function buildJs (compileType, repoPath, dir, locals) {
 
     if (!name.startsWith('@polkadot/x-')) {
       if (name !== '@polkadot/util' && !name.startsWith('@polkadot/dev')) {
-        const detectThis = path.join(process.cwd(), 'src/detectPackage.ts');
+        const detectOld = path.join(process.cwd(), 'src/detectPackage.ts');
         const detectOther = path.join(process.cwd(), 'src/detectOther.ts');
+        const detectThis = path.join(process.cwd(), 'src/packageDetect.ts');
 
         /** @type {string[]} */
         let otherImports = ["import { detectPackage } from '@polkadot/util';"];
@@ -1270,11 +1271,12 @@ async function buildJs (compileType, repoPath, dir, locals) {
 
         if (fs.existsSync(detectOther)) {
           [otherImports, otherNames] = extractPackageInfoImports(detectOther);
-
-          fs.rmSync(detectOther);
         } else if (fs.existsSync(detectThis)) {
           [otherImports, otherNames] = extractPackageInfoImports(detectThis);
         }
+
+        fs.rmSync(detectOther);
+        fs.rmSync(detectOld);
 
         fs.writeFileSync(detectThis, `${genHeader}// (packageInfo imports will be kept as-is, user-editable)\n\n${otherImports.join('\n')}\n\nimport { packageInfo } from './packageInfo.js';\n\ndetectPackage(packageInfo, null, [${otherNames.sort().join(', ')}]);\n`);
       }
