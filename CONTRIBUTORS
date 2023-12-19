@@ -1,4 +1,4 @@
-    1376	Jaco                          	Adjust removal of old detect* (#1128)
+    1377	Jaco                          	Apply packageDetect logic for util lib (#1129)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
