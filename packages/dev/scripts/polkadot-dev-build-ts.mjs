@@ -1191,11 +1191,14 @@ async function timeIt (label, fn) {
 
 /**
  * @param {string} filepath
+ * @param {boolean} withDetectImport
  * @returns {[string[], string[]]}
  */
-function extractPackageInfoImports (filepath) {
+function extractPackageInfoImports (filepath, withDetectImport) {
   /** @type {string[]} */
-  const otherImports = ["import { detectPackage } from '@polkadot/util';"];
+  const otherImports = withDetectImport
+    ? ["import { detectPackage } from '@polkadot/util';"]
+    : [];
   /** @type {string[]} */
   const otherNames = [];
 
@@ -1259,26 +1262,38 @@ async function buildJs (compileType, repoPath, dir, locals) {
     fs.writeFileSync(path.join(process.cwd(), 'src/packageInfo.ts'), `${genHeader}\nexport const packageInfo = { name: '${name}', path: 'auto', type: 'auto', version: '${version}' };\n`);
 
     if (!name.startsWith('@polkadot/x-')) {
-      if (name !== '@polkadot/util' && !name.startsWith('@polkadot/dev')) {
+      if (!name.startsWith('@polkadot/dev')) {
         const detectOld = path.join(process.cwd(), 'src/detectPackage.ts');
         const detectOther = path.join(process.cwd(), 'src/detectOther.ts');
         const detectThis = path.join(process.cwd(), 'src/packageDetect.ts');
+        const withDetectImport = name !== '@polkadot/util';
 
         /** @type {string[]} */
-        let otherImports = ["import { detectPackage } from '@polkadot/util';"];
+        let otherImports = withDetectImport
+          ? ["import { detectPackage } from '@polkadot/util';"]
+          : [];
         /** @type {string[]} */
         let otherNames = [];
+        const localImports = withDetectImport
+          ? []
+          : ["import { detectPackage } from './detectPackage.js';"];
+
+        localImports.push("import { packageInfo } from './packageInfo.js';");
 
         if (fs.existsSync(detectOther)) {
-          [otherImports, otherNames] = extractPackageInfoImports(detectOther);
+          [otherImports, otherNames] = extractPackageInfoImports(detectOther, withDetectImport);
+
+          fs.rmSync(detectOther);
         } else if (fs.existsSync(detectThis)) {
-          [otherImports, otherNames] = extractPackageInfoImports(detectThis);
+          [otherImports, otherNames] = extractPackageInfoImports(detectThis, withDetectImport);
         }
 
-        fs.rmSync(detectOther, { force: true });
-        fs.rmSync(detectOld, { force: true });
+        if (withDetectImport) {
+          // for @polkadot/util this file contains the detection logic, keep it
+          fs.rmSync(detectOld, { force: true });
+        }
 
-        fs.writeFileSync(detectThis, `${genHeader}// (packageInfo imports will be kept as-is, user-editable)\n\n${otherImports.join('\n')}\n\nimport { packageInfo } from './packageInfo.js';\n\ndetectPackage(packageInfo, null, [${otherNames.sort().join(', ')}]);\n`);
+        fs.writeFileSync(detectThis, `${genHeader}// (packageInfo imports will be kept as-is, user-editable)\n\n${otherImports.join('\n')}\n\n${localImports.join('\n')}\n\ndetectPackage(packageInfo, null, [${otherNames.sort().join(', ')}]);\n`);
       }
 
       const cjsRoot = path.join(process.cwd(), 'src/cjs');
