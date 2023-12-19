@@ -22,7 +22,8 @@ import { run } from 'node:test';
 
 // NOTE error should be defined as "Error", however the @types/node definitions doesn't include all
 /** @typedef  {{ details: { error: { failureType: unknown; cause: { code: number; message: string; stack: string; }; code: number; } }; file?: string; name: string }} FailStat */
-/** @typedef {{ diag: { file?: string; message?: string; }[]; fail: FailStat[]; pass: unknown[]; skip: unknown[]; todo: unknown[]; total: number }} Stats */
+/** @typedef {{ details: { duration_ms: number }; name: string; }} PassStat */
+/** @typedef {{ diag: { file?: string; message?: string; }[]; fail: FailStat[]; pass: PassStat[]; skip: unknown[]; todo: unknown[]; total: number }} Stats */
 
 console.time('\t elapsed :');
 
@@ -235,6 +236,20 @@ function complete () {
         console.log(`\t${r.message?.split('\n').join('\n\t')}`);
       }
     });
+    console.log();
+  }
+
+  if (toConsole) {
+    stats.pass.forEach((r) => {
+      console.log(`pass ${r.name} ${r.details.duration_ms} ms`);
+    });
+
+    console.log();
+
+    stats.fail.forEach((r) => {
+      console.log(`fail ${r.name}`);
+    });
+
     console.log();
   }
 
