@@ -1271,15 +1271,12 @@ async function buildJs (compileType, repoPath, dir, locals) {
 
         if (fs.existsSync(detectOther)) {
           [otherImports, otherNames] = extractPackageInfoImports(detectOther);
-
-          fs.rmSync(detectOther);
-        } else if (fs.existsSync(detectOld)) {
-          [otherImports, otherNames] = extractPackageInfoImports(detectOld);
-
-          fs.rmSync(detectOld);
         } else if (fs.existsSync(detectThis)) {
           [otherImports, otherNames] = extractPackageInfoImports(detectThis);
         }
+
+        fs.rmSync(detectOther, { force: true });
+        fs.rmSync(detectOld, { force: true });
 
         fs.writeFileSync(detectThis, `${genHeader}// (packageInfo imports will be kept as-is, user-editable)\n\n${otherImports.join('\n')}\n\nimport { packageInfo } from './packageInfo.js';\n\ndetectPackage(packageInfo, null, [${otherNames.sort().join(', ')}]);\n`);
       }
