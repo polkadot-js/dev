@@ -1,4 +1,4 @@
-// Copyright 2017-2023 @polkadot/dev-ts authors & contributors
+// Copyright 2017-2024 @polkadot/dev-ts authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 import type { TsAlias } from './types.js';

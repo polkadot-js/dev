@@ -1,4 +1,4 @@
-// Copyright 2017-2023 @polkadot/dev-test authors & contributors
+// Copyright 2017-2024 @polkadot/dev-test authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 /* eslint-disable no-var */
@@ -18,11 +18,9 @@ type Suite = ReturnType<typeof suite>;
 
 declare global {
   var after: Lifecycle['after'];
-  /** Jest-compatible alias for before */
   var afterAll: Lifecycle['afterAll'];
   var afterEach: Lifecycle['afterEach'];
   var before: Lifecycle['before'];
-  /** Jest-compatible alias for after */
   var beforeAll: Lifecycle['beforeAll'];
   var beforeEach: Lifecycle['beforeEach'];
   var describe: Suite['describe'];
