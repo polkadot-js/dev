@@ -1,4 +1,4 @@
-// Copyright 2017-2023 @polkadot/dev authors & contributors
+// Copyright 2017-2024 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 /** This should appear as-is in the output with: 1. extension added, 2. augmented.d.ts correct */
