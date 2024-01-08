@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright 2017-2023 @polkadot/dev authors & contributors
+# Copyright 2017-2024 @polkadot/dev authors & contributors
 # SPDX-License-Identifier: Apache-2.0
 
 # This scripts updates all the inter polkadot-js dependencies. To do so it
