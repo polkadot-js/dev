@@ -21,7 +21,7 @@
     "./globals.d.ts": "./src/globals.d.ts"
   },
   "dependencies": {
-    "jsdom": "^23.2.0",
+    "jsdom": "^24.0.0",
     "tslib": "^2.6.2"
   },
   "devDependencies": {
