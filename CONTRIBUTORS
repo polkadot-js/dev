@@ -1,5 +1,6 @@
     1382	Jaco                          	Bump deps (#1134)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
+       2	Tarik Gul                     	chore(yarn): update yarn to 4.1.0 (#1136)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
        1	Amaury Martiny                	Allow .spec.ts files (#143)
@@ -8,4 +9,3 @@
        1	Nazar Mokrynskyi              	Remove redundant babel plugins (#501)
        1	Stefanie Doll                 	Added react-hot-loader to 'dev-react' config (#191)
        1	StefansArya                   	Change bundle configuration to UMD (#557)
-       1	Tarik Gul                     	ci: add user (TarikGul) to auto-approve (#1137)
