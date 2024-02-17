@@ -8,3 +8,4 @@
        1	Nazar Mokrynskyi              	Remove redundant babel plugins (#501)
        1	Stefanie Doll                 	Added react-hot-loader to 'dev-react' config (#191)
        1	StefansArya                   	Change bundle configuration to UMD (#557)
+       1	Tarik Gul                     	ci: add user (TarikGul) to auto-approve (#1137)
