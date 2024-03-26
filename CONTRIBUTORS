@@ -1,6 +1,6 @@
     1382	Jaco                          	Bump deps (#1134)
+       3	Tarik Gul                     	Bump yarn to 4.1.1 (#1138)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
-       2	Tarik Gul                     	chore(yarn): update yarn to 4.1.0 (#1136)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
        1	Amaury Martiny                	Allow .spec.ts files (#143)
