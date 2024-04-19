@@ -435,7 +435,7 @@ export function exitFatalYarn () {
 /**
  * Topological sort of dependencies. It handles circular deps by placing them at the end
  * of the sorted array from circular dep with the smallest vertices to the greatest vertices.
- * 
+ *
  * @param {string[]} dirs
  */
 export function topoSort (dirs) {
