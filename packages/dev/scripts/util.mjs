@@ -431,3 +431,99 @@ export function exitFatalYarn () {
     process.exit(1);
   }
 }
+
+/**
+ * Topological sort of dependencies. It handles circular deps by placing them at the end
+ * of the sorted array from circular dep with the smallest vertices to the greatest vertices.
+ * 
+ * @param {string[]} dirs
+ */
+export function topoSort (dirs) {
+  /** @type {Record<string, Node>} */
+  const nodes = {};
+  /** @type {string[]} */
+  const sorted = [];
+  /** @type {Record<string, boolean>} */
+  const visited = {};
+  /** @type {Record<string, Node>} */
+  const circular = {};
+
+  class Node {
+    /** @param {string} id  */
+    constructor (id) {
+      this.id = id;
+      /** @type {string[]} */
+      this.vertices = [];
+    }
+  }
+
+  /**
+   * @param {*} key
+   * @param {string[]} ancestors
+   * @returns
+   */
+  function cb (key, ancestors) {
+    const node = nodes[key];
+    const id = node.id;
+
+    if (visited[key]) {
+      return;
+    }
+
+    ancestors.push(id);
+    visited[key] = true;
+
+    node.vertices.forEach((i) => {
+      if (ancestors.indexOf(i) >= 0) {
+        console.log('CIRCULAR: closed chain : ' + i + ' is in ' + id);
+
+        if (nodes[id].vertices.includes(i)) {
+          circular[id] = nodes[id];
+        }
+
+        circular[i] = nodes[i];
+      }
+
+      cb(i.toString(), ancestors.map((v) => v));
+    });
+
+    if (!circular[id]) {
+      sorted.push(id);
+    }
+  }
+
+  // Build edges
+  const edges = dirs.map((dir) => {
+    const json = fs.readFileSync(path.join('packages', dir, 'package.json'), 'utf8');
+    const deps = JSON.parse(json).dependencies;
+
+    return dirs
+      .filter((d) => d !== dir && Object.keys(deps).includes(`@polkadot/${d}`))
+      .map((d) => [dir, d]);
+  }).flat();
+
+  edges.forEach((v) => {
+    const from = v[0]; const to = v[1];
+
+    if (!nodes[from]) {
+      nodes[from] = new Node(from);
+    }
+
+    if (!nodes[to]) {
+      nodes[to] = new Node(to);
+    }
+
+    nodes[from].vertices.push(to);
+  });
+
+  const keys = Object.keys(nodes);
+
+  for (const key of keys) {
+    cb(key, []);
+  }
+
+  const circularSorted = Object.keys(circular)
+    .sort((a, b) => circular[a].vertices.length < circular[b].vertices.length ? -1 : 1);
+
+  return sorted.concat(circularSorted);
+}
