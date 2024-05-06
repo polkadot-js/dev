@@ -8,7 +8,7 @@ import path from 'node:path';
 import process from 'node:process';
 import yargs from 'yargs';
 
-import { copyDirSync, copyFileSync, denoCreateDir, execGit, execPm, execSync, exitFatal, GITHUB_REPO, GITHUB_TOKEN_URL, gitSetup, logBin, mkdirpSync, rimrafSync } from './util.mjs';
+import { copyDirSync, copyFileSync, denoCreateDir, execGit, execPm, execSync, exitFatal, GITHUB_REPO, GITHUB_TOKEN_URL, gitSetup, logBin, mkdirpSync, rimrafSync, topoSort } from './util.mjs';
 
 /** @typedef {Record<string, any>} ChangelogMap */
 
@@ -492,7 +492,7 @@ skip-checks: true"`);
  */
 function loopFunc (fn) {
   if (fs.existsSync('packages')) {
-    fs
+    const dirs = fs
       .readdirSync('packages')
       .filter((dir) => {
         const pkgDir = path.join(process.cwd(), 'packages', dir);
@@ -500,7 +500,9 @@ function loopFunc (fn) {
         return fs.statSync(pkgDir).isDirectory() &&
           fs.existsSync(path.join(pkgDir, 'package.json')) &&
           fs.existsSync(path.join(pkgDir, 'build'));
-      })
+      });
+
+    topoSort(dirs)
       .forEach((dir) => {
         process.chdir(path.join('packages', dir));
         fn();

@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.79.1
+
+- feat: add topological sorting to the packages when releasing
+
 ## 0.78.1
 
 - Update internal scripts to dedupe git & yarn commands
