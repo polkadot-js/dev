@@ -450,6 +450,10 @@ export function topoSort (dirs) {
   /** @type {Record<string, Node>} */
   const circular = {};
 
+  if (dirs.length === 1) {
+    return dirs;
+  }
+
   class Node {
     /** @param {string} id  */
     constructor (id) {
