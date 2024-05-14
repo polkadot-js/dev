@@ -531,5 +531,10 @@ export function topoSort (dirs) {
   const circularSorted = Object.keys(circular)
     .sort((a, b) => circular[a].vertices.length < circular[b].vertices.length ? -1 : 1);
 
-  return sorted.concat(circularSorted);
+  const flattenedEdges = edges.flat();
+  // Packages that have no edges
+  /** @type {string[]} */
+  const standAlones = dirs.filter((d) => !flattenedEdges.includes(d));
+
+  return sorted.concat(circularSorted).concat(standAlones);
 }
