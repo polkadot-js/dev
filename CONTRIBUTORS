@@ -1,5 +1,5 @@
     1382	Jaco                          	Bump deps (#1134)
-       5	Tarik Gul                     	feat: topological sort for releases (#1141)
+       6	Tarik Gul                     	Fix topo sort for single dirs (#1142)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
