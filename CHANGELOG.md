@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.80.1
+
+- Typescript 5.5.4
+
+
 ## 0.79.4
 
 - fix: Add check for `deps` in topo sort
