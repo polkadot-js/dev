@@ -1,8 +1,14 @@
 # CHANGELOG
 
+## 0.79.4
+
+- fix: Add check for `deps` in topo sort
+
+
 ## 0.79.1
 
 - feat: add topological sorting to the packages when releasing
+
 
 ## 0.78.1
 
