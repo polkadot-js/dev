@@ -504,7 +504,7 @@ export function topoSort (dirs) {
     const deps = JSON.parse(json).dependencies;
 
     return dirs
-      .filter((d) => d !== dir && Object.keys(deps).includes(`@polkadot/${d}`))
+      .filter((d) => d !== dir && deps && Object.keys(deps).includes(`@polkadot/${d}`))
       .map((d) => [dir, d]);
   }).flat();
 
