@@ -15,7 +15,7 @@
   },
   "sideEffects": false,
   "type": "module",
-  "version": "0.80.1",
+  "version": "0.81.0",
   "bin": {
     "polkadot-ci-ghact-build": "./scripts/polkadot-ci-ghact-build.mjs",
     "polkadot-ci-ghact-docs": "./scripts/polkadot-ci-ghact-docs.mjs",
@@ -50,8 +50,8 @@
   },
   "dependencies": {
     "@eslint/js": "^8.56.0",
-    "@polkadot/dev-test": "^0.80.1",
-    "@polkadot/dev-ts": "^0.80.1",
+    "@polkadot/dev-test": "^0.81.0",
+    "@polkadot/dev-ts": "^0.81.0",
     "@rollup/plugin-alias": "^5.1.0",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-dynamic-import-vars": "^2.1.2",
