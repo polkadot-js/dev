@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.81.1
+
+- Duplicate .d.ts files into cjs
+
+
 ## 0.80.1
 
 - Typescript 5.5.4
