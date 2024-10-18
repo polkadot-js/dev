@@ -438,10 +438,12 @@ function relativePath (value) {
 function createMapEntry (rootDir, jsPath = '', noTypes) {
   jsPath = relativePath(jsPath);
 
-  const cjsPath = jsPath.replace('./', './cjs/');
-  const hasCjs = fs.existsSync(path.join(rootDir, cjsPath));
   const typesPath = jsPath.replace('.js', '.d.ts');
-  const hasTypes = !noTypes && jsPath.endsWith('.js') && fs.existsSync(path.join(rootDir, typesPath));
+  const cjsPath = jsPath.replace('./', './cjs/');
+  const cjsTypesPath = typesPath.replace('./', './cjs/');
+  const hasCjs = fs.existsSync(path.join(rootDir, cjsPath));
+  const hasTypesCjs = fs.existsSync(path.join(rootDir, cjsTypesPath));
+  const hasTypes = !hasTypesCjs && !noTypes && jsPath.endsWith('.js') && fs.existsSync(path.join(rootDir, typesPath));
   const field = hasCjs
     ? {
       // As per TS, the types key needs to be first
@@ -453,12 +455,21 @@ function createMapEntry (rootDir, jsPath = '', noTypes) {
       // bundler-specific path, eg. webpack & rollup
       ...(
         jsPath.endsWith('.js')
-          ? { module: jsPath }
+          ? hasTypesCjs
+          // eslint-disable-next-line sort-keys
+            ? { module: { types: typesPath, default: jsPath } }
+            : { module: jsPath }
           : {}
       ),
-      require: cjsPath,
+      require: hasTypesCjs
       // eslint-disable-next-line sort-keys
-      default: jsPath
+        ? { types: cjsTypesPath, default: cjsPath }
+        : cjsPath,
+      // eslint-disable-next-line sort-keys
+      default: hasTypesCjs
+      // eslint-disable-next-line sort-keys
+        ? { types: typesPath, default: jsPath }
+        : jsPath
     }
     : hasTypes
       ? {
@@ -496,7 +507,10 @@ function copyBuildFiles (compileType, dir) {
   copyDirSync('src', 'build', ['.patch', '.js', '.cjs', '.mjs', '.json', '.d.ts', '.d.cts', '.d.mts', '.css', '.gif', '.hbs', '.md', '.jpg', '.png', '.rs', '.svg']);
 
   // copy all *.d.ts files
-  copyDirSync([path.join('../../build', dir, 'src'), path.join('../../build/packages', dir, 'src')], 'build', ['.d.ts']);
+  const dtsPaths = ['build-tsc', path.join('../../build', dir, 'src'), path.join('../../build/packages', dir, 'src')];
+
+  copyDirSync(dtsPaths, 'build', ['.d.ts']);
+  copyDirSync(dtsPaths, 'build/cjs', ['.d.ts']);
 
   // copy all from build-{babel|swc|tsc|...}-esm to build
   copyDirSync(`build-${compileType}-esm`, 'build');
@@ -787,6 +801,8 @@ function buildExports () {
 
   pkg.exports = listRoot
     .filter(([path, config]) =>
+      // skip d.ts files
+      !path.endsWith('.d.ts') &&
       // we handle the CJS path at the root below
       path !== './cjs/package.json' &&
       // we don't export ./deno/* paths (e.g. wasm)
@@ -1254,6 +1270,11 @@ async function buildJs (compileType, repoPath, dir, locals) {
   console.log(`*** ${name} ${version}`);
 
   orderPackageJson(repoPath, dir, pkgJson);
+
+  // move the tsc-generated *.d.ts build files to build-tsc
+  if (fs.existsSync('build')) {
+    copyDirSync('build', 'build-tsc', ['.d.ts']);
+  }
 
   if (!fs.existsSync(path.join(process.cwd(), '.skip-build'))) {
     const srcHeader = `// Copyright 2017-${new Date().getFullYear()} ${name} authors & contributors\n// SPDX-License-Identifier: Apache-2.0\n`;
