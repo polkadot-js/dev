@@ -801,8 +801,8 @@ function buildExports () {
 
   pkg.exports = listRoot
     .filter(([path, config]) =>
-      // skip d.ts files
-      !path.endsWith('.d.ts') &&
+      // skip d.ts files, except globals.d.ts which is needed for dev-test
+      (path.startsWith('./globals.d.ts') || !path.endsWith('.d.ts')) &&
       // we handle the CJS path at the root below
       path !== './cjs/package.json' &&
       // we don't export ./deno/* paths (e.g. wasm)
