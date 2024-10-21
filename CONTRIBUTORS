@@ -1,5 +1,5 @@
     1382	Jaco                          	Bump deps (#1134)
-      10	Tarik Gul                     	Duplicate .d.ts files into cjs (#1147)
+      11	Tarik Gul                     	Fix globals.d.ts export (#1148)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
