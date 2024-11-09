@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.82.1
+
+- Create seperate testLoader and testCached for Node v22 compatibility with JSON assertions
+
+
 ## 0.81.1
 
 - Duplicate .d.ts files into cjs
