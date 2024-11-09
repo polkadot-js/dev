@@ -28,14 +28,12 @@ export async function load (url: string, context: Record<string, unknown>, nextL
       format: 'module'
     });
 
-    let modifiedSrc: Buffer | string = source;
-    if (url.includes('.spec')) {
-      // Replace JSON imports with `with { type: 'json' }`
-      modifiedSrc = Buffer.from(source.toString().replace(/assert\s*\{\s*type:\s*'json'\s*\}/g, 'with { type: \'json\' }'), 'utf-8');
-    }
+
+    // This ensures there is support for Node v22 while also maintaining backwards compatibility for testing.
+    const modifiedSrc = Buffer.from(source.toString().replace(/assert\s*\{\s*type:\s*'json'\s*\}/g, 'with { type: \'json\' }'), 'utf-8');
     
     // we use a hash of the source to determine caching
-    const sourceHash = `//# sourceHash=${crypto.createHash('sha256').update(modifiedSrc as string).digest('hex')}`;
+    const sourceHash = `//# sourceHash=${crypto.createHash('sha256').update(modifiedSrc as unknown as string).digest('hex')}`;
     const compiledFile = url.includes('/src/')
       ? fileURLToPath(
         url

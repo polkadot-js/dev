@@ -157,7 +157,7 @@ try {
       : `@polkadot/dev-test/${testEnv}`
   );
 
-  execNodeTs(allFlags, nodeFlags, false, isDev ? './packages/dev-ts/build/testCached.js' : undefined);
+  execNodeTs(allFlags, nodeFlags, false, isDev ? './packages/dev-ts/build/testCached.js' : '@polkadot/dev-ts/testCached');
 } catch {
   process.exit(1);
 }
