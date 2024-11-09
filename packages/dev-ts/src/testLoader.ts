@@ -28,10 +28,9 @@ export async function load (url: string, context: Record<string, unknown>, nextL
       format: 'module'
     });
 
-
     // This ensures there is support for Node v22 while also maintaining backwards compatibility for testing.
     const modifiedSrc = Buffer.from(source.toString().replace(/assert\s*\{\s*type:\s*'json'\s*\}/g, 'with { type: \'json\' }'), 'utf-8');
-    
+
     // we use a hash of the source to determine caching
     const sourceHash = `//# sourceHash=${crypto.createHash('sha256').update(modifiedSrc as unknown as string).digest('hex')}`;
     const compiledFile = url.includes('/src/')
@@ -48,7 +47,7 @@ export async function load (url: string, context: Record<string, unknown>, nextL
       if (compiled.includes(sourceHash)) {
         return {
           format: 'module',
-          source: compiled,
+          source: compiled
         };
       }
     }
@@ -85,10 +84,9 @@ export async function load (url: string, context: Record<string, unknown>, nextL
 
     return {
       format: 'module',
-      source: outputText,
+      source: outputText
     };
   }
-  
 
   return nextLoad(url, context);
 }

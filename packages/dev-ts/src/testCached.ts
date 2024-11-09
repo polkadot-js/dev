@@ -9,5 +9,5 @@ import { loaderOptions } from './common.js';
 
 loaderOptions.isCached = true;
 
-export { load } from './testLoader.js';
 export { resolve } from './resolver.js';
+export { load } from './testLoader.js';
