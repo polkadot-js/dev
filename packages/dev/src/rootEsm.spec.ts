@@ -94,7 +94,8 @@ describe('as-built output checks', (): void => {
             jsIdx[type].includes(
               type === 'cjs'
                 ? 'require("@polkadot/dev/rootJs/testJson.json")'
-                : "import testJson from '@polkadot/dev/rootJs/testJson.json' assert { type: 'json' };"
+                // eslint-disable-next-line no-useless-escape
+                : "import testJson from '@polkadot/dev/rootJs/testJson.json' assert { type: 'json\' };"
             )
           ).toBe(true);
         })
