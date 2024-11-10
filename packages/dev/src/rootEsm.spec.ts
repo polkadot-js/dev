@@ -3,20 +3,13 @@
 
 /// <reference types="@polkadot/dev-test/globals.d.ts" />
 
-import type * as testRoot from './root.js';
-
 import fs from 'node:fs';
 import path from 'node:path';
 
-// NOTE We don't use ts-expect-error here since the build folder may or may
-// not exist (so the error may or may not be there)
-//
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore This should only run against the compiled ouput, where this should exist
-import * as testRootBuild from '../build/root.js';
+import * as testRoot from './root.js';
 import { runTests } from './rootTests.js';
 
-runTests(testRootBuild as unknown as typeof testRoot);
+runTests(testRoot);
 
 describe('as-built output checks', (): void => {
   const buildRoot = path.join(process.cwd(), 'packages/dev/build');
@@ -95,7 +88,7 @@ describe('as-built output checks', (): void => {
               type === 'cjs'
                 ? 'require("@polkadot/dev/rootJs/testJson.json")'
                 // eslint-disable-next-line no-useless-escape
-                : "import testJson from '@polkadot/dev/rootJs/testJson.json' assert { type: 'json\' };"
+                : "import testJson from '@polkadot/dev/rootJs/testJson.json' assert { type: \'json\' };"
             )
           ).toBe(true);
         })
