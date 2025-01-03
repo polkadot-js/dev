@@ -1,4 +1,4 @@
-// Copyright 2017-2024 @polkadot/dev authors & contributors
+// Copyright 2017-2025 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
 // Adapted from https://github.com/testing-library/react-testing-library#basic-example
