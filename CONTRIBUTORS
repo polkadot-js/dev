@@ -1,5 +1,5 @@
     1382	Jaco                          	Bump deps (#1134)
-      15	Tarik Gul                     	2025 (#1152)
+      16	Tarik Gul                     	Create docs for all the scripts in `@polkadot/dev` (#1153)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
