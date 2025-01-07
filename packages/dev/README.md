@@ -14,6 +14,12 @@ This script automates the continuous integration (CI) process for building, test
 - **`--skip-beta`**:  
   Prevents incrementing the version to a beta release.
 
+### Usage
+
+```bash
+yarn polkadot-ci-ghact-build [options]
+```
+
 ## polkadot-ci-ghact-docs
 
 **Summary**:  
@@ -22,6 +28,12 @@ This script generates documentation for the repository and deploys it to GitHub 
 ### CLI Arguments
 
 This script does not accept any CLI arguments.
+
+### Usage
+
+```bash
+yarn polkadot-ci-ghact-docs
+```
 
 ## polkadot-ci-ghpages-force
 
@@ -32,6 +44,12 @@ This script force-refreshes the `gh-pages` branch of the repository by creating 
 
 This script does not accept any CLI arguments.
 
+### Usage
+
+```bash
+yarn polkadot-ci-ghpages-force
+```
+
 ## polkadot-dev-build-docs
 
 **Summary**:  
@@ -40,6 +58,12 @@ This script prepares the documentation for building by copying the `docs` direct
 ### CLI Arguments
 
 This script does not accept any CLI arguments.
+
+### Usage
+
+```bash
+yarn polkadot-dev-build-docs
+```
 
 ## polkadot-dev-build-ts
 
@@ -52,6 +76,11 @@ This script compiles TypeScript source files into JavaScript outputs using the s
   - Acceptable values: `tsc`  
   - Default: `tsc`
 
+### Usage
+
+```bash
+yarn polkadot-dev-build-ts [options]
+```
 
 ## polkadot-dev-circular
 
@@ -62,6 +91,10 @@ This script checks the project for circular dependencies in TypeScript (`.ts`, `
 
 This script does not accept any CLI arguments.
 
+```bash
+yarn polkadot-dev-circular
+```
+
 ## polkadot-dev-clean-build
 
 **Summary**:  
@@ -71,6 +104,10 @@ This script removes build artifacts and temporary files from the repository. It 
 
 This script does not accept any CLI arguments.
 
+```bash
+yarn polkadot-dev-clean-build
+```
+
 ## polkadot-dev-contrib
 
 **Summary**:  
@@ -79,6 +116,10 @@ This script generates a `CONTRIBUTORS` file by aggregating and listing all contr
 ### CLI Arguments
 
 This script does not accept any CLI arguments.
+
+```bash
+yarn polkadot-dev-contrib
+```
 
 ## polkadot-dev-copy-dir
 
