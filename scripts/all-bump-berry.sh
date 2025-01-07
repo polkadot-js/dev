@@ -16,7 +16,7 @@ DIRECTORIES=( "wasm" "common" "api" "docs" "ui" "phishing" "extension" "tools" "
 cd dev
 echo "*** Updating yarn in dev"
 git pull
-yarn set version berry
+yarn set version latest
 yarn
 cd ..
 
