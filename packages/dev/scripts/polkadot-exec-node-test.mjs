@@ -9,6 +9,20 @@ import os from 'node:os';
 import { Worker, isMainThread, parentPort, workerData } from 'node:worker_threads';
 import { run } from 'node:test';
 
+// For Node 18, earliest usable is 18.14:
+//
+//   - node:test added in 18.0,
+//   - run method exposed in 18.9,
+//   - mock in 18.13,
+//   - diagnostics changed in 18.14
+//
+// Node 16 is not supported:
+//
+//   - node:test added is 16.17,
+//   - run method exposed in 16.19,
+//   - mock not available
+
+// NOTE error should be defined as "Error", however the @types/node definitions doesn't include all
 /** @typedef  {{ details: { error: { failureType: unknown; cause: { code: number; message: string; stack: string; }; code: number; } }; file?: string; name: string }} FailStat */
 /** @typedef {{ details: { duration_ms: number }; name: string; }} PassStat */
 /** @typedef {{ diag: { file?: string; message?: string; }[]; fail: FailStat[]; pass: PassStat[]; skip: unknown[]; todo: unknown[]; total: number; [key: string]: any; }} Stats */
