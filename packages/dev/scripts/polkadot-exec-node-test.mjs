@@ -290,9 +290,9 @@ async function runParallel() {
     results.forEach((result) => {
       Object.keys(stats).forEach((key) => {
         if (Array.isArray(stats[key])) {
-          stats[key] = stats[key].concat(result[key]); // Merge arrays
+          stats[key] = stats[key].concat(result[key]);
         } else if (typeof stats[key] === 'number') {
-          stats[key] += result[key]; // Sum totals
+          stats[key] += result[key];
         }
       });
     });
