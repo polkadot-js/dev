@@ -16,11 +16,11 @@
 //   - mock not available
 
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import process from 'node:process';
-import os from 'node:os';
-import { Worker, isMainThread, parentPort, workerData } from 'node:worker_threads';
 import { run } from 'node:test';
+import { isMainThread, parentPort, Worker, workerData } from 'node:worker_threads';
 
 // NOTE error should be defined as "Error", however the @types/node definitions doesn't include all
 /** @typedef  {{ details: { error: { failureType: unknown; cause: { code: number; message: string; stack: string; }; code: number; } }; file?: string; name: string }} FailStat */
@@ -165,7 +165,7 @@ function getFilename (r) {
   return r.file;
 }
 
-function complete() {
+function complete () {
   process.stdout.write('\n');
 
   let logError = '';
@@ -256,7 +256,7 @@ function complete() {
   process.exit(stats.fail.length);
 }
 
-async function runParallel() {
+async function runParallel () {
   const MAX_WORKERS = Math.min(os.cpus().length, files.length);
   const chunks = Math.ceil(files.length / MAX_WORKERS);
 
@@ -279,7 +279,7 @@ async function runParallel() {
 
         return new Promise((resolve, reject) => {
           const worker = new Worker(new URL(import.meta.url), {
-            workerData: { files: fileSubset },
+            workerData: { files: fileSubset }
           });
 
           worker.on('message', (message) => {
@@ -320,11 +320,9 @@ async function runParallel() {
   }
 }
 
-
-
 if (isMainThread) {
   console.time('\tElapsed:');
-  runParallel();
+  runParallel().catch((err) => console.error(err));
 } else {
   run({ files: workerData.files, timeout: 3_600_000 })
     .on('data', () => undefined)
@@ -332,7 +330,7 @@ if (isMainThread) {
     .on('test:coverage', () => undefined)
     .on('test:diagnostic', (data) => {
       stats.diag.push(data);
-      parentPort && parentPort.postMessage({ type: 'result', data: stats });
+      parentPort && parentPort.postMessage({ data: stats, type: 'result' });
     })
     .on('test:fail', (/** @type {any} */ data) => {
       stats.fail.push(data);
