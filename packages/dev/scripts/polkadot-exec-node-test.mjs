@@ -330,6 +330,7 @@ if (isMainThread) {
     .on('test:coverage', () => undefined)
     .on('test:diagnostic', (data) => {
       stats.diag.push(data);
+      parentPort && parentPort.postMessage({ data: stats, type: 'result' });
     })
     .on('test:fail', (/** @type {any} */ data) => {
       stats.fail.push(data);
