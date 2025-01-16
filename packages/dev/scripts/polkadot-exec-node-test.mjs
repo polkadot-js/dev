@@ -2,13 +2,6 @@
 // Copyright 2017-2025 @polkadot/dev authors & contributors
 // SPDX-License-Identifier: Apache-2.0
 
-import fs from 'node:fs';
-import path from 'node:path';
-import process from 'node:process';
-import os from 'node:os';
-import { Worker, isMainThread, parentPort, workerData } from 'node:worker_threads';
-import { run } from 'node:test';
-
 // For Node 18, earliest usable is 18.14:
 //
 //   - node:test added in 18.0,
@@ -21,6 +14,13 @@ import { run } from 'node:test';
 //   - node:test added is 16.17,
 //   - run method exposed in 16.19,
 //   - mock not available
+
+import fs from 'node:fs';
+import path from 'node:path';
+import process from 'node:process';
+import os from 'node:os';
+import { Worker, isMainThread, parentPort, workerData } from 'node:worker_threads';
+import { run } from 'node:test';
 
 // NOTE error should be defined as "Error", however the @types/node definitions doesn't include all
 /** @typedef  {{ details: { error: { failureType: unknown; cause: { code: number; message: string; stack: string; }; code: number; } }; file?: string; name: string }} FailStat */
