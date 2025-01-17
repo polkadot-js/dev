@@ -273,6 +273,8 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
     // Since Deno 1.28 the node: specifiers is supported out-of-the-box
     // so we just return and use these as-is
     return f;
+  } else if (f === '@types/node') {
+    return null
   }
 
   const depParts = f.split('/');
@@ -404,6 +406,35 @@ function rewriteImports (dir, pkgCwd, pkgJson, replacer) {
     });
 }
 
+/**
+ * Adds the `import { Buffer } from 'node:buffer';` to files that use `Buffer`.
+ *
+ * @param {string} dir - Directory to traverse.
+ * @param {string} pkgCwd - Current working directory of the package.
+ */
+function addBufferImportForDeno(dir, pkgCwd) {
+  if (!fs.existsSync(dir)) {
+    return;
+  }
+
+  fs.readdirSync(dir).forEach((fileName) => {
+    const filePath = path.join(dir, fileName);
+
+    if (fs.statSync(filePath).isDirectory()) {
+      // Recursively handle subdirectories
+      addBufferImportForDeno(filePath, pkgCwd);
+    } else if (filePath.endsWith('.ts') || filePath.endsWith('.tsx')) {
+      const content = fs.readFileSync(filePath, 'utf-8');
+
+      if (content.includes('Buffer') && !content.includes("import { Buffer } from 'node:buffer';")) {
+        const updatedContent = `import { Buffer } from 'node:buffer';\n\n${content}`;
+        fs.writeFileSync(filePath, updatedContent, 'utf-8');
+      }
+    }
+  });
+}
+
+
 function buildDeno () {
   const pkgCwd = process.cwd();
 
@@ -417,6 +448,8 @@ function buildDeno () {
 
   // remove unneeded directories
   rimrafSync('build-deno/cjs');
+
+  addBufferImportForDeno('build-deno', pkgCwd);
 }
 
 /**
