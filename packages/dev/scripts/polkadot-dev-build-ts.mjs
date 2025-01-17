@@ -410,7 +410,7 @@ function rewriteImports (dir, pkgCwd, pkgJson, replacer) {
  * @param {string} dir - Directory to traverse.
  * @param {string} pkgCwd - Current working directory of the package.
  */
-function addBufferImportForDeno(dir, pkgCwd) {
+function addBufferImportForDeno (dir, pkgCwd) {
   if (!fs.existsSync(dir)) {
     return;
   }
@@ -426,12 +426,12 @@ function addBufferImportForDeno(dir, pkgCwd) {
 
       if (content.includes('Buffer') && !content.includes("import { Buffer } from 'node:buffer';")) {
         const updatedContent = `import { Buffer } from 'node:buffer';\n\n${content}`;
+
         fs.writeFileSync(filePath, updatedContent, 'utf-8');
       }
     }
   });
 }
-
 
 function buildDeno () {
   const pkgCwd = process.cwd();
