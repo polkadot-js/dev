@@ -23,9 +23,10 @@ import { run } from 'node:test';
 import { isMainThread, parentPort, Worker, workerData } from 'node:worker_threads';
 
 // NOTE error should be defined as "Error", however the @types/node definitions doesn't include all
+/** @typedef {{ file?: string; message?: string; }} DiagStat */
 /** @typedef  {{ details: { type: string; duration_ms: number;  error: { message: string; failureType: unknown; stack: string; cause: { code: number; message: string; stack: string; generatedMessage?: any; }; code: number; } }; file?: string; name: string; testNumber: number; nesting: number; }} FailStat */
 /** @typedef {{ details: { duration_ms: number }; name: string; }} PassStat */
-/** @typedef {{ diag: { file?: string; message?: string; }[]; fail: FailStat[]; pass: PassStat[]; skip: unknown[]; todo: unknown[]; total: number; [key: string]: any; }} Stats */
+/** @typedef {{ diag: DiagStat[]; fail: FailStat[]; pass: PassStat[]; skip: unknown[]; todo: unknown[]; total: number; [key: string]: any; }} Stats */
 
 console.time('\t elapsed :');
 
@@ -220,10 +221,12 @@ function complete () {
           console.log(lastFilename ? `\n${lastFilename}::\n` : '\n');
         }
 
-        console.log(`\t${r.message?.split('\n').join('\n\t')}`);
+        // Edge case: We don't need additional noise that is not useful.
+        if (!r.message?.split(' ').includes('tests')) {
+          console.log(`\t${r.message?.split('\n').join('\n\t')}`);
+        }
       }
     });
-    console.log();
   }
 
   if (toConsole) {
@@ -344,7 +347,7 @@ if (isMainThread) {
     .on('data', () => undefined)
     .on('end', () => parentPort && parentPort.postMessage(stats))
     .on('test:coverage', () => undefined)
-    .on('test:diagnostic', (data) => {
+    .on('test:diagnostic', (/** @type {DiagStat} */data) => {
       stats.diag.push(data);
       parentPort && parentPort.postMessage({ data: stats, type: 'result' });
     })
