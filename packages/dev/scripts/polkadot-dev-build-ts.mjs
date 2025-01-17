@@ -273,8 +273,6 @@ function adjustDenoPath (pkgCwd, pkgJson, dir, f, isDeclare) {
     // Since Deno 1.28 the node: specifiers is supported out-of-the-box
     // so we just return and use these as-is
     return f;
-  } else if (f === '@types/node') {
-    return null
   }
 
   const depParts = f.split('/');
