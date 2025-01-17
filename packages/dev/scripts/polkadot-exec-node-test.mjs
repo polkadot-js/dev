@@ -53,6 +53,8 @@ let startAt = 0;
 let bail = false;
 /** @type {boolean} */
 let toConsole = false;
+/** @type {number} */
+let progressRowCount = 0;
 
 for (let i = 0; i < args.length; i++) {
   if (args[i] === '--bail') {
@@ -130,34 +132,6 @@ function getFilename (r) {
 
   return r.file;
 }
-
-/**
- *
- * @param {string[]} progress
- */
-const printBuffer = (progress) => {
-  if (!startAt) {
-    startAt = performance.now();
-  }
-
-  const now = performance.now();
-  const elapsed = (now - startAt) / 1000;
-  const minutes = Math.floor(elapsed / 60);
-  const seconds = elapsed - minutes * 60;
-
-  process.stdout.write(`\n ${`${minutes}:${seconds.toFixed(3).padStart(6, '0')}`.padStart(11)}  `);
-
-  for (let i = 0; i < progress.length; i++) {
-    process.stdout.write(progress[i]);
-
-    // Add spacing for readability
-    if ((i + 1) % 10 === 0) {
-      process.stdout.write('  '); // Double space every 10 dots
-    } else if ((i + 1) % 5 === 0) {
-      process.stdout.write(' '); // Single space every 5 dots
-    }
-  }
-};
 
 function complete () {
   process.stdout.write('\n');
@@ -252,41 +226,54 @@ function complete () {
   process.exit(stats.fail.length);
 }
 
+/**
+ * Prints the progress in real-time as data is passed from the worker.
+ *
+ * @param {string} symbol
+ */
+function printProgress (symbol) {
+  if (!progressRowCount) {
+    progressRowCount = 0;
+  }
+
+  if (!startAt) {
+    startAt = performance.now();
+  }
+
+  // If starting a new row, calculate and print the elapsed time
+  if (progressRowCount === 0) {
+    const now = performance.now();
+    const elapsed = (now - startAt) / 1000;
+    const minutes = Math.floor(elapsed / 60);
+    const seconds = elapsed - minutes * 60;
+
+    process.stdout.write(
+      `${`${minutes}:${seconds.toFixed(3).padStart(6, '0')}`.padStart(11)}  `
+    );
+  }
+
+  // Print the symbol with formatting
+  process.stdout.write(symbol);
+
+  progressRowCount++;
+
+  // Add spaces for readability
+  if (progressRowCount % 10 === 0) {
+    process.stdout.write('  '); // Double space every 10 symbols
+  } else if (progressRowCount % 5 === 0) {
+    process.stdout.write(' '); // Single space every 5 symbols
+  }
+
+  // If the row reaches 100 symbols, start a new row
+  if (progressRowCount >= 100) {
+    process.stdout.write('\n');
+    progressRowCount = 0;
+  }
+}
+
 async function runParallel () {
   const MAX_WORKERS = Math.min(os.cpus().length, files.length);
   const chunks = Math.ceil(files.length / MAX_WORKERS);
-
-  /** @type {string[]} */
-  const progress = []; // Collect progress updates from workers
-
-  const logProgress = setInterval(() => {
-    // Process full rows of 100 dots
-    while (progress.length >= 100) {
-      const row = progress.splice(0, 100);
-
-      printBuffer(row);
-    }
-
-    // Handle leftover dots (less than 100)
-    if (progress.length > 0) {
-      const leftoverDots = progress.join('');
-
-      // Keep leftover dots for the next interval without printing them
-      progress.length = leftoverDots.length;
-    }
-  }, 100);
-
-  /**
-   * Final flush when all tests are done
-   * @param {string[]} progress
-   */
-  function flushProgress (progress) {
-    if (progress.length > 0) {
-      printBuffer(progress);
-
-      progress.length = 0; // Clear the buffer
-    }
-  }
 
   try {
     // Create and manage worker threads
@@ -301,7 +288,7 @@ async function runParallel () {
 
           worker.on('message', (message) => {
             if (message.type === 'progress') {
-              progress.push(message.data);
+              printProgress(message.data);
             } else if (message.type === 'result') {
               resolve(message.data);
             }
@@ -328,12 +315,8 @@ async function runParallel () {
       });
     });
 
-    clearInterval(logProgress);
-    flushProgress(progress);
     complete();
   } catch (err) {
-    clearInterval(logProgress);
-    flushProgress(progress);
     console.error('Error during parallel execution:', err);
     process.exit(1);
   }
