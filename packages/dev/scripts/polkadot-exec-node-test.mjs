@@ -16,14 +16,17 @@
 //   - mock not available
 
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import process from 'node:process';
 import { run } from 'node:test';
+import { isMainThread, parentPort, Worker, workerData } from 'node:worker_threads';
 
 // NOTE error should be defined as "Error", however the @types/node definitions doesn't include all
-/** @typedef  {{ details: { error: { failureType: unknown; cause: { code: number; message: string; stack: string; }; code: number; } }; file?: string; name: string }} FailStat */
+/** @typedef {{ file?: string; message?: string; }} DiagStat */
+/** @typedef  {{ details: { type: string; duration_ms: number;  error: { message: string; failureType: unknown; stack: string; cause: { code: number; message: string; stack: string; generatedMessage?: any; }; code: number; } }; file?: string; name: string; testNumber: number; nesting: number; }} FailStat */
 /** @typedef {{ details: { duration_ms: number }; name: string; }} PassStat */
-/** @typedef {{ diag: { file?: string; message?: string; }[]; fail: FailStat[]; pass: PassStat[]; skip: unknown[]; todo: unknown[]; total: number }} Stats */
+/** @typedef {{ diag: DiagStat[]; fail: FailStat[]; pass: PassStat[]; skip: unknown[]; todo: unknown[]; total: number; [key: string]: any; }} Stats */
 
 console.time('\t elapsed :');
 
@@ -50,6 +53,8 @@ let startAt = 0;
 let bail = false;
 /** @type {boolean} */
 let toConsole = false;
+/** @type {number} */
+let progressRowCount = 0;
 
 for (let i = 0; i < args.length; i++) {
   if (args[i] === '--bail') {
@@ -61,41 +66,6 @@ for (let i = 0; i < args.length; i++) {
   } else {
     files.push(args[i]);
   }
-}
-
-/**
- * @internal
- *
- * Prints a single character on-screen with formatting.
- *
- * @param {string} ch
- */
-function output (ch) {
-  let result = '';
-
-  if (stats.total % 100 === 0) {
-    const now = performance.now();
-
-    if (!startAt) {
-      startAt = now;
-    }
-
-    const elapsed = (now - startAt) / 1000;
-    const m = (elapsed / 60) | 0;
-    const s = (elapsed - (m * 60));
-
-    result += `\n ${`${m}:${s.toFixed(3).padStart(6, '0')}`.padStart(11)}  `;
-  } else if (stats.total % 10 === 0) {
-    result += '  ';
-  } else if (stats.total % 5 === 0) {
-    result += ' ';
-  }
-
-  stats.total++;
-
-  result += ch;
-
-  process.stdout.write(result);
 }
 
 /**
@@ -180,7 +150,6 @@ function complete () {
       item += indent(2, r.details.error.cause.message);
     }
 
-    // we don't add the stack to the log-to-file below
     logError += item;
 
     if (r.details.error.cause.stack) {
@@ -207,9 +176,7 @@ function complete () {
   console.timeEnd('\t elapsed :');
   console.log();
 
-  // The full error information can be quite useful in the case of overall
-  // failures, i.e. when Node itself has an internal error before even executing
-  // a single test
+  // The full error information can be quite useful in the case of overall failures
   if ((stats.fail.length || toConsole) && stats.diag.length) {
     /** @type {string | undefined} */
     let lastFilename = '';
@@ -218,25 +185,22 @@ function complete () {
       WITH_DEBUG && console.error(JSON.stringify(r, null, 2));
 
       if (typeof r === 'string') {
-        // Node.js <= 18.14
-        console.log(r);
+        console.log(r); // Node.js <= 18.14
       } else if (r.file && r.file.includes('@polkadot/dev/scripts')) {
-        // ignore, these are internal
+        // Ignore internal diagnostics
       } else {
         if (lastFilename !== r.file) {
           lastFilename = r.file;
 
-          if (lastFilename) {
-            console.log(`\n${lastFilename}::\n`);
-          } else {
-            console.log('\n');
-          }
+          console.log(lastFilename ? `\n${lastFilename}::\n` : '\n');
         }
 
-        console.log(`\t${r.message?.split('\n').join('\n\t')}`);
+        // Edge case: We don't need additional noise that is not useful.
+        if (!r.message?.split(' ').includes('tests')) {
+          console.log(`\t${r.message?.split('\n').join('\n\t')}`);
+        }
       }
     });
-    console.log();
   }
 
   if (toConsole) {
@@ -262,38 +226,143 @@ function complete () {
   process.exit(stats.fail.length);
 }
 
-// 1hr default timeout ... just in-case something goes wrong on an
-// CI-like environment, don't expect this to be hit (never say never)
-run({ files, timeout: 3_600_000 })
-  // this ensures that the stream is switched to flowing mode
-  // (which is needed to ensure the end event actually fires)
-  .on('data', () => undefined)
-  // the stream is done, print the summary and exit
-  .on('end', () => complete())
-  // handlers for all the known TestStream events from Node
-  .on('test:coverage', () => undefined)
-  .on('test:diagnostic', (data) => {
-    stats.diag.push(data);
-  })
-  .on('test:fail', (/** @type {any} */ data) => {
-    stats.fail.push(data);
-    output('x');
+/**
+ * Prints the progress in real-time as data is passed from the worker.
+ *
+ * @param {string} symbol
+ */
+function printProgress (symbol) {
+  if (!progressRowCount) {
+    progressRowCount = 0;
+  }
 
-    if (bail) {
-      complete();
-    }
-  })
-  .on('test:pass', (data) => {
-    if (typeof data.skip !== 'undefined') {
-      stats.skip.push(data);
-      output('>');
-    } else if (typeof data.todo !== 'undefined') {
-      stats.todo.push(data);
-      output('!');
-    } else {
-      stats.pass.push(data);
-      output('·');
-    }
-  })
-  .on('test:plan', () => undefined)
-  .on('test:start', () => undefined);
+  if (!startAt) {
+    startAt = performance.now();
+  }
+
+  // If starting a new row, calculate and print the elapsed time
+  if (progressRowCount === 0) {
+    const now = performance.now();
+    const elapsed = (now - startAt) / 1000;
+    const minutes = Math.floor(elapsed / 60);
+    const seconds = elapsed - minutes * 60;
+
+    process.stdout.write(
+      `${`${minutes}:${seconds.toFixed(3).padStart(6, '0')}`.padStart(11)}  `
+    );
+  }
+
+  // Print the symbol with formatting
+  process.stdout.write(symbol);
+
+  progressRowCount++;
+
+  // Add spaces for readability
+  if (progressRowCount % 10 === 0) {
+    process.stdout.write('  '); // Double space every 10 symbols
+  } else if (progressRowCount % 5 === 0) {
+    process.stdout.write(' '); // Single space every 5 symbols
+  }
+
+  // If the row reaches 100 symbols, start a new row
+  if (progressRowCount >= 100) {
+    process.stdout.write('\n');
+    progressRowCount = 0;
+  }
+}
+
+async function runParallel () {
+  const MAX_WORKERS = Math.min(os.cpus().length, files.length);
+  const chunks = Math.ceil(files.length / MAX_WORKERS);
+
+  try {
+    // Create and manage worker threads
+    const results = await Promise.all(
+      Array.from({ length: MAX_WORKERS }, (_, i) => {
+        const fileSubset = files.slice(i * chunks, (i + 1) * chunks);
+
+        return new Promise((resolve, reject) => {
+          const worker = new Worker(new URL(import.meta.url), {
+            workerData: { files: fileSubset }
+          });
+
+          worker.on('message', (message) => {
+            if (message.type === 'progress') {
+              printProgress(message.data);
+            } else if (message.type === 'result') {
+              resolve(message.data);
+            }
+          });
+
+          worker.on('error', reject);
+          worker.on('exit', (code) => {
+            if (code !== 0) {
+              reject(new Error(`Worker stopped with exit code ${code}`));
+            }
+          });
+        });
+      })
+    );
+
+    // Aggregate results from workers
+    results.forEach((result) => {
+      Object.keys(stats).forEach((key) => {
+        if (Array.isArray(stats[key])) {
+          stats[key] = stats[key].concat(result[key]);
+        } else if (typeof stats[key] === 'number') {
+          stats[key] += result[key];
+        }
+      });
+    });
+
+    complete();
+  } catch (err) {
+    console.error('Error during parallel execution:', err);
+    process.exit(1);
+  }
+}
+
+if (isMainThread) {
+  console.time('\tElapsed:');
+  runParallel().catch((err) => console.error(err));
+} else {
+  run({ files: workerData.files, timeout: 3_600_000 })
+    .on('data', () => undefined)
+    .on('end', () => parentPort && parentPort.postMessage(stats))
+    .on('test:coverage', () => undefined)
+    .on('test:diagnostic', (/** @type {DiagStat} */data) => {
+      stats.diag.push(data);
+      parentPort && parentPort.postMessage({ data: stats, type: 'result' });
+    })
+    .on('test:fail', (/** @type {FailStat} */ data) => {
+      const statFail = structuredClone(data);
+
+      if (data.details.error.cause?.stack) {
+        statFail.details.error.cause.stack = data.details.error.cause.stack;
+      }
+
+      stats.fail.push(statFail);
+      stats.total++;
+      parentPort && parentPort.postMessage({ data: 'x', type: 'progress' });
+
+      if (bail) {
+        complete();
+      }
+    })
+    .on('test:pass', (data) => {
+      const symbol = typeof data.skip !== 'undefined' ? '>' : typeof data.todo !== 'undefined' ? '!' : '·';
+
+      if (symbol === '>') {
+        stats.skip.push(data);
+      } else if (symbol === '!') {
+        stats.todo.push(data);
+      } else {
+        stats.pass.push(data);
+      }
+
+      stats.total++;
+      parentPort && parentPort.postMessage({ data: symbol, type: 'progress' });
+    })
+    .on('test:plan', () => undefined)
+    .on('test:start', () => undefined);
+}

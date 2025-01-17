@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## 0.83.1
+
+- Parallelize the tests in `polkadot-exec-node-test`
+
+
 ## 0.82.1
 
 - Create seperate testLoader and testCached for Node v22 compatibility with JSON assertions
