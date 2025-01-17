@@ -1,5 +1,5 @@
     1382	Jaco                          	Bump deps (#1134)
-      17	Tarik Gul                     	Update berry script to target latest (#1154)
+      18	Tarik Gul                     	Parallelize tests in `polkadot-exec-node-test` (#1155)
        2	Nikos Kontakis                	Add rollup dynamic import variables plugin (#789)
        1	Alex Saft                     	Fix Vite build bundling error about EISDIR on `new URL('.', import.meta.url)` (#637)
        1	Alex Wang                     	support build when using lerna with on package (#214)
