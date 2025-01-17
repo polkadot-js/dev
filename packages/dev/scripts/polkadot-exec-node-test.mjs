@@ -23,7 +23,7 @@ import { run } from 'node:test';
 import { isMainThread, parentPort, Worker, workerData } from 'node:worker_threads';
 
 // NOTE error should be defined as "Error", however the @types/node definitions doesn't include all
-/** @typedef  {{ details: { error: { failureType: unknown; cause: { code: number; message: string; stack: string; }; code: number; } }; file?: string; name: string }} FailStat */
+/** @typedef  {{ details: { type: string; duration_ms: number;  error: { message: string; failureType: unknown; stack: string; cause: { code: number; message: string; stack: string; generatedMessage?: any; }; code: number; } }; file?: string; name: string; testNumber: number; nesting: number; }} FailStat */
 /** @typedef {{ details: { duration_ms: number }; name: string; }} PassStat */
 /** @typedef {{ diag: { file?: string; message?: string; }[]; fail: FailStat[]; pass: PassStat[]; skip: unknown[]; todo: unknown[]; total: number; [key: string]: any; }} Stats */
 
@@ -348,8 +348,14 @@ if (isMainThread) {
       stats.diag.push(data);
       parentPort && parentPort.postMessage({ data: stats, type: 'result' });
     })
-    .on('test:fail', (/** @type {any} */ data) => {
-      stats.fail.push(data);
+    .on('test:fail', (/** @type {FailStat} */ data) => {
+      const statFail = structuredClone(data);
+
+      if (data.details.error.cause?.stack) {
+        statFail.details.error.cause.stack = data.details.error.cause.stack;
+      }
+
+      stats.fail.push(statFail);
       stats.total++;
       parentPort && parentPort.postMessage({ data: 'x', type: 'progress' });
 
