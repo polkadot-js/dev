@@ -68,41 +68,6 @@ for (let i = 0; i < args.length; i++) {
 /**
  * @internal
  *
- * Prints a single character on-screen with formatting.
- *
- * @param {string} ch
- */
-function output (ch) {
-  let result = '';
-
-  if (stats.total % 100 === 0) {
-    const now = performance.now();
-
-    if (!startAt) {
-      startAt = now;
-    }
-
-    const elapsed = (now - startAt) / 1000;
-    const m = (elapsed / 60) | 0;
-    const s = (elapsed - (m * 60));
-
-    result += `\n ${`${m}:${s.toFixed(3).padStart(6, '0')}`.padStart(11)}  `;
-  } else if (stats.total % 10 === 0) {
-    result += '  ';
-  } else if (stats.total % 5 === 0) {
-    result += ' ';
-  }
-
-  stats.total++;
-
-  result += ch;
-
-  process.stdout.write(result);
-}
-
-/**
- * @internal
- *
  * Performs an indent of the line (and containing lines) with the specific count
  *
  * @param {number} count
@@ -164,6 +129,34 @@ function getFilename (r) {
 
   return r.file;
 }
+
+/**
+ *
+ * @param {string[]} progress
+ */
+const printBuffer = (progress) => {
+  if (!startAt) {
+    startAt = performance.now();
+  }
+
+  const now = performance.now();
+  const elapsed = (now - startAt) / 1000;
+  const minutes = Math.floor(elapsed / 60);
+  const seconds = elapsed - minutes * 60;
+
+  process.stdout.write(`\n ${`${minutes}:${seconds.toFixed(3).padStart(6, '0')}`.padStart(11)}  `);
+
+  for (let i = 0; i < progress.length; i++) {
+    process.stdout.write(progress[i]);
+
+    // Add spacing for readability
+    if ((i + 1) % 10 === 0) {
+      process.stdout.write('  '); // Double space every 10 dots
+    } else if ((i + 1) % 5 === 0) {
+      process.stdout.write(' '); // Single space every 5 dots
+    }
+  }
+};
 
 function complete () {
   process.stdout.write('\n');
@@ -263,13 +256,34 @@ async function runParallel () {
   /** @type {string[]} */
   const progress = []; // Collect progress updates from workers
 
-  // Log progress periodically
   const logProgress = setInterval(() => {
+    // Process full rows of 100 dots
+    while (progress.length >= 100) {
+      const row = progress.splice(0, 100);
+
+      printBuffer(row);
+    }
+
+    // Handle leftover dots (less than 100)
     if (progress.length > 0) {
-      process.stdout.write(progress.join(''));
-      progress.length = 0; // Clear collected progress
+      const leftoverDots = progress.join('');
+
+      // Keep leftover dots for the next interval without printing them
+      progress.length = leftoverDots.length;
     }
   }, 100);
+
+  /**
+   * Final flush when all tests are done
+   * @param {string[]} progress
+   */
+  function flushProgress (progress) {
+    if (progress.length > 0) {
+      printBuffer(progress);
+
+      progress.length = 0; // Clear the buffer
+    }
+  }
 
   try {
     // Create and manage worker threads
@@ -312,9 +326,11 @@ async function runParallel () {
     });
 
     clearInterval(logProgress);
+    flushProgress(progress);
     complete();
   } catch (err) {
     clearInterval(logProgress);
+    flushProgress(progress);
     console.error('Error during parallel execution:', err);
     process.exit(1);
   }
@@ -334,23 +350,26 @@ if (isMainThread) {
     })
     .on('test:fail', (/** @type {any} */ data) => {
       stats.fail.push(data);
-      output('x');
+      stats.total++;
+      parentPort && parentPort.postMessage({ data: 'x', type: 'progress' });
 
       if (bail) {
         complete();
       }
     })
     .on('test:pass', (data) => {
-      if (typeof data.skip !== 'undefined') {
+      const symbol = typeof data.skip !== 'undefined' ? '>' : typeof data.todo !== 'undefined' ? '!' : '·';
+
+      if (symbol === '>') {
         stats.skip.push(data);
-        output('>');
-      } else if (typeof data.todo !== 'undefined') {
+      } else if (symbol === '!') {
         stats.todo.push(data);
-        output('!');
       } else {
         stats.pass.push(data);
-        output('·');
       }
+
+      stats.total++;
+      parentPort && parentPort.postMessage({ data: symbol, type: 'progress' });
     })
     .on('test:plan', () => undefined)
     .on('test:start', () => undefined);
