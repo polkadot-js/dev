@@ -71,17 +71,7 @@ async function compileJs (compileType, type) {
         // split src prefix, replace .ts extension with .js
         const outFile = path.join(buildDir, filename.split(/[\\/]/).slice(1).join('/').replace(/\.tsx?$/, '.js'));
 
-        // Until we hit the es2022 target, all private fields are compiled to using
-        // WeakMap with less than stellar performannce of get/set on the polyfill. We
-        // replace usages of these with TS-only private fields.
-        //
-        // As used these are internal-only, completely hidden fields should be done via
-        // closures, see e.g. the common keypairs where this is done
-        const source = fs
-          .readFileSync(filename, 'utf-8')
-          .replace(/(this|other|source)\.#/g, '$1.__internal__')
-          .replace(/ {2}(async|readonly) #/g, '  private $1 __internal__')
-          .replace(/ {2}#/g, '  private __internal__');
+        const source = fs.readFileSync(filename, 'utf-8');
 
         // compile with the options aligning with our tsconfig
         const { outputText } = ts.transpileModule(source, {
