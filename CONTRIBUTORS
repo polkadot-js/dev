@@ -7,5 +7,6 @@
        1	Axel Chalon                   	Include dotfiles when pushing to gh-pages (#268)
        1	Ewa Kowalska                  	Add fix flag to eslint script (#419)
        1	Nazar Mokrynskyi              	Remove redundant babel plugins (#501)
+       1	rajk93                        	build(dev): ignore removing private fields (#1157)
        1	Stefanie Doll                 	Added react-hot-loader to 'dev-react' config (#191)
        1	StefansArya                   	Change bundle configuration to UMD (#557)
