@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## 0.84.1
+
+- Write the Buffer Import to necessary Deno build files
+- build(dev): ignore removing private fields
+
+
 ## 0.83.1
 
 - Parallelize the tests in `polkadot-exec-node-test`
