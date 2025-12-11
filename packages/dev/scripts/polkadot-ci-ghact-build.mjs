@@ -473,6 +473,10 @@ function gitPush () {
 
 skip-checks: true"`);
 
+  // Make sure the release commit is on top of the latest master
+  execGit(`pull --rebase ${repo} master`);
+
+  // Now push normally
   execGit(`push ${repo} HEAD:${process.env['GITHUB_REF']}`, true);
 
   if (doGHRelease) {
